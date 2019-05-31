@@ -1,0 +1,6 @@
+C:\Users\mscott\source\repos\middleware_log_client\middleware_log_client\bin\Debug\middleware_log_client.exe.config
+C:\Users\mscott\source\repos\middleware_log_client\middleware_log_client\bin\Debug\middleware_log_client.exe
+C:\Users\mscott\source\repos\middleware_log_client\middleware_log_client\bin\Debug\middleware_log_client.pdb
+C:\Users\mscott\source\repos\middleware_log_client\middleware_log_client\obj\Debug\middleware_log_client.csproj.CoreCompileInputs.cache
+C:\Users\mscott\source\repos\middleware_log_client\middleware_log_client\obj\Debug\middleware_log_client.exe
+C:\Users\mscott\source\repos\middleware_log_client\middleware_log_client\obj\Debug\middleware_log_client.pdb

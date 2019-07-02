@@ -2463,5 +2463,16 @@ namespace middleware_service.Database_Operations
             
             return date;
         }
+
+        public void SetIntegrationStat(int stat)
+        {
+            prepareConnection();
+            SqlCommand cmd = new SqlCommand();
+
+            cmd.Connection = cIntegration;
+            cmd.CommandText = "sp_UpdateStat @stat";
+            cmd.Parameters.AddWithValue("@stat", stat);
+            cmd.ExecuteNonQuery();
+        }
     }
 }

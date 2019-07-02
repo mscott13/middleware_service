@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.IO.Pipes;
 using System.Threading;
+using middleware_service.Database_Operations;
 
 namespace middleware_service.Other_Classes
 {
@@ -13,12 +14,11 @@ namespace middleware_service.Other_Classes
     {
         private static string docPath = "C:\\Middleware Service";
         private static string result = "";
+        private static Integration intlink;
 
-        public static void StartServer()
+        public static void Init(Integration integration)
         {
-            Save("Starting log server...");
-            Thread thread = new Thread(new ThreadStart(startPipeServer));
-            thread.Start();
+            intlink = integration;
         }
 
         public static string Save(string message)
@@ -33,6 +33,8 @@ namespace middleware_service.Other_Classes
                 result = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString() + " - " + message;
                 outputFile.WriteLine(result);
             }
+
+            intlink.Log(message);
             return result;
         }
 
@@ -48,60 +50,6 @@ namespace middleware_service.Other_Classes
             {
                 outputFile.WriteLine("--------end\r\n");
                 result = "newline";
-            }
-        }
-
-        private static void startPipeServer()
-        {
-            bool restart = false;
-            PipeSecurity ps = new PipeSecurity();
-            PipeAccessRule psRule = new PipeAccessRule(@"Everyone", PipeAccessRights.ReadWrite, System.Security.AccessControl.AccessControlType.Allow);
-            ps.AddAccessRule(psRule);
-            var server = new NamedPipeServerStream("middleware-link", PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.Asynchronous, 1, 1, ps);
-
-            server.WaitForConnection();
-
-            StreamReader reader = new StreamReader(server);
-            StreamWriter writer = new StreamWriter(server);
-            Save("Log server started");
-            WriteEnd();
-
-            while (true)
-            {
-                if (restart)
-                {
-                    ps = new PipeSecurity();
-                    psRule = new PipeAccessRule(@"Everyone", PipeAccessRights.ReadWrite, System.Security.AccessControl.AccessControlType.Allow);
-                    ps.AddAccessRule(psRule);
-                    server = new NamedPipeServerStream("middleware-link", PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.Asynchronous, 1, 1, ps);
-
-                    server.WaitForConnection();
-                    reader = new StreamReader(server);
-                    writer = new StreamWriter(server);
-                    restart = false;
-                    Save("Log server restarted");
-                }
-
-                Thread.Sleep(1);
-                try
-                {
-                    writer.WriteLine("");
-                    writer.Flush();
-
-                    if (result != "")
-                    {
-                        writer.WriteLine(result);
-                        writer.Flush();
-                        result = "";
-                    }
-                }
-                catch (Exception e)
-                {
-                    Save(e.Message);
-                    server.Disconnect();
-                    server.Dispose();
-                    restart = true;
-                }
             }
         }
     }

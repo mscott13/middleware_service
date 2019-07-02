@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Pipes;
-using System.Linq;
+using System.Net;
 using System.ServiceProcess;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Timers;
 using ACCPAC.Advantage;
 using middleware_service.Database_Classes;
@@ -20,6 +16,7 @@ using middleware_service.TableDependencyDefinitions;
 using TableDependency.Enums;
 using TableDependency.EventArgs;
 using TableDependency.SqlClient;
+using Newtonsoft.Json;
 
 namespace middleware_service
 {
@@ -28,7 +25,6 @@ namespace middleware_service
         string smaDbserv = "Data Source=ERP-SRVR\\ASMSDEV;Initial Catalog=ASMSGenericMaster;Integrated Security=True";
         string IntegrationDB_SMA = "Data Source=ERP-SRVR\\ASMSDEV;Initial Catalog=ASMSSAGEINTEGRATION;Integrated Security=True";
 
-        SqlTableDependency<SqlNotify_Pay> tableDependPay;
         SqlTableDependency<SqlNotifyCancellation> tableDependCancellation;
         SqlTableDependency<SqlNotify_DocumentInfo> tableDependInfo;
 
@@ -85,6 +81,8 @@ namespace middleware_service
         int currentInvoice = -1;
         DateTime prevTime;
         DateTime currentTime;
+        System.Timers.Timer broadcastTimer = new System.Timers.Timer();
+        private int Code = 21;
 
         public middleware_service()
         {
@@ -102,12 +100,6 @@ namespace middleware_service
 
                 accpacSession = new Session();
 
-                using (tableDependPay = new SqlTableDependency<SqlNotify_Pay>("Data Source=ERP-SRVR\\ASMSDEV;Initial Catalog=ASMSGenericMaster;Integrated Security=True", "tblARPayments"))
-                {
-                    tableDependPay.OnChanged += TableDependPay_OnChanged;
-                    tableDependPay.OnError += TableDependPay_OnError;
-                }
-
                 using (tableDependCancellation = new SqlTableDependency<SqlNotifyCancellation>("Data Source=ERP-SRVR\\ASMSDEV;Initial Catalog=ASMSGenericMaster;Integrated Security=True", "tblARInvoices"))
                 {
                     tableDependCancellation.OnChanged += TableDependCancellation_OnChanged;
@@ -121,6 +113,11 @@ namespace middleware_service
                 }
 
                 intLink = new Integration(connGeneric, connIntegration, connMsgQueue);
+                Log.Init(intLink);
+
+                broadcastTimer.Elapsed += Timer_Elapsed;
+                broadcastTimer.Enabled = true;
+                broadcastTimer.Interval = 1000;
 
             }
             catch (Exception e)
@@ -143,19 +140,26 @@ namespace middleware_service
             //////////////////////////////////////////////////////////////////// STARTING SESSION ///////////////////////////////////////////////////////////////////////
         }
 
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            intLink.SetIntegrationStat(Code);
+        }
+
+
+
         protected override void OnStart(string[] args)
         {
             currentTime = DateTime.Now;
             event_logger.WriteEntry("middleware_service started. - " + currentTime.ToShortDateString() + " " + currentTime.ToShortTimeString());
             try
             {
-                tableDependPay.Start();
                 tableDependCancellation.Start();
                 tableDependInfo.Start();
 
-                Log.StartServer();
                 Log.Save("middleware_service started.");
                 Log.WriteEnd();
+                Code = 3;
+                broadcastTimer.Start();
             }
             catch (Exception e)
             {
@@ -171,19 +175,34 @@ namespace middleware_service
                 Log.WriteEnd();
 
                 event_logger.WriteEntry("middleware_service stopped.");
-
-                tableDependPay.Stop();
                 tableDependCancellation.Stop();
                 tableDependInfo.Stop();
 
-                tableDependPay.Dispose();
                 tableDependCancellation.Dispose();
                 tableDependInfo.Dispose();
                 intLink.closeConnection();
+                Code = 2;
+                broadcastTimer.Stop();
             }
             catch (Exception e)
             {
                 event_logger.WriteEntry(e.Message);
+            }
+        }
+
+        void BroadcastStatus(int code)
+        {
+            try
+            {
+                var stat = new { status = code };
+                var json = JsonConvert.SerializeObject(stat);
+                var client = new WebClient();
+                client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                client.UploadString("localhost:8080/IntegrationService.asmx/SetMonStat", "POST", json);
+            }
+            catch (Exception ex)
+            {
+                Log.Save(ex.InnerException.Message);
             }
         }
 
@@ -215,7 +234,6 @@ namespace middleware_service
                         {
                             Log.Save("Waiting for invoice amount to update, current value: " + invoiceInfo.amount.ToString());
                             invoiceInfo = intLink.getInvoiceDetails(docInfo.OriginalDocumentID);
-                            //Thread.Sleep(1000);
                         }
 
                         Log.Save("Invoice amount: "+invoiceInfo.amount);
@@ -1193,6 +1211,7 @@ namespace middleware_service
                     for (int i = 0; i < accpacSession.Errors.Count; i++)
                     {
                         event_logger.WriteEntry("Error: " + accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority, EventLogEntryType.Error);
+                        Log.Save(accpacSession.Errors[i].Message + ", Severity: ");
                     }
                     accpacSession.Errors.Clear();
                 }
@@ -1202,12 +1221,6 @@ namespace middleware_service
                 }
             }
             Log.WriteEnd();
-        }
-
-        private void TableDependPay_OnChanged(object sender, RecordChangedEventArgs<SqlNotify_Pay> e)
-
-        {
-            event_logger.WriteEntry("Database change detected, operation: " + e.ChangeType, EventLogEntryType.Information);
         }
 
         private void TableDependCancellation_OnChanged(object sender, RecordChangedEventArgs<SqlNotifyCancellation> e)
@@ -1307,6 +1320,7 @@ namespace middleware_service
                     for (int i = 0; i < accpacSession.Errors.Count; i++)
                     {
                         event_logger.WriteEntry("Error: " + accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority, EventLogEntryType.Error);
+                        Log.Save(accpacSession.Errors[i].Message + ", Severity: ");
                     }
                     accpacSession.Errors.Clear();
                 }
@@ -1316,11 +1330,6 @@ namespace middleware_service
                 }
             }
             Log.WriteEnd();
-        }
-
-        private void TableDependPay_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
-        {
-            event_logger.WriteEntry("Table Dependency error: " + e.Error.Message, EventLogEntryType.Error);
         }
 
         InsertionReturn InvBatchInsert(string idCust, string docNum, string desc, string feeCode, string amt, string batchId)
@@ -2546,7 +2555,6 @@ namespace middleware_service
         {
             csRateHeader = dbLink.OpenView("CS0005");
             csRateDetail = dbLink.OpenView("CS0006");
-
             csRateHeader.Compose(new View[] { csRateDetail });
             csRateDetail.Compose(new View[] { csRateHeader });
 
@@ -2554,7 +2562,6 @@ namespace middleware_service
             csRateHeader.Fields.FieldByName("HOMECUR").SetValue("JAD", false);
             csRateHeader.Fields.FieldByName("RATETYPE").SetValue("BB", false);
             csRateHeader.Read(false);
-
 
             csRateDetail.Read(false);
             csRateDetail.RecordCreate(ViewRecordCreate.NoInsert);
@@ -2565,9 +2572,7 @@ namespace middleware_service
             csRateDetail.Insert();
             csRateDetail.Fields.FieldByName("SOURCECUR").SetValue("USD", false);
             csRateDetail.Read(false);
-
             csRateHeader.Update();
-
         }
     }
 }

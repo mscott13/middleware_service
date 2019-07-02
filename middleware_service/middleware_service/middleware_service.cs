@@ -113,7 +113,7 @@ namespace middleware_service
                 }
 
                 intLink = new Integration(connGeneric, connIntegration, connMsgQueue);
-                Log.Init(intLink);
+                Log.Init(intLink, event_logger);
 
                 broadcastTimer.Elapsed += Timer_Elapsed;
                 broadcastTimer.Enabled = true;
@@ -122,20 +122,20 @@ namespace middleware_service
             }
             catch (Exception e)
             {
-                event_logger.WriteEntry(e.Message + " ~ " + e.StackTrace, EventLogEntryType.Error);
+                Log.Save(e.Message);
             }
 
             //////////////////////////////////////////////////////////////////// STARTING SESSION ///////////////////////////////////////////////////////////////////////
             try
             {
-                event_logger.WriteEntry("Starting accpac session...");
+                Log.Save("Starting accpac session...");
                 accpacSession.Init("", "XY", "XY1000", "65A");
                 accpacSession.Open("ADMIN", "SPECTRUM9", "SMALTD", DateTime.Today, 0);
                 dbLink = accpacSession.OpenDBLink(DBLinkType.Company, DBLinkFlags.ReadWrite);
             }
             catch (Exception e)
             {
-                event_logger.WriteEntry(e.Message + " ~ " + e.StackTrace, EventLogEntryType.Error);
+               Log.Save(e.Message + " ~ " + e.StackTrace);
             }
             //////////////////////////////////////////////////////////////////// STARTING SESSION ///////////////////////////////////////////////////////////////////////
         }
@@ -145,12 +145,10 @@ namespace middleware_service
             intLink.SetIntegrationStat(Code);
         }
 
-
-
         protected override void OnStart(string[] args)
         {
             currentTime = DateTime.Now;
-            event_logger.WriteEntry("middleware_service started. - " + currentTime.ToShortDateString() + " " + currentTime.ToShortTimeString());
+            Log.Save("middleware_service started. - " + currentTime.ToShortDateString() + " " + currentTime.ToShortTimeString());
             try
             {
                 tableDependCancellation.Start();
@@ -163,7 +161,7 @@ namespace middleware_service
             }
             catch (Exception e)
             {
-                event_logger.WriteEntry(e.Message, EventLogEntryType.Error);
+                Log.Save(e.Message);
             }
         }
 
@@ -174,7 +172,7 @@ namespace middleware_service
                 Log.Save("middleware_service stopped.");
                 Log.WriteEnd();
 
-                event_logger.WriteEntry("middleware_service stopped.");
+                Log.Save("middleware_service stopped.");
                 tableDependCancellation.Stop();
                 tableDependInfo.Stop();
 
@@ -186,7 +184,7 @@ namespace middleware_service
             }
             catch (Exception e)
             {
-                event_logger.WriteEntry(e.Message);
+                Log.Save(e.Message);
             }
         }
 
@@ -208,17 +206,16 @@ namespace middleware_service
 
         private void TableDependCancellation_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
         {
-            event_logger.WriteEntry(e.Error.Message, EventLogEntryType.Error);
+            Log.Save(e.Error.Message);
         }
 
         private void TableDependInfo_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
         {
-            event_logger.WriteEntry("Table Dependency error: " + e.Error.Message, EventLogEntryType.Error);
+            Log.Save("Table Dependency error: " + e.Error.Message);
         }
 
         private void TableDependInfo_OnChanged(object sender, RecordChangedEventArgs<SqlNotify_DocumentInfo> e)
         {
-            event_logger.WriteEntry("Database change detected, operation: " + e.ChangeType, EventLogEntryType.Information);
             Log.Save("Database change detected, operation: " + e.ChangeType);
 
             try
@@ -1210,14 +1207,13 @@ namespace middleware_service
                 {
                     for (int i = 0; i < accpacSession.Errors.Count; i++)
                     {
-                        event_logger.WriteEntry("Error: " + accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority, EventLogEntryType.Error);
-                        Log.Save(accpacSession.Errors[i].Message + ", Severity: ");
+                        Log.Save("Error: " + accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
                     }
                     accpacSession.Errors.Clear();
                 }
                 else
                 {
-                    event_logger.WriteEntry(ex.Message, EventLogEntryType.Error);
+                    Log.Save(ex.Message);
                 }
             }
             Log.WriteEnd();
@@ -1319,14 +1315,13 @@ namespace middleware_service
                 {
                     for (int i = 0; i < accpacSession.Errors.Count; i++)
                     {
-                        event_logger.WriteEntry("Error: " + accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority, EventLogEntryType.Error);
-                        Log.Save(accpacSession.Errors[i].Message + ", Severity: ");
+                        Log.Save("Error: " + accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
                     }
                     accpacSession.Errors.Clear();
                 }
                 else
                 {
-                    event_logger.WriteEntry(ex.Message, EventLogEntryType.Error);
+                    Log.Save(ex.Message);
                 }
             }
             Log.WriteEnd();
@@ -2549,6 +2544,11 @@ namespace middleware_service
                 count++;
             }
             return count;
+        }
+
+        public void OnDebug()
+        {
+            OnStart(null);
         }
 
         public void XrateInsert(string amt)

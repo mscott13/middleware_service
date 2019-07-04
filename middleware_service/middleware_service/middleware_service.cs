@@ -142,7 +142,7 @@ namespace middleware_service
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            intLink.SetIntegrationStat(Code);
+            //intLink.SetIntegrationStat(Code);
         }
 
         protected override void OnStart(string[] args)
@@ -169,18 +169,17 @@ namespace middleware_service
         {
             try
             {
-                Log.Save("middleware_service stopped.");
-                Log.WriteEnd();
-
-                Log.Save("middleware_service stopped.");
                 tableDependCancellation.Stop();
                 tableDependInfo.Stop();
 
                 tableDependCancellation.Dispose();
                 tableDependInfo.Dispose();
-                intLink.closeConnection();
                 Code = 2;
                 broadcastTimer.Stop();
+
+                Log.StopSocketConnection();
+                Log.Save("middleware_service stopped.");
+                Log.WriteEnd();
             }
             catch (Exception e)
             {
@@ -225,6 +224,7 @@ namespace middleware_service
                 {
                     if (docInfo.DocumentType == INVOICE)
                     {
+                        Log.WriteEnd();
                         Log.Save("Incoming invoice...");
                         InvoiceInfo invoiceInfo = new InvoiceInfo();
                         while (invoiceInfo.amount == 0)
@@ -729,6 +729,7 @@ namespace middleware_service
                     }
                     else if (docInfo.DocumentType == RECEIPT && docInfo.PaymentMethod != 99)
                     {
+                        Log.WriteEnd();
                         Log.Save("Incoming Receipt");
                         Data dt = new Data();
                         PaymentInfo pinfo = new PaymentInfo();
@@ -1207,7 +1208,7 @@ namespace middleware_service
                 {
                     for (int i = 0; i < accpacSession.Errors.Count; i++)
                     {
-                        Log.Save("Error: " + accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
+                        Log.Save(accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
                     }
                     accpacSession.Errors.Clear();
                 }
@@ -1216,7 +1217,6 @@ namespace middleware_service
                     Log.Save(ex.Message);
                 }
             }
-            Log.WriteEnd();
         }
 
         private void TableDependCancellation_OnChanged(object sender, RecordChangedEventArgs<SqlNotifyCancellation> e)
@@ -1315,7 +1315,7 @@ namespace middleware_service
                 {
                     for (int i = 0; i < accpacSession.Errors.Count; i++)
                     {
-                        Log.Save("Error: " + accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
+                        Log.Save(accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
                     }
                     accpacSession.Errors.Clear();
                 }
@@ -1324,7 +1324,6 @@ namespace middleware_service
                     Log.Save(ex.Message);
                 }
             }
-            Log.WriteEnd();
         }
 
         InsertionReturn InvBatchInsert(string idCust, string docNum, string desc, string feeCode, string amt, string batchId)

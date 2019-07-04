@@ -22,6 +22,8 @@ namespace middleware_service.Other_Classes
         private static string message = "";
         private static Socket handler;
         private static Socket server;
+        private static bool run = true;
+        private static int port = 11000;
 
 
 
@@ -33,6 +35,22 @@ namespace middleware_service.Other_Classes
             thread.Start();
         }
 
+        public static void StopSocketConnection()
+        {
+            try
+            {
+                server.Close();
+                handler.Shutdown(SocketShutdown.Both);
+                handler.Close();
+            }
+            catch (Exception e)
+            {
+                evt.WriteEntry(e.Message, EventLogEntryType.Information);
+            }
+
+            run = false;
+        }
+
         public static string Save(string msg)
         {
             if (!Directory.Exists(docPath))
@@ -40,14 +58,21 @@ namespace middleware_service.Other_Classes
                 Directory.CreateDirectory(docPath);
             }
 
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "Log.txt"), true))
+            try
             {
-                result = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString() + " - " + msg;
-                outputFile.WriteLine(result);
+                using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "Log.txt"), true))
+                {
+                    result = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString() + " - " + msg;
+                    outputFile.WriteLine(result);
+                }
+            }
+            catch (Exception e)
+            {
+                message = e.Message;
             }
 
             intlink.Log(msg);
-            evt.WriteEntry(message + " ~ ", EventLogEntryType.Information);
+            evt.WriteEntry(msg + " ~ ", EventLogEntryType.Information);
             message = msg;
             return result;
         }
@@ -60,12 +85,20 @@ namespace middleware_service.Other_Classes
                 Directory.CreateDirectory(docPath);
             }
 
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "Log.txt"), true))
+            try
             {
-                Thread.Sleep(50);
-                outputFile.WriteLine("--------end\r\n");
-                message = "--------end\r\n";
-                result = "newline";
+                using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "Log.txt"), true))
+                {
+                    Thread.Sleep(50);
+                    outputFile.WriteLine("--------end\r\n");
+                    message = "--------end\r\n";
+                    result = "newline";
+                }
+                Thread.Sleep(100);
+            }
+            catch (Exception e)
+            {
+                message = e.Message;
             }
         }
 
@@ -73,9 +106,9 @@ namespace middleware_service.Other_Classes
         {
             IPHostEntry host = Dns.GetHostEntry("localhost"); ;
             IPAddress address = host.AddressList[0]; ;
-            IPEndPoint localEndPoint = new IPEndPoint(address, 11000); ;
+            IPEndPoint localEndPoint = new IPEndPoint(address, port); ;
 
-            while (true)
+            while (run)
             {
                 try
                 {
@@ -85,7 +118,7 @@ namespace middleware_service.Other_Classes
 
                     handler = server.Accept();
 
-                    while (true)
+                    while (run)
                     {
                         Thread.Sleep(5);
                         byte[] bytes = null;
@@ -93,19 +126,26 @@ namespace middleware_service.Other_Classes
                         handler.Send(bytes);
                         message = "";
                     }
-
-                    //handler.Shutdown(SocketShutdown.Both);
-                    //handler.Close();
+                 
                 }
                 catch (Exception e)
                 {
                     evt.WriteEntry(e.Message, EventLogEntryType.Information);
-
                     server.Close();
-
                     handler.Shutdown(SocketShutdown.Both);
                     handler.Close();
                 }
+            }
+
+            try
+            {
+                server.Close();
+                handler.Shutdown(SocketShutdown.Both);
+                handler.Close();
+            }
+            catch (Exception e)
+            {
+                evt.WriteEntry(e.Message, EventLogEntryType.Information);
             }
         }
     }

@@ -1,72 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.ServiceProcess;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 
-namespace middleware_log_client
+namespace client_client
 {
     class Program
     {
         static void Main(string[] args)
         {
-            ServiceController sc = new ServiceController("middleware_service");
-            Console.WriteLine("Middleware Log Client");
-            Console.WriteLine("---------------------");
+            init();
+        }
 
-            if (sc.Status != ServiceControllerStatus.Running)
-            {
-                Console.WriteLine("Middleware Service is not running. Please start the service to continue...");
-                Console.WriteLine("Service status: "+sc.Status.ToString());
-                while (true)
-                {
-                    sc = new ServiceController("middleware_service");
-                    if (sc.Status == ServiceControllerStatus.Running)
-                    {
-                        break;
-                    }
-                }
-            }
-
-            Console.Clear();
-            Console.WriteLine("Waiting for middleware server...");
-            Thread.Sleep(1500);
-
-            var client = new NamedPipeClientStream("middleware-link");
-            client.Connect();
-
-            StreamReader reader = new StreamReader(client);
-            StreamWriter writer = new StreamWriter(client);
+        public static void init()
+        {
+            byte[] bytes = new byte[1024];
 
             try
             {
-                Console.WriteLine("\nConnected");
-                Console.WriteLine("Listening for log messages...\n");
+                IPHostEntry host = Dns.GetHostEntry("localhost");
+                IPAddress address = host.AddressList[0];
+                IPEndPoint localEndPoint = new IPEndPoint(address, 11000);
+
+                Socket client = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                client.Connect(localEndPoint);
+                Console.WriteLine("Socket connected to {0}", client.RemoteEndPoint.ToString());
+
                 while (true)
                 {
-                    string result = reader.ReadLine();
-                    if (result != null && result != "")
+                    int bytesRec = client.Receive(bytes);
+                    if (Encoding.ASCII.GetString(bytes, 0, bytesRec) != null || Encoding.ASCII.GetString(bytes, 0, bytesRec) != "")
                     {
-                        if (result == "newline")
-                        {
-                            Console.WriteLine("");
-                        }
-                        else
-                        {
-                            Console.WriteLine(result);
-                        }
+                        Console.WriteLine(DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString() + " ~ " + Encoding.ASCII.GetString(bytes, 0, bytesRec));
+                        Thread.Sleep(1);
                     }
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("\nMiddlware Log Server not started. Make sure the middleware_service is running before starting this client.");
-                Console.WriteLine("Press any key to exit");
-                Console.ReadLine();
+                Console.WriteLine(e.Message);
+                Console.ReadKey();
             }
         }
     }

@@ -3908,3 +3908,47 @@ Affected parameters are:
    logtoconsole = 
    logfile = C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.InstallLog
    assemblypath = C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.exe
+Uninstalling assembly 'C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.InstallLog
+   assemblypath = C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.exe
+Removing EventLog source middleware_service.
+Service middleware_service is being removed from the system...
+Service middleware_service was successfully removed from the system.
+Attempt to stop service middleware_service.
+Installing assembly 'C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.InstallLog
+   assemblypath = C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.exe
+Installing service middleware_service...
+Service middleware_service has been successfully installed.
+Creating EventLog source middleware_service in log Application...
+Committing assembly 'C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.InstallLog
+   assemblypath = C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.exe
+Uninstalling assembly 'C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.InstallLog
+   assemblypath = C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.exe
+Removing EventLog source middleware_service.
+Service middleware_service is being removed from the system...
+Service middleware_service was successfully removed from the system.
+Attempt to stop service middleware_service.
+Installing assembly 'C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.InstallLog
+   assemblypath = C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.exe
+Installing service middleware_service...
+Service middleware_service has been successfully installed.
+Creating EventLog source middleware_service in log Application...
+Committing assembly 'C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.InstallLog
+   assemblypath = C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\middleware_service.exe

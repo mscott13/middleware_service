@@ -22,8 +22,8 @@ namespace middleware_service
 {
     public partial class middleware_service : ServiceBase
     {
-        string dbGeneric = "Data Source=SERVER-ERP2\\ASMSDEV;Initial Catalog=ASMSGenericMaster;Integrated Security=True";
-        string dbIntegration = "Data Source=SERVER-ERP2\\ASMSDEV;Initial Catalog=ASMSSAGEINTEGRATION;Integrated Security=True";
+        string dbGeneric = "Data Source=erp-srvr\\ASMSDEV;Initial Catalog=ASMSGenericMaster;Integrated Security=True";
+        string dbIntegration = "Data Source=erp-srvr\\ASMSDEV;Initial Catalog=ASMSSAGEINTEGRATION;Integrated Security=True";
 
         SqlTableDependency<SqlNotifyCancellation> tableDependCancellation;
         SqlTableDependency<SqlNotify_DocumentInfo> tableDependInfo;
@@ -128,6 +128,7 @@ namespace middleware_service
             catch (Exception e)
             {
                 Log.Save(e.Message + " "+e.StackTrace);
+                Log.WriteEnd();
                 Stop();
             }
         }
@@ -153,6 +154,7 @@ namespace middleware_service
             catch (Exception e)
             {
                 Log.Save(e.Message+" "+e.StackTrace);
+                Log.WriteEnd();
             }
         }
 
@@ -181,6 +183,7 @@ namespace middleware_service
             catch (Exception e)
             {
                 Log.Save(e.Message +" "+e.StackTrace);
+                Log.WriteEnd();
             }
         }
 
@@ -197,6 +200,7 @@ namespace middleware_service
             catch (Exception ex)
             {
                 Log.Save(ex.InnerException.Message);
+                Log.WriteEnd();
             }
         }
 
@@ -1208,10 +1212,12 @@ namespace middleware_service
                         Log.Save(accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
                     }
                     accpacSession.Errors.Clear();
+                    Log.WriteEnd();
                 }
                 else
                 {
                     Log.Save(ex.Message + " "+ex.StackTrace);
+                    Log.WriteEnd();
                 }
             }
         }
@@ -1315,10 +1321,12 @@ namespace middleware_service
                         Log.Save(accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
                     }
                     accpacSession.Errors.Clear();
+                    Log.WriteEnd();
                 }
                 else
                 {
                     Log.Save(ex.Message + " "+ex.StackTrace);
+                    Log.WriteEnd();
                 }
             }
         }

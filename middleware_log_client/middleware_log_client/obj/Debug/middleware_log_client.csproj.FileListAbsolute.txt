@@ -11,3 +11,10 @@ C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_log_clien
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_log_client\middleware_log_client\obj\Debug\middleware_log_client.csproj.CoreCompileInputs.cache
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_log_client\middleware_log_client\obj\Debug\middleware_log_client.exe
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_log_client\middleware_log_client\obj\Debug\middleware_log_client.pdb
+C:\Users\mscott\Desktop\Git Repositories\Middleware Service\middleware_log_client\middleware_log_client\bin\Debug\middleware_log_client.exe.config
+C:\Users\mscott\Desktop\Git Repositories\Middleware Service\middleware_log_client\middleware_log_client\bin\Debug\middleware_log_client.exe
+C:\Users\mscott\Desktop\Git Repositories\Middleware Service\middleware_log_client\middleware_log_client\bin\Debug\middleware_log_client.pdb
+C:\Users\mscott\Desktop\Git Repositories\Middleware Service\middleware_log_client\middleware_log_client\obj\Debug\middleware_log_client.csprojAssemblyReference.cache
+C:\Users\mscott\Desktop\Git Repositories\Middleware Service\middleware_log_client\middleware_log_client\obj\Debug\middleware_log_client.csproj.CoreCompileInputs.cache
+C:\Users\mscott\Desktop\Git Repositories\Middleware Service\middleware_log_client\middleware_log_client\obj\Debug\middleware_log_client.exe
+C:\Users\mscott\Desktop\Git Repositories\Middleware Service\middleware_log_client\middleware_log_client\obj\Debug\middleware_log_client.pdb

@@ -148,7 +148,6 @@ namespace middleware_service
         protected override void OnStart(string[] args)
         {
             currentTime = DateTime.Now;
-            Log.Save("middleware_service started. - " + currentTime.ToShortDateString() + " " + currentTime.ToShortTimeString());
             try
             {
                 tableDependCancellation.Start();
@@ -163,6 +162,12 @@ namespace middleware_service
             {
                 Log.Save(e.Message);
             }
+        }
+
+        protected override void OnShutdown()
+        {
+            Log.Save("Machine shutdown event detected");
+            base.OnShutdown();
         }
 
         protected override void OnStop()

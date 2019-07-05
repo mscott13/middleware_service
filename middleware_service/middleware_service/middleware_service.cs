@@ -22,8 +22,8 @@ namespace middleware_service
 {
     public partial class middleware_service : ServiceBase
     {
-        string smaDbserv = "Data Source=ERP-SRVR\\ASMSDEV;Initial Catalog=ASMSGenericMaster;Integrated Security=True";
-        string IntegrationDB_SMA = "Data Source=ERP-SRVR\\ASMSDEV;Initial Catalog=ASMSSAGEINTEGRATION;Integrated Security=True";
+        string dbGeneric = "Data Source=SERVER-ERP2\\ASMSDEV;Initial Catalog=ASMSGenericMaster;Integrated Security=True";
+        string dbIntegration = "Data Source=SERVER-ERP2\\ASMSDEV;Initial Catalog=ASMSSAGEINTEGRATION;Integrated Security=True";
 
         SqlTableDependency<SqlNotifyCancellation> tableDependCancellation;
         SqlTableDependency<SqlNotify_DocumentInfo> tableDependInfo;
@@ -94,40 +94,32 @@ namespace middleware_service
 
             try
             {
-                connGeneric = new SqlConnection(smaDbserv);
-                connIntegration = new SqlConnection(IntegrationDB_SMA);
-                connMsgQueue = new SqlConnection(IntegrationDB_SMA);
+                connGeneric = new SqlConnection(dbGeneric);
+                connIntegration = new SqlConnection(dbIntegration);
+                connMsgQueue = new SqlConnection(dbIntegration);
+
+                intLink = new Integration(connGeneric, connIntegration, connMsgQueue);
+                Log.Init(intLink, event_logger);
 
                 accpacSession = new Session();
 
-                using (tableDependCancellation = new SqlTableDependency<SqlNotifyCancellation>("Data Source=ERP-SRVR\\ASMSDEV;Initial Catalog=ASMSGenericMaster;Integrated Security=True", "tblARInvoices"))
+                using (tableDependCancellation = new SqlTableDependency<SqlNotifyCancellation>(dbGeneric, "tblARInvoices"))
                 {
                     tableDependCancellation.OnChanged += TableDependCancellation_OnChanged;
                     tableDependCancellation.OnError += TableDependCancellation_OnError;
                 }
 
-                using (tableDependInfo = new SqlTableDependency<SqlNotify_DocumentInfo>("Data Source=ERP-SRVR\\ASMSDEV;Initial Catalog=ASMSGenericMaster;Integrated Security=True", "tblGLDocuments"))
+                using (tableDependInfo = new SqlTableDependency<SqlNotify_DocumentInfo>(dbGeneric, "tblGLDocuments"))
                 {
                     tableDependInfo.OnChanged += TableDependInfo_OnChanged;
                     tableDependInfo.OnError += TableDependInfo_OnError;
                 }
 
-                intLink = new Integration(connGeneric, connIntegration, connMsgQueue);
-                Log.Init(intLink, event_logger);
-
                 broadcastTimer.Elapsed += Timer_Elapsed;
                 broadcastTimer.Enabled = true;
                 broadcastTimer.Interval = 1000;
 
-            }
-            catch (Exception e)
-            {
-                Log.Save(e.Message);
-            }
-
-            //////////////////////////////////////////////////////////////////// STARTING SESSION ///////////////////////////////////////////////////////////////////////
-            try
-            {
+                //////////////////////////////////////////////////////////////////// STARTING SESSION ///////////////////////////////////////////////////////////////////////
                 Log.Save("Starting accpac session...");
                 accpacSession.Init("", "XY", "XY1000", "65A");
                 accpacSession.Open("ADMIN", "SPECTRUM9", "SMALTD", DateTime.Today, 0);
@@ -135,9 +127,9 @@ namespace middleware_service
             }
             catch (Exception e)
             {
-               Log.Save(e.Message + " ~ " + e.StackTrace);
+                Log.Save(e.Message + " "+e.StackTrace);
+                Stop();
             }
-            //////////////////////////////////////////////////////////////////// STARTING SESSION ///////////////////////////////////////////////////////////////////////
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -160,7 +152,7 @@ namespace middleware_service
             }
             catch (Exception e)
             {
-                Log.Save(e.Message);
+                Log.Save(e.Message+" "+e.StackTrace);
             }
         }
 
@@ -188,7 +180,7 @@ namespace middleware_service
             }
             catch (Exception e)
             {
-                Log.Save(e.Message);
+                Log.Save(e.Message +" "+e.StackTrace);
             }
         }
 
@@ -210,7 +202,7 @@ namespace middleware_service
 
         private void TableDependCancellation_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
         {
-            Log.Save(e.Error.Message);
+            Log.Save("Table Dependency error: " + e.Error.Message);
         }
 
         private void TableDependInfo_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
@@ -1219,7 +1211,7 @@ namespace middleware_service
                 }
                 else
                 {
-                    Log.Save(ex.Message);
+                    Log.Save(ex.Message + " "+ex.StackTrace);
                 }
             }
         }
@@ -1326,7 +1318,7 @@ namespace middleware_service
                 }
                 else
                 {
-                    Log.Save(ex.Message);
+                    Log.Save(ex.Message + " "+ex.StackTrace);
                 }
             }
         }

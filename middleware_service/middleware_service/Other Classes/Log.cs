@@ -25,8 +25,6 @@ namespace middleware_service.Other_Classes
         private static bool run = true;
         private static int port = 11000;
 
-
-
         public static void Init(Integration integration, EventLog _evt)
         {
             intlink = integration;
@@ -53,40 +51,41 @@ namespace middleware_service.Other_Classes
 
         public static string Save(string msg)
         {
-            if (!Directory.Exists(docPath))
-            {
-                Directory.CreateDirectory(docPath);
-            }
-
             try
             {
+                if (!Directory.Exists(docPath))
+                {
+                    Directory.CreateDirectory(docPath);
+                }
+
                 using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "Log.txt"), true))
                 {
                     result = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString() + " - " + msg;
                     outputFile.WriteLine(result);
                 }
+
+                intlink.Log(msg);
+                evt.WriteEntry(msg, EventLogEntryType.Information);
             }
             catch (Exception e)
             {
                 message = e.Message;
+                evt.WriteEntry(msg + " ~ ", EventLogEntryType.Information);
             }
-
-            intlink.Log(msg);
-            evt.WriteEntry(msg + " ~ ", EventLogEntryType.Information);
+            
             message = msg;
             return result;
         }
 
         public static void WriteEnd()
         {
-            string docPath = "C:\\Middleware Service";
-            if (!Directory.Exists(docPath))
-            {
-                Directory.CreateDirectory(docPath);
-            }
-
             try
             {
+                if (!Directory.Exists(docPath))
+                {
+                    Directory.CreateDirectory(docPath);
+                }
+
                 using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "Log.txt"), true))
                 {
                     Thread.Sleep(50);
@@ -99,6 +98,7 @@ namespace middleware_service.Other_Classes
             catch (Exception e)
             {
                 message = e.Message;
+                evt.WriteEntry(e.Message + " ~ ", EventLogEntryType.Information);
             }
         }
 
@@ -126,7 +126,7 @@ namespace middleware_service.Other_Classes
                         handler.Send(bytes);
                         message = "";
                     }
-                 
+
                 }
                 catch (Exception e)
                 {

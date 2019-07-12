@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "middleware_service", "middleware_service\middleware_service.csproj", "{B4282EE9-FB7C-47C5-B691-9E5F68DDF204}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "setup", "setup\setup.vdproj", "{147ADA5F-E784-45F7-8842-EFBE5F30701B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,11 +23,15 @@ Global
 		{B4282EE9-FB7C-47C5-B691-9E5F68DDF204}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B4282EE9-FB7C-47C5-B691-9E5F68DDF204}.Release|x86.ActiveCfg = Release|x86
 		{B4282EE9-FB7C-47C5-B691-9E5F68DDF204}.Release|x86.Build.0 = Release|x86
+		{147ADA5F-E784-45F7-8842-EFBE5F30701B}.Debug|Any CPU.ActiveCfg = Debug
+		{147ADA5F-E784-45F7-8842-EFBE5F30701B}.Debug|x86.ActiveCfg = Debug
+		{147ADA5F-E784-45F7-8842-EFBE5F30701B}.Release|Any CPU.ActiveCfg = Release
+		{147ADA5F-E784-45F7-8842-EFBE5F30701B}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {0F877C45-D996-46DE-A3DB-C6BD0021AFD3}
+		SolutionGuid = {B9C0E9E7-D514-4A1C-A2B2-3E136FE88A36}
 	EndGlobalSection
 EndGlobal

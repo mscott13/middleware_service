@@ -33,7 +33,7 @@
             // 
             // installer
             // 
-            this.installer.Account = System.ServiceProcess.ServiceAccount.NetworkService;
+            this.installer.Account = System.ServiceProcess.ServiceAccount.LocalSystem;
             this.installer.Password = null;
             this.installer.Username = null;
             // 
@@ -44,6 +44,7 @@
             this.middleware_service.DisplayName = "Middleware Service";
             this.middleware_service.ServiceName = "middleware_service";
             this.middleware_service.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
+            this.middleware_service.AfterInstall += new System.Configuration.Install.InstallEventHandler(this.middleware_service_AfterInstall);
             // 
             // ProjectInstaller
             // 

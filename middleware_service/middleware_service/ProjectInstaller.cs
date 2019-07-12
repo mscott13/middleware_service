@@ -20,15 +20,24 @@ namespace middleware_service
             processInstaller = new ServiceProcessInstaller();
             serviceInstaller = new ServiceInstaller();
             
-            processInstaller.Account = ServiceAccount.NetworkService;
+            processInstaller.Account = ServiceAccount.LocalSystem;
             serviceInstaller.StartType = ServiceStartMode.Automatic;
             serviceInstaller.DelayedAutoStart = true;
             serviceInstaller.Description = "Syncronize databases between ASMS and SAGE";
             serviceInstaller.ServiceName = "middleware_service";
             serviceInstaller.DisplayName = "Middleware Service";
+            AfterInstall += middleware_service_AfterInstall;
 
             Installers.Add(serviceInstaller);
             Installers.Add(processInstaller);
+        }
+
+        private void middleware_service_AfterInstall(object sender, InstallEventArgs e)
+        {
+            using (ServiceController sc = new ServiceController(serviceInstaller.ServiceName))
+            {
+                sc.Start();
+            }
         }
     }
 }

@@ -2287,5 +2287,29 @@ namespace middleware_service.Database_Operations
             cmd.ExecuteNonQuery();
             closeConnection("cIntegration");
         }
+
+        public bool checkReportExist(DateTime date)
+        {
+            openConnection("cIntegration");
+            SqlCommand cmd = new SqlCommand();
+            SqlDataReader reader;
+
+            cmd.Connection = cIntegration;
+            cmd.CommandText = "EXEC sp_checkRptExist @period";
+            cmd.Parameters.AddWithValue("@period", date);
+       
+            reader = cmd.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                closeConnection("cIntegration");
+                return true;
+            }
+            else
+            {
+                closeConnection("cIntegration");
+                return false;
+            }
+        }
     }
 }

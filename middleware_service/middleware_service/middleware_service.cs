@@ -92,7 +92,81 @@ namespace middleware_service
 
             event_logger.Source = "middleware_service";
             event_logger.Log = "Application";
+        }
 
+        private void DeferredTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Log.Save("Checking deferred report generation time");
+            Log.WriteEnd();
+
+            DateTime MonthlyRptDate = intLink.GetNextGenDate("Monthly");
+            DateTime AnnualRptDate = intLink.GetNextGenDate("Annual");
+
+            Log.Save("Monthly Rpt Date: " + MonthlyRptDate.ToLongDateString() + " " + MonthlyRptDate.ToLongTimeString());
+            Log.Save("Annual Rpt Date: " + AnnualRptDate.ToLongDateString() + " " + AnnualRptDate.ToLongTimeString());
+            Log.WriteEnd();
+
+            if (DateTime.Now.Year == MonthlyRptDate.Year && DateTime.Now.Month == MonthlyRptDate.Month && DateTime.Now.Day == MonthlyRptDate.Day)
+            {
+                if (DateTime.Now.Hour == MonthlyRptDate.Hour)
+                {
+                    int m = DateTime.Now.Month - 1;
+                    int y = DateTime.Now.Year;
+
+                    if (m == 0)
+                    {
+                        m = 12;
+                        y = y - 1;
+                    }
+
+                    Log.Save("Generating Monthly Deferred Income Report... | Month: "+m+", Year: "+y);
+                    Database_Operations.Report rpt = new Database_Operations.Report(intLink);
+                    var result = rpt.gen_rpt("Monthly", 0, m, y);
+
+                    if (result != null)
+                    {
+                        //here we set the next Report Generation Date
+                        int es = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month) - DateTime.Now.Day;
+                        es++;
+                        DateTime nextMonth = DateTime.Now.AddDays(es);
+                        DateTime nextGenDate = new DateTime(nextMonth.Year, nextMonth.Month, 2);
+                        nextGenDate = nextGenDate.AddHours(2);
+                        intLink.SetNextGenDate("Monthly", nextGenDate);
+                        Log.Save("Monthly Deferred Report Generated.");
+                    }
+                }
+            }
+
+            if (DateTime.Now.Year == AnnualRptDate.Year && DateTime.Now.Month == AnnualRptDate.Month && DateTime.Now.Day == AnnualRptDate.Day)
+            {
+                if (DateTime.Now.Hour == AnnualRptDate.Hour)
+                {
+                    int m = 4;
+                    int y = DateTime.Now.Year - 1;
+
+                    Log.Save("Generating Annual Deferred Income Report...");
+                    Database_Operations.Report rpt = new Database_Operations.Report(intLink);
+                    var result = rpt.gen_rpt("Monthly", 0, m, y);
+
+                    if (result != null)
+                    {
+                        //here we set the next Report Generation Date
+                        DateTime nextGenDate = new DateTime(DateTime.Now.Year + 1, 4, 2);
+                        nextGenDate = nextGenDate.AddHours(3);
+                        intLink.SetNextGenDate("Annual", nextGenDate);
+                        Log.Save("Annual Deferred Report Generated.");
+                    }
+                }
+            }
+        }
+
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            //intLink.SetIntegrationStat(Code);
+        }
+
+        protected override void OnStart(string[] args)
+        {
             try
             {
                 connGeneric = new SqlConnection(dbGeneric);
@@ -132,77 +206,10 @@ namespace middleware_service
             }
             catch (Exception e)
             {
-                Log.Save(e.Message + " "+e.StackTrace);
+                Log.Save(e.Message + " " + e.StackTrace);
                 Log.WriteEnd();
-                Stop();
-            }
-        }
-
-        private void DeferredTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            Log.Save("Checking deferred report generation time");
-            Log.WriteEnd();
-
-            DateTime MonthlyRptDate = intLink.GetNextGenDate("Monthly");
-            DateTime AnnualRptDate = intLink.GetNextGenDate("Annual");
-
-            Log.Save("Monthly Rpt Date: " + MonthlyRptDate.ToLongDateString() + " " + MonthlyRptDate.ToLongTimeString());
-            Log.Save("Annual Rpt Date: " + AnnualRptDate.ToLongDateString() + " " + AnnualRptDate.ToLongTimeString());
-            Log.WriteEnd();
-
-            if (DateTime.Now.Year == MonthlyRptDate.Year && DateTime.Now.Month == MonthlyRptDate.Month && DateTime.Now.Day == MonthlyRptDate.Day)
-            {
-                if (DateTime.Now.Hour == MonthlyRptDate.Hour)
-                {
-                    int m = DateTime.Now.Month - 1;
-                    int y = DateTime.Now.Year;
-
-                    if (m == 0)
-                    {
-                        m = 12;
-                        y = y - 1;
-                    }
-
-                    Log.Save("Generating Monthly Deferred Income Report...");
-                    Database_Operations.Report rpt = new Database_Operations.Report();
-                    rpt.gen_rpt("Monthly", intLink, 0, m, y);
-                    //here we set the next Report Generation Date
-                    int es = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month) - DateTime.Now.Day;
-                    es++;
-                    DateTime nextMonth = DateTime.Now.AddDays(es);
-                    DateTime nextGenDate = new DateTime(nextMonth.Year, nextMonth.Month, 2);
-                    nextGenDate = nextGenDate.AddHours(2);
-                    intLink.SetNextGenDate("Monthly", nextGenDate);
-                    Log.Save("Monthly Deferred Report Generated.");
-                }
             }
 
-            if (DateTime.Now.Year == AnnualRptDate.Year && DateTime.Now.Month == AnnualRptDate.Month && DateTime.Now.Day == AnnualRptDate.Day)
-            {
-                if (DateTime.Now.Hour == AnnualRptDate.Hour)
-                {
-                    int m = 4;
-                    int y = DateTime.Now.Year - 1;
-
-                    Log.Save("Generating Annual Deferred Income Report...");
-                    Database_Operations.Report rpt = new Database_Operations.Report();
-                    rpt.gen_rpt("Monthly", intLink, 0, m, y);
-                    //here we set the next Report Generation Date
-                    DateTime nextGenDate = new DateTime(DateTime.Now.Year + 1, 4, 2);
-                    nextGenDate = nextGenDate.AddHours(3);
-                    intLink.SetNextGenDate("Annual", nextGenDate);
-                    Log.Save("Annual Deferred Report Generated.");
-                }
-            }
-        }
-
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            //intLink.SetIntegrationStat(Code);
-        }
-
-        protected override void OnStart(string[] args)
-        {
             currentTime = DateTime.Now;
             try
             {

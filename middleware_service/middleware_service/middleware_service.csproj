@@ -148,6 +148,7 @@
     <Compile Include="Database Classes\DeferredData.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="resources\icon.ico" />
     <Content Include="resources\spec.jpg" />
   </ItemGroup>
   <ItemGroup>

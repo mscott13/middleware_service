@@ -15,7 +15,7 @@ namespace middleware_service.Other_Classes
 {
     public static class Log
     {
-        private static string docPath = "C:\\Middleware Service";
+        private static string docPath = AppDomain.CurrentDomain.BaseDirectory + "resources";
         private static string result = "";
         private static Integration intlink;
         private static EventLog evt;
@@ -132,8 +132,8 @@ namespace middleware_service.Other_Classes
                 {
                     evt.WriteEntry(e.Message, EventLogEntryType.Information);
                     server.Close();
-                    handler.Shutdown(SocketShutdown.Both);
-                    handler.Close();
+                    //handler.Shutdown(SocketShutdown.Both);
+                    //handler.Close();
                 }
             }
 

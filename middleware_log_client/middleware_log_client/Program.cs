@@ -24,7 +24,6 @@ namespace client_client
 
         static void Main(string[] args)
         {
-            DisbleQuickEditMode();
             init();
         }
 
@@ -68,6 +67,7 @@ namespace client_client
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                Console.ReadKey();
             }
         }
     }

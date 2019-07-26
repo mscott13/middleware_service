@@ -162,7 +162,7 @@ namespace middleware_service
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            //intLink.SetIntegrationStat(Code);
+            intLink.SetIntegrationStat(Code);
         }
 
         protected override void OnStart(string[] args)

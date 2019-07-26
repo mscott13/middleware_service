@@ -688,12 +688,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_81ED6D227D6647AE91A5D36DCD823A77"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_BC88B09429E2454C2315ACBB27D04BA9"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -737,6 +731,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_8310F2FD0715A60F6C6DEDC42A0049C6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_81ED6D227D6647AE91A5D36DCD823A77"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -2277,26 +2277,26 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:setup"
-        "ProductCode" = "8:{F5AF860C-3BA7-49B5-A2C2-9876300D5103}"
-        "PackageCode" = "8:{B082FDEA-3743-4CF4-BFC4-2ADDFC1EDAB1}"
+        "ProductName" = "8:SMA Middleware"
+        "ProductCode" = "8:{F7E8F567-CEDD-41A2-B5CE-9EEAA45FABE3}"
+        "PackageCode" = "8:{239243E9-D7C9-4163-96E5-ED6D5EE3F59D}"
         "UpgradeCode" = "8:{4B6D55D9-06F8-4B0F-BCD0-E422CA152694}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
         "Manufacturer" = "8:M.S"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:setup"
+        "Title" = "8:SMA Middleware"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Mark Scott"
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:Middleware service installer"
         "ARPURLINFOABOUT" = "8:"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_567981AE970447CEA0C225A3747FB2E7"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"

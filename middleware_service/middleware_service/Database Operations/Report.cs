@@ -17,7 +17,7 @@ namespace middleware_service.Database_Operations
     {
         private string pdfImgPath = AppDomain.CurrentDomain.BaseDirectory + @"resources\spec.jpg";
         private string pdfFilePath = AppDomain.CurrentDomain.BaseDirectory + @"resources\reports\";
-        
+
         private Integration intlink;
 
         public Report(Integration intlink)
@@ -28,442 +28,434 @@ namespace middleware_service.Database_Operations
         public DeferredData gen_rpt(string ReportType, int action, int month, int year)
         {
             DateTime period = new DateTime(year, month + 1, 1);
-            if (!intlink.checkReportExist(period))
+            DateTime startDate = new DateTime(year, month, 1);
+            DateTime endDate = new DateTime();
+            if (ReportType == "Monthly") endDate = new DateTime(year, month, DateTime.DaysInMonth(year, month));
+            if (ReportType == "Annual") endDate = new DateTime(year + 1, month - 1, DateTime.DaysInMonth(year + 1, month - 1));
+
+            List<ReportRawData> ReportInfo = intlink.getDIRInformation(ReportType, startDate, endDate);
+
+            List<DataWrapper> ReportCategories = new List<DataWrapper>();
+
+            DataWrapper cell_category = new DataWrapper();
+            DataWrapper bband_category = new DataWrapper();
+            DataWrapper micro_category = new DataWrapper();
+            DataWrapper vsat_category = new DataWrapper();
+            DataWrapper marine_category = new DataWrapper();
+            DataWrapper dservices_category = new DataWrapper();
+            DataWrapper aero_category = new DataWrapper();
+            DataWrapper trunking_category = new DataWrapper();
+            DataWrapper other_category = new DataWrapper();
+
+            cell_category.label = "Cellular";
+            bband_category.label = "P/R Commercial (Broadband)";
+            micro_category.label = "P/R Commercial (Microwave)";
+            vsat_category.label = "Vsat";
+            marine_category.label = "P/R - Marine";
+            dservices_category.label = "P/R Commercial (Data & Services)";
+            aero_category.label = "P/R - Aeronautical";
+            trunking_category.label = "P/R - Trunking";
+            other_category.label = "Other P/R Non-Commercial Clients";
+
+            List<String> ReportColumnNames = new List<string>();
+            ReportColumnNames.Add("License Number");
+            ReportColumnNames.Add("Client Company");
+            ReportColumnNames.Add("Invoice ID");
+            ReportColumnNames.Add("Budget");
+            ReportColumnNames.Add("Invoice Total");
+            if (ReportType == "Monthly") ReportColumnNames.Add("This Month's Invoice");
+            if (ReportType == "Annual") ReportColumnNames.Add("This Year's Invoice");
+            ReportColumnNames.Add("Balance B/FWD");
+            ReportColumnNames.Add("From Revenue");
+            ReportColumnNames.Add("To Revenue");
+            ReportColumnNames.Add("Closing Balance");
+            ReportColumnNames.Add("Total Months");
+            ReportColumnNames.Add("Months Utilized");
+            ReportColumnNames.Add("Months Remaining");
+            ReportColumnNames.Add("Validity Period Start");
+            ReportColumnNames.Add("Validity Period End");
+
+            UIData record_info = new UIData();
+
+            decimal OpeningBal = 0;
+            decimal ClosingBal = 0;
+            DateTime RecordsStartValPeriod = new DateTime();
+            DateTime RecordsEndValPeriod = new DateTime();
+            DateTime LastRptsStartValPeriod = new DateTime();
+            DateTime LastRptsEndValPeriod = new DateTime();
+            string ThisPeriodsInv = "";
+            string clientCompany = "";
+            string invoiceID = "";
+            int TotalMonths = 0;
+            int MonthsUtilized = 0;
+            int MonthsRemaining = 0;
+            decimal fromRevAmt = 0;
+            decimal toRevAmt = 0;
+
+            decimal cell_SubT_budget = 0;
+            decimal cell_SubT_invoiceTotal = 0;
+            decimal cell_SubT_balBFwd = 0;
+            decimal cell_SubT_closingBal = 0;
+            decimal cell_SubT_fromRev = 0;
+            decimal cell_SubT_toRev = 0;
+
+            decimal bband_SubT_budget = 0;
+            decimal bband_SubT_invoiceTotal = 0;
+            decimal bband_SubT_balBFwd = 0;
+            decimal bband_SubT_closingBal = 0;
+            decimal bband_SubT_fromRev = 0;
+            decimal bband_SubT_toRev = 0;
+
+            decimal micro_SubT_budget = 0;
+            decimal micro_SubT_invoiceTotal = 0;
+            decimal micro_SubT_balBFwd = 0;
+            decimal micro_SubT_closingBal = 0;
+            decimal micro_SubT_fromRev = 0;
+            decimal micro_SubT_toRev = 0;
+
+            decimal vsat_SubT_budget = 0;
+            decimal vsat_SubT_invoiceTotal = 0;
+            decimal vsat_SubT_balBFwd = 0;
+            decimal vsat_SubT_closingBal = 0;
+            decimal vsat_SubT_fromRev = 0;
+            decimal vsat_SubT_toRev = 0;
+
+            decimal marine_SubT_budget = 0;
+            decimal marine_SubT_invoiceTotal = 0;
+            decimal marine_SubT_balBFwd = 0;
+            decimal marine_SubT_closingBal = 0;
+            decimal marine_SubT_fromRev = 0;
+            decimal marine_SubT_toRev = 0;
+
+            decimal dservices_SubT_budget = 0;
+            decimal dservices_SubT_invoiceTotal = 0;
+            decimal dservices_SubT_balBFwd = 0;
+            decimal dservices_SubT_closingBal = 0;
+            decimal dservices_SubT_fromRev = 0;
+            decimal dservices_SubT_toRev = 0;
+
+            decimal aero_SubT_budget = 0;
+            decimal aero_SubT_invoiceTotal = 0;
+            decimal aero_SubT_balBFwd = 0;
+            decimal aero_SubT_closingBal = 0;
+            decimal aero_SubT_fromRev = 0;
+            decimal aero_SubT_toRev = 0;
+
+            decimal trunking_SubT_budget = 0;
+            decimal trunking_SubT_invoiceTotal = 0;
+            decimal trunking_SubT_balBFwd = 0;
+            decimal trunking_SubT_closingBal = 0;
+            decimal trunking_SubT_fromRev = 0;
+            decimal trunking_SubT_toRev = 0;
+
+            decimal other_SubT_budget = 0;
+            decimal other_SubT_invoiceTotal = 0;
+            decimal other_SubT_balBFwd = 0;
+            decimal other_SubT_closingBal = 0;
+            decimal other_SubT_fromRev = 0;
+            decimal other_SubT_toRev = 0;
+
+            decimal tot_budget = 0;
+            decimal tot_invoiceTotal = 0;
+            decimal tot_balBFwd = 0;
+            decimal tot_closingBal = 0;
+            decimal tot_fromRev = 0;
+            decimal tot_toRev = 0;
+
+
+            for (int i = 0; i < ReportInfo.Count; i++)
             {
-                DateTime startDate = new DateTime(year, month, 1);
-                DateTime endDate = new DateTime();
-                if (ReportType == "Monthly") endDate = new DateTime(year, month, DateTime.DaysInMonth(year, month));
-                if (ReportType == "Annual") endDate = new DateTime(year + 1, month - 1, DateTime.DaysInMonth(year + 1, month - 1));
 
-                List<ReportRawData> ReportInfo = intlink.getDIRInformation(ReportType, startDate, endDate);
+                record_info = new UIData();
+                OpeningBal = 0;
+                fromRevAmt = 0;
+                ThisPeriodsInv = "No";
+                RecordsStartValPeriod = ReportInfo[i].CurrentStartValPeriod.Date;
+                RecordsEndValPeriod = ReportInfo[i].CurrentEndValPeriod.Date;
+                invoiceID = ReportInfo[i].ARInvoiceID;
+                if (invoiceID == "0") invoiceID = "";
 
-                List<DataWrapper> ReportCategories = new List<DataWrapper>();
-
-                DataWrapper cell_category = new DataWrapper();
-                DataWrapper bband_category = new DataWrapper();
-                DataWrapper micro_category = new DataWrapper();
-                DataWrapper vsat_category = new DataWrapper();
-                DataWrapper marine_category = new DataWrapper();
-                DataWrapper dservices_category = new DataWrapper();
-                DataWrapper aero_category = new DataWrapper();
-                DataWrapper trunking_category = new DataWrapper();
-                DataWrapper other_category = new DataWrapper();
-
-                cell_category.label = "Cellular";
-                bband_category.label = "P/R Commercial (Broadband)";
-                micro_category.label = "P/R Commercial (Microwave)";
-                vsat_category.label = "Vsat";
-                marine_category.label = "P/R - Marine";
-                dservices_category.label = "P/R Commercial (Data & Services)";
-                aero_category.label = "P/R - Aeronautical";
-                trunking_category.label = "P/R - Trunking";
-                other_category.label = "Other P/R Non-Commercial Clients";
-
-                List<String> ReportColumnNames = new List<string>();
-                ReportColumnNames.Add("License Number");
-                ReportColumnNames.Add("Client Company");
-                ReportColumnNames.Add("Invoice ID");
-                ReportColumnNames.Add("Budget");
-                ReportColumnNames.Add("Invoice Total");
-                if (ReportType == "Monthly") ReportColumnNames.Add("This Month's Invoice");
-                if (ReportType == "Annual") ReportColumnNames.Add("This Year's Invoice");
-                ReportColumnNames.Add("Balance B/FWD");
-                ReportColumnNames.Add("From Revenue");
-                ReportColumnNames.Add("To Revenue");
-                ReportColumnNames.Add("Closing Balance");
-                ReportColumnNames.Add("Total Months");
-                ReportColumnNames.Add("Months Utilized");
-                ReportColumnNames.Add("Months Remaining");
-                ReportColumnNames.Add("Validity Period Start");
-                ReportColumnNames.Add("Validity Period End");
-
-                UIData record_info = new UIData();
-
-                decimal OpeningBal = 0;
-                decimal ClosingBal = 0;
-                DateTime RecordsStartValPeriod = new DateTime();
-                DateTime RecordsEndValPeriod = new DateTime();
-                DateTime LastRptsStartValPeriod = new DateTime();
-                DateTime LastRptsEndValPeriod = new DateTime();
-                string ThisPeriodsInv = "";
-                string clientCompany = "";
-                string invoiceID = "";
-                int TotalMonths = 0;
-                int MonthsUtilized = 0;
-                int MonthsRemaining = 0;
-                decimal fromRevAmt = 0;
-                decimal toRevAmt = 0;
-
-                decimal cell_SubT_budget = 0;
-                decimal cell_SubT_invoiceTotal = 0;
-                decimal cell_SubT_balBFwd = 0;
-                decimal cell_SubT_closingBal = 0;
-                decimal cell_SubT_fromRev = 0;
-                decimal cell_SubT_toRev = 0;
-
-                decimal bband_SubT_budget = 0;
-                decimal bband_SubT_invoiceTotal = 0;
-                decimal bband_SubT_balBFwd = 0;
-                decimal bband_SubT_closingBal = 0;
-                decimal bband_SubT_fromRev = 0;
-                decimal bband_SubT_toRev = 0;
-
-                decimal micro_SubT_budget = 0;
-                decimal micro_SubT_invoiceTotal = 0;
-                decimal micro_SubT_balBFwd = 0;
-                decimal micro_SubT_closingBal = 0;
-                decimal micro_SubT_fromRev = 0;
-                decimal micro_SubT_toRev = 0;
-
-                decimal vsat_SubT_budget = 0;
-                decimal vsat_SubT_invoiceTotal = 0;
-                decimal vsat_SubT_balBFwd = 0;
-                decimal vsat_SubT_closingBal = 0;
-                decimal vsat_SubT_fromRev = 0;
-                decimal vsat_SubT_toRev = 0;
-
-                decimal marine_SubT_budget = 0;
-                decimal marine_SubT_invoiceTotal = 0;
-                decimal marine_SubT_balBFwd = 0;
-                decimal marine_SubT_closingBal = 0;
-                decimal marine_SubT_fromRev = 0;
-                decimal marine_SubT_toRev = 0;
-
-                decimal dservices_SubT_budget = 0;
-                decimal dservices_SubT_invoiceTotal = 0;
-                decimal dservices_SubT_balBFwd = 0;
-                decimal dservices_SubT_closingBal = 0;
-                decimal dservices_SubT_fromRev = 0;
-                decimal dservices_SubT_toRev = 0;
-
-                decimal aero_SubT_budget = 0;
-                decimal aero_SubT_invoiceTotal = 0;
-                decimal aero_SubT_balBFwd = 0;
-                decimal aero_SubT_closingBal = 0;
-                decimal aero_SubT_fromRev = 0;
-                decimal aero_SubT_toRev = 0;
-
-                decimal trunking_SubT_budget = 0;
-                decimal trunking_SubT_invoiceTotal = 0;
-                decimal trunking_SubT_balBFwd = 0;
-                decimal trunking_SubT_closingBal = 0;
-                decimal trunking_SubT_fromRev = 0;
-                decimal trunking_SubT_toRev = 0;
-
-                decimal other_SubT_budget = 0;
-                decimal other_SubT_invoiceTotal = 0;
-                decimal other_SubT_balBFwd = 0;
-                decimal other_SubT_closingBal = 0;
-                decimal other_SubT_fromRev = 0;
-                decimal other_SubT_toRev = 0;
-
-                decimal tot_budget = 0;
-                decimal tot_invoiceTotal = 0;
-                decimal tot_balBFwd = 0;
-                decimal tot_closingBal = 0;
-                decimal tot_fromRev = 0;
-                decimal tot_toRev = 0;
-
-
-                for (int i = 0; i < ReportInfo.Count; i++)
+                if (ReportInfo[i].ExistedBefore == 1)
                 {
-
-                    record_info = new UIData();
-                    OpeningBal = 0;
-                    fromRevAmt = 0;
-                    ThisPeriodsInv = "No";
-                    RecordsStartValPeriod = ReportInfo[i].CurrentStartValPeriod.Date;
-                    RecordsEndValPeriod = ReportInfo[i].CurrentEndValPeriod.Date;
-                    invoiceID = ReportInfo[i].ARInvoiceID;
-                    if (invoiceID == "0") invoiceID = "";
-
-                    if (ReportInfo[i].ExistedBefore == 1)
-                    {
-                        LastRptsStartValPeriod = DateTime.ParseExact(ReportInfo[i].LastRptsStartValPeriod, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                        LastRptsEndValPeriod = DateTime.ParseExact(ReportInfo[i].LastRptsEndValPeriod, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                        OpeningBal = Convert.ToDecimal(ReportInfo[i].LastRptsClosingBal);
-                    }
-
-                    if (ReportInfo[i].isCancelled == 1)
-                    {
-                        RecordsStartValPeriod = LastRptsStartValPeriod;
-                        RecordsEndValPeriod = LastRptsEndValPeriod;
-                    }
-
-                    if (((ReportInfo[i].isCreditMemo == 1 || ReportInfo[i].isCancelled == 1) && ReportInfo[i].ExistedBefore == 0) ||
-                        (ReportInfo[i].ExistedBefore == 1 && Convert.ToDecimal(ReportInfo[i].LastRptsClosingBal) == 0 &&
-                        LastRptsStartValPeriod == ReportInfo[i].CurrentStartValPeriod.Date && LastRptsEndValPeriod == ReportInfo[i].CurrentEndValPeriod.Date) ||
-                        (ReportInfo[i].CurrentEndValPeriod.Year == year && ReportInfo[i].CurrentEndValPeriod.Month == month && ReportInfo[i].CurrentEndValPeriod.Day < 15))
-                        continue;
-
-                    if (ReportInfo[i].ExistedBefore == 0)
-                    {
-                        ThisPeriodsInv = "Yes";
-                        fromRevAmt = ReportInfo[i].InvAmount;
-                    }
-
-                    TotalMonths = getMonths(RecordsStartValPeriod, RecordsEndValPeriod);
-                    MonthsUtilized = getMonths(RecordsStartValPeriod, endDate);
-
-                    if (RecordsStartValPeriod.Day != 1 && RecordsStartValPeriod.Day <= 15) MonthsUtilized++;
-
-                    if (ReportInfo[i].notes == "Modification")
-                    {
-                        TotalMonths = getMonths(ReportInfo[i].InvoiceCreationDate, RecordsEndValPeriod);
-                        MonthsUtilized = getMonths(ReportInfo[i].InvoiceCreationDate, endDate);
-                        if (ReportInfo[i].InvoiceCreationDate.Day != 1 && RecordsEndValPeriod.Day < 15) MonthsUtilized++;
-                    }
-
-                    if (MonthsUtilized > TotalMonths) MonthsUtilized = TotalMonths;
-
-                    MonthsRemaining = TotalMonths - MonthsUtilized;
-
-                    ClosingBal = ReportInfo[i].InvAmount / TotalMonths * MonthsRemaining;
-
-                    clientCompany = ReportInfo[i].clientCompany;
-                    if (ReportInfo[i].clientCompany == "") clientCompany = ReportInfo[i].clientFname + " " + ReportInfo[i].clientLname;
-
-                    if (ReportInfo[i].isCancelled == 1)
-                    {
-                        ClosingBal = 0;
-                        fromRevAmt = -ReportInfo[i].InvAmount;
-                    }
-
-                    if (ReportInfo[i].isCreditMemo == 1)
-                    {
-                        ClosingBal = 0;
-                        fromRevAmt = -ReportInfo[i].CreditMemoAmt;
-                        invoiceID = ReportInfo[i].ARInvoiceID.ToString() + "/" + ReportInfo[i].CreditMemoNum;
-                    }
-
-                    toRevAmt = ClosingBal - OpeningBal - fromRevAmt;
-
-                    record_info.licenseNumber = ReportInfo[i].ccNum;
-                    record_info.clientCompany = clientCompany;
-                    record_info.invoiceID = invoiceID;
-                    record_info.budget = formatMoney(Math.Round(ReportInfo[i].Budget, 2));
-                    record_info.invoiceTotal = formatMoney(Math.Round(ReportInfo[i].InvAmount, 2));
-                    record_info.thisPeriodsInv = ThisPeriodsInv;
-                    record_info.balBFwd = formatMoney(Math.Round(OpeningBal, 2));
-                    record_info.fromRev = formatMoney(Math.Round(fromRevAmt, 2));
-                    record_info.toRev = formatMoney(Math.Round(toRevAmt, 2));
-                    record_info.closingBal = formatMoney(Math.Round(ClosingBal, 2));
-                    record_info.totalMonths = TotalMonths;
-                    record_info.monthUtil = MonthsUtilized;
-                    record_info.monthRemain = MonthsRemaining;
-                    record_info.valPStart = RecordsStartValPeriod.Day.ToString("00") + "/" + RecordsStartValPeriod.Month.ToString("00") + "/" + RecordsStartValPeriod.Year.ToString();
-                    record_info.valPEnd = RecordsEndValPeriod.Day.ToString("00") + "/" + RecordsEndValPeriod.Month.ToString("00") + "/" + RecordsEndValPeriod.Year.ToString();
-
-                    if (ReportInfo[i].CreditGLID == 5156)
-                    {
-                        cell_category.records.Add(record_info);
-                        cell_SubT_budget = cell_SubT_budget + Math.Round(ReportInfo[i].Budget, 2);
-                        cell_SubT_invoiceTotal = cell_SubT_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
-                        cell_SubT_balBFwd = cell_SubT_balBFwd + Math.Round(OpeningBal, 2);
-                        cell_SubT_closingBal = cell_SubT_closingBal + Math.Round(ClosingBal, 2);
-                        cell_SubT_fromRev = cell_SubT_fromRev + Math.Round(fromRevAmt, 2);
-                        cell_SubT_toRev = cell_SubT_toRev + Math.Round(toRevAmt, 2);
-                    }
-
-                    if (ReportInfo[i].CreditGLID == 5157)
-                    {
-                        bband_category.records.Add(record_info);
-                        bband_SubT_budget = bband_SubT_budget + Math.Round(ReportInfo[i].Budget, 2);
-                        bband_SubT_invoiceTotal = bband_SubT_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
-                        bband_SubT_balBFwd = bband_SubT_balBFwd + Math.Round(OpeningBal, 2);
-                        bband_SubT_closingBal = bband_SubT_closingBal + Math.Round(ClosingBal, 2);
-                        bband_SubT_fromRev = bband_SubT_fromRev + Math.Round(fromRevAmt, 2);
-                        bband_SubT_toRev = bband_SubT_toRev + Math.Round(toRevAmt, 2);
-                    }
-
-                    if (ReportInfo[i].CreditGLID == 5158)
-                    {
-                        micro_category.records.Add(record_info);
-                        micro_SubT_budget = micro_SubT_budget + Math.Round(ReportInfo[i].Budget, 2);
-                        micro_SubT_invoiceTotal = micro_SubT_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
-                        micro_SubT_balBFwd = micro_SubT_balBFwd + Math.Round(OpeningBal, 2);
-                        micro_SubT_closingBal = micro_SubT_closingBal + Math.Round(ClosingBal, 2);
-                        micro_SubT_fromRev = micro_SubT_fromRev + Math.Round(fromRevAmt, 2);
-                        micro_SubT_toRev = micro_SubT_toRev + Math.Round(toRevAmt, 2);
-                    }
-
-                    if (ReportInfo[i].CreditGLID == 5160)
-                    {
-                        vsat_category.records.Add(record_info);
-                        vsat_SubT_budget = vsat_SubT_budget + Math.Round(ReportInfo[i].Budget, 2);
-                        vsat_SubT_invoiceTotal = vsat_SubT_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
-                        vsat_SubT_balBFwd = vsat_SubT_balBFwd + Math.Round(OpeningBal, 2);
-                        vsat_SubT_closingBal = vsat_SubT_closingBal + Math.Round(ClosingBal, 2);
-                        vsat_SubT_fromRev = vsat_SubT_fromRev + Math.Round(fromRevAmt, 2);
-                        vsat_SubT_toRev = vsat_SubT_toRev + Math.Round(toRevAmt, 2);
-                    }
-
-                    if (ReportInfo[i].CreditGLID == 5162)
-                    {
-                        marine_category.records.Add(record_info);
-                        marine_SubT_budget = marine_SubT_budget + Math.Round(ReportInfo[i].Budget, 2);
-                        marine_SubT_invoiceTotal = marine_SubT_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
-                        marine_SubT_balBFwd = marine_SubT_balBFwd + Math.Round(OpeningBal, 2);
-                        marine_SubT_closingBal = marine_SubT_closingBal + Math.Round(ClosingBal, 2);
-                        marine_SubT_fromRev = marine_SubT_fromRev + Math.Round(fromRevAmt, 2);
-                        marine_SubT_toRev = marine_SubT_toRev + Math.Round(toRevAmt, 2);
-                    }
-
-                    if (ReportInfo[i].CreditGLID == 5159)
-                    {
-                        dservices_category.records.Add(record_info);
-                        dservices_SubT_budget = dservices_SubT_budget + Math.Round(ReportInfo[i].Budget, 2);
-                        dservices_SubT_invoiceTotal = dservices_SubT_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
-                        dservices_SubT_balBFwd = dservices_SubT_balBFwd + Math.Round(OpeningBal, 2);
-                        dservices_SubT_closingBal = dservices_SubT_closingBal + Math.Round(ClosingBal, 2);
-                        dservices_SubT_fromRev = dservices_SubT_fromRev + Math.Round(fromRevAmt, 2);
-                        dservices_SubT_toRev = dservices_SubT_toRev + Math.Round(toRevAmt, 2);
-                    }
-
-                    if (ReportInfo[i].CreditGLID == 5161)
-                    {
-                        aero_category.records.Add(record_info);
-                        aero_SubT_budget = aero_SubT_budget + Math.Round(ReportInfo[i].Budget, 2);
-                        aero_SubT_invoiceTotal = aero_SubT_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
-                        aero_SubT_balBFwd = aero_SubT_balBFwd + Math.Round(OpeningBal, 2);
-                        aero_SubT_closingBal = aero_SubT_closingBal + Math.Round(ClosingBal, 2);
-                        aero_SubT_fromRev = aero_SubT_fromRev + Math.Round(fromRevAmt, 2);
-                        aero_SubT_toRev = aero_SubT_toRev + Math.Round(toRevAmt, 2);
-                    }
-
-                    if (ReportInfo[i].CreditGLID == 5163)
-                    {
-                        trunking_category.records.Add(record_info);
-                        trunking_SubT_budget = trunking_SubT_budget + Math.Round(ReportInfo[i].Budget, 2);
-                        trunking_SubT_invoiceTotal = trunking_SubT_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
-                        trunking_SubT_balBFwd = trunking_SubT_balBFwd + Math.Round(OpeningBal, 2);
-                        trunking_SubT_closingBal = trunking_SubT_closingBal + Math.Round(ClosingBal, 2);
-                        trunking_SubT_fromRev = trunking_SubT_fromRev + Math.Round(fromRevAmt, 2);
-                        trunking_SubT_toRev = trunking_SubT_toRev + Math.Round(toRevAmt, 2);
-                    }
-
-                    if (ReportInfo[i].CreditGLID == 5164)
-                    {
-                        other_category.records.Add(record_info);
-                        other_SubT_budget = other_SubT_budget + Math.Round(ReportInfo[i].Budget, 2);
-                        other_SubT_invoiceTotal = other_SubT_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
-                        other_SubT_balBFwd = other_SubT_balBFwd + Math.Round(OpeningBal, 2);
-                        other_SubT_closingBal = other_SubT_closingBal + Math.Round(ClosingBal, 2);
-                        other_SubT_fromRev = other_SubT_fromRev + Math.Round(fromRevAmt, 2);
-                        other_SubT_toRev = other_SubT_toRev + Math.Round(toRevAmt, 2);
-                    }
-
-                    tot_budget = tot_budget + Math.Round(ReportInfo[i].Budget, 2);
-                    tot_invoiceTotal = tot_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
-                    tot_balBFwd = tot_balBFwd + Math.Round(OpeningBal, 2);
-                    tot_closingBal = tot_closingBal + Math.Round(ClosingBal, 2);
-                    tot_fromRev = tot_fromRev + Math.Round(fromRevAmt, 2);
-                    tot_toRev = tot_toRev + Math.Round(toRevAmt, 2);
+                    LastRptsStartValPeriod = DateTime.ParseExact(ReportInfo[i].LastRptsStartValPeriod, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    LastRptsEndValPeriod = DateTime.ParseExact(ReportInfo[i].LastRptsEndValPeriod, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    OpeningBal = Convert.ToDecimal(ReportInfo[i].LastRptsClosingBal);
                 }
 
-                cell_category.subT_budget = formatMoney(cell_SubT_budget);
-                cell_category.subT_invoiceTotal = formatMoney(cell_SubT_invoiceTotal);
-                cell_category.subT_balBFwd = formatMoney(cell_SubT_balBFwd);
-                cell_category.subT_closingBal = formatMoney(cell_SubT_closingBal);
-                cell_category.subT_fromRev = formatMoney(cell_SubT_fromRev);
-                cell_category.subT_toRev = formatMoney(cell_SubT_toRev);
-
-                bband_category.subT_budget = formatMoney(bband_SubT_budget);
-                bband_category.subT_invoiceTotal = formatMoney(bband_SubT_invoiceTotal);
-                bband_category.subT_balBFwd = formatMoney(bband_SubT_balBFwd);
-                bband_category.subT_closingBal = formatMoney(bband_SubT_closingBal);
-                bband_category.subT_fromRev = formatMoney(bband_SubT_fromRev);
-                bband_category.subT_toRev = formatMoney(bband_SubT_toRev);
-
-                micro_category.subT_budget = formatMoney(micro_SubT_budget);
-                micro_category.subT_invoiceTotal = formatMoney(micro_SubT_invoiceTotal);
-                micro_category.subT_balBFwd = formatMoney(micro_SubT_balBFwd);
-                micro_category.subT_closingBal = formatMoney(micro_SubT_closingBal);
-                micro_category.subT_fromRev = formatMoney(micro_SubT_fromRev);
-                micro_category.subT_toRev = formatMoney(micro_SubT_toRev);
-
-                vsat_category.subT_budget = formatMoney(vsat_SubT_budget);
-                vsat_category.subT_invoiceTotal = formatMoney(vsat_SubT_invoiceTotal);
-                vsat_category.subT_balBFwd = formatMoney(vsat_SubT_balBFwd);
-                vsat_category.subT_closingBal = formatMoney(vsat_SubT_closingBal);
-                vsat_category.subT_fromRev = formatMoney(vsat_SubT_fromRev);
-                vsat_category.subT_toRev = formatMoney(vsat_SubT_toRev);
-
-                marine_category.subT_budget = formatMoney(marine_SubT_budget);
-                marine_category.subT_invoiceTotal = formatMoney(marine_SubT_invoiceTotal);
-                marine_category.subT_balBFwd = formatMoney(marine_SubT_balBFwd);
-                marine_category.subT_closingBal = formatMoney(marine_SubT_closingBal);
-                marine_category.subT_fromRev = formatMoney(marine_SubT_fromRev);
-                marine_category.subT_toRev = formatMoney(marine_SubT_toRev);
-
-                dservices_category.subT_budget = formatMoney(dservices_SubT_budget);
-                dservices_category.subT_invoiceTotal = formatMoney(dservices_SubT_invoiceTotal);
-                dservices_category.subT_balBFwd = formatMoney(dservices_SubT_balBFwd);
-                dservices_category.subT_closingBal = formatMoney(dservices_SubT_closingBal);
-                dservices_category.subT_fromRev = formatMoney(dservices_SubT_fromRev);
-                dservices_category.subT_toRev = formatMoney(dservices_SubT_toRev);
-
-                aero_category.subT_budget = formatMoney(aero_SubT_budget);
-                aero_category.subT_invoiceTotal = formatMoney(aero_SubT_invoiceTotal);
-                aero_category.subT_balBFwd = formatMoney(aero_SubT_balBFwd);
-                aero_category.subT_closingBal = formatMoney(aero_SubT_closingBal);
-                aero_category.subT_fromRev = formatMoney(aero_SubT_fromRev);
-                aero_category.subT_toRev = formatMoney(aero_SubT_toRev);
-
-                trunking_category.subT_budget = formatMoney(trunking_SubT_budget);
-                trunking_category.subT_invoiceTotal = formatMoney(trunking_SubT_invoiceTotal);
-                trunking_category.subT_balBFwd = formatMoney(trunking_SubT_balBFwd);
-                trunking_category.subT_closingBal = formatMoney(trunking_SubT_closingBal);
-                trunking_category.subT_fromRev = formatMoney(trunking_SubT_fromRev);
-                trunking_category.subT_toRev = formatMoney(trunking_SubT_toRev);
-
-                other_category.subT_budget = formatMoney(other_SubT_budget);
-                other_category.subT_invoiceTotal = formatMoney(other_SubT_invoiceTotal);
-                other_category.subT_balBFwd = formatMoney(other_SubT_balBFwd);
-                other_category.subT_closingBal = formatMoney(other_SubT_closingBal);
-                other_category.subT_fromRev = formatMoney(other_SubT_fromRev);
-                other_category.subT_toRev = formatMoney(other_SubT_toRev);
-
-
-                ReportCategories.Add(cell_category);
-                ReportCategories.Add(bband_category);
-                ReportCategories.Add(micro_category);
-                ReportCategories.Add(vsat_category);
-                ReportCategories.Add(marine_category);
-                ReportCategories.Add(dservices_category);
-                ReportCategories.Add(aero_category);
-                ReportCategories.Add(trunking_category);
-                ReportCategories.Add(other_category);
-
-                Totals ReportTotal = new Totals();
-                ReportTotal.tot_budget = formatMoney(tot_budget);
-                ReportTotal.tot_invoiceTotal = formatMoney(tot_invoiceTotal);
-                ReportTotal.tot_balBFwd = formatMoney(tot_balBFwd);
-                ReportTotal.tot_closingBal = formatMoney(tot_closingBal);
-                ReportTotal.tot_toRev = formatMoney(tot_toRev);
-                ReportTotal.tot_fromRev = formatMoney(tot_fromRev);
-
-                DeferredData Report = new DeferredData();
-
-                Report.ColumnNames = ReportColumnNames;
-                Report.Categories = ReportCategories;
-                Report.Total = ReportTotal;
-
-                if (action == 0)
+                if (ReportInfo[i].isCancelled == 1)
                 {
-                    Report.report_id = intlink.saveReport(ReportType, ReportCategories, ReportTotal);
+                    RecordsStartValPeriod = LastRptsStartValPeriod;
+                    RecordsEndValPeriod = LastRptsEndValPeriod;
                 }
 
-                createPdfReport(ReportType, Report, startDate);
-                createPdfTotalsReport(ReportType, Report, startDate);
+                if (((ReportInfo[i].isCreditMemo == 1 || ReportInfo[i].isCancelled == 1) && ReportInfo[i].ExistedBefore == 0) ||
+                    (ReportInfo[i].ExistedBefore == 1 && Convert.ToDecimal(ReportInfo[i].LastRptsClosingBal) == 0 &&
+                    LastRptsStartValPeriod == ReportInfo[i].CurrentStartValPeriod.Date && LastRptsEndValPeriod == ReportInfo[i].CurrentEndValPeriod.Date) ||
+                    (ReportInfo[i].CurrentEndValPeriod.Year == year && ReportInfo[i].CurrentEndValPeriod.Month == month && ReportInfo[i].CurrentEndValPeriod.Day < 15))
+                    continue;
 
-                return Report;
+                if (ReportInfo[i].ExistedBefore == 0)
+                {
+                    ThisPeriodsInv = "Yes";
+                    fromRevAmt = ReportInfo[i].InvAmount;
+                }
+
+                TotalMonths = getMonths(RecordsStartValPeriod, RecordsEndValPeriod);
+                MonthsUtilized = getMonths(RecordsStartValPeriod, endDate);
+
+                if (RecordsStartValPeriod.Day != 1 && RecordsStartValPeriod.Day <= 15) MonthsUtilized++;
+
+                if (ReportInfo[i].notes == "Modification")
+                {
+                    TotalMonths = getMonths(ReportInfo[i].InvoiceCreationDate, RecordsEndValPeriod);
+                    MonthsUtilized = getMonths(ReportInfo[i].InvoiceCreationDate, endDate);
+                    if (ReportInfo[i].InvoiceCreationDate.Day != 1 && RecordsEndValPeriod.Day < 15) MonthsUtilized++;
+                }
+
+                if (MonthsUtilized > TotalMonths) MonthsUtilized = TotalMonths;
+
+                MonthsRemaining = TotalMonths - MonthsUtilized;
+
+                ClosingBal = ReportInfo[i].InvAmount / TotalMonths * MonthsRemaining;
+
+                clientCompany = ReportInfo[i].clientCompany;
+                if (ReportInfo[i].clientCompany == "") clientCompany = ReportInfo[i].clientFname + " " + ReportInfo[i].clientLname;
+
+                if (ReportInfo[i].isCancelled == 1)
+                {
+                    ClosingBal = 0;
+                    fromRevAmt = -ReportInfo[i].InvAmount;
+                }
+
+                if (ReportInfo[i].isCreditMemo == 1)
+                {
+                    ClosingBal = 0;
+                    fromRevAmt = -ReportInfo[i].CreditMemoAmt;
+                    invoiceID = ReportInfo[i].ARInvoiceID.ToString() + "/" + ReportInfo[i].CreditMemoNum;
+                }
+
+                toRevAmt = ClosingBal - OpeningBal - fromRevAmt;
+
+                record_info.licenseNumber = ReportInfo[i].ccNum;
+                record_info.clientCompany = clientCompany;
+                record_info.invoiceID = invoiceID;
+                record_info.budget = formatMoney(Math.Round(ReportInfo[i].Budget, 2));
+                record_info.invoiceTotal = formatMoney(Math.Round(ReportInfo[i].InvAmount, 2));
+                record_info.thisPeriodsInv = ThisPeriodsInv;
+                record_info.balBFwd = formatMoney(Math.Round(OpeningBal, 2));
+                record_info.fromRev = formatMoney(Math.Round(fromRevAmt, 2));
+                record_info.toRev = formatMoney(Math.Round(toRevAmt, 2));
+                record_info.closingBal = formatMoney(Math.Round(ClosingBal, 2));
+                record_info.totalMonths = TotalMonths;
+                record_info.monthUtil = MonthsUtilized;
+                record_info.monthRemain = MonthsRemaining;
+                record_info.valPStart = RecordsStartValPeriod.Day.ToString("00") + "/" + RecordsStartValPeriod.Month.ToString("00") + "/" + RecordsStartValPeriod.Year.ToString();
+                record_info.valPEnd = RecordsEndValPeriod.Day.ToString("00") + "/" + RecordsEndValPeriod.Month.ToString("00") + "/" + RecordsEndValPeriod.Year.ToString();
+
+                if (ReportInfo[i].CreditGLID == 5156)
+                {
+                    cell_category.records.Add(record_info);
+                    cell_SubT_budget = cell_SubT_budget + Math.Round(ReportInfo[i].Budget, 2);
+                    cell_SubT_invoiceTotal = cell_SubT_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
+                    cell_SubT_balBFwd = cell_SubT_balBFwd + Math.Round(OpeningBal, 2);
+                    cell_SubT_closingBal = cell_SubT_closingBal + Math.Round(ClosingBal, 2);
+                    cell_SubT_fromRev = cell_SubT_fromRev + Math.Round(fromRevAmt, 2);
+                    cell_SubT_toRev = cell_SubT_toRev + Math.Round(toRevAmt, 2);
+                }
+
+                if (ReportInfo[i].CreditGLID == 5157)
+                {
+                    bband_category.records.Add(record_info);
+                    bband_SubT_budget = bband_SubT_budget + Math.Round(ReportInfo[i].Budget, 2);
+                    bband_SubT_invoiceTotal = bband_SubT_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
+                    bband_SubT_balBFwd = bband_SubT_balBFwd + Math.Round(OpeningBal, 2);
+                    bband_SubT_closingBal = bband_SubT_closingBal + Math.Round(ClosingBal, 2);
+                    bband_SubT_fromRev = bband_SubT_fromRev + Math.Round(fromRevAmt, 2);
+                    bband_SubT_toRev = bband_SubT_toRev + Math.Round(toRevAmt, 2);
+                }
+
+                if (ReportInfo[i].CreditGLID == 5158)
+                {
+                    micro_category.records.Add(record_info);
+                    micro_SubT_budget = micro_SubT_budget + Math.Round(ReportInfo[i].Budget, 2);
+                    micro_SubT_invoiceTotal = micro_SubT_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
+                    micro_SubT_balBFwd = micro_SubT_balBFwd + Math.Round(OpeningBal, 2);
+                    micro_SubT_closingBal = micro_SubT_closingBal + Math.Round(ClosingBal, 2);
+                    micro_SubT_fromRev = micro_SubT_fromRev + Math.Round(fromRevAmt, 2);
+                    micro_SubT_toRev = micro_SubT_toRev + Math.Round(toRevAmt, 2);
+                }
+
+                if (ReportInfo[i].CreditGLID == 5160)
+                {
+                    vsat_category.records.Add(record_info);
+                    vsat_SubT_budget = vsat_SubT_budget + Math.Round(ReportInfo[i].Budget, 2);
+                    vsat_SubT_invoiceTotal = vsat_SubT_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
+                    vsat_SubT_balBFwd = vsat_SubT_balBFwd + Math.Round(OpeningBal, 2);
+                    vsat_SubT_closingBal = vsat_SubT_closingBal + Math.Round(ClosingBal, 2);
+                    vsat_SubT_fromRev = vsat_SubT_fromRev + Math.Round(fromRevAmt, 2);
+                    vsat_SubT_toRev = vsat_SubT_toRev + Math.Round(toRevAmt, 2);
+                }
+
+                if (ReportInfo[i].CreditGLID == 5162)
+                {
+                    marine_category.records.Add(record_info);
+                    marine_SubT_budget = marine_SubT_budget + Math.Round(ReportInfo[i].Budget, 2);
+                    marine_SubT_invoiceTotal = marine_SubT_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
+                    marine_SubT_balBFwd = marine_SubT_balBFwd + Math.Round(OpeningBal, 2);
+                    marine_SubT_closingBal = marine_SubT_closingBal + Math.Round(ClosingBal, 2);
+                    marine_SubT_fromRev = marine_SubT_fromRev + Math.Round(fromRevAmt, 2);
+                    marine_SubT_toRev = marine_SubT_toRev + Math.Round(toRevAmt, 2);
+                }
+
+                if (ReportInfo[i].CreditGLID == 5159)
+                {
+                    dservices_category.records.Add(record_info);
+                    dservices_SubT_budget = dservices_SubT_budget + Math.Round(ReportInfo[i].Budget, 2);
+                    dservices_SubT_invoiceTotal = dservices_SubT_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
+                    dservices_SubT_balBFwd = dservices_SubT_balBFwd + Math.Round(OpeningBal, 2);
+                    dservices_SubT_closingBal = dservices_SubT_closingBal + Math.Round(ClosingBal, 2);
+                    dservices_SubT_fromRev = dservices_SubT_fromRev + Math.Round(fromRevAmt, 2);
+                    dservices_SubT_toRev = dservices_SubT_toRev + Math.Round(toRevAmt, 2);
+                }
+
+                if (ReportInfo[i].CreditGLID == 5161)
+                {
+                    aero_category.records.Add(record_info);
+                    aero_SubT_budget = aero_SubT_budget + Math.Round(ReportInfo[i].Budget, 2);
+                    aero_SubT_invoiceTotal = aero_SubT_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
+                    aero_SubT_balBFwd = aero_SubT_balBFwd + Math.Round(OpeningBal, 2);
+                    aero_SubT_closingBal = aero_SubT_closingBal + Math.Round(ClosingBal, 2);
+                    aero_SubT_fromRev = aero_SubT_fromRev + Math.Round(fromRevAmt, 2);
+                    aero_SubT_toRev = aero_SubT_toRev + Math.Round(toRevAmt, 2);
+                }
+
+                if (ReportInfo[i].CreditGLID == 5163)
+                {
+                    trunking_category.records.Add(record_info);
+                    trunking_SubT_budget = trunking_SubT_budget + Math.Round(ReportInfo[i].Budget, 2);
+                    trunking_SubT_invoiceTotal = trunking_SubT_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
+                    trunking_SubT_balBFwd = trunking_SubT_balBFwd + Math.Round(OpeningBal, 2);
+                    trunking_SubT_closingBal = trunking_SubT_closingBal + Math.Round(ClosingBal, 2);
+                    trunking_SubT_fromRev = trunking_SubT_fromRev + Math.Round(fromRevAmt, 2);
+                    trunking_SubT_toRev = trunking_SubT_toRev + Math.Round(toRevAmt, 2);
+                }
+
+                if (ReportInfo[i].CreditGLID == 5164)
+                {
+                    other_category.records.Add(record_info);
+                    other_SubT_budget = other_SubT_budget + Math.Round(ReportInfo[i].Budget, 2);
+                    other_SubT_invoiceTotal = other_SubT_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
+                    other_SubT_balBFwd = other_SubT_balBFwd + Math.Round(OpeningBal, 2);
+                    other_SubT_closingBal = other_SubT_closingBal + Math.Round(ClosingBal, 2);
+                    other_SubT_fromRev = other_SubT_fromRev + Math.Round(fromRevAmt, 2);
+                    other_SubT_toRev = other_SubT_toRev + Math.Round(toRevAmt, 2);
+                }
+
+                tot_budget = tot_budget + Math.Round(ReportInfo[i].Budget, 2);
+                tot_invoiceTotal = tot_invoiceTotal + Math.Round(ReportInfo[i].InvAmount, 2);
+                tot_balBFwd = tot_balBFwd + Math.Round(OpeningBal, 2);
+                tot_closingBal = tot_closingBal + Math.Round(ClosingBal, 2);
+                tot_fromRev = tot_fromRev + Math.Round(fromRevAmt, 2);
+                tot_toRev = tot_toRev + Math.Round(toRevAmt, 2);
             }
-            else
+
+            cell_category.subT_budget = formatMoney(cell_SubT_budget);
+            cell_category.subT_invoiceTotal = formatMoney(cell_SubT_invoiceTotal);
+            cell_category.subT_balBFwd = formatMoney(cell_SubT_balBFwd);
+            cell_category.subT_closingBal = formatMoney(cell_SubT_closingBal);
+            cell_category.subT_fromRev = formatMoney(cell_SubT_fromRev);
+            cell_category.subT_toRev = formatMoney(cell_SubT_toRev);
+
+            bband_category.subT_budget = formatMoney(bband_SubT_budget);
+            bband_category.subT_invoiceTotal = formatMoney(bband_SubT_invoiceTotal);
+            bband_category.subT_balBFwd = formatMoney(bband_SubT_balBFwd);
+            bband_category.subT_closingBal = formatMoney(bband_SubT_closingBal);
+            bband_category.subT_fromRev = formatMoney(bband_SubT_fromRev);
+            bband_category.subT_toRev = formatMoney(bband_SubT_toRev);
+
+            micro_category.subT_budget = formatMoney(micro_SubT_budget);
+            micro_category.subT_invoiceTotal = formatMoney(micro_SubT_invoiceTotal);
+            micro_category.subT_balBFwd = formatMoney(micro_SubT_balBFwd);
+            micro_category.subT_closingBal = formatMoney(micro_SubT_closingBal);
+            micro_category.subT_fromRev = formatMoney(micro_SubT_fromRev);
+            micro_category.subT_toRev = formatMoney(micro_SubT_toRev);
+
+            vsat_category.subT_budget = formatMoney(vsat_SubT_budget);
+            vsat_category.subT_invoiceTotal = formatMoney(vsat_SubT_invoiceTotal);
+            vsat_category.subT_balBFwd = formatMoney(vsat_SubT_balBFwd);
+            vsat_category.subT_closingBal = formatMoney(vsat_SubT_closingBal);
+            vsat_category.subT_fromRev = formatMoney(vsat_SubT_fromRev);
+            vsat_category.subT_toRev = formatMoney(vsat_SubT_toRev);
+
+            marine_category.subT_budget = formatMoney(marine_SubT_budget);
+            marine_category.subT_invoiceTotal = formatMoney(marine_SubT_invoiceTotal);
+            marine_category.subT_balBFwd = formatMoney(marine_SubT_balBFwd);
+            marine_category.subT_closingBal = formatMoney(marine_SubT_closingBal);
+            marine_category.subT_fromRev = formatMoney(marine_SubT_fromRev);
+            marine_category.subT_toRev = formatMoney(marine_SubT_toRev);
+
+            dservices_category.subT_budget = formatMoney(dservices_SubT_budget);
+            dservices_category.subT_invoiceTotal = formatMoney(dservices_SubT_invoiceTotal);
+            dservices_category.subT_balBFwd = formatMoney(dservices_SubT_balBFwd);
+            dservices_category.subT_closingBal = formatMoney(dservices_SubT_closingBal);
+            dservices_category.subT_fromRev = formatMoney(dservices_SubT_fromRev);
+            dservices_category.subT_toRev = formatMoney(dservices_SubT_toRev);
+
+            aero_category.subT_budget = formatMoney(aero_SubT_budget);
+            aero_category.subT_invoiceTotal = formatMoney(aero_SubT_invoiceTotal);
+            aero_category.subT_balBFwd = formatMoney(aero_SubT_balBFwd);
+            aero_category.subT_closingBal = formatMoney(aero_SubT_closingBal);
+            aero_category.subT_fromRev = formatMoney(aero_SubT_fromRev);
+            aero_category.subT_toRev = formatMoney(aero_SubT_toRev);
+
+            trunking_category.subT_budget = formatMoney(trunking_SubT_budget);
+            trunking_category.subT_invoiceTotal = formatMoney(trunking_SubT_invoiceTotal);
+            trunking_category.subT_balBFwd = formatMoney(trunking_SubT_balBFwd);
+            trunking_category.subT_closingBal = formatMoney(trunking_SubT_closingBal);
+            trunking_category.subT_fromRev = formatMoney(trunking_SubT_fromRev);
+            trunking_category.subT_toRev = formatMoney(trunking_SubT_toRev);
+
+            other_category.subT_budget = formatMoney(other_SubT_budget);
+            other_category.subT_invoiceTotal = formatMoney(other_SubT_invoiceTotal);
+            other_category.subT_balBFwd = formatMoney(other_SubT_balBFwd);
+            other_category.subT_closingBal = formatMoney(other_SubT_closingBal);
+            other_category.subT_fromRev = formatMoney(other_SubT_fromRev);
+            other_category.subT_toRev = formatMoney(other_SubT_toRev);
+
+
+            ReportCategories.Add(cell_category);
+            ReportCategories.Add(bband_category);
+            ReportCategories.Add(micro_category);
+            ReportCategories.Add(vsat_category);
+            ReportCategories.Add(marine_category);
+            ReportCategories.Add(dservices_category);
+            ReportCategories.Add(aero_category);
+            ReportCategories.Add(trunking_category);
+            ReportCategories.Add(other_category);
+
+            Totals ReportTotal = new Totals();
+            ReportTotal.tot_budget = formatMoney(tot_budget);
+            ReportTotal.tot_invoiceTotal = formatMoney(tot_invoiceTotal);
+            ReportTotal.tot_balBFwd = formatMoney(tot_balBFwd);
+            ReportTotal.tot_closingBal = formatMoney(tot_closingBal);
+            ReportTotal.tot_toRev = formatMoney(tot_toRev);
+            ReportTotal.tot_fromRev = formatMoney(tot_fromRev);
+
+            DeferredData Report = new DeferredData();
+
+            Report.ColumnNames = ReportColumnNames;
+            Report.Categories = ReportCategories;
+            Report.Total = ReportTotal;
+
+            if (action == 0)
             {
-                Log.Save("Deferred report record already exist for the period: "+ period.ToLongDateString());
-                return null;
+                Report.report_id = intlink.saveReport(ReportType, ReportCategories, ReportTotal);
             }
+
+            createPdfReport(ReportType, Report, startDate);
+            createPdfTotalsReport(ReportType, Report, startDate);
+
+            return Report;
         }
 
         public int getMonths(DateTime sdate, DateTime edate)

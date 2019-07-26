@@ -1,0 +1,818 @@
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\ApplicationInsights.config
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\roslyn\csc.exe
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\roslyn\vbc.exe
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\Interface.dll.config
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\Interface.dll
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\Interface.pdb
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.Web.dll
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.Web.xml
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\obj\Debug\Interface.dll
+c:\users\mark\documents\visual studio 2015\Projects\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\Interface.dll.config
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\Interface.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\Interface.pdb
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\Mark\Desktop\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\Mark\Desktop\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\Mark\Desktop\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\Mark\Desktop\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\Mark\Desktop\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\Mark\Desktop\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\Mark\Desktop\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\Mark\Desktop\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\Mark\Desktop\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\Mark\Desktop\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\Mark\Desktop\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\Mark\Desktop\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\Mark\Desktop\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\Mark\Desktop\Interface\Interface\bin\Interface.dll.config
+C:\Users\Mark\Desktop\Interface\Interface\bin\Interface.dll
+C:\Users\Mark\Desktop\Interface\Interface\bin\Interface.pdb
+C:\Users\Mark\Desktop\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\Mark\Desktop\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\Mark\Desktop\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\Mark\Desktop\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\Mark\Desktop\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\Mark\Desktop\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\Mark\Desktop\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\Mark\Desktop\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\Mark\Desktop\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\Mark\Desktop\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\Mark\Desktop\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\Mark\Desktop\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\Mark\Desktop\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\Mark\Desktop\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\Mark\Desktop\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\Mark\Desktop\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\Mark\Desktop\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\Interface.dll.config
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\Interface.dll
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\Interface.pdb
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\asms-accpac-1\Desktop\INTFCE\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\Interface.dll.config
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\Interface.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\Interface.pdb
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\bak\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\Interface.dll.config
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\Interface.dll
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\Interface.pdb
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\asms-accpac-1\Desktop\transfer\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\Interface.dll.config
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\Interface.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\Interface.pdb
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\Interface.dll.config
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\Interface.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\Interface.pdb
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\ACCPAC.Advantage.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\ACCPAC.Advantage.Server.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\DocumentFormat.OpenXml.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\itextsharp.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\itextsharp.pdfa.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\itextsharp.xtra.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\ACCPAC.Advantage.Types.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\ACCPAC.Advantage.Server.RemotingManager.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\bin\ACCPAC.Advantage.COMSVR.Interop.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\New folder (2)\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\ASMS-ACCPAC-1\Desktop\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Interface.dll.config
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Interface.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Interface.pdb
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Interface.dll.config
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Interface.dll
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Interface.pdb
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\Apolack\Documents\Visual Studio 2015\Projects\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\Interface.dll.config
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\Interface.dll
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\Interface.pdb
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\asms-accpac-1\Desktop\SAIM_ver1.2_TestEnv\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\Interface.dll.config
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\Interface.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\Interface.pdb
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.2_Test\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Interface.dll.config
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Interface.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Interface.pdb
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver1.3_Test\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Interface.dll.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Interface.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Interface.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3_Test\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\Interface.dll.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\Interface.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\Interface.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\DocumentFormat.OpenXml.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.2_Test\Interface\Interface\bin\DocumentFormat.OpenXml.xml
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\Interface.dll.config
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\Interface.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\Interface.pdb
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\DocumentFormat.OpenXml.xml
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\Interface.dll.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\Interface.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\Interface.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\DocumentFormat.OpenXml.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\DocumentFormat.OpenXml.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.4_Test\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\Interface.dll.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\Interface.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\Interface.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\DocumentFormat.OpenXml.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.5_Test\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\Interface.dll.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\Interface.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\Interface.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\DocumentFormat.OpenXml.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\Interface.dll.config
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\Interface.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\Interface.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.0_Test\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\Interface.dll.config
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\Interface.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\Interface.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\Interface.dll.config
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\Interface.dll
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\Interface.pdb
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\DocumentFormat.OpenXml.dll
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\DocumentFormat.OpenXml.xml
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\obj\Debug\Interface.csprojResolveAssemblyReference.cache
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\cgriffith.000\Desktop\SAIMver2.2_Test\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\Interface.dll.config
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\Interface.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\Interface.pdb
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\stdole.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\DocumentFormat.OpenXml.xml
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\obj\Debug\Interface.csprojAssemblyReference.cache
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\obj\Debug\Interface.csproj.CoreCompileInputs.cache
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\obj\Debug\Interface.csproj.CopyComplete
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\obj\Debug\Interface.pdb
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\ApplicationInsights.config
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\roslyn\csc.exe
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\roslyn\vbc.exe
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\roslyn\VBCSCompiler.exe
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\Interface.dll.config
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\Interface.dll
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\Interface.pdb
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\Microsoft.AI.Web.dll
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\Microsoft.ApplicationInsights.dll
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\stdole.dll
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\DocumentFormat.OpenXml.xml
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\Microsoft.AI.Web.xml
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\Microsoft.ApplicationInsights.xml
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\obj\Debug\Interface.csprojAssemblyReference.cache
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\obj\Debug\Interface.csproj.CoreCompileInputs.cache
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\obj\Debug\Interface.csproj.CopyComplete
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\obj\Debug\Interface.dll
+C:\Users\mscott\Desktop\Git Repositories\old_sma-middleware\Interface\Interface\obj\Debug\Interface.pdb

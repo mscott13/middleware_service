@@ -7,6 +7,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Net;
 using System.Web.Script.Serialization;
+using System.ServiceProcess;
 
 
 namespace WebApplication4
@@ -139,10 +140,31 @@ namespace WebApplication4
         [WebMethod]
         public int GetMonStat()
         {
+            ServiceController sc = new ServiceController("middleware_service");
+            int result = -1;
+
+            try
+            {
+                switch (sc.Status)
+                {
+                    case ServiceControllerStatus.Running:
+                        result = 3;
+                        break;
+                    case ServiceControllerStatus.Stopped:
+                        result = 2;
+                        break;
+
+                }
+            }
+            catch (Exception e)
+            {
+                result = 21;
+            }
+
             Integration intlink = new Integration();
             int data = intlink.GetIntegrationStat();
 
-            return data;
+            return result;
         }
 
         [WebMethod]

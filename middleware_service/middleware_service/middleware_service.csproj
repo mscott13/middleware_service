@@ -109,6 +109,7 @@
     <Compile Include="Database Classes\SubTotals.cs" />
     <Compile Include="Database Classes\Totals.cs" />
     <Compile Include="Database Classes\UIData.cs" />
+    <Compile Include="Database Operations\Constants.cs" />
     <Compile Include="Database Operations\Integration.cs" />
     <Compile Include="Database Operations\Report.cs" />
     <Compile Include="middleware_service.cs">

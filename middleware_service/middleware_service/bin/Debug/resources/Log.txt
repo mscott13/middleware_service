@@ -99,3 +99,191 @@
    at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 224
 --------end
 
+7/29/2019 9:56:45 AM - Invalid connection string.    at TableDependency.SqlClient.SqlTableDependency`1.CheckIfConnectionStringIsValid(String connectionString)
+   at TableDependency.SqlClient.SqlTableDependency`1.PreliminaryChecks(String connectionString, String tableName)
+   at TableDependency.TableDependency`1..ctor(String connectionString, String tableName, ModelToTableMapper`1 mapper, IList`1 updateOf, DmlTriggerType dmlTriggerType, Boolean automaticDatabaseObjectsTeardown, String namingConventionForDatabaseObjects)
+   at TableDependency.SqlClient.SqlTableDependency`1..ctor(String connectionString, String tableName)
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 181
+7/29/2019 9:59:13 AM - Starting accpac session...
+7/29/2019 9:59:14 AM - The source was not found, but some or all event logs could not be searched.  To create the source, you need permission to read all event logs to make sure that the new source name is unique.  Inaccessible logs: Security.    at System.Diagnostics.EventLog.FindSourceRegistration(String source, String machineName, Boolean readOnly, Boolean wantToCreate)
+   at System.Diagnostics.EventLog.SourceExists(String source, String machineName, Boolean wantToCreate)
+   at System.Diagnostics.EventLogInternal.VerifyAndCreateSource(String sourceName, String currentMachineName)
+   at System.Diagnostics.EventLogInternal.WriteEntry(String message, EventLogEntryType type, Int32 eventID, Int16 category, Byte[] rawData)
+   at System.Diagnostics.EventLog.WriteEntry(String message, EventLogEntryType type)
+   at middleware_service.Other_Classes.Log.Save(String msg) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Other Classes\Log.cs:line 73
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 202
+7/30/2019 12:13:02 PM - Starting accpac session...
+7/30/2019 12:13:07 PM - middleware_service started.
+--------end
+
+7/30/2019 12:13:08 PM - Checking deferred report generation time
+--------end
+
+7/30/2019 12:13:08 PM - Monthly Rpt Date: Friday, August 2, 2019 2:00:00 AM
+7/30/2019 12:13:08 PM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+--------end
+
+7/30/2019 12:15:04 PM - Starting accpac session...
+--------end
+
+7/30/2019 12:16:22 PM - Starting accpac session...
+7/30/2019 12:19:32 PM - Checking deferred report generation time
+7/30/2019 12:19:35 PM - Starting accpac session...
+7/30/2019 12:22:52 PM - Checking deferred report generation time
+7/30/2019 12:22:56 PM - Starting accpac session...
+--------end
+
+7/30/2019 12:23:21 PM - Monthly Rpt Date: Friday, August 2, 2019 2:00:00 AM
+7/30/2019 12:23:23 PM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+--------end
+
+7/30/2019 12:23:57 PM - middleware_service started.
+--------end
+
+7/30/2019 12:24:00 PM - Checking deferred report generation time
+--------end
+
+7/30/2019 12:24:03 PM - date    at System.Data.ProviderBase.FieldNameLookup.GetOrdinal(String fieldName)
+   at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at middleware_service.Database_Operations.Integration.GetNextGenDate(String ReportType) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Database Operations\Integration.cs:line 2219
+   at middleware_service.middleware_service.DeferredTimer_Elapsed(Object sender, ElapsedEventArgs e) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 102
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 224
+--------end
+
+7/30/2019 12:25:58 PM - Starting accpac session...
+7/30/2019 12:26:03 PM - middleware_service started.
+--------end
+
+7/30/2019 12:26:03 PM - Checking deferred report generation time
+--------end
+
+7/30/2019 12:26:03 PM - Monthly Rpt Date: Friday, August 2, 2019 2:00:00 AM
+7/30/2019 12:26:03 PM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+--------end
+
+7/30/2019 12:27:07 PM - Starting accpac session...
+7/30/2019 12:27:11 PM - middleware_service started.
+--------end
+
+7/30/2019 12:27:11 PM - Checking deferred report generation time
+--------end
+
+7/30/2019 12:27:12 PM - Monthly Rpt Date: Friday, August 2, 2019 2:00:00 AM
+7/30/2019 12:27:12 PM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+--------end
+
+7/30/2019 12:28:18 PM - Starting accpac session...
+--------end
+
+7/30/2019 12:28:19 PM - Monthly Rpt Date: Friday, August 2, 2019 2:00:00 AM
+7/30/2019 12:28:19 PM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+--------end
+
+7/30/2019 12:28:33 PM - middleware_service started.
+--------end
+
+7/30/2019 12:28:35 PM - Checking deferred report generation time
+--------end
+
+7/30/2019 12:28:35 PM - Monthly Rpt Date: Friday, August 2, 2019 2:00:00 AM
+7/30/2019 12:28:35 PM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+--------end
+
+7/30/2019 12:29:27 PM - Starting accpac session...
+--------end
+
+7/30/2019 12:29:28 PM - Monthly Rpt Date: Friday, August 2, 2019 2:00:00 AM
+7/30/2019 12:29:28 PM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+--------end
+
+7/30/2019 12:30:03 PM - middleware_service started.
+--------end
+
+7/30/2019 12:30:05 PM - Checking deferred report generation time
+--------end
+
+7/30/2019 12:30:05 PM - ExecuteReader requires an open and available Connection. The connection's current state is open.    at System.Data.SqlClient.SqlConnection.GetOpenConnection(String method)
+   at System.Data.SqlClient.SqlConnection.ValidateConnectionForExecute(String method, SqlCommand command)
+   at System.Data.SqlClient.SqlCommand.ValidateCommand(String method, Boolean async)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader()
+   at middleware_service.Database_Operations.Integration.GetNextGenDate(String ReportType) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Database Operations\Integration.cs:line 2216
+   at middleware_service.middleware_service.DeferredTimer_Elapsed(Object sender, ElapsedEventArgs e) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 102
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 224
+--------end
+
+7/30/2019 12:30:55 PM - Starting accpac session...
+--------end
+
+7/30/2019 12:31:53 PM - Monthly Rpt Date: Friday, August 2, 2019 2:00:00 AM
+7/30/2019 12:31:58 PM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+--------end
+
+7/30/2019 12:32:02 PM - middleware_service started.
+--------end
+
+7/30/2019 12:32:02 PM - Checking deferred report generation time
+--------end
+
+7/30/2019 12:32:03 PM - date    at System.Data.ProviderBase.FieldNameLookup.GetOrdinal(String fieldName)
+   at System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at middleware_service.Database_Operations.Integration.GetNextGenDate(String ReportType) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Database Operations\Integration.cs:line 2219
+   at middleware_service.middleware_service.DeferredTimer_Elapsed(Object sender, ElapsedEventArgs e) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 102
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 224
+--------end
+
+7/30/2019 12:33:26 PM - Starting accpac session...
+7/30/2019 12:37:51 PM - Starting accpac session...
+7/30/2019 12:38:06 PM - Starting accpac session...
+7/30/2019 12:38:20 PM - Starting accpac session...
+7/30/2019 12:38:24 PM - middleware_service started.
+--------end
+
+7/30/2019 12:38:24 PM - Checking deferred report generation time
+--------end
+
+7/30/2019 12:38:24 PM - Monthly Rpt Date: Friday, August 2, 2019 2:00:00 AM
+7/30/2019 12:38:24 PM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+--------end
+
+7/30/2019 12:39:46 PM - Starting accpac session...
+7/30/2019 12:39:50 PM - middleware_service started.
+--------end
+
+7/30/2019 12:39:50 PM - Checking deferred report generation time
+--------end
+
+7/30/2019 12:39:50 PM - Monthly Rpt Date: Friday, August 2, 2019 2:00:00 AM
+7/30/2019 12:39:50 PM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+7/30/2019 12:40:07 PM - Starting accpac session...
+--------end
+
+7/30/2019 12:40:08 PM - Monthly Rpt Date: Friday, August 2, 2019 2:00:00 AM
+7/30/2019 12:40:08 PM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+--------end
+
+7/30/2019 12:40:20 PM - middleware_service started.
+--------end
+
+7/30/2019 12:40:22 PM - Checking deferred report generation time
+--------end
+
+7/30/2019 12:40:22 PM - Monthly Rpt Date: Friday, August 2, 2019 2:00:00 AM
+7/30/2019 12:40:22 PM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+--------end
+
+7/30/2019 12:43:25 PM - Starting accpac session...
+7/30/2019 12:43:39 PM - middleware_service started.
+--------end
+
+7/30/2019 12:43:40 PM - Checking deferred report generation time
+--------end
+
+7/30/2019 12:43:40 PM - Monthly Rpt Date: Friday, August 2, 2019 2:00:00 AM
+7/30/2019 12:43:40 PM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+--------end
+

@@ -11,7 +11,7 @@ namespace Interface
     {
         public void Log(string msg)
         {
-            SqlConnection conn = new SqlConnection("Data Source=ERP-SRVR\\ASMSDEV;Initial Catalog=ASMSSAGEINTEGRATION;Integrated Security=True");
+            SqlConnection conn = new SqlConnection("Data Source=server-erp2\\ASMSDEV;Initial Catalog=ASMSSAGEINTEGRATION;Integrated Security=True");
             SqlCommand cmd_inv = new SqlCommand();
 
             cmd_inv.CommandText = "exec sp_Log @msg";

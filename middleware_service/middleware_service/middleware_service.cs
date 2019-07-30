@@ -22,9 +22,6 @@ namespace middleware_service
 {
     public partial class middleware_service : ServiceBase
     {
-        string dbGeneric = "Data Source=SERVER-ERP2\\ASMSDEV;Initial Catalog=ASMSGenericMaster;Integrated Security=True";
-        string dbIntegration = "Data Source=SERVER-ERP2\\ASMSDEV;Initial Catalog=ASMSSAGEINTEGRATION;Integrated Security=True";
-
         SqlTableDependency<SqlNotifyCancellation> tableDependCancellation;
         SqlTableDependency<SqlNotify_DocumentInfo> tableDependInfo;
 
@@ -162,29 +159,25 @@ namespace middleware_service
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            intLink.SetIntegrationStat(Code);
+            //intLink.SetIntegrationStat(Code);
         }
 
         protected override void OnStart(string[] args)
         {
             try
             {
-                connGeneric = new SqlConnection(dbGeneric);
-                connIntegration = new SqlConnection(dbIntegration);
-                connMsgQueue = new SqlConnection(dbIntegration);
-
-                intLink = new Integration(connGeneric, connIntegration, connMsgQueue);
+                intLink = new Integration();
                 Log.Init(intLink, event_logger);
 
                 accpacSession = new Session();
 
-                using (tableDependCancellation = new SqlTableDependency<SqlNotifyCancellation>(dbGeneric, "tblARInvoices"))
+                using (tableDependCancellation = new SqlTableDependency<SqlNotifyCancellation>(Constants.dbGeneric, "tblARInvoices"))
                 {
                     tableDependCancellation.OnChanged += TableDependCancellation_OnChanged;
                     tableDependCancellation.OnError += TableDependCancellation_OnError;
                 }
 
-                using (tableDependInfo = new SqlTableDependency<SqlNotify_DocumentInfo>(dbGeneric, "tblGLDocuments"))
+                using (tableDependInfo = new SqlTableDependency<SqlNotify_DocumentInfo>(Constants.dbGeneric, "tblGLDocuments"))
                 {
                     tableDependInfo.OnChanged += TableDependInfo_OnChanged;
                     tableDependInfo.OnError += TableDependInfo_OnError;
@@ -1263,6 +1256,7 @@ namespace middleware_service
             {
                 if (accpacSession.Errors.Count > 0)
                 {
+                    Log.Save(ex.Message + " " + ex.StackTrace);
                     for (int i = 0; i < accpacSession.Errors.Count; i++)
                     {
                         Log.Save(accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
@@ -1372,6 +1366,7 @@ namespace middleware_service
             {
                 if (accpacSession.Errors.Count > 0)
                 {
+                    Log.Save(ex.Message + " " + ex.StackTrace);
                     for (int i = 0; i < accpacSession.Errors.Count; i++)
                     {
                         Log.Save(accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
@@ -2029,57 +2024,58 @@ namespace middleware_service
 
         public bool receiptBatchAvail(string bankcode)
         {
-            if (connGeneric.State != ConnectionState.Open)
+            connIntegration = new SqlConnection(Constants.dbIntegration);
+            connIntegration.Open();
+
+            try
             {
-                connGeneric.Open();
-            }
+                SqlCommand cmd = new SqlCommand();
+                SqlDataReader reader;
+                bool truth = false;
+                int receiptBatch = -1;
+                DateTime expiryDate = DateTime.Now;
 
-            if (connIntegration.State != ConnectionState.Open)
-            {
-                connIntegration.Open();
-            }
+                cmd.CommandText = "exec sp_rBatchAvail @bankcode";
+                cmd.Parameters.AddWithValue("@bankcode", bankcode);
+                cmd.Connection = connIntegration;
 
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader;
-            bool truth = false;
-            int receiptBatch = -1;
-            DateTime expiryDate = DateTime.Now;
-
-            cmd.CommandText = "exec sp_rBatchAvail @bankcode";
-            cmd.Parameters.AddWithValue("@bankcode", bankcode);
-            cmd.Connection = connIntegration;
-
-            reader = cmd.ExecuteReader();
-
-            if (reader.HasRows)
-            {
-                reader.Read();
-                receiptBatch = Convert.ToInt32(reader[0]);
-                expiryDate = Convert.ToDateTime(reader["ExpiryDate"]);
-                reader.Close();
-
-                if (DateTime.Now < expiryDate)
+                reader = cmd.ExecuteReader();
+                if (reader.HasRows)
                 {
-                    if (!checkAccpacRBatchPosted(receiptBatch))
+                    reader.Read();
+                    receiptBatch = Convert.ToInt32(reader[0]);
+                    expiryDate = Convert.ToDateTime(reader["ExpiryDate"]);
+                    connIntegration.Close();
+
+                    if (DateTime.Now < expiryDate)
                     {
-                        truth = true;
+                        if (!checkAccpacRBatchPosted(receiptBatch))
+                        {
+                            truth = true;
+                        }
+                        else
+                        {
+                            intLink.closeReceiptBatch(receiptBatch);
+                        }
                     }
                     else
                     {
                         intLink.closeReceiptBatch(receiptBatch);
                     }
+
+                    return truth;
                 }
                 else
                 {
-                    intLink.closeReceiptBatch(receiptBatch);
+                    connIntegration.Close();
+                    return truth;
                 }
-
-                return truth;
             }
-            else
+            catch (Exception e)
             {
-                reader.Close();
-                return truth;
+                Log.Save(e.Message + " " + e.StackTrace);
+                connIntegration.Close();
+                return false;
             }
         }
 
@@ -2609,6 +2605,17 @@ namespace middleware_service
         public void OnDebug()
         {
             OnStart(null);
+            try
+            {
+                while (true)
+                {
+                    var iDetails = intLink.getInvoiceDetails(20692);
+                }
+            }
+            catch (Exception e)
+            {
+                string msg = e.Message;
+            }
         }
 
         public void XrateInsert(string amt)

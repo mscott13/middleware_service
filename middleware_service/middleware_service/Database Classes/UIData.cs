@@ -13,7 +13,7 @@ namespace middleware_service.Database_Classes
         public string invoiceID { get; set; }
         public string budget { get; set; }
         public string invoiceTotal { get; set; }
-        public string thisMonthInv { get; set; }
+        public string thisPeriodsInv { get; set; }
         public string balBFwd { get; set; }
         public string fromRev { get; set; }
         public string toRev { get; set; }

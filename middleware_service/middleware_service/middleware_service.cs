@@ -22,8 +22,8 @@ namespace middleware_service
 {
     public partial class middleware_service : ServiceBase
     {
-        string dbGeneric = "Data Source=erp-srvr\\ASMSDEV;Initial Catalog=ASMSGenericMaster;Integrated Security=True";
-        string dbIntegration = "Data Source=erp-srvr\\ASMSDEV;Initial Catalog=ASMSSAGEINTEGRATION;Integrated Security=True";
+        string dbGeneric = "Data Source=SERVER-ERP2\\ASMSDEV;Initial Catalog=ASMSGenericMaster;Integrated Security=True";
+        string dbIntegration = "Data Source=SERVER-ERP2\\ASMSDEV;Initial Catalog=ASMSSAGEINTEGRATION;Integrated Security=True";
 
         SqlTableDependency<SqlNotifyCancellation> tableDependCancellation;
         SqlTableDependency<SqlNotify_DocumentInfo> tableDependInfo;
@@ -82,6 +82,7 @@ namespace middleware_service
         DateTime prevTime;
         DateTime currentTime;
         System.Timers.Timer broadcastTimer = new System.Timers.Timer();
+        System.Timers.Timer deferredTimer = new System.Timers.Timer();
         private int Code = 21;
 
         public middleware_service()
@@ -119,6 +120,10 @@ namespace middleware_service
                 broadcastTimer.Enabled = true;
                 broadcastTimer.Interval = 1000;
 
+                deferredTimer.Elapsed += DeferredTimer_Elapsed;
+                deferredTimer.Enabled = true;
+                deferredTimer.Interval = 3600000;
+
                 //////////////////////////////////////////////////////////////////// STARTING SESSION ///////////////////////////////////////////////////////////////////////
                 Log.Save("Starting accpac session...");
                 accpacSession.Init("", "XY", "XY1000", "65A");
@@ -130,6 +135,64 @@ namespace middleware_service
                 Log.Save(e.Message + " "+e.StackTrace);
                 Log.WriteEnd();
                 Stop();
+            }
+        }
+
+        private void DeferredTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Log.Save("Checking deferred report generation time");
+            Log.WriteEnd();
+
+            DateTime MonthlyRptDate = intLink.GetNextGenDate("Monthly");
+            DateTime AnnualRptDate = intLink.GetNextGenDate("Annual");
+
+            Log.Save("Monthly Rpt Date: " + MonthlyRptDate.ToLongDateString() + " " + MonthlyRptDate.ToLongTimeString());
+            Log.Save("Annual Rpt Date: " + AnnualRptDate.ToLongDateString() + " " + AnnualRptDate.ToLongTimeString());
+            Log.WriteEnd();
+
+            if (DateTime.Now.Year == MonthlyRptDate.Year && DateTime.Now.Month == MonthlyRptDate.Month && DateTime.Now.Day == MonthlyRptDate.Day)
+            {
+                if (DateTime.Now.Hour == MonthlyRptDate.Hour)
+                {
+                    int m = DateTime.Now.Month - 1;
+                    int y = DateTime.Now.Year;
+
+                    if (m == 0)
+                    {
+                        m = 12;
+                        y = y - 1;
+                    }
+
+                    Log.Save("Generating Monthly Deferred Income Report...");
+                    Database_Operations.Report rpt = new Database_Operations.Report();
+                    rpt.gen_rpt("Monthly", intLink, 0, m, y);
+                    //here we set the next Report Generation Date
+                    int es = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month) - DateTime.Now.Day;
+                    es++;
+                    DateTime nextMonth = DateTime.Now.AddDays(es);
+                    DateTime nextGenDate = new DateTime(nextMonth.Year, nextMonth.Month, 2);
+                    nextGenDate = nextGenDate.AddHours(2);
+                    intLink.SetNextGenDate("Monthly", nextGenDate);
+                    Log.Save("Monthly Deferred Report Generated.");
+                }
+            }
+
+            if (DateTime.Now.Year == AnnualRptDate.Year && DateTime.Now.Month == AnnualRptDate.Month && DateTime.Now.Day == AnnualRptDate.Day)
+            {
+                if (DateTime.Now.Hour == AnnualRptDate.Hour)
+                {
+                    int m = 4;
+                    int y = DateTime.Now.Year - 1;
+
+                    Log.Save("Generating Annual Deferred Income Report...");
+                    Database_Operations.Report rpt = new Database_Operations.Report();
+                    rpt.gen_rpt("Monthly", intLink, 0, m, y);
+                    //here we set the next Report Generation Date
+                    DateTime nextGenDate = new DateTime(DateTime.Now.Year + 1, 4, 2);
+                    nextGenDate = nextGenDate.AddHours(3);
+                    intLink.SetNextGenDate("Annual", nextGenDate);
+                    Log.Save("Annual Deferred Report Generated.");
+                }
             }
         }
 
@@ -146,10 +209,12 @@ namespace middleware_service
                 tableDependCancellation.Start();
                 tableDependInfo.Start();
 
+                broadcastTimer.Start();
+                deferredTimer.Start();
                 Log.Save("middleware_service started.");
                 Log.WriteEnd();
                 Code = 3;
-                broadcastTimer.Start();
+                DeferredTimer_Elapsed(null, null);
             }
             catch (Exception e)
             {
@@ -175,6 +240,7 @@ namespace middleware_service
                 tableDependInfo.Dispose();
                 Code = 2;
                 broadcastTimer.Stop();
+                deferredTimer.Stop();
 
                 Log.StopSocketConnection();
                 Log.Save("middleware_service stopped.");
@@ -183,23 +249,6 @@ namespace middleware_service
             catch (Exception e)
             {
                 Log.Save(e.Message +" "+e.StackTrace);
-                Log.WriteEnd();
-            }
-        }
-
-        void BroadcastStatus(int code)
-        {
-            try
-            {
-                var stat = new { status = code };
-                var json = JsonConvert.SerializeObject(stat);
-                var client = new WebClient();
-                client.Headers[HttpRequestHeader.ContentType] = "application/json";
-                client.UploadString("localhost:8080/IntegrationService.asmx/SetMonStat", "POST", json);
-            }
-            catch (Exception ex)
-            {
-                Log.Save(ex.InnerException.Message);
                 Log.WriteEnd();
             }
         }
@@ -2475,12 +2524,12 @@ namespace middleware_service
                 b1_arInvoiceHeader.Fetch(false);
                 b1_arInvoiceHeader.Delete();
 
-                //"Invoice: " + invoiceId.ToString() + " was deleted from the batch (" + batchNumber + ")"
+                Log.Save("Invoice: " + invoiceId.ToString() + " was deleted from the batch (" + batchNumber + ")");
                 return true;
             }
             else
             {
-                //"The batch is already posted, cannot delete invoice"
+                Log.Save("The batch is already posted, cannot delete invoice");
                 return false;
             }
         }

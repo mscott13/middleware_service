@@ -68,6 +68,63 @@ namespace middleware_service.Database_Operations
             }
         }
 
+        public List<ReportRawData> getDIRInformation(string ReportType, DateTime searchStartDate, DateTime searchEndDate)
+        {
+            openConnection("cIntegration");
+            SqlCommand cmd = new SqlCommand();
+            SqlDataReader reader = null;
+            cmd.Connection = cIntegration;
+
+            List<ReportRawData> reportInfo = new List<ReportRawData>();
+            ReportRawData record = new ReportRawData();
+            cmd.Connection = cIntegration;
+            cmd.CommandText = "EXEC sp_getDIRInformation @ReportType, @searchStartDate, @searchEndDate";
+            cmd.Parameters.AddWithValue("@ReportType", ReportType);
+            cmd.Parameters.AddWithValue("@searchStartDate", searchStartDate);
+            cmd.Parameters.AddWithValue("@searchEndDate", searchEndDate);
+            
+            reader = cmd.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    record = new ReportRawData();
+                    record.clientID = reader.GetInt32(0);
+                    record.ccNum = reader["ccNum"].ToString();
+                    record.clientCompany = reader["clientCompany"].ToString();
+                    record.clientFname = reader["clientFname"].ToString();
+                    record.clientLname = reader["clientLname"].ToString();
+                    record.Budget = Convert.ToDecimal(reader["budget"]);
+                    record.InvAmount = Convert.ToDecimal(reader["InvAmount"]);
+                    record.ExistedBefore = Convert.ToInt32(reader["ExistedBefore"]);
+                    record.LastRptsClosingBal = reader["LastRptsClosingBal"].ToString();
+                    record.LastRptsStartValPeriod = reader["LastRptsStartValPeriod"].ToString();
+                    record.LastRptsEndValPeriod = reader["LastRptsEndValPeriod"].ToString();
+                    record.CurrentStartValPeriod = reader.GetDateTime(11);
+                    record.CurrentEndValPeriod = reader.GetDateTime(12);
+                    record.CreditGLID = reader.GetInt32(13);
+                    record.notes = reader["notes"].ToString();
+                    record.ARInvoiceID = reader["ARInvoiceID"].ToString();
+                    record.InvoiceCreationDate = reader.GetDateTime(16);
+                    record.isCancelled = Convert.ToInt32(reader["isCancelled"]);
+                    record.isCreditMemo = Convert.ToInt32(reader["isCreditMemo"]);
+                    record.CreditMemoNum = reader["CreditMemoNum"].ToString();
+                    record.CreditMemoAmt = Convert.ToDecimal(reader["CreditMemoAmt"]);
+
+                    reportInfo.Add(record);
+                }
+
+                closeConnection("cIntegration");
+                return reportInfo;
+            }
+            else
+            {
+                reader.Close();
+                return reportInfo;
+            }
+        }
+
         public List<Batch> GetExpiryBatchDate()
         {
             openConnection("cIntegration");
@@ -1888,14 +1945,17 @@ namespace middleware_service.Database_Operations
 
         }
 
-        public string generateReportId()
+
+        public string generateReportId(string ReportType)
         {
             openConnection("cIntegration");
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
-            cmd.CommandText = "exec sp_newReport";
+            cmd.CommandText = "exec sp_DIRnewReportID @ReportType";
+            cmd.Parameters.AddWithValue("@ReportType", ReportType);
             cmd.Connection = cIntegration;
             string result = "";
+
 
             reader = cmd.ExecuteReader();
             if (reader.HasRows)
@@ -1908,22 +1968,23 @@ namespace middleware_service.Database_Operations
             return result;
         }
 
-        private void dataRouter(DataWrapper data, string recordID, int destination)
+        private void dataRouter(string ReportType, DataWrapper data, string recordID, int destination)
         {
             openConnection("cIntegration");
             for (int i = 0; i < data.records.Count; i++)
             {
                 SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = "exec sp_rptRecInsert @reportId, @licenseNumber, @clientCompany, @invoiceID, @budget, @invoiceTotal, @thisMonthInv, @balBFwd, @fromRev, @toRev, @closingBal, @totalMonths, @monthUtil, @monthRemain,  @valPStart, @valPEnd, @destination";
+                cmd.CommandText = "exec sp_rptRecInsert @ReportType, @reportId, @licenseNumber, @clientCompany, @invoiceID, @budget, @invoiceTotal, @thisPeriodsInv, @balBFwd, @fromRev, @toRev, @closingBal, @totalMonths, @monthUtil, @monthRemain,  @valPStart, @valPEnd, @destination";
                 cmd.Connection = cIntegration;
 
+                cmd.Parameters.AddWithValue("@ReportType", ReportType);
                 cmd.Parameters.AddWithValue("@reportId", recordID);
                 cmd.Parameters.AddWithValue("@licenseNumber", data.records[i].licenseNumber);
                 cmd.Parameters.AddWithValue("@clientCompany", data.records[i].clientCompany);
                 cmd.Parameters.AddWithValue("@invoiceID", data.records[i].invoiceID);
                 cmd.Parameters.AddWithValue("@budget", data.records[i].budget);
                 cmd.Parameters.AddWithValue("@invoiceTotal", data.records[i].invoiceTotal);
-                cmd.Parameters.AddWithValue("@thisMonthInv", data.records[i].thisMonthInv);
+                cmd.Parameters.AddWithValue("@thisPeriodsInv", data.records[i].thisPeriodsInv);
                 cmd.Parameters.AddWithValue("@balBFwd", data.records[i].balBFwd);
                 cmd.Parameters.AddWithValue("@fromRev", data.records[i].fromRev);
                 cmd.Parameters.AddWithValue("@toRev", data.records[i].toRev);
@@ -1937,29 +1998,32 @@ namespace middleware_service.Database_Operations
 
                 cmd.ExecuteNonQuery();
             }
+
             closeConnection("cIntegration");
-            insertSubtotals(recordID, data, destination);
+            insertSubtotals(ReportType, recordID, data, destination);
         }
 
-        public void saveReport(List<DataWrapper> tables, Totals total)
+        public string saveReport(string ReportType, List<DataWrapper> categories, Totals total)
         {
-            string id = generateReportId();
+            string id = generateReportId(ReportType);
 
-            for (int i = 0; i < tables.Count; i++)
+            for (int i = 0; i < categories.Count; i++)
             {
-                dataRouter(tables[i], id, i);
+                dataRouter(ReportType, categories[i], id, i);
             }
-            insertTotals(id, total);
 
+            insertTotals(ReportType, id, total);
+            return id;
         }
 
-        public void insertSubtotals(string reportID, DataWrapper data, int destination)
+        public void insertSubtotals(string ReportType, string reportID, DataWrapper data, int destination)
         {
             openConnection("cIntegration");
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "exec insertSubtotals @reportId, @category, @invoiceTotal, @balanceBFwd, @toRev, @closingBal, @fromRev, @budget";
+            cmd.CommandText = "exec sp_insertSubtotals @ReportType, @reportId, @category, @invoiceTotal, @balanceBFwd, @toRev, @closingBal, @fromRev, @budget";
             cmd.Connection = cIntegration;
 
+            cmd.Parameters.AddWithValue("@ReportType", ReportType);
             cmd.Parameters.AddWithValue("@reportId", reportID);
             cmd.Parameters.AddWithValue("@category", destination);
             cmd.Parameters.AddWithValue("@invoiceTotal", data.subT_invoiceTotal);
@@ -1968,18 +2032,21 @@ namespace middleware_service.Database_Operations
             cmd.Parameters.AddWithValue("@closingBal", data.subT_closingBal);
             cmd.Parameters.AddWithValue("@fromRev", data.subT_fromRev);
             cmd.Parameters.AddWithValue("@budget", data.subT_budget);
+
+            
             cmd.ExecuteNonQuery();
             closeConnection("cIntegration");
         }
 
 
-        public void insertTotals(string reportID, Totals total)
+        public void insertTotals(string ReportType, string reportID, Totals total)
         {
             openConnection("cIntegration");
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "exec sp_insertTotals @recordID, @invoiceTotal, @balanceBFwd, @toRev, @closingBal, @fromRev, @budget";
+            cmd.CommandText = "exec sp_insertTotals @ReportType, @recordID, @invoiceTotal, @balanceBFwd, @toRev, @closingBal, @fromRev, @budget";
             cmd.Connection = cIntegration;
 
+            cmd.Parameters.AddWithValue("@ReportType", ReportType);
             cmd.Parameters.AddWithValue("@recordID", reportID);
             cmd.Parameters.AddWithValue("@invoiceTotal", total.tot_invoiceTotal);
             cmd.Parameters.AddWithValue("@balanceBFwd", total.tot_balBFwd);
@@ -1987,73 +2054,86 @@ namespace middleware_service.Database_Operations
             cmd.Parameters.AddWithValue("@closingBal", total.tot_closingBal);
             cmd.Parameters.AddWithValue("@fromRev", total.tot_fromRev);
             cmd.Parameters.AddWithValue("@budget", total.tot_budget);
+
             cmd.ExecuteNonQuery();
             closeConnection("cIntegration");
         }
 
-        public DeferredData getDeferredRpt(string report_id)
+        public DeferredData getDeferredRpt(string ReportType, string report_id)
         {
             List<DataWrapper> tables = new List<DataWrapper>();
-            DataWrapper cell_table = new DataWrapper("Cellular");
-            DataWrapper micro_table = new DataWrapper("Microwave");
-            DataWrapper bbrand_table = new DataWrapper("Broadband");
-            DataWrapper vsat_table = new DataWrapper("Vsat");
-            DataWrapper other_table = new DataWrapper("Other");
-            DataWrapper trunking_table = new DataWrapper("Trunking");
-            DataWrapper aero_table = new DataWrapper("Aeronautical");
-            DataWrapper marine_table = new DataWrapper("Marine");
-            DataWrapper dservices_table = new DataWrapper("Data & Services");
+            DataWrapper cell_table = new DataWrapper();
+            DataWrapper micro_table = new DataWrapper();
+            DataWrapper bbrand_table = new DataWrapper();
+            DataWrapper vsat_table = new DataWrapper();
+            DataWrapper other_table = new DataWrapper();
+            DataWrapper trunking_table = new DataWrapper();
+            DataWrapper aero_table = new DataWrapper();
+            DataWrapper marine_table = new DataWrapper();
+            DataWrapper dservices_table = new DataWrapper();
 
-            cell_table.records = getDeferredPartial(0, report_id);
-            cell_table.setSubTotals(getDeferredPartialSubs(0, report_id));
+            cell_table.label = "Cellular";
+            cell_table.records = getDeferredPartial(ReportType, 0, report_id);
+            cell_table.setSubTotals(getDeferredPartialSubs(ReportType, 0, report_id));
 
-            micro_table.records = getDeferredPartial(1, report_id);
-            micro_table.setSubTotals(getDeferredPartialSubs(1, report_id));
+            bbrand_table.label = "Broadband";
+            bbrand_table.records = getDeferredPartial(ReportType, 1, report_id);
+            bbrand_table.setSubTotals(getDeferredPartialSubs(ReportType, 1, report_id));
 
-            bbrand_table.records = getDeferredPartial(2, report_id);
-            bbrand_table.setSubTotals(getDeferredPartialSubs(2, report_id));
+            micro_table.label = "Microwave";
+            micro_table.records = getDeferredPartial(ReportType, 2, report_id);
+            micro_table.setSubTotals(getDeferredPartialSubs(ReportType, 2, report_id));
 
-            vsat_table.records = getDeferredPartial(3, report_id);
-            vsat_table.setSubTotals(getDeferredPartialSubs(3, report_id));
+            vsat_table.label = "Vsat";
+            vsat_table.records = getDeferredPartial(ReportType, 3, report_id);
+            vsat_table.setSubTotals(getDeferredPartialSubs(ReportType, 3, report_id));
 
-            other_table.records = getDeferredPartial(4, report_id);
-            other_table.setSubTotals(getDeferredPartialSubs(4, report_id));
+            marine_table.label = "Marine";
+            marine_table.records = getDeferredPartial(ReportType, 4, report_id);
+            marine_table.setSubTotals(getDeferredPartialSubs(ReportType, 4, report_id));
 
-            trunking_table.records = getDeferredPartial(5, report_id);
-            trunking_table.setSubTotals(getDeferredPartialSubs(5, report_id));
+            dservices_table.label = "Data & Services";
+            dservices_table.records = getDeferredPartial(ReportType, 5, report_id);
+            dservices_table.setSubTotals(getDeferredPartialSubs(ReportType, 5, report_id));
 
-            aero_table.records = getDeferredPartial(6, report_id);
-            aero_table.setSubTotals(getDeferredPartialSubs(6, report_id));
+            aero_table.label = "Aeronautical";
+            aero_table.records = getDeferredPartial(ReportType, 6, report_id);
+            aero_table.setSubTotals(getDeferredPartialSubs(ReportType, 6, report_id));
 
-            marine_table.records = getDeferredPartial(7, report_id);
-            marine_table.setSubTotals(getDeferredPartialSubs(7, report_id));
+            trunking_table.label = "Trunking";
+            trunking_table.records = getDeferredPartial(ReportType, 7, report_id);
+            trunking_table.setSubTotals(getDeferredPartialSubs(ReportType, 7, report_id));
 
-            dservices_table.records = getDeferredPartial(8, report_id);
-            dservices_table.setSubTotals(getDeferredPartialSubs(8, report_id));
+            other_table.label = "Other";
+            other_table.records = getDeferredPartial(ReportType, 8, report_id);
+            other_table.setSubTotals(getDeferredPartialSubs(ReportType, 8, report_id));
 
             tables.Add(cell_table);
-            tables.Add(micro_table);
             tables.Add(bbrand_table);
+            tables.Add(micro_table);
             tables.Add(vsat_table);
-            tables.Add(other_table);
-            tables.Add(trunking_table);
-            tables.Add(aero_table);
             tables.Add(marine_table);
             tables.Add(dservices_table);
+            tables.Add(aero_table);
+            tables.Add(trunking_table);
+            tables.Add(other_table);
 
+            DeferredData d = new DeferredData();
+            d.Categories = tables;
+            d.Total = getDeferredTotal(ReportType, report_id);
 
-            return new DeferredData(tables, getDeferredTotal(report_id));
+            return d;
         }
 
-        private List<UIData> getDeferredPartial(int index, string report_id)
+        private List<UIData> getDeferredPartial(string ReportType, int index, string report_id)
         {
             openConnection("cIntegration");
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
 
             List<UIData> udt = new List<UIData>();
-            cmd.Connection = cIntegration;
-            cmd.CommandText = "EXEC sp_getDeferredPartial @index, @report_id";
+            cmd.CommandText = "EXEC sp_getDeferredPartial @ReportType, @index, @report_id";
+            cmd.Parameters.AddWithValue("@ReportType", ReportType);
             cmd.Parameters.AddWithValue("@index", index);
             cmd.Parameters.AddWithValue("@report_id", report_id);
             reader = cmd.ExecuteReader();
@@ -2068,7 +2148,7 @@ namespace middleware_service.Database_Operations
                     record.invoiceID = reader["invoiceID"].ToString();
                     record.budget = reader["budget"].ToString();
                     record.invoiceTotal = reader["invoiceTotal"].ToString();
-                    record.thisMonthInv = reader["thisMonthInvoice"].ToString();
+                    record.thisPeriodsInv = reader["thisPeriodsInvoice"].ToString();
                     record.balBFwd = reader["balanceBFoward"].ToString();
                     record.fromRev = reader["fromRevenue"].ToString();
                     record.toRev = reader["toRevenue"].ToString();
@@ -2092,61 +2172,66 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        private SubTotals getDeferredPartialSubs(int index, string report_id)
+        private SubTotals getDeferredPartialSubs(string ReportType, int index, string report_id)
         {
             openConnection("cIntegration");
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
 
             SubTotals subs = new SubTotals();
-            cmd.Connection = cIntegration;
-            cmd.CommandText = "EXEC sp_getDeferredPartialSubs @index, @record_id";
+            cmd.CommandText = "EXEC sp_getDeferredPartialSubs @ReportType, @index, @record_id";
+            cmd.Parameters.AddWithValue("@ReportType", ReportType);
             cmd.Parameters.AddWithValue("@index", index);
             cmd.Parameters.AddWithValue("@record_id", report_id);
+            cmd.Connection = cIntegration;
+
             reader = cmd.ExecuteReader();
 
             if (reader.HasRows)
             {
                 reader.Read();
-                subs.invoiceTotal = Convert.ToDecimal(reader["invoiceTotal"]);
-                subs.balanceBFwd = Convert.ToDecimal(reader["balanceBFwd"]);
-                subs.toRev = Convert.ToDecimal(reader["toRev"]);
-                subs.closingBal = Convert.ToDecimal(reader["closingBal"]);
-                subs.fromRev = Convert.ToDecimal(reader["fromRev"]);
-                subs.budget = Convert.ToDecimal(reader["budget"]);
+                subs.invoiceTotal = reader["invoiceTotal"].ToString();
+                subs.balanceBFwd = reader["balanceBFwd"].ToString();
+                subs.toRev = reader["toRev"].ToString();
+                subs.closingBal = reader["closingBal"].ToString();
+                subs.fromRev = reader["fromRev"].ToString();
+                subs.budget = reader["budget"].ToString();
 
                 closeConnection("cIntegration");
                 return subs;
             }
             else
             {
+                reader.Close();
                 closeConnection("cIntegration");
                 return subs;
             }
         }
 
-        public Totals getDeferredTotal(string recordID)
+
+        public Totals getDeferredTotal(string ReportType, string recordID)
         {
             openConnection("cIntegration");
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
-
             Totals totals = new Totals();
-            cmd.Connection = cIntegration;
-            cmd.CommandText = "EXEC sp_getRptTotals @record_id";
+            
+            cmd.CommandText = "EXEC sp_getDeferredRptTotals @ReportType, @record_id";
+            cmd.Parameters.AddWithValue("@ReportType", ReportType);
             cmd.Parameters.AddWithValue("@record_id", recordID);
+            cmd.Connection = cIntegration;
+
             reader = cmd.ExecuteReader();
 
             if (reader.HasRows)
             {
                 reader.Read();
-                totals.tot_invoiceTotal = Convert.ToDecimal(reader["invoiceTotal"]);
-                totals.tot_balBFwd = Convert.ToDecimal(reader["balanceBFwd"]);
-                totals.tot_toRev = Convert.ToDecimal(reader["toRev"]);
-                totals.tot_closingBal = Convert.ToDecimal(reader["closingBal"]);
-                totals.tot_fromRev = totals.tot_toRev = Convert.ToDecimal(reader["fromRev"]);
-                totals.tot_budget = Convert.ToDecimal(reader["budget"]);
-
+                totals.tot_invoiceTotal = reader["invoiceTotal"].ToString();
+                totals.tot_balBFwd = reader["balanceBFwd"].ToString();
+                totals.tot_toRev = reader["toRev"].ToString();
+                totals.tot_closingBal = reader["closingBal"].ToString();
+                totals.tot_fromRev = reader["fromRev"].ToString();
+                totals.tot_budget = reader["budget"].ToString();
 
                 closeConnection("cIntegration");
                 return totals;

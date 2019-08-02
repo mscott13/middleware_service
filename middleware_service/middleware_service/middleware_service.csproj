@@ -61,6 +61,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>assemblies\ACCPAC.Advantage.Types.dll</HintPath>
     </Reference>
+    <Reference Include="DocumentFormat.OpenXml">
+      <HintPath>assemblies\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>assemblies\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp.pdfa">
+      <HintPath>assemblies\itextsharp.pdfa.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp.xtra">
+      <HintPath>assemblies\itextsharp.xtra.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -86,16 +98,19 @@
   <ItemGroup>
     <Compile Include="Database Classes\Batch.cs" />
     <Compile Include="Database Classes\CreditNoteInfo.cs" />
+    <Compile Include="Database Classes\ClientDataWrapper.cs" />
     <Compile Include="Database Classes\DataWrapper.cs" />
     <Compile Include="Database Classes\InvoiceInfo.cs" />
     <Compile Include="Database Classes\Maj.cs" />
     <Compile Include="Database Classes\PaymentInfo.cs" />
     <Compile Include="Database Classes\PrepaymentData.cs" />
     <Compile Include="Database Classes\Queue.cs" />
+    <Compile Include="Database Classes\ReportRawData.cs" />
     <Compile Include="Database Classes\SubTotals.cs" />
     <Compile Include="Database Classes\Totals.cs" />
     <Compile Include="Database Classes\UIData.cs" />
     <Compile Include="Database Operations\Integration.cs" />
+    <Compile Include="Database Operations\Report.cs" />
     <Compile Include="middleware_service.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -131,6 +146,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database Classes\DeferredData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="resources\spec.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="resources\reports\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

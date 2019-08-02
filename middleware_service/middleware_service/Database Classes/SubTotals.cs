@@ -8,11 +8,11 @@ namespace middleware_service.Database_Classes
 {
     public class SubTotals
     {
-        public decimal invoiceTotal { get; set; }
-        public decimal balanceBFwd { get; set; }
-        public decimal toRev { get; set; }
-        public decimal closingBal { get; set; }
-        public decimal fromRev { get; set; }
-        public decimal budget { get; set; }
+        public string invoiceTotal { get; set; }
+        public string balanceBFwd { get; set; }
+        public string toRev { get; set; }
+        public string closingBal { get; set; }
+        public string fromRev { get; set; }
+        public string budget { get; set; }
     }
 }

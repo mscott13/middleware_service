@@ -158,12 +158,8 @@ namespace WebApplication4
             }
             catch (Exception e)
             {
-                result = 21;
+                result = -1;
             }
-
-            Integration intlink = new Integration();
-            int data = intlink.GetIntegrationStat();
-
             return result;
         }
 

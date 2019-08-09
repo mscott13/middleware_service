@@ -93,15 +93,8 @@ namespace middleware_service
 
         private void DeferredTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Log.Save("Checking deferred report generation time");
-            Log.WriteEnd();
-
             DateTime MonthlyRptDate = intLink.GetNextGenDate("Monthly");
             DateTime AnnualRptDate = intLink.GetNextGenDate("Annual");
-
-            Log.Save("Monthly Rpt Date: " + MonthlyRptDate.ToLongDateString() + " " + MonthlyRptDate.ToLongTimeString());
-            Log.Save("Annual Rpt Date: " + AnnualRptDate.ToLongDateString() + " " + AnnualRptDate.ToLongTimeString());
-            Log.WriteEnd();
 
             if (DateTime.Now.Year == MonthlyRptDate.Year && DateTime.Now.Month == MonthlyRptDate.Month && DateTime.Now.Day == MonthlyRptDate.Day)
             {
@@ -791,7 +784,7 @@ namespace middleware_service
                         while (pinfo.ReceiptNumber == 0)
                         {
                             pinfo = intLink.getPaymentInfo(docInfo.OriginalDocumentID);
-                            Thread.Sleep(1000);
+                            Thread.Sleep(500);
                         }
 
                         var receipt = pinfo.ReceiptNumber;

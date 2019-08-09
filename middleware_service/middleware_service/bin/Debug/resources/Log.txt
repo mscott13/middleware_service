@@ -287,3 +287,100 @@
 7/30/2019 12:43:40 PM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
 --------end
 
+8/7/2019 11:45:56 AM - Starting accpac session...
+8/7/2019 11:45:56 AM - The source was not found, but some or all event logs could not be searched.  To create the source, you need permission to read all event logs to make sure that the new source name is unique.  Inaccessible logs: Security.    at System.Diagnostics.EventLog.FindSourceRegistration(String source, String machineName, Boolean readOnly, Boolean wantToCreate)
+   at System.Diagnostics.EventLog.SourceExists(String source, String machineName, Boolean wantToCreate)
+   at System.Diagnostics.EventLogInternal.VerifyAndCreateSource(String sourceName, String currentMachineName)
+   at System.Diagnostics.EventLogInternal.WriteEntry(String message, EventLogEntryType type, Int32 eventID, Int16 category, Byte[] rawData)
+   at System.Diagnostics.EventLog.WriteEntry(String message, EventLogEntryType type)
+   at middleware_service.Other_Classes.Log.Save(String msg) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Other Classes\Log.cs:line 73
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 195
+8/7/2019 11:46:54 AM - Starting accpac session...
+8/7/2019 11:46:59 AM - middleware_service started.
+--------end
+
+8/7/2019 11:47:02 AM - Checking deferred report generation time
+--------end
+
+8/7/2019 11:47:35 AM - Invalid attempt to read when no data is present.    at System.Data.SqlClient.SqlDataReader.CheckDataIsReady(Int32 columnIndex, Boolean allowPartiallyReadColumn, Boolean permitAsync, String methodName)
+   at System.Data.SqlClient.SqlDataReader.TryReadColumn(Int32 i, Boolean setTimeout, Boolean allowPartiallyReadColumn)
+   at System.Data.SqlClient.SqlDataReader.GetValueInternal(Int32 i)
+   at System.Data.SqlClient.SqlDataReader.GetValue(Int32 i)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at middleware_service.Database_Operations.Integration.GetNextGenDate(String ReportType) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Database Operations\Integration.cs:line 2200
+   at middleware_service.middleware_service.DeferredTimer_Elapsed(Object sender, ElapsedEventArgs e) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 99
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 217
+--------end
+
+8/7/2019 11:48:03 AM - Starting accpac session...
+8/7/2019 11:48:06 AM - middleware_service started.
+--------end
+
+8/7/2019 11:48:10 AM - Checking deferred report generation time
+--------end
+
+8/7/2019 11:48:23 AM - Invalid attempt to read when no data is present.    at System.Data.SqlClient.SqlDataReader.CheckDataIsReady(Int32 columnIndex, Boolean allowPartiallyReadColumn, Boolean permitAsync, String methodName)
+   at System.Data.SqlClient.SqlDataReader.TryReadColumn(Int32 i, Boolean setTimeout, Boolean allowPartiallyReadColumn)
+   at System.Data.SqlClient.SqlDataReader.GetValueInternal(Int32 i)
+   at System.Data.SqlClient.SqlDataReader.GetValue(Int32 i)
+   at System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   at middleware_service.Database_Operations.Integration.GetNextGenDate(String ReportType) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Database Operations\Integration.cs:line 2200
+   at middleware_service.middleware_service.DeferredTimer_Elapsed(Object sender, ElapsedEventArgs e) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 99
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 217
+--------end
+
+8/7/2019 12:48:03 PM - Checking deferred report generation time
+--------end
+
+8/8/2019 11:33:22 AM - Starting accpac session...
+8/8/2019 11:33:30 AM - middleware_service started.
+--------end
+
+8/8/2019 11:33:33 AM - Checking deferred report generation time
+--------end
+
+8/8/2019 11:33:40 AM - Monthly Rpt Date: Thursday, August 8, 2019 11:00:00 AM
+8/8/2019 11:33:40 AM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+--------end
+
+8/8/2019 11:33:48 AM - Generating Monthly Deferred Income Report... | Month: 7, Year: 2019
+8/8/2019 11:37:31 AM - (Main Report) Writing to path: C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\resources\reports\MonthlyDefferedIncomeReport20190701.pdf
+8/8/2019 11:50:38 AM - Starting accpac session...
+8/8/2019 11:50:42 AM - middleware_service started.
+--------end
+
+8/8/2019 11:53:14 AM - Invalid connection string.    at TableDependency.SqlClient.SqlTableDependency`1.CheckIfConnectionStringIsValid(String connectionString)
+   at TableDependency.SqlClient.SqlTableDependency`1.PreliminaryChecks(String connectionString, String tableName)
+   at TableDependency.TableDependency`1..ctor(String connectionString, String tableName, ModelToTableMapper`1 mapper, IList`1 updateOf, DmlTriggerType dmlTriggerType, Boolean automaticDatabaseObjectsTeardown, String namingConventionForDatabaseObjects)
+   at TableDependency.SqlClient.SqlTableDependency`1..ctor(String connectionString, String tableName)
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 174
+--------end
+
+8/8/2019 11:53:24 AM - Object reference not set to an instance of an object.    at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 209
+--------end
+
+8/8/2019 11:55:39 AM - Object reference not set to an instance of an object.    at middleware_service.middleware_service.OnStop() in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 236
+--------end
+
+8/8/2019 11:56:26 AM - Starting accpac session...
+8/8/2019 11:56:29 AM - middleware_service started.
+--------end
+
+8/8/2019 11:56:36 AM - Checking deferred report generation time
+--------end
+
+8/8/2019 11:57:09 AM - Starting accpac session...
+8/8/2019 11:57:12 AM - middleware_service started.
+--------end
+
+8/8/2019 11:57:13 AM - Checking deferred report generation time
+--------end
+
+8/8/2019 11:57:20 AM - Monthly Rpt Date: Thursday, August 8, 2019 11:00:00 AM
+8/8/2019 11:57:21 AM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+--------end
+
+8/8/2019 11:57:26 AM - Generating Monthly Deferred Income Report... | Month: 7, Year: 2019
+8/8/2019 11:57:55 AM - (Main Report) Writing to path: C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\resources\reports\MonthlyDefferedIncomeReport20190701.pdf
+8/8/2019 11:58:21 AM - (Totals Report) Writing to path: C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\resources\reports\MonthlyDefferedIncomeSummaryReport20190701.pdf
+8/8/2019 11:58:21 AM - Monthly Deferred Report Generated.

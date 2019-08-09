@@ -39,5 +39,10 @@ namespace middleware_service
                 sc.Start();
             }
         }
+
+        private void installer_AfterInstall(object sender, InstallEventArgs e)
+        {
+
+        }
     }
 }

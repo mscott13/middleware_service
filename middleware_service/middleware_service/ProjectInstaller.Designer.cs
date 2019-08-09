@@ -36,6 +36,7 @@
             this.installer.Account = System.ServiceProcess.ServiceAccount.LocalSystem;
             this.installer.Password = null;
             this.installer.Username = null;
+            this.installer.AfterInstall += new System.Configuration.Install.InstallEventHandler(this.installer_AfterInstall);
             // 
             // middleware_service
             // 

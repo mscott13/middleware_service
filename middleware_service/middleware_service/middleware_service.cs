@@ -152,7 +152,7 @@ namespace middleware_service
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            //intLink.SetIntegrationStat(Code);
+            
         }
 
         protected override void OnStart(string[] args)
@@ -267,7 +267,6 @@ namespace middleware_service
                 {
                     if (docInfo.DocumentType == INVOICE)
                     {
-                        Log.WriteEnd();
                         Log.Save("Incoming invoice...");
                         InvoiceInfo invoiceInfo = new InvoiceInfo();
                         while (invoiceInfo.amount == 0)
@@ -283,6 +282,7 @@ namespace middleware_service
                         string fname = clientInfo[2].ToString();
                         string lname = clientInfo[3].ToString();
                         Maj m = new Maj();
+
                         InsertionReturn stat = new InsertionReturn();
 
                         if (companyName == "" || companyName == " " || companyName == null)
@@ -340,7 +340,7 @@ namespace middleware_service
                                                 intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
                                                 prevInvoice = currentInvoice;
-                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
+                                                
                                                 intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
                                                 intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                                 prevInvoice = currentInvoice;
@@ -352,7 +352,6 @@ namespace middleware_service
                                                 intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
                                                 prevInvoice = currentInvoice;
-                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                                 intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString() + " For " + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
                                                 intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                                 prevInvoice = currentInvoice;
@@ -372,7 +371,6 @@ namespace middleware_service
                                                 intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
                                                 prevInvoice = currentInvoice;
-                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                                 intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
                                                 intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                                 prevInvoice = currentInvoice;
@@ -385,7 +383,6 @@ namespace middleware_service
                                                 intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
                                                 prevInvoice = currentInvoice;
-                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                                 intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
                                                 intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                                 prevInvoice = currentInvoice;
@@ -405,7 +402,6 @@ namespace middleware_service
                                                 intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
                                                 prevInvoice = currentInvoice;
-                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                                 intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
                                                 intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                                 prevInvoice = currentInvoice;
@@ -417,7 +413,6 @@ namespace middleware_service
                                                 intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
                                                 prevInvoice = currentInvoice;
-                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                                 intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
                                                 intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                                 prevInvoice = currentInvoice;
@@ -437,7 +432,6 @@ namespace middleware_service
                                                 intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
                                                 prevInvoice = currentInvoice;
-                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                                 intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", intLink.GetRate(), changetous(invoiceInfo.amount), invoiceInfo.isvoided, 0, 0);
                                                 intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                                 prevInvoice = currentInvoice;
@@ -449,7 +443,6 @@ namespace middleware_service
                                                 intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
                                                 prevInvoice = currentInvoice;
-                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                                 intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", intLink.GetRate(), changetous(invoiceInfo.amount), invoiceInfo.isvoided, 0, 0);
                                                 intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                                 prevInvoice = currentInvoice;
@@ -470,7 +463,6 @@ namespace middleware_service
                                                 intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
                                                 prevInvoice = currentInvoice;
-                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                                 intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
                                                 intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                                 prevInvoice = currentInvoice;
@@ -482,7 +474,6 @@ namespace middleware_service
                                                 intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
                                                 prevInvoice = currentInvoice;
-                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                                 intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
                                                 intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                                 prevInvoice = currentInvoice;
@@ -597,7 +588,6 @@ namespace middleware_service
                                         intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
                                         prevInvoice = currentInvoice;
-                                        Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                         intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
                                         intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                         prevInvoice = currentInvoice;
@@ -610,7 +600,6 @@ namespace middleware_service
 
                                         intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
                                         prevInvoice = currentInvoice;
-                                        Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                         intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
                                         intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                         prevInvoice = currentInvoice;
@@ -628,11 +617,9 @@ namespace middleware_service
 
                                         intLink.UpdateBatchCount(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString());
                                         intLink.UpdateEntryNumber(docInfo.OriginalDocumentID);
-
                                         intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
                                         prevInvoice = currentInvoice;
-                                        Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                         intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
                                         intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                         prevInvoice = currentInvoice;
@@ -646,7 +633,6 @@ namespace middleware_service
                                         intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
                                         prevInvoice = currentInvoice;
-                                        Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                         intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
                                         intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                         prevInvoice = currentInvoice;
@@ -669,7 +655,6 @@ namespace middleware_service
                                         intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
                                         prevInvoice = currentInvoice;
-                                        Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                         intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
                                         intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                         prevInvoice = currentInvoice;
@@ -679,11 +664,9 @@ namespace middleware_service
                                     {
                                         intLink.UpdateBatchCount(MAJ);
                                         intLink.UpdateEntryNumber(docInfo.OriginalDocumentID);
-
                                         intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
                                         prevInvoice = currentInvoice;
-                                        Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                         intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
                                         intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                         prevInvoice = currentInvoice;
@@ -704,7 +687,6 @@ namespace middleware_service
                                         intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
                                         prevInvoice = currentInvoice;
-                                        Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                         intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", intLink.GetRate(), changetous(invoiceInfo.amount), invoiceInfo.isvoided, 0, 0);
                                         intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                         prevInvoice = currentInvoice;
@@ -717,7 +699,6 @@ namespace middleware_service
                                         intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
                                         prevInvoice = currentInvoice;
-                                        Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                         intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", intLink.GetRate(), changetous(invoiceInfo.amount), invoiceInfo.isvoided, 0, 0);
                                         intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                         prevInvoice = currentInvoice;
@@ -739,7 +720,6 @@ namespace middleware_service
                                         intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
                                         prevInvoice = currentInvoice;
-                                        Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                         intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
                                         intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                         prevInvoice = currentInvoice;
@@ -752,7 +732,6 @@ namespace middleware_service
                                         intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
                                         prevInvoice = currentInvoice;
-                                        Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                         intLink.storeInvoice(docInfo.OriginalDocumentID, getBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
                                         intLink.MarkAsTransferred(docInfo.OriginalDocumentID);
                                         prevInvoice = currentInvoice;
@@ -772,7 +751,6 @@ namespace middleware_service
                     }
                     else if (docInfo.DocumentType == RECEIPT && docInfo.PaymentMethod != 99)
                     {
-                        Log.WriteEnd();
                         Log.Save("Incoming Receipt");
                         Data dt = new Data();
                         PaymentInfo pinfo = new PaymentInfo();
@@ -1244,6 +1222,7 @@ namespace middleware_service
                         }
                     }
                 }
+                Log.WriteEnd();
             }
             catch (Exception ex)
             {
@@ -1440,6 +1419,7 @@ namespace middleware_service
                 b1_arInvoiceHeader.Dispose();
                 b1_arInvoiceHeaderOptFields.Dispose();
                 b1_arInvoicePaymentSchedules.Dispose();
+                Log.Save("Invoice Id: " + docNum + " Transferred");
             }
 
             else

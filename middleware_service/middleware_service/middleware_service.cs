@@ -1792,6 +1792,28 @@ namespace middleware_service
             }
         }
 
+        public bool isAccpacSessionOpen()
+        {
+            if (accpacSession != null)
+            {
+                if (accpacSession.IsOpened)
+                {
+                    return true;
+                }
+                else
+                {
+                    Log.Save("Accpac session is not opened");
+                    return false;
+                }
+            }
+            else
+            {
+                Log.Save("Accpac session is not initialized");
+                return false;
+            }
+        }
+
+
         public bool checkAccpacIBatchPosted(int batchNumber)
         {
             View cssql = dbLink.OpenView("CS0120");

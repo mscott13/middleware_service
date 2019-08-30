@@ -12,7 +12,7 @@ namespace middleware_service
         static void Main()
         {
 
-#if (!DEBUG)
+#if (DEBUG)
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {

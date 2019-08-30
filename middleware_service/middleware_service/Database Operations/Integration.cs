@@ -1696,7 +1696,7 @@ namespace middleware_service.Database_Operations
             closeConnection(CINTEGRATION);
         }
 
-        public string getClientIdZRecord()
+        public string getClientIdZRecord(bool stripExtention)
         {
             openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
@@ -1713,18 +1713,25 @@ namespace middleware_service.Database_Operations
                 reader.Read();
                 result = reader["clientId"].ToString();
 
-                for (int i = 0; i < result.Length; i++)
+                if (stripExtention)
                 {
-                    if (result[i] != '-')
+                    for (int i = 0; i < result.Length; i++)
                     {
-                        temp += result[i];
+                        if (result[i] != '-')
+                        {
+                            temp += result[i];
+                        }
+                        else
+                        {
+                            i = result.Length;
+                        }
                     }
-                    else
-                    {
-                        i = result.Length;
-                    }
+                    result = temp;
                 }
-                result = temp;
+                else
+                {
+                    return result;
+                }
             }
 
 

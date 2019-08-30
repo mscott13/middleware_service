@@ -161,11 +161,6 @@ namespace middleware_service
             {
                 intLink = new Integration();
                 Log.Init(intLink, event_logger);
-                if ("00159-T".Contains("-T"))
-                {
-                    string a = "";
-                }
-
                 accpacSession = new Session();
 
                 using (tableDependCancellation = new SqlTableDependency<SqlNotifyCancellation>(Constants.dbGeneric, "tblARInvoices"))
@@ -909,7 +904,7 @@ namespace middleware_service
                                         }
                                     }
 
-                                    if (prepstat == "Yes" && clientIdPrefix == intLink.getClientIdZRecord())
+                                    if (prepstat == "Yes" && clientIdPrefix == intLink.getClientIdZRecord(true))
                                     {
                                         dt.customerId = clientIdPrefix + "-T";
                                         currentRate = intLink.GetRate();
@@ -1484,9 +1479,9 @@ namespace middleware_service
             string iv_customerId = "";
             Data dt = new Data();
 
-            if (_fcode == "PREPAYMENT" && intLink.getClientIdZRecord().Contains("-T"))
+            if (_fcode == "PREPAYMENT" && intLink.getClientIdZRecord(false).Contains("-T"))
             {
-                dt.customerId = intLink.getClientIdZRecord();
+                dt.customerId = intLink.getClientIdZRecord(false);
                 dt.companyName = "Processing Fee for Type Approval Certificationn";
                 dt.desc = "Processing Fee";
                 dt.success = true;

@@ -161,6 +161,10 @@ namespace middleware_service
             {
                 intLink = new Integration();
                 Log.Init(intLink, event_logger);
+                if ("00159-T".Contains("-T"))
+                {
+                    string a = "";
+                }
 
                 accpacSession = new Session();
 
@@ -829,8 +833,15 @@ namespace middleware_service
                                 }
                             }
 
-                            dt = Translate(customerId, ftype, companyName, debit, notes, "", intLink.getFreqUsage(Convert.ToInt32(invoiceId)));
-
+                            if (prepstat == "Yes")
+                            {
+                                dt = Translate(customerId, ftype, companyName, debit, notes, "PREPAYMENT", intLink.getFreqUsage(Convert.ToInt32(invoiceId)));
+                            }
+                            else
+                            {
+                                dt = Translate(customerId, ftype, companyName, debit, notes, "", intLink.getFreqUsage(Convert.ToInt32(invoiceId)));
+                            }
+                           
                             bool cusexists;
                             cusexists = CustomerExists(dt.customerId);
                             if (Convert.ToInt32(invoiceId) == 0)
@@ -1473,170 +1484,181 @@ namespace middleware_service
             string iv_customerId = "";
             Data dt = new Data();
 
-            if (_fcode == "PAYMENT")
+            if (_fcode == "PREPAYMENT" && intLink.getClientIdZRecord().Contains("-T"))
             {
-                dt.fcode = "";
-            }
-            else
-            {
-                dt.fcode = _fcode;
-            }
-
-            if (debit != "0.0000" && debit != "")
-            {
-                dt.debit = debit;
-
-                for (int i = 0; i < cNum.Length; i++)
-                {
-                    if (cNum[i] != '-')
-                    {
-                        temp += cNum[i];
-                    }
-                    else
-                    {
-                        i = cNum.Length;
-                        cNum = temp;
-                    }
-                }
-
-                if (feeType == "SLF")
-                {
-                    iv_customerId = cNum + "-L";
-                    dt.customerId = iv_customerId;
-                    dt.feeType = "SLF";
-                    dt.companyName = companyName + " - Spec Fee";
-                    dt.desc = "Spec Fee";
-                }
-
-                else if (notes == "Radio Operator")
-                {
-                    iv_customerId = cNum + "-L";
-                    dt.customerId = iv_customerId;
-                    dt.feeType = "SLF";
-                    dt.companyName = companyName + " - Spec Fee";
-                    dt.desc = "Spec Fee";
-                }
-
-                else if (notes == "Type Approval" || FreqUsage == "TA-ProAmend")
-                {
-                    iv_customerId = cNum + "-T";
-                    dt.customerId = iv_customerId;
-                    dt.feeType = "RF";
-                    dt.companyName = companyName + " - Type Approval";
-                    dt.desc = "Processing Fee";
-                }
-
-                else if (notes != "Type Approval" && feeType == "APF")
-                {
-                    iv_customerId = cNum + "-R";
-                    dt.customerId = iv_customerId;
-                    dt.feeType = "RF";
-                    dt.companyName = companyName + " - Processing Fee";
-                    dt.desc = "Processing Fee";
-                }
-                else
-                {
-                    iv_customerId = cNum + "-R";
-                    dt.customerId = iv_customerId;
-                    dt.companyName = companyName + " - Reg Fee";
-                    dt.feeType = "RF";
-                    dt.desc = "Reg Fee";
-                }
-
+                dt.customerId = intLink.getClientIdZRecord();
+                dt.companyName = "Processing Fee for Type Approval Certificationn";
+                dt.desc = "Processing Fee";
                 dt.success = true;
-                return dt;
-            }
-            else if (debit == "")
-            {
-                if (companyName == "")
-                {
-                    companyName = " ";
-                    dt.companyName = companyName;
-                }
-                else
-                {
-                    dt.companyName = companyName;
-                }
-
-                for (int i = 0; i < cNum.Length; i++)
-                {
-                    if (cNum[i] != '-')
-                    {
-                        temp += cNum[i];
-                    }
-                    else
-                    {
-                        i = cNum.Length;
-                        cNum = temp;
-                    }
-                }
-
-                if (feeType == "SLF")
-                {
-                    iv_customerId = cNum + "-L";
-                    dt.customerId = iv_customerId;
-                    dt.feeType = "SLF";
-                    dt.companyName = companyName + " - Spec Fee";
-                    dt.companyName_NewCust = companyName;
-                    dt.desc = "Spec Fee";
-                }
-
-                else if (feeType == "Reg")
-                {
-                    iv_customerId = cNum + "-R";
-                    dt.customerId = iv_customerId;
-                    dt.feeType = "RF";
-                    dt.companyName = companyName + " - Reg Fee";
-                    dt.companyName_NewCust = companyName;
-                    dt.desc = "Reg Fee";
-                }
-                else if (notes == "Radio Operator")
-                {
-                    iv_customerId = cNum + "-L";
-                    dt.customerId = iv_customerId;
-                    dt.feeType = "SLF";
-                    dt.companyName = companyName + " - Spec Fee";
-                    dt.companyName_NewCust = companyName;
-                    dt.desc = "Spec Fee";
-                }
-
-                else if (notes == "Type Approval" || FreqUsage == "TA-ProAmend")
-                {
-                    iv_customerId = cNum + "-T";
-                    dt.customerId = iv_customerId;
-                    dt.feeType = "RF";
-                    dt.companyName = companyName + " - Type Approval";
-                    dt.companyName_NewCust = companyName;
-                    dt.desc = "Processing Fee";
-                }
-
-                else if (notes != "Type Approval" && feeType == "APF")
-                {
-                    iv_customerId = cNum + "-R";
-                    dt.customerId = iv_customerId;
-                    dt.feeType = "RF";
-                    dt.companyName = companyName + " - Processing Fee";
-                    dt.companyName_NewCust = companyName;
-                    dt.desc = "Processing Fee";
-                }
-                else
-                {
-                    iv_customerId = cNum + "-R";
-                    dt.customerId = iv_customerId;
-                    dt.feeType = "RF";
-                    dt.companyName = companyName + " - Reg Fee";
-                    dt.companyName_NewCust = companyName;
-                    dt.desc = "Reg Fee";
-                }
-
-                dt.success = true;
-
                 return dt;
             }
             else
             {
-                dt.success = false;
-                return dt;
+                if (_fcode == "PAYMENT")
+                {
+                    dt.fcode = "";
+                }
+                else
+                {
+                    dt.fcode = _fcode;
+                }
+
+                if (debit != "0.0000" && debit != "")
+                {
+                    dt.debit = debit;
+
+                    for (int i = 0; i < cNum.Length; i++)
+                    {
+                        if (cNum[i] != '-')
+                        {
+                            temp += cNum[i];
+                        }
+                        else
+                        {
+                            i = cNum.Length;
+                            cNum = temp;
+                        }
+                    }
+
+                    if (feeType == "SLF")
+                    {
+                        iv_customerId = cNum + "-L";
+                        dt.customerId = iv_customerId;
+                        dt.feeType = "SLF";
+                        dt.companyName = companyName + " - Spec Fee";
+                        dt.desc = "Spec Fee";
+                    }
+
+                    else if (notes == "Radio Operator")
+                    {
+                        iv_customerId = cNum + "-L";
+                        dt.customerId = iv_customerId;
+                        dt.feeType = "SLF";
+                        dt.companyName = companyName + " - Spec Fee";
+                        dt.desc = "Spec Fee";
+                    }
+
+                    else if (notes == "Type Approval" || FreqUsage == "TA-ProAmend")
+                    {
+                        iv_customerId = cNum + "-T";
+                        dt.customerId = iv_customerId;
+                        dt.feeType = "RF";
+                        dt.companyName = companyName + " - Type Approval";
+                        dt.desc = "Processing Fee";
+                    }
+
+                    else if (notes != "Type Approval" && feeType == "APF")
+                    {
+                        iv_customerId = cNum + "-R";
+                        dt.customerId = iv_customerId;
+                        dt.feeType = "RF";
+                        dt.companyName = companyName + " - Processing Fee";
+                        dt.desc = "Processing Fee";
+                    }
+                    else
+                    {
+                        iv_customerId = cNum + "-R";
+                        dt.customerId = iv_customerId;
+                        dt.companyName = companyName + " - Reg Fee";
+                        dt.feeType = "RF";
+                        dt.desc = "Reg Fee";
+                    }
+
+                    dt.success = true;
+                    return dt;
+                }
+                else if (debit == "")
+                {
+                    if (companyName == "")
+                    {
+                        companyName = " ";
+                        dt.companyName = companyName;
+                    }
+                    else
+                    {
+                        dt.companyName = companyName;
+                    }
+
+                    for (int i = 0; i < cNum.Length; i++)
+                    {
+                        if (cNum[i] != '-')
+                        {
+                            temp += cNum[i];
+                        }
+                        else
+                        {
+                            i = cNum.Length;
+                            cNum = temp;
+                        }
+                    }
+
+                    if (feeType == "SLF")
+                    {
+                        iv_customerId = cNum + "-L";
+                        dt.customerId = iv_customerId;
+                        dt.feeType = "SLF";
+                        dt.companyName = companyName + " - Spec Fee";
+                        dt.companyName_NewCust = companyName;
+                        dt.desc = "Spec Fee";
+                    }
+
+                    else if (feeType == "Reg")
+                    {
+                        iv_customerId = cNum + "-R";
+                        dt.customerId = iv_customerId;
+                        dt.feeType = "RF";
+                        dt.companyName = companyName + " - Reg Fee";
+                        dt.companyName_NewCust = companyName;
+                        dt.desc = "Reg Fee";
+                    }
+                    else if (notes == "Radio Operator")
+                    {
+                        iv_customerId = cNum + "-L";
+                        dt.customerId = iv_customerId;
+                        dt.feeType = "SLF";
+                        dt.companyName = companyName + " - Spec Fee";
+                        dt.companyName_NewCust = companyName;
+                        dt.desc = "Spec Fee";
+                    }
+
+                    else if (notes == "Type Approval" || FreqUsage == "TA-ProAmend")
+                    {
+                        iv_customerId = cNum + "-T";
+                        dt.customerId = iv_customerId;
+                        dt.feeType = "RF";
+                        dt.companyName = companyName + " - Type Approval";
+                        dt.companyName_NewCust = companyName;
+                        dt.desc = "Processing Fee";
+                    }
+
+                    else if (notes != "Type Approval" && feeType == "APF")
+                    {
+                        iv_customerId = cNum + "-R";
+                        dt.customerId = iv_customerId;
+                        dt.feeType = "RF";
+                        dt.companyName = companyName + " - Processing Fee";
+                        dt.companyName_NewCust = companyName;
+                        dt.desc = "Processing Fee";
+                    }
+                    else
+                    {
+                        iv_customerId = cNum + "-R";
+                        dt.customerId = iv_customerId;
+                        dt.feeType = "RF";
+                        dt.companyName = companyName + " - Reg Fee";
+                        dt.companyName_NewCust = companyName;
+                        dt.desc = "Reg Fee";
+                    }
+
+                    dt.success = true;
+
+                    return dt;
+                }
+                else
+                {
+                    dt.success = false;
+                    return dt;
+                }
             }
         }
 
@@ -2621,17 +2643,7 @@ namespace middleware_service
         public void OnDebug()
         {
             OnStart(null);
-            try
-            {
-                while (true)
-                {
-                    var iDetails = intLink.getInvoiceDetails(20692);
-                }
-            }
-            catch (Exception e)
-            {
-                string msg = e.Message;
-            }
+          
         }
 
         public void XrateInsert(string amt)

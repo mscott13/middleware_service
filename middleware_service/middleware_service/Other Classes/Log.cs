@@ -51,30 +51,37 @@ namespace middleware_service.Other_Classes
 
         public static string Save(string msg)
         {
-            try
-            {
-                if (!Directory.Exists(docPath))
-                {
-                    Directory.CreateDirectory(docPath);
-                }
 
-                using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "Log.txt"), true))
-                {
-                    result = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString() + " - " + msg;
-                    outputFile.WriteLine(result);
-                }
-
-                intlink.Log(msg);
-                evt.WriteEntry(msg, EventLogEntryType.Information);
-            }
-            catch (Exception e)
+            if (!Directory.Exists(docPath))
             {
-                message = e.Message;
-                evt.WriteEntry(msg + " ~ ", EventLogEntryType.Information);
+                Directory.CreateDirectory(docPath);
             }
-            
+
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "Log.txt"), true))
+            {
+                result = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString() + " - " + msg;
+                outputFile.WriteLine(result);
+            }
+            evt.WriteEntry(msg, EventLogEntryType.Information);
+
+            intlink.Log(msg);
             message = msg;
             return result;
+        }
+
+        public static void FileWrite(string msg)
+        {
+
+            if (!Directory.Exists(docPath))
+            {
+                Directory.CreateDirectory(docPath);
+            }
+
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "Log.txt"), true))
+            {
+                result = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString() + " - " + msg;
+                outputFile.WriteLine(result);
+            }
         }
 
         public static void WriteEnd()

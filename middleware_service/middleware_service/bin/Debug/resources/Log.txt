@@ -871,3 +871,15 @@
 8/11/2019 11:29:50 AM - middleware_service stopped.
 --------end
 
+8/22/2019 1:15:53 PM - Starting accpac session...
+8/22/2019 1:15:53 PM - The source was not found, but some or all event logs could not be searched.  To create the source, you need permission to read all event logs to make sure that the new source name is unique.  Inaccessible logs: Security.    at System.Diagnostics.EventLog.FindSourceRegistration(String source, String machineName, Boolean readOnly, Boolean wantToCreate)
+   at System.Diagnostics.EventLog.SourceExists(String source, String machineName, Boolean wantToCreate)
+   at System.Diagnostics.EventLogInternal.VerifyAndCreateSource(String sourceName, String currentMachineName)
+   at System.Diagnostics.EventLogInternal.WriteEntry(String message, EventLogEntryType type, Int32 eventID, Int16 category, Byte[] rawData)
+   at System.Diagnostics.EventLog.WriteEntry(String message, EventLogEntryType type)
+   at middleware_service.Other_Classes.Log.Save(String msg) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Other Classes\Log.cs:line 73
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 188
+--------end
+
+--------end
+

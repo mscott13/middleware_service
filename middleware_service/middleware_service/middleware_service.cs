@@ -912,7 +912,7 @@ namespace middleware_service
 
                                     if (dt.customerId[6] == 'T')
                                     {
-                                        usamount = Convert.ToDecimal(dt.debit) / intLink.GetUsRateByInvoice(Convert.ToInt32(invoiceId));
+                                        usamount = Math.Round(Convert.ToDecimal(dt.debit) / intLink.GetUsRateByInvoice(Convert.ToInt32(invoiceId)),2);
                                         intLink.modifyInvoiceList(0, intLink.GetUsRateByInvoice(Convert.ToInt32(invoiceId)), dt.customerId);
                                         currentRate = intLink.GetRate();
                                     }
@@ -1484,6 +1484,7 @@ namespace middleware_service
                 dt.customerId = intLink.getClientIdZRecord(false);
                 dt.companyName = "Processing Fee for Type Approval Certificationn";
                 dt.desc = "Processing Fee";
+                dt.debit = debit;
                 dt.success = true;
                 return dt;
             }

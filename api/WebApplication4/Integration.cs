@@ -942,6 +942,7 @@ namespace WebApplication4
                         DateTime createdDate = Convert.ToDateTime(reader["dateCreated"]);
                         data.formattedDate = createdDate.ToString("MMM") + " " + createdDate.Day.ToString() + ", " + createdDate.Year.ToString() + " | " + createdDate.ToShortTimeString();
                         data.amount = reader["amount"].ToString();
+                        data.usamount = reader["usamount"].ToString();
                         data.Author = reader["author"].ToString();
                         data.clientName = reader["clientName"].ToString();
                         data.clientId = reader["clientId"].ToString();
@@ -966,7 +967,7 @@ namespace WebApplication4
                         else if (usrate > 1)
                         {
                             data.currency = "US";
-                            data.amount = "US$ " + data.amount;
+                            data.amount = "US$ " + data.usamount;
                         }
 
                         if (isVoid == 1)

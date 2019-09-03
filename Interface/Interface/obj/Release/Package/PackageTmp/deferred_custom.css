@@ -1,0 +1,349 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Lato:300i,400,700,900');
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+
+*:focus {
+    outline: none;
+}
+
+
+html {
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+.gridTop {
+    width: 100%;
+    height: 50px;
+    min-width: 1000px;
+    float: left;
+    background-color: #2D3142;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+.bar-title {
+    width: 400px;
+    height: 100%;
+    position: absolute;
+    left: 0px;
+}
+
+    .bar-title h2 {
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 300;
+        font-size: 20px;
+        color: #DBDBDB;
+        margin-left: 20px;
+        line-height: 20px;
+    }
+
+.left {
+    width: 95%;
+    height: 100%;
+    float: left;
+}
+
+
+.logout {
+    height: 100%;
+    width: 200px;
+    float: right;
+    right: 0px;
+}
+
+
+.logoutBtn {
+    border-style: none;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    background-color: #43473E;
+    color: #fff;
+}
+
+.containIt {
+    padding: 30px;
+    height: 100vh;
+    background-color: #ffffff;
+}
+
+    .containIt span {
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    .containIt hr {
+        margin-bottom: 20px;
+    }
+
+
+.deferred-income {
+    height: 200px;
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+
+.generateOptions_ {
+    width: 50%;
+    height: 100%;
+    float: left;
+    padding: 8px;
+}
+
+
+.MonthlyRptBtnSelect {
+    margin-top: 30px;
+    border-style: none;
+    width: 100%;
+    height: 50px;
+    color: #ffffff;
+    background-color: #828282;
+    border-radius: 4px;
+    transition: background-color .6s ease;
+    margin-bottom: 7px;
+}
+
+.MonthlyRptBtnSelect:hover {
+    background-color: #5E5E5E;
+}
+
+.AnnualRptBtnSelect {
+    margin-top: 90px;
+    border-style: none;
+    width: 100%;
+    height: 50px;
+    color: #ffffff;
+    background-color: #828282;
+    border-radius: 4px;
+    transition: background-color .6s ease;
+    margin-bottom: 7px;
+}
+
+    .AnnualRptBtnSelect:hover {
+        background-color: #5E5E5E;
+    }
+
+.btnSelect {
+    margin-top: 30px;
+    border-style: none;
+    width: 100%;
+    height: 50px;
+    color: #ffffff;
+    background-color: #828282;
+    border-radius: 4px;
+    transition: background-color .6s ease;
+    margin-bottom: 7px;
+}
+
+    .btnSelect:hover {
+        background-color: #5E5E5E;
+    }
+
+.MonthlyRptLogIn {
+    margin-left: 27px;
+    margin-top: 20px;
+    border-style: none;
+    width: 80%;
+    height: 50px;
+    color: #ffffff;
+    background-color: #DBDBDB;
+    border-radius: 30px;
+    transition: background-color .6s ease;
+    margin-bottom: 55px;
+}
+
+    .MonthlyRptLogIn:hover {
+        background-color: #57bfdc;
+    }
+
+.AnnualRptLogIn {
+    margin-left: 27px;
+    margin-top: 20px;
+    border-style: none;
+    width: 80%;
+    height: 50px;
+    color: #ffffff;
+    background-color: #DBDBDB;
+    border-radius: 30px;
+    transition: background-color .6s ease;
+    margin-bottom: 55px;
+}
+
+    .AnnualRptLogIn:hover {
+        background-color: #57bfdc;
+    }
+
+.MonthlyRptBtn {
+    margin-left: 27px;
+    margin-top: 20px;
+    border-style: none;
+    width: 80%;
+    height: 50px;
+    color: #ffffff;
+    background-color: #2693b0;
+    border-radius: 30px;
+    transition: background-color .6s ease;
+    margin-bottom: 55px;
+}
+
+.AnnualRptBtn {
+    margin-left: 27px;
+    margin-top: 20px;
+    border-style: none;
+    width: 80%;
+    height: 50px;
+    color: #ffffff;
+    background-color: #2693b0;
+    border-radius: 30px;
+    transition: background-color .6s ease;
+    margin-bottom: 55px;
+}
+
+select {
+    width: 100%;
+    padding: 4px;
+    background-color: #ffffff;
+    outline: none;
+    border: 1px solid #D9DEE0;
+    border-radius: 3px;
+    height: 50px;
+    font-family: 'Open Sans', sans-serif;
+    margin-bottom: 10px;
+}
+
+.update-budget {
+    width: 50%;
+    height: 100%;
+    float: left;
+    padding: 8px;
+}
+
+.txt_ {
+    border-style: none;
+    height: 50px;
+    width: 100%;
+    background-color: #EDEDED;
+    padding: 5px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    color: #7A7A7A;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+.deferred_table
+{
+   
+}
+
+table
+{
+    border-collapse:collapse;
+    width:100%;
+}
+
+th {
+    font-size: 15px;
+    background-color: #1e768e;
+    color: white;
+    padding: 10px;
+    font-family: 'Lato', sans-serif;
+}
+
+td {
+    font-family: 'Lato', sans-serif;
+    font-size:13px;
+}
+
+table, td {
+    border: 1px solid #E0E2E8;
+}
+
+.card {
+    background-color: #ffffff;
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.10);
+    margin-bottom:25px;
+    display:none;
+}
+
+td
+{
+    padding: 7px;
+    text-align:center;
+}
+tbody tr:nth-child(odd) {
+    background-color: #F5F5F5;
+}
+
+    tbody tr:nth-child(odd):hover {
+        background-color: #E1E1E1;
+    }
+
+tr:hover {
+    background-color: #E1E1E1;
+}
+
+
+.title {
+    float: left;
+    width: auto;
+    height: auto;
+    background-color: #1e768e;
+    margin: 0;
+    padding: 5px;
+}
+
+
+.title p {
+    color: white;
+    text-align: center;
+    font-family: 'Lato', sans-serif;
+    font-size:15px;
+    margin:0;
+    padding:0;
+    font-weight:700;
+}
+
+.overlay-preload {
+    position: absolute;
+    padding-top: 67px;
+    width: 100%;
+    height: 200%;
+    z-index: 300;
+    background-color: rgba(221, 221, 221, 0.6);
+    overflow: hidden;
+    display: none;
+}
+
+.progress 
+{
+    position:relative;
+    margin: 400px auto;
+    width:100px;
+    height:100px;
+}
+
+    .progress p {
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        color: #2d3142;
+        text-align: center;
+        padding: 0;
+        margin: 0;
+    }

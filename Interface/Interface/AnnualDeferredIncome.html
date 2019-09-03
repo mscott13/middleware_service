@@ -1,0 +1,614 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Annual Report</title>
+    <link rel="stylesheet" href="deferred_custom.css" />
+    <!-- Compiled and minified CSS -->
+   
+</head>
+<body>
+    <div class="overlay-preload">
+        <div class="progress">
+            <img src="/images/spinner.svg" alt="Kiwi standing on oval">
+        </div>
+    </div>
+    <div class="gridTop">
+        <div class="bar-title">
+            <div class="left">
+                <h2>Deffered Income Report</h2>
+            </div>
+
+        </div>
+        <div class="logout">
+            <button type="button" class="logoutBtn" id="btnMain">Main</button>
+        </div>
+    </div>
+
+    <div class="containIt">
+        <div class="deferred-income" style="margin-top:35px; margin-bottom:305px;">
+            <div class="generateOptions_">
+
+                <input type="button" class="MonthlyRptLogIn" onclick="location.href='/MonthlyDeferredIncome.html';" value="Monthly Report" />
+
+                <select id="fiscalyr">
+                    <option Value="2016">2016 - 2017</option>
+                    <option Value="2017">2017 - 2018</option>
+                    <option Value="2018">2018 - 2019</option>
+                    <option Value="2019">2019 - 2020</option>
+                    <option Value="2020">2020 - 2021</option>
+                </select>
+
+                <button type="button" class="AnnualRptBtnSelect" id="btnViewHtml">View Deferred Income Report (HTML)</button>
+                <button type="button" class="btnSelect" style="margin-top:12px;" id="btnDeferredMainPdf">View Deferred Income Report (PDF)</button>
+            </div>
+
+            <div class="update-budget">
+                <!--<asp:dropdownlist ID="ddlccnum" runat="server" DataSourceID="SqlDataSource1" DataTextField="invoice_id" DataValueField="invoice_id"></asp:dropdownlist>-->
+                <!--<asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:Integrationn %>" SelectCommand="SELECT [invoice_id] FROM [DeferredBudget] order by invoice_id desc"></asp:SqlDataSource>-->
+
+                <button type="button" class="AnnualRptBtn">Annual Report</button>
+
+                <select id="invoiceList"></select>
+
+                <input type="number" placeholder="New Budget For Invoice" class="txt_" id="txt_budget" />
+
+
+                <button type="button" id="btnUpdateBudget" class="btnSelect">Update Budget</button>
+                <button type="button" id="btnDeferredSubs" class="btnSelect" style="margin-top:12px;">View Deferred Income Totals Report (PDF)</button>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="title"><p>Cellular</p></div>
+            <table class="deferred_table" id="tbl_cellular">
+                <thead>
+                    <tr>
+                        <th>License Number</th>
+                        <th>Client Company</th>
+                        <th>Invoice ID</th>
+                        <th>Budget</th>
+                        <th>Invoice Total</th>
+                        <th>This Year's Invoice</th>
+                        <th>Balance B/FWD</th>
+                        <th>From Revenue</th>
+                        <th>To Revenue</th>
+                        <th>Closing Balance</th>
+                        <th>Total Months</th>
+                        <th>Months Utilized</th>
+                        <th>Months Remaining</th>
+                        <th>Validity Period Start</th>
+                        <th>Validity Period End</th>
+                    </tr>
+                </thead>
+                <tbody data-index="0" id="cellular"></tbody>
+            </table>
+        </div>
+
+
+        <div class="card">
+            <div class="title"><p>Broadband</p></div>
+            <table class="deferred_table" id="tbl_broadband">
+                <thead>
+                    <tr>
+                        <th>License Number</th>
+                        <th>Client Company</th>
+                        <th>Invoice ID</th>
+                        <th>Budget</th>
+                        <th>Invoice Total</th>
+                        <th>This Year's Invoice</th>
+                        <th>Balance B/FWD</th>
+                        <th>From Revenue</th>
+                        <th>To Revenue</th>
+                        <th>Closing Balance</th>
+                        <th>Total Months</th>
+                        <th>Months Utilized</th>
+                        <th>Months Remaining</th>
+                        <th>Validity Period Start</th>
+                        <th>Validity Period End</th>
+                    </tr>
+                </thead>
+                <tbody data-index="1"></tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="title"><p>Microwave</p></div>
+            <table class="deferred_table" id="tbl_microwave">
+                <thead>
+                    <tr>
+                        <th>License Number</th>
+                        <th>Client Company</th>
+                        <th>Invoice ID</th>
+                        <th>Budget</th>
+                        <th>Invoice Total</th>
+                        <th>This Year's Invoice</th>
+                        <th>Balance B/FWD</th>
+                        <th>From Revenue</th>
+                        <th>To Revenue</th>
+                        <th>Closing Balance</th>
+                        <th>Total Months</th>
+                        <th>Months Utilized</th>
+                        <th>Months Remaining</th>
+                        <th>Validity Period Start</th>
+                        <th>Validity Period End</th>
+                    </tr>
+                </thead>
+                <tbody data-index="2"></tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="title"><p>Vsat</p></div>
+            <table class="deferred_table" id="tbl_vsat">
+                <thead>
+                    <tr>
+                        <th>License Number</th>
+                        <th>Client Company</th>
+                        <th>Invoice ID</th>
+                        <th>Budget</th>
+                        <th>Invoice Total</th>
+                        <th>This Year's Invoice</th>
+                        <th>Balance B/FWD</th>
+                        <th>From Revenue</th>
+                        <th>To Revenue</th>
+                        <th>Closing Balance</th>
+                        <th>Total Months</th>
+                        <th>Months Utilized</th>
+                        <th>Months Remaining</th>
+                        <th>Validity Period Start</th>
+                        <th>Validity Period End</th>
+                    </tr>
+                </thead>
+                <tbody data-index="3"></tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="title"><p>Marine</p></div>
+            <table class="deferred_table" id="tbl_marine">
+                <thead>
+                    <tr>
+                        <th>License Number</th>
+                        <th>Client Company</th>
+                        <th>Invoice ID</th>
+                        <th>Budget</th>
+                        <th>Invoice Total</th>
+                        <th>This Year's Invoice</th>
+                        <th>Balance B/FWD</th>
+                        <th>From Revenue</th>
+                        <th>To Revenue</th>
+                        <th>Closing Balance</th>
+                        <th>Total Months</th>
+                        <th>Months Utilized</th>
+                        <th>Months Remaining</th>
+                        <th>Validity Period Start</th>
+                        <th>Validity Period End</th>
+                    </tr>
+                </thead>
+                <tbody data-index="4"></tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="title"><p>Data & Services</p></div>
+            <table class="deferred_table" id="tbl_dservices">
+                <thead>
+                    <tr>
+                        <th>License Number</th>
+                        <th>Client Company</th>
+                        <th>Invoice ID</th>
+                        <th>Budget</th>
+                        <th>Invoice Total</th>
+                        <th>This Year's Invoice</th>
+                        <th>Balance B/FWD</th>
+                        <th>From Revenue</th>
+                        <th>To Revenue</th>
+                        <th>Closing Balance</th>
+                        <th>Total Months</th>
+                        <th>Months Utilized</th>
+                        <th>Months Remaining</th>
+                        <th>Validity Period Start</th>
+                        <th>Validity Period End</th>
+                    </tr>
+                </thead>
+                <tbody data-index="5"></tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="title"><p>Aeronautical</p></div>
+            <table class="deferred_table" id="tbl_aeronautical">
+                <thead>
+                    <tr>
+                        <th>License Number</th>
+                        <th>Client Company</th>
+                        <th>Invoice ID</th>
+                        <th>Budget</th>
+                        <th>Invoice Total</th>
+                        <th>This Year's Invoice</th>
+                        <th>Balance B/FWD</th>
+                        <th>From Revenue</th>
+                        <th>To Revenue</th>
+                        <th>Closing Balance</th>
+                        <th>Total Months</th>
+                        <th>Months Utilized</th>
+                        <th>Months Remaining</th>
+                        <th>Validity Period Start</th>
+                        <th>Validity Period End</th>
+                    </tr>
+                </thead>
+                <tbody data-index="6"></tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="title"><p>Trunking</p></div>
+            <table class="deferred_table" id="tbl_trunking">
+                <thead>
+                    <tr>
+                        <th>License Number</th>
+                        <th>Client Company</th>
+                        <th>Invoice ID</th>
+                        <th>Budget</th>
+                        <th>Invoice Total</th>
+                        <th>This Year's Invoice</th>
+                        <th>Balance B/FWD</th>
+                        <th>From Revenue</th>
+                        <th>To Revenue</th>
+                        <th>Closing Balance</th>
+                        <th>Total Months</th>
+                        <th>Months Utilized</th>
+                        <th>Months Remaining</th>
+                        <th>Validity Period Start</th>
+                        <th>Validity Period End</th>
+                    </tr>
+                </thead>
+                <tbody data-index="7"></tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="title"><p>Other</p></div>
+            <table class="deferred_table" id="tbl_other">
+                <thead>
+                    <tr>
+                        <th>License Number</th>
+                        <th>Client Company</th>
+                        <th>Invoice ID</th>
+                        <th>Budget</th>
+                        <th>Invoice Total</th>
+                        <th>This Year's Invoice</th>
+                        <th>Balance B/FWD</th>
+                        <th>From Revenue</th>
+                        <th>To Revenue</th>
+                        <th>Closing Balance</th>
+                        <th>Total Months</th>
+                        <th>Months Utilized</th>
+                        <th>Months Remaining</th>
+                        <th>Validity Period Start</th>
+                        <th>Validity Period End</th>
+                    </tr>
+                </thead>
+                <tbody data-index="8"></tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="title"><p>Total</p></div>
+            <table class="deferred_table" id="tbl_total">
+                <thead>
+                    <tr>
+                        <th>License Number</th>
+                        <th>Client Company</th>
+                        <th>Invoice ID</th>
+                        <th>Budget</th>
+                        <th>Invoice Total</th>
+                        <th>This Year's Invoice</th>
+                        <th>Balance B/FWD</th>
+                        <th>From Revenue</th>
+                        <th>To Revenue</th>
+                        <th>Closing Balance</th>
+                        <th>Total Months</th>
+                        <th>Months Utilized</th>
+                        <th>Months Remaining</th>
+                        <th>Validity Period Start</th>
+                        <th>Validity Period End</th>
+                    </tr>
+                </thead>
+                <tbody data-index="9"></tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+
+    <script src="scripts/jquery-3.2.1.min.js"></script>
+
+    <script>
+        var main = function () {
+
+            function initializeInvoiceList() {
+                $.ajax({
+                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/GetInvoiceIDs',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: {},
+                    dataType: 'json',
+                    success: function (data) {
+                        for (var i = 0; i < data.d.length; i++) {
+                            var option = "<option value='" + data.d[i] + "'>" + data.d[i] + "</option>";
+                            $("#invoiceList").append(option);
+                        }
+                    },
+                    error: function (data) {
+
+                    }
+                });
+
+            }
+
+            function loadTableData(data, fiscalyr) {
+
+                $("#tbl_cellular tbody").html("");
+                $("#tbl_broadband tbody").html("");
+                $("#tbl_microwave tbody").html("");
+                $("#tbl_other tbody").html("");
+                $("#tbl_trunking tbody").html("");
+                $("#tbl_aeronautical tbody").html("");
+                $("#tbl_marine tbody").html("");
+                $("#tbl_dservices tbody").html("");
+                $("#tbl_total tbody").html("");
+                $("#tbl_vsat tbody").html("");
+
+                for (var i = 0; i < data.d.Categories.length; i++) {
+                    for (var j = 0; j < data.d.Categories[i].records.length; j++) {
+                        var row = "<tr>" +
+                            "<td>" + data.d.Categories[i].records[j].licenseNumber + "</td>" +
+                            "<td>" + data.d.Categories[i].records[j].clientCompany + "</td>" +
+                            "<td>" + data.d.Categories[i].records[j].invoiceID + "</td>" +
+                            "<td>" + data.d.Categories[i].records[j].budget + "</td>" +
+                            "<td>" + data.d.Categories[i].records[j].invoiceTotal + "</td>" +
+                            "<td>" + data.d.Categories[i].records[j].thisPeriodsInv + "</td>" +
+                            "<td>" + data.d.Categories[i].records[j].balBFwd + "</td>" +
+                            "<td>" + data.d.Categories[i].records[j].fromRev + "</td>" +
+                            "<td>" + data.d.Categories[i].records[j].toRev + "</td>" +
+                            "<td>" + data.d.Categories[i].records[j].closingBal + "</td>" +
+                            "<td>" + data.d.Categories[i].records[j].totalMonths + "</td>" +
+                            "<td>" + data.d.Categories[i].records[j].monthUtil + "</td>" +
+                            "<td>" + data.d.Categories[i].records[j].monthRemain + "</td>" +
+                            "<td>" + data.d.Categories[i].records[j].valPStart + "</td>" +
+                            "<td>" + data.d.Categories[i].records[j].valPEnd + "</td>";
+                        "</tr>";
+
+                        $('tbody[data-index="' + i + '"]').append(row);
+
+                        if (j == data.d.Categories[i].records.length - 1) {
+                            var rowSub = "<tr>" +
+                                "<td>" + "Sub Total" + "</td>" +
+                                "<td>" + "--" + "</td>" +
+                                "<td>" + "--" + "</td>" +
+                                "<td>" + data.d.Categories[i].subT_budget + "</td>" +
+                                "<td>" + data.d.Categories[i].subT_invoiceTotal + "</td>" +
+                                "<td>" + "--" + "</td>" +
+                                "<td>" + data.d.Categories[i].subT_balBFwd + "</td>" +
+                                "<td>" + data.d.Categories[i].subT_fromRev + "</td>" +
+                                "<td>" + data.d.Categories[i].subT_toRev + "</td>" +
+                                "<td>" + data.d.Categories[i].subT_closingBal + "</td>" +
+                                "<td>" + "0" + "</td>" +
+                                "<td>" + "0" + "</td>" +
+                                "<td>" + "0" + "</td>" +
+                                "<td>" + "--" + "</td>" +
+                                "<td>" + "--" + "</td>";
+                            "</tr>";
+
+                            $('tbody[data-index="' + i + '"]').append(rowSub);
+                        }
+                    }
+
+                    if (i == data.d.Categories.length - 1) {
+                        var rowTot = "<tr>" +
+                            "<td>" + "Total" + "</td>" +
+                            "<td>" + "--" + "</td>" +
+                            "<td>" + "--" + "</td>" +
+                            "<td>" + data.d.Total.tot_budget + "</td>" +
+                            "<td>" + data.d.Total.tot_invoiceTotal + "</td>" +
+                            "<td>" + "--" + "</td>" +
+                            "<td>" + data.d.Total.tot_balBFwd + "</td>" +
+                            "<td>" + data.d.Total.tot_fromRev + "</td>" +
+                            "<td>" + data.d.Total.tot_toRev + "</td>" +
+                            "<td>" + data.d.Total.tot_closingBal + "</td>" +
+                            "<td>" + "0" + "</td>" +
+                            "<td>" + "0" + "</td>" +
+                            "<td>" + "0" + "</td>" +
+                            "<td>" + "--" + "</td>" +
+                            "<td>" + "--" + "</td>";
+                        "</tr>";
+
+                        $('tbody[data-index="' + "9" + '"]').append(rowTot);
+                    }
+                }
+                $(".overlay-preload").delay(1300).fadeOut(100);
+                $("body").css("overflow-y", "scroll");
+                $(".card").fadeIn(800);
+            }
+
+
+            $("#btnViewHtml").click(function () {
+                var fiscalyr = $("#fiscalyr").find(":selected").val();
+
+                $(".overlay-preload").fadeIn(500);
+                $("body").css("overflow-y", "hidden");
+
+                $.ajax({
+                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/ViewAnnDeferredRpt',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: '{"ReportType":"Annual", "fiscalyr":' + fiscalyr + '}',
+                    dataType: 'json',
+                    success: function (data) {
+
+                        if (data.d != null) {
+
+                            loadTableData(data, fiscalyr);
+                        }
+                        else {
+
+                            $("#tbl_cellular tbody").html("");
+                            $("#tbl_broadband tbody").html("");
+                            $("#tbl_microwave tbody").html("");
+                            $("#tbl_other tbody").html("");
+                            $("#tbl_trunking tbody").html("");
+                            $("#tbl_aeronautical tbody").html("");
+                            $("#tbl_marine tbody").html("");
+                            $("#tbl_dservices tbody").html("");
+                            $("#tbl_total tbody").html("");
+                            $("#tbl_vsat tbody").html("");
+                            $(".card").fadeOut(2000);
+
+                            alert("Report for selected period does not exist or cannot be produced at this time");
+                            $(".overlay-preload").fadeOut(0);
+                            $("body").css("overflow-y", "scroll");
+                        }
+                    },
+                    error: function (data) {
+                        console.log("error");
+                    }
+                });
+
+            });
+
+            $("#btnDeferredMainPdf").click(function () {
+                var fiscalyr = $("#fiscalyr").find(":selected").val();
+
+                $(".overlay-preload").fadeIn(500);
+                $("body").css("overflow-y", "hidden");
+
+                $.ajax({
+                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/ViewAnnDeferredRpt',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: '{"ReportType":"Annual", "fiscalyr":' + fiscalyr + '}',
+                    dataType: 'json',
+                    success: function (data) {
+
+                        if (data.d != null) {
+                            var filename = "AnnualDefferedIncomeReport" + fiscalyr + "0401.pdf";
+                            window.location = 'http://erp-srvr.sma.gov.jm/pdf/' + filename;
+
+                            $(".overlay-preload").delay(1300).fadeOut(100);
+                            $("body").css("overflow-y", "scroll");
+
+                        }
+                        else {
+
+                            $("#tbl_cellular tbody").html("");
+                            $("#tbl_broadband tbody").html("");
+                            $("#tbl_microwave tbody").html("");
+                            $("#tbl_other tbody").html("");
+                            $("#tbl_trunking tbody").html("");
+                            $("#tbl_aeronautical tbody").html("");
+                            $("#tbl_marine tbody").html("");
+                            $("#tbl_dservices tbody").html("");
+                            $("#tbl_total tbody").html("");
+                            $("#tbl_vsat tbody").html("");
+                            $(".card").fadeOut(2000);
+
+                            alert("Report for selected period does not exist or cannot be produced at this time");
+                            $(".overlay-preload").fadeOut(0);
+                            $("body").css("overflow-y", "scroll");
+                        }
+                    },
+                    error: function (data) {
+                        console.log("error");
+                    }
+                });
+
+
+            });
+
+            $("#btnDeferredSubs").click(function () {
+                var fiscalyr = $("#fiscalyr").find(":selected").val();
+
+                $(".overlay-preload").fadeIn(500);
+                $("body").css("overflow-y", "hidden");
+
+                $.ajax({
+                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/ViewAnnDeferredRpt',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: '{"ReportType":"Annual", "fiscalyr":' + fiscalyr + '}',
+                    dataType: 'json',
+                    success: function (data) {
+
+                        if (data.d != null) {
+
+                            var filename = "AnnualDefferedIncomeSummaryReport" + fiscalyr + "0401.pdf";
+                            window.location = 'http://erp-srvr.sma.gov.jm/pdf/' + filename;
+
+                            $(".overlay-preload").delay(1300).fadeOut(100);
+                            $("body").css("overflow-y", "scroll");
+
+                        }
+                        else {
+
+                            $("#tbl_cellular tbody").html("");
+                            $("#tbl_broadband tbody").html("");
+                            $("#tbl_microwave tbody").html("");
+                            $("#tbl_other tbody").html("");
+                            $("#tbl_trunking tbody").html("");
+                            $("#tbl_aeronautical tbody").html("");
+                            $("#tbl_marine tbody").html("");
+                            $("#tbl_dservices tbody").html("");
+                            $("#tbl_total tbody").html("");
+                            $("#tbl_vsat tbody").html("");
+                            $(".card").fadeOut(2000);
+
+                            alert("Report for selected period does not exist or cannot be produced at this time");
+                            $(".overlay-preload").fadeOut(0);
+                            $("body").css("overflow-y", "scroll");
+                        }
+                    },
+                    error: function (data) {
+                        console.log("error");
+                    }
+                });
+
+            });
+
+            $("#btnUpdateBudget").click(function () {
+
+                var invoiceId = $("#invoiceList").find(":selected").val();
+                var budget = $("#txt_budget").val();
+
+                $.ajax({
+                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/UpdateBudget',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: '{"invoiceID":' + invoiceId + ', "budgetAmt":' + budget + '}',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.d >= 1) {
+                            $("#txt_budget").val("");
+                            alert("Updated succesfully");
+                        }
+                    },
+                    error: function (data) {
+
+                    }
+                });
+            });
+
+            $("#btnMain").click(function () {
+                window.location.replace("/menugrid.aspx");
+            });
+
+            initializeInvoiceList();
+        }
+
+        $(document).ready(main);
+    </script>
+</body>

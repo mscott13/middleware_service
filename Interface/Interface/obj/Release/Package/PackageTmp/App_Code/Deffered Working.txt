@@ -1,0 +1,1935 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data.Sql;
+using System.Data.SqlClient;
+using System.Timers;
+using System.Data;
+using System.IO;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.Diagnostics;
+using System.Drawing;
+
+namespace _000
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        decimal budgettotal;
+        decimal invoiceTotal = 0;
+        decimal fromRev = 0;
+        decimal toRev = 0;
+        decimal closeBal = 0;
+        decimal balancebf = 0;
+        decimal invoiceTotalForYes = 0;
+
+        //cellular totals
+        decimal invoicetotcell = 0;
+        decimal fromremcell = 0;
+        decimal torevcell = 0;
+        decimal closingtotcell = 0;
+        decimal balancebfcell = 0;
+
+        //broadband totals
+        decimal invoicetotbb = 0;
+        decimal fromrembb = 0;
+        decimal torevbb = 0;
+        decimal closingtotbb = 0;
+        decimal balancebfbb = 0;
+
+        //Microwave totals
+        decimal invoicetotmicro = 0;
+        decimal fromrevmicro = 0;
+        decimal torevmicro = 0;
+        decimal closingtotmicro = 0;
+        decimal balancebfmicro = 0;
+
+        //Trunking totals
+        decimal invoicetottrunk = 0;
+        decimal fromrevtrunk = 0;
+        decimal torevtrunk = 0;
+        decimal closingtottrunk = 0;
+        decimal balancebftrunk = 0;
+
+        //Aueranautical totals
+        decimal invoicetotaero = 0;
+        decimal fromrevaero = 0;
+        decimal torevaero = 0;
+        decimal closingtotaero = 0;
+        decimal balancebfaero = 0;
+
+        //data and services totals
+        decimal invoicetotds = 0;
+        decimal fromrevds = 0;
+        decimal torevds = 0;
+        decimal closingtotds = 0;
+        decimal balancebfds = 0;
+
+        //Marine totals
+        decimal invoicetotmar = 0;
+        decimal fromrevmar = 0;
+        decimal torevmar = 0;
+        decimal closingtotmar = 0;
+        decimal balancebfmar = 0;
+
+        //Other totals
+        decimal invoicetotother = 0;
+        decimal fromrevother = 0;
+        decimal torevother = 0;
+        decimal closingtotother = 0;
+        decimal balancebfother = 0;
+
+        //Vsat totals
+        decimal invoicetotvsat = 0;
+        decimal fromrevvsat = 0;
+        decimal torevvsat = 0;
+        decimal closingtotvsat = 0;
+        decimal balancebfvsat = 0;
+
+        public void getdetails1()
+        {
+            string month = "";
+
+            if (ddl1.SelectedValue == "1")
+            {
+                month = "January";
+            }
+
+            else if (ddl1.SelectedValue == "2")
+            {
+                month = "February";
+            }
+
+            else if (ddl1.SelectedValue == "3")
+            {
+                month = "March";
+            }
+
+            else if (ddl1.SelectedValue == "4")
+            {
+                month = "April";
+            }
+
+            else if (ddl1.SelectedValue == "5")
+            {
+                month = "May";
+            }
+
+            else if (ddl1.SelectedValue == "6")
+            {
+                month = "June";
+            }
+
+            else if (ddl1.SelectedValue == "7")
+            {
+                month = "July";
+            }
+
+            else if (ddl1.SelectedValue == "8")
+            {
+                month = "August";
+            }
+
+            else if (ddl1.SelectedValue == "9")
+            {
+                month = "September";
+            }
+
+            else if (ddl1.SelectedValue == "10")
+            {
+                month = "October";
+            }
+
+            else if (ddl1.SelectedValue == "11")
+            {
+                month = "November";
+            }
+
+            else if (ddl1.SelectedValue == "12")
+            {
+                month = "December";
+            }
+
+
+            int year = 0;
+
+            if (DropDownList1.SelectedValue == "2016")
+            {
+                year = 2016;
+            }
+            else if (DropDownList1.SelectedValue == "2017")
+            {
+                year = 2017;
+            }
+
+            else if (DropDownList1.SelectedValue == "2018")
+            {
+                year = 2018;
+            }
+
+            else if (DropDownList1.SelectedValue == "2019")
+            {
+                year = 2019;
+            }
+
+            else if (DropDownList1.SelectedValue == "2020")
+            {
+                year = 2020;
+            }
+
+            DataSet ds = generateDeferredIncome();
+            DataTable table = ds.Tables[4];
+
+            DataTable cell = ds.Tables[0];
+            DataTable vsat = ds.Tables[1];
+            DataTable mar = ds.Tables[2];
+            DataTable dservice = ds.Tables[3];
+            DataTable aero = ds.Tables[5];
+            DataTable trunk = ds.Tables[6];
+            DataTable other = ds.Tables[7];
+            DataTable bb = ds.Tables[8];
+            DataTable micro = ds.Tables[9];
+
+
+            //Table to excel
+
+            var Testpath1 = Server.MapPath("~/Excel.xls");
+
+            CreateCSVFile(ref cell, Testpath1);
+            CreateCSVFile(ref mar, Testpath1);
+
+
+
+            // table = generateDeferredIncome();
+            string now = DateTime.Now.ToString();
+            string FormatDate = DateTime.Now.ToString("dddd");
+            string FormatDate1 = DateTime.Now.ToString("MMMM");
+            string FormatDate2 = DateTime.Now.ToString("yyyy");
+            string FormatDate3 = DateTime.Now.ToString("HH");
+            string FormatDate4 = DateTime.Now.ToString("mm");
+            string FormatDate5 = DateTime.Now.ToString("tt");
+
+            DataTable dt;
+            dt = new DataTable();
+
+            //dt.Columns.Add("Invoice Total", typeof(decimal));
+            //dt.Columns.Add("To revenue Total", typeof(decimal));
+            //dt.Columns.Add("From revenue Total", typeof(decimal));
+            //dt.Columns.Add("Closing Balance Total", typeof(decimal));
+
+            dt.Columns.Add("License Number", typeof(string));
+            dt.Columns.Add("Client Company", typeof(string));
+            dt.Columns.Add("Budget", typeof(decimal));
+            dt.Columns.Add("Invoice Total", typeof(decimal));
+            dt.Columns.Add("This Month Invoice", typeof(string));
+            dt.Columns.Add("Balance B/FWD", typeof(decimal));
+            dt.Columns.Add("From Revenue", typeof(decimal));
+            dt.Columns.Add("To Revenue", typeof(decimal));
+            dt.Columns.Add("Closing Balance", typeof(decimal));
+            dt.Columns.Add("Total Months", typeof(int));
+            dt.Columns.Add("Month Utilized", typeof(int));
+            dt.Columns.Add("Months Remaining", typeof(int));
+            dt.Columns.Add("Validity Period Start", typeof(string));
+            dt.Columns.Add("Validity Period End", typeof(string));
+
+            dt.Rows.Add("Total", "             ", Math.Round(invoiceTotal, 2), Math.Round(invoiceTotal, 2), " ", Math.Round(balancebf, 2), Math.Round(fromRev, 2), Math.Round(-toRev, 2), Math.Round(closeBal, 2), 0, 0, 0/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, DateTime.Now.ToString("MM/dd/yyyy"), DateTime.Now.ToString("MM/dd/yyyy"));
+
+
+
+            //dt.Rows.Add(Math.Round(invoiceTotal, 2), Math.Round(-toRev, 2), Math.Round(fromRev, 2), Math.Round(closeBal, 2));
+            GridView2.DataSource = dt;
+            GridView2.DataBind();
+
+
+
+            GridView1.DataSource = table;
+            GridView1.DataBind();
+
+            CellGrid.DataSource = cell;
+            CellGrid.DataBind();
+
+            VsatGrid.DataSource = vsat;
+            VsatGrid.DataBind();
+
+            TrunkGrid.DataSource = trunk;
+            TrunkGrid.DataBind();
+
+            MarineGrid.DataSource = mar;
+            MarineGrid.DataBind();
+
+            AeroGrid.DataSource = aero;
+            AeroGrid.DataBind();
+
+            DServicesGrid.DataSource = dservice;
+            DServicesGrid.DataBind();
+
+            OtherGrid.DataSource = other;
+            OtherGrid.DataBind();
+
+            BBGrid.DataSource = bb;
+            BBGrid.DataBind();
+
+            MicroGrid.DataSource = micro;
+            MicroGrid.DataBind();
+
+            if (table.Columns.Count > 0)
+            {
+
+                var Testpath = Server.MapPath("~/DefferedincomeReport_Generated" + "_" + "On" + "_" + FormatDate + " " + FormatDate1 + " " + FormatDate2 + " " + "at" + " " + FormatDate3 + " " + FormatDate4 + " " + FormatDate5 + ".pdf");
+                // Document doc = new Document(iTextSharp.text.PageSize._11X17, 10, 10, 42, 35);
+                Document doc = new Document(iTextSharp.text.PageSize.LEDGER, 0, 0, 20, 0);
+
+                PdfWriter deffered = PdfWriter.GetInstance(doc, new FileStream(Testpath, FileMode.OpenOrCreate));
+                doc.Open();
+
+                PdfPTable defferecdtable = new PdfPTable(table.Columns.Count);
+                for (int j = 0; j < table.Columns.Count; j++)
+                {
+                    defferecdtable.AddCell(new Phrase(table.Columns[j].ColumnName, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                }
+                defferecdtable.HeaderRows = 1;
+
+                for (int i = 0; i < GridView1.Rows.Count; i++)
+                {
+                    for (int k = 0; k < table.Columns.Count; k++)
+                    {
+                        if (GridView1.Rows[i].Cells[k] != null)
+                        {
+                            defferecdtable.AddCell(new Phrase(GridView1.Rows[i].Cells[k].Text, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                        }
+                    }
+                }
+
+
+                //Cell table 
+
+                PdfPTable celltable = new PdfPTable(cell.Columns.Count);
+                for (int j = 0; j < cell.Columns.Count; j++)
+                {
+                    celltable.AddCell(new Phrase(cell.Columns[j].ColumnName, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                }
+                celltable.HeaderRows = 1;
+
+                for (int i = 0; i < CellGrid.Rows.Count; i++)
+                {
+                    for (int k = 0; k < cell.Columns.Count; k++)
+                    {
+                        if (CellGrid.Rows[i].Cells[k] != null)
+                        {
+                            celltable.AddCell(new Phrase(CellGrid.Rows[i].Cells[k].Text, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                        }
+                    }
+                }
+
+                //Broadband table
+
+                PdfPTable bbtable = new PdfPTable(bb.Columns.Count);
+                for (int j = 0; j < bb.Columns.Count; j++)
+                {
+                    bbtable.AddCell(new Phrase(bb.Columns[j].ColumnName, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                }
+                bbtable.HeaderRows = 1;
+
+                for (int i = 0; i < BBGrid.Rows.Count; i++)
+                {
+                    for (int k = 0; k < bb.Columns.Count; k++)
+                    {
+                        if (BBGrid.Rows[i].Cells[k] != null)
+                        {
+                            bbtable.AddCell(new Phrase(BBGrid.Rows[i].Cells[k].Text, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                        }
+                    }
+                }
+
+
+                //Marine table
+
+                PdfPTable martable = new PdfPTable(mar.Columns.Count);
+                for (int j = 0; j < mar.Columns.Count; j++)
+                {
+                    martable.AddCell(new Phrase(mar.Columns[j].ColumnName, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                }
+                martable.HeaderRows = 1;
+
+                for (int i = 0; i < MarineGrid.Rows.Count; i++)
+                {
+                    for (int k = 0; k < mar.Columns.Count; k++)
+                    {
+                        if (MarineGrid.Rows[i].Cells[k] != null)
+                        {
+                            martable.AddCell(new Phrase(MarineGrid.Rows[i].Cells[k].Text, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                        }
+                    }
+                }
+
+
+                //Trunking Table 
+
+                PdfPTable Trunktable = new PdfPTable(trunk.Columns.Count);
+                for (int j = 0; j < trunk.Columns.Count; j++)
+                {
+                    Trunktable.AddCell(new Phrase(trunk.Columns[j].ColumnName, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                }
+                Trunktable.HeaderRows = 1;
+
+                for (int i = 0; i < TrunkGrid.Rows.Count; i++)
+                {
+                    for (int k = 0; k < trunk.Columns.Count; k++)
+                    {
+                        if (TrunkGrid.Rows[i].Cells[k] != null)
+                        {
+                            Trunktable.AddCell(new Phrase(TrunkGrid.Rows[i].Cells[k].Text, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                        }
+                    }
+                }
+
+
+                //Vsat table
+
+                PdfPTable vsattable = new PdfPTable(vsat.Columns.Count);
+                for (int j = 0; j < vsat.Columns.Count; j++)
+                {
+                    vsattable.AddCell(new Phrase(vsat.Columns[j].ColumnName, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                }
+                vsattable.HeaderRows = 1;
+
+                for (int i = 0; i < VsatGrid.Rows.Count; i++)
+                {
+                    for (int k = 0; k < vsat.Columns.Count; k++)
+                    {
+                        if (VsatGrid.Rows[i].Cells[k] != null)
+                        {
+                            vsattable.AddCell(new Phrase(VsatGrid.Rows[i].Cells[k].Text, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                        }
+                    }
+                }
+
+
+                //Aueronautical table
+
+                PdfPTable aerotable = new PdfPTable(aero.Columns.Count);
+                for (int j = 0; j < aero.Columns.Count; j++)
+                {
+                    aerotable.AddCell(new Phrase(aero.Columns[j].ColumnName, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                }
+                aerotable.HeaderRows = 1;
+
+                for (int i = 0; i < AeroGrid.Rows.Count; i++)
+                {
+                    for (int k = 0; k < aero.Columns.Count; k++)
+                    {
+                        if (AeroGrid.Rows[i].Cells[k] != null)
+                        {
+                            aerotable.AddCell(new Phrase(AeroGrid.Rows[i].Cells[k].Text, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                        }
+                    }
+                }
+
+
+                //Microwave table 
+
+                PdfPTable microtable = new PdfPTable(micro.Columns.Count);
+                for (int j = 0; j < micro.Columns.Count; j++)
+                {
+                    microtable.AddCell(new Phrase(micro.Columns[j].ColumnName, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                }
+                microtable.HeaderRows = 1;
+
+                for (int i = 0; i < MicroGrid.Rows.Count; i++)
+                {
+                    for (int k = 0; k < micro.Columns.Count; k++)
+                    {
+                        if (MicroGrid.Rows[i].Cells[k] != null)
+                        {
+                            microtable.AddCell(new Phrase(MicroGrid.Rows[i].Cells[k].Text, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                        }
+                    }
+                }
+
+
+                //Data and Services Table 
+
+                PdfPTable dstable = new PdfPTable(dservice.Columns.Count);
+                for (int j = 0; j < dservice.Columns.Count; j++)
+                {
+                    dstable.AddCell(new Phrase(dservice.Columns[j].ColumnName, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                }
+                dstable.HeaderRows = 1;
+
+                for (int i = 0; i < DServicesGrid.Rows.Count; i++)
+                {
+                    for (int k = 0; k < dservice.Columns.Count; k++)
+                    {
+                        if (DServicesGrid.Rows[i].Cells[k] != null)
+                        {
+                            dstable.AddCell(new Phrase(DServicesGrid.Rows[i].Cells[k].Text, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                        }
+                    }
+                }
+
+
+                //Other table
+
+                PdfPTable othertable = new PdfPTable(other.Columns.Count);
+                for (int j = 0; j < other.Columns.Count; j++)
+                {
+                    othertable.AddCell(new Phrase(other.Columns[j].ColumnName, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                }
+                othertable.HeaderRows = 1;
+
+                for (int i = 0; i < OtherGrid.Rows.Count; i++)
+                {
+                    for (int k = 0; k < other.Columns.Count; k++)
+                    {
+                        if (OtherGrid.Rows[i].Cells[k] != null)
+                        {
+                            othertable.AddCell(new Phrase(OtherGrid.Rows[i].Cells[k].Text, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 8f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                        }
+                    }
+                }
+
+                //total table
+
+                PdfPTable total = new PdfPTable(14);
+
+                total.AddCell(new Phrase("Total ", new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 6f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                total.AddCell(new Phrase(" ", new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 6f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+
+
+                total.AddCell(new Phrase(Math.Round(invoiceTotal, 2).ToString(), new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 6f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+
+                total.AddCell(new Phrase(Math.Round(invoiceTotal, 2).ToString(), new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 6f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+
+                total.AddCell(new Phrase(" ", new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 6f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+
+                total.AddCell(new Phrase(Math.Round(balancebf, 2).ToString(), new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 6f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+
+                total.AddCell(new Phrase(Math.Round(fromRev, 2).ToString(), new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 6f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+
+                total.AddCell(new Phrase(Math.Round(-toRev, 2).ToString(), new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 6f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+
+                total.AddCell(new Phrase(Math.Round(closeBal, 2).ToString(), new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 6f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+
+                total.AddCell(new Phrase(" ", new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 6f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+
+                total.AddCell(new Phrase(" ", new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 6f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+
+                total.AddCell(new Phrase(" ", new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 6f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+
+                total.AddCell(new Phrase(DateTime.Now.ToString(), new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 6f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+
+                total.AddCell(new Phrase(DateTime.Now.ToString(), new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 6f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+
+
+                Paragraph space = new Paragraph("\n");
+
+                var imagePath = Server.MapPath("~/spec.jpg");
+                iTextSharp.text.Image PNG = iTextSharp.text.Image.GetInstance(imagePath);
+                PNG.ScaleToFit(100f, 100f);
+                PNG.Alignment = 1;
+                Paragraph paragraph4 = new Paragraph(new Phrase("Spectrum Management Authority Deferred Income Report For the Month of " + month + " " + year, new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 16f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                paragraph4.Alignment = 1;
+                doc.Add(paragraph4);
+                doc.Add(PNG);
+                //doc.Add(defferecdtable);
+                Paragraph invoice = new Paragraph((new Phrase("Invoices Total: " + Math.Round(invoiceTotal, 2), new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 16f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.RED))));
+                invoice.Alignment = 1;
+                Paragraph from = new Paragraph((new Phrase("From Revenue Total: " + Math.Round(fromRev, 2), new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 16f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.RED))));
+                from.Alignment = 1;
+                Paragraph to = new Paragraph((new Phrase("To Revenue Total: " + Math.Round(-toRev, 2), new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 16f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.RED))));
+                to.Alignment = 1;
+                Paragraph closing = new Paragraph((new Phrase("Closing balance Total: " + Math.Round(closeBal, 2), new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 16f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.RED))));
+                closing.Alignment = 1;
+
+                Paragraph paragraphcell = new Paragraph(new Phrase("Cellular", new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 10f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                paragraphcell.Alignment = 1; paragraphcell.SpacingAfter = 6f;
+                doc.Add(paragraphcell);
+                doc.Add(celltable);
+
+
+                Paragraph paragraphb = new Paragraph(new Phrase("P/R Commercial (Broadband)", new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 10f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                paragraphb.Alignment = 1; paragraphb.SpacingAfter = 6f;
+
+                doc.Add(paragraphb);
+                doc.Add(bbtable);
+
+
+                Paragraph paragraphm = new Paragraph(new Phrase("P/R Commercial (Microwave)", new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 10f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                paragraphm.Alignment = 1; paragraphm.SpacingAfter = 6f;
+
+                doc.Add(paragraphm);
+                doc.Add(microtable);
+
+
+                Paragraph paragraphvsat = new Paragraph(new Phrase("Vsat", new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 10f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                paragraphvsat.Alignment = 1; paragraphvsat.SpacingAfter = 6f;
+
+                doc.Add(paragraphvsat);
+                doc.Add(vsattable);
+
+
+                Paragraph paragraphtrunk = new Paragraph(new Phrase("P/R - Trunking", new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 10f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                paragraphtrunk.Alignment = 1; paragraphtrunk.SpacingAfter = 6f;
+
+                doc.Add(paragraphtrunk);
+                doc.Add(Trunktable);
+
+
+                Paragraph paragraphds = new Paragraph(new Phrase("P/R Commercial (Data & Services)", new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 10f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                paragraphds.Alignment = 1; paragraphds.SpacingAfter = 6f;
+
+                doc.Add(paragraphds);
+                doc.Add(dstable);
+
+
+                Paragraph paragraphaero = new Paragraph(new Phrase("P/R - Aerounautical", new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 10f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                paragraphaero.Alignment = 1; paragraphaero.SpacingAfter = 6f;
+
+                doc.Add(paragraphaero);
+                doc.Add(aerotable);
+
+
+                Paragraph paragraphmar = new Paragraph(new Phrase("P/R - Marine", new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 10f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                paragraphmar.Alignment = 1; paragraphmar.SpacingAfter = 6f;
+
+                doc.Add(paragraphmar);
+                doc.Add(martable);
+
+
+                Paragraph paragraphother = new Paragraph(new Phrase("Other P/R Non - Commercial Clients", new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 10f, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLACK)));
+                paragraphother.Alignment = 1; paragraphother.SpacingAfter = 6f;
+
+                doc.Add(paragraphother);
+                doc.Add(othertable);
+                doc.Add(space);
+                //doc.Add(invoice);
+                //doc.Add(from);
+                //doc.Add(to);
+                //doc.Add(closing);
+                doc.Add(total);
+                doc.Close();
+                Process p = new Process();
+                p.StartInfo.UseShellExecute = true;
+                p.StartInfo.FileName = Testpath;
+                p.Start();
+
+            }
+            else
+            { Button1.Text = "Error"; }
+        }
+
+        public DataSet generateDeferredIncome()
+        {
+            int year = 0, month = 0;
+
+            if (DropDownList1.SelectedValue == "2016")
+            {
+                year = 2016;
+            }
+            else if (DropDownList1.SelectedValue == "2017")
+            {
+                year = 2017;
+            }
+
+            else if (DropDownList1.SelectedValue == "2018")
+            {
+                year = 2018;
+            }
+
+            else if (DropDownList1.SelectedValue == "2019")
+            {
+                year = 2019;
+            }
+
+            else if (DropDownList1.SelectedValue == "2020")
+            {
+                year = 2020;
+            }
+
+
+            if (ddl1.SelectedValue == "1")
+            {
+                month = 1;
+            }
+
+            else if (ddl1.SelectedValue == "2")
+            {
+                month = 2;
+            }
+
+            else if (ddl1.SelectedValue == "3")
+            {
+                month = 3;
+            }
+
+            else if (ddl1.SelectedValue == "4")
+            {
+                month = 4;
+            }
+
+            else if (ddl1.SelectedValue == "5")
+            {
+                month = 5;
+            }
+
+            else if (ddl1.SelectedValue == "6")
+            {
+                month = 6;
+            }
+
+            else if (ddl1.SelectedValue == "7")
+            {
+                month = 7;
+            }
+
+            else if (ddl1.SelectedValue == "8")
+            {
+                month = 8;
+            }
+
+            else if (ddl1.SelectedValue == "9")
+            {
+                month = 9;
+            }
+
+            else if (ddl1.SelectedValue == "10")
+            {
+                month = 10;
+            }
+
+            else if (ddl1.SelectedValue == "11")
+            {
+                month = 11;
+            }
+
+            else if (ddl1.SelectedValue == "12")
+            {
+                month = 12;
+            }
+
+
+
+            DateTime defered = new DateTime(year, month, 1);
+
+
+
+
+            Int32 id = 0;
+            Decimal invoiceamount = 0;
+            DateTime ValidityS;
+            DateTime ValidityF;
+
+            string ccnum = " ";
+            string Company = " ";
+            string fname = " ";
+            string lname = " ";
+            int glid = 0;
+            DataTable table, cell, micro, bbrand, vsat, other, trunking, aero, marine, dServices;
+
+            string getdetails = "SELECT  cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname, Amount, val.ValidFrom, val.ValidTo, GL.CreditGLID, Gl.Description FROM tblARInvoices inv, tbl_LicenseValidityHistory val, client cus, tblARInvoiceDetail GL where inv.LicensevalidityHistoryID = val.LicenseValidityHistoryID AND val.ClientID = cus.clientID AND (cus.ccNum is not null) AND inv.FeeType!='SLF' AND inv.notes!='Radio Operator' AND val.ValidTo >=GETDATE() AND val.ValidFrom < GETDATE() AND inv.ARInvoiceID = GL.ARInvoiceID Group by cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname, inv.notes, inv.FeeType, inv.ARInvoiceID, inv.Amount, val.ValidFrom, val.ValidTo, GL.CreditGLID, GL.Description order by cus.ccNum desc";
+            SqlConnection connection = new SqlConnection("Data Source =SMA-PE2850\\SQLEXPRESS2012; Initial Catalog = ASMSGenericMaster; Integrated Security = True; MultipleActiveResultSets = true");
+
+            string getbudget = "SELECT * from DeferredBudget order by ccNum desc";
+            SqlConnection connection1 = new SqlConnection("Data Source=SMA-DBSRV\\ASMSDEV;Initial Catalog=ASMSGenericMaster;Integrated Security=True ;Persist Security Info=True; MultipleActiveResultSets=True; Application Name=EntityFramework;user ID=asms; password=$$asms$$");
+
+            SqlConnection connection2 = new SqlConnection("Data Source=SMA-DBSRV\\ASMSDEV;Initial Catalog=ASMSSAGEINTEGRATION;Integrated Security=True ;Persist Security Info=True; MultipleActiveResultSets=True; Application Name=EntityFramework");
+
+            //Data Source=SMA-DBSRV\ASMSDEV;Initial Catalog=ASMSSAGEINTEGRATION;Integrated Security=True ;Persist Security Info=True; MultipleActiveResultSets=True; Application Name=EntityFramework
+            SqlCommand newCmd = new SqlCommand(getdetails, connection);
+            SqlCommand newcmd1 = new SqlCommand(getbudget, connection2);
+
+            connection2.Open();
+            connection.Open();
+            SqlDataReader rdr = newCmd.ExecuteReader();
+            SqlDataReader rdr1 = newcmd1.ExecuteReader();
+
+            //original 
+            table = new DataTable();
+            table.Columns.Add("License Number", typeof(string));
+            table.Columns.Add("Client Company", typeof(string));
+            table.Columns.Add("Budget", typeof(decimal));
+            table.Columns.Add("Invoice Total", typeof(decimal));
+            table.Columns.Add("This Month Invoice", typeof(string));
+            table.Columns.Add("Balance B/FWD", typeof(decimal));
+            table.Columns.Add("From Revenue", typeof(decimal));
+            table.Columns.Add("To Revenue", typeof(decimal));
+            table.Columns.Add("Closing Balance", typeof(decimal));
+            table.Columns.Add("Total Months", typeof(int));
+            table.Columns.Add("Month Utilized", typeof(int));
+            table.Columns.Add("Months Remaining", typeof(int));
+            table.Columns.Add("Validity Period Start", typeof(string));
+            table.Columns.Add("Validity Period End", typeof(string));
+
+            //cellular
+
+            cell = new DataTable();
+            cell.Columns.Add("License Number", typeof(string));
+            cell.Columns.Add("Client Company", typeof(string));
+            cell.Columns.Add("Budget", typeof(decimal));
+            cell.Columns.Add("Invoice Total", typeof(decimal));
+            cell.Columns.Add("This Month Invoice", typeof(string));
+            cell.Columns.Add("Balance B/FWD", typeof(decimal));
+            cell.Columns.Add("From Revenue", typeof(decimal));
+            cell.Columns.Add("To Revenue", typeof(decimal));
+            cell.Columns.Add("Closing Balance", typeof(decimal));
+            cell.Columns.Add("Total Months", typeof(int));
+            cell.Columns.Add("Month Utilized", typeof(int));
+            cell.Columns.Add("Months Remaining", typeof(int));
+            cell.Columns.Add("Validity Period Start", typeof(string));
+            cell.Columns.Add("Validity Period End", typeof(string));
+
+            //microwave
+
+            micro = new DataTable();
+            micro.Columns.Add("License Number", typeof(string));
+            micro.Columns.Add("Client Company", typeof(string));
+            micro.Columns.Add("Budget", typeof(decimal));
+            micro.Columns.Add("Invoice Total", typeof(decimal));
+            micro.Columns.Add("This Month Invoice", typeof(string));
+            micro.Columns.Add("Balance B/FWD", typeof(decimal));
+            micro.Columns.Add("From Revenue", typeof(decimal));
+            micro.Columns.Add("To Revenue", typeof(decimal));
+            micro.Columns.Add("Closing Balance", typeof(decimal));
+            micro.Columns.Add("Total Months", typeof(int));
+            micro.Columns.Add("Month Utilized", typeof(int));
+            micro.Columns.Add("Months Remaining", typeof(int));
+            micro.Columns.Add("Validity Period Start", typeof(string));
+            micro.Columns.Add("Validity Period End", typeof(string));
+
+            //Broadband
+
+            bbrand = new DataTable();
+            bbrand.Columns.Add("License Number", typeof(string));
+            bbrand.Columns.Add("Client Company", typeof(string));
+            bbrand.Columns.Add("Budget", typeof(decimal));
+            bbrand.Columns.Add("Invoice Total", typeof(decimal));
+            bbrand.Columns.Add("This Month Invoice", typeof(string));
+            bbrand.Columns.Add("Balance B/FWD", typeof(decimal));
+            bbrand.Columns.Add("From Revenue", typeof(decimal));
+            bbrand.Columns.Add("To Revenue", typeof(decimal));
+            bbrand.Columns.Add("Closing Balance", typeof(decimal));
+            bbrand.Columns.Add("Total Months", typeof(int));
+            bbrand.Columns.Add("Month Utilized", typeof(int));
+            bbrand.Columns.Add("Months Remaining", typeof(int));
+            bbrand.Columns.Add("Validity Period Start", typeof(string));
+            bbrand.Columns.Add("Validity Period End", typeof(string));
+
+            //Vsat
+
+            vsat = new DataTable();
+            vsat.Columns.Add("License Number", typeof(string));
+            vsat.Columns.Add("Client Company", typeof(string));
+            vsat.Columns.Add("Budget", typeof(decimal));
+            vsat.Columns.Add("Invoice Total", typeof(decimal));
+            vsat.Columns.Add("This Month Invoice", typeof(string));
+            vsat.Columns.Add("Balance B/FWD", typeof(decimal));
+            vsat.Columns.Add("From Revenue", typeof(decimal));
+            vsat.Columns.Add("To Revenue", typeof(decimal));
+            vsat.Columns.Add("Closing Balance", typeof(decimal));
+            vsat.Columns.Add("Total Months", typeof(int));
+            vsat.Columns.Add("Month Utilized", typeof(int));
+            vsat.Columns.Add("Months Remaining", typeof(int));
+            vsat.Columns.Add("Validity Period Start", typeof(string));
+            vsat.Columns.Add("Validity Period End", typeof(string));
+
+            //other
+
+            other = new DataTable();
+            other.Columns.Add("License Number", typeof(string));
+            other.Columns.Add("Client Company", typeof(string));
+            other.Columns.Add("Budget", typeof(decimal));
+            other.Columns.Add("Invoice Total", typeof(decimal));
+            other.Columns.Add("This Month Invoice", typeof(string));
+            other.Columns.Add("Balance B/FWD", typeof(decimal));
+            other.Columns.Add("From Revenue", typeof(decimal));
+            other.Columns.Add("To Revenue", typeof(decimal));
+            other.Columns.Add("Closing Balance", typeof(decimal));
+            other.Columns.Add("Total Months", typeof(int));
+            other.Columns.Add("Month Utilized", typeof(int));
+            other.Columns.Add("Months Remaining", typeof(int));
+            other.Columns.Add("Validity Period Start", typeof(string));
+            other.Columns.Add("Validity Period End", typeof(string));
+
+            //Trunking
+
+            trunking = new DataTable();
+            trunking.Columns.Add("License Number", typeof(string));
+            trunking.Columns.Add("Client Company", typeof(string));
+            trunking.Columns.Add("Budget", typeof(decimal));
+            trunking.Columns.Add("Invoice Total", typeof(decimal));
+            trunking.Columns.Add("This Month Invoice", typeof(string));
+            trunking.Columns.Add("Balance B/FWD", typeof(decimal));
+            trunking.Columns.Add("From Revenue", typeof(decimal));
+            trunking.Columns.Add("To Revenue", typeof(decimal));
+            trunking.Columns.Add("Closing Balance", typeof(decimal));
+            trunking.Columns.Add("Total Months", typeof(int));
+            trunking.Columns.Add("Month Utilized", typeof(int));
+            trunking.Columns.Add("Months Remaining", typeof(int));
+            trunking.Columns.Add("Validity Period Start", typeof(string));
+            trunking.Columns.Add("Validity Period End", typeof(string));
+
+            //Aero
+
+            aero = new DataTable();
+            aero.Columns.Add("License Number", typeof(string));
+            aero.Columns.Add("Client Company", typeof(string));
+            aero.Columns.Add("Budget", typeof(decimal));
+            aero.Columns.Add("Invoice Total", typeof(decimal));
+            aero.Columns.Add("This Month Invoice", typeof(string));
+            aero.Columns.Add("Balance B/FWD", typeof(decimal));
+            aero.Columns.Add("From Revenue", typeof(decimal));
+            aero.Columns.Add("To Revenue", typeof(decimal));
+            aero.Columns.Add("Closing Balance", typeof(decimal));
+            aero.Columns.Add("Total Months", typeof(int));
+            aero.Columns.Add("Month Utilized", typeof(int));
+            aero.Columns.Add("Months Remaining", typeof(int));
+            aero.Columns.Add("Validity Period Start", typeof(string));
+            aero.Columns.Add("Validity Period End", typeof(string));
+
+            //Marine
+
+            marine = new DataTable();
+            marine.Columns.Add("License Number", typeof(string));
+            marine.Columns.Add("Client Company", typeof(string));
+            marine.Columns.Add("Budget", typeof(decimal));
+            marine.Columns.Add("Invoice Total", typeof(decimal));
+            marine.Columns.Add("This Month Invoice", typeof(string));
+            marine.Columns.Add("Balance B/FWD", typeof(decimal));
+            marine.Columns.Add("From Revenue", typeof(decimal));
+            marine.Columns.Add("To Revenue", typeof(decimal));
+            marine.Columns.Add("Closing Balance", typeof(decimal));
+            marine.Columns.Add("Total Months", typeof(int));
+            marine.Columns.Add("Month Utilized", typeof(int));
+            marine.Columns.Add("Months Remaining", typeof(int));
+            marine.Columns.Add("Validity Period Start", typeof(string));
+            marine.Columns.Add("Validity Period End", typeof(string));
+
+            //Data and Services
+
+            dServices = new DataTable();
+            dServices.Columns.Add("License Number", typeof(string));
+            dServices.Columns.Add("Client Company", typeof(string));
+            dServices.Columns.Add("Budget", typeof(decimal));
+            dServices.Columns.Add("Invoice Total", typeof(decimal));
+            dServices.Columns.Add("This Month Invoice", typeof(string));
+            dServices.Columns.Add("Balance B/FWD", typeof(decimal));
+            dServices.Columns.Add("From Revenue", typeof(decimal));
+            dServices.Columns.Add("To Revenue", typeof(decimal));
+            dServices.Columns.Add("Closing Balance", typeof(decimal));
+            dServices.Columns.Add("Total Months", typeof(int));
+            dServices.Columns.Add("Month Utilized", typeof(int));
+            dServices.Columns.Add("Months Remaining", typeof(int));
+            dServices.Columns.Add("Validity Period Start", typeof(string));
+            dServices.Columns.Add("Validity Period End", typeof(string));
+
+
+            //  Decimal budget = rdr1.GetDecimal(1);
+            // decimal budget = (decimal)rdr1["Budget"];
+
+
+
+
+            while (rdr.Read() && rdr1.Read())
+            {
+                id = rdr.GetInt32(0);
+                ccnum = rdr.GetString(1);
+                Company = rdr.GetString(2);
+                fname = rdr.GetString(3);
+                lname = rdr.GetString(4);
+                invoiceamount = rdr.GetDecimal(5);
+                ValidityS = rdr.GetDateTime(6);
+                ValidityF = rdr.GetDateTime(7);
+                glid = rdr.GetInt32(8);
+                decimal budget = Convert.ToDecimal(rdr1.GetValue(1));
+
+               // decimal budget = 0;
+                 //_000.App_Code.BusinessClass.InsertBudgetInfo(ccnum, invoiceamount);
+                var ValiditySS = ValidityS.ToString("MM/dd/yyyy");
+
+                var ValidityFF = ValidityF.ToString("MM/dd/yyyy");
+
+
+
+                //------------------------------------------------------------------------------------
+
+                string invoicestat = " ";
+
+                string clientCompany = " ";
+                decimal openingbalance = 0;
+                decimal closingbalance = 0;
+                decimal toRevenue = 0;
+                decimal fromRevenue = 0;
+
+
+
+                if (Company == null || Company == "")
+                {
+                    clientCompany = fname + " " + lname;
+
+                }
+                else
+                {
+                    clientCompany = Company;
+                }
+                int validity = ((ValidityF.Year - ValidityS.Year) * 12) + ValidityF.Month - ValidityS.Month;
+                if (validity == 11)
+                {
+                    validity = 12;
+                }
+                if (validity == 23)
+                {
+                    validity = 24;
+                }
+
+                if (validity == 47)
+                {
+                    validity = 48;
+                }
+                int Difference = ((defered.Year - ValidityS.Year) * 12) + defered.Month - ValidityS.Month;
+                int trial = ((defered.Year - ValidityS.Year) * 12) + validity - Difference;
+                int trial2 = validity - Difference;
+                if (Difference >= 0)
+                    invoiceTotal += invoiceamount;
+                decimal opp = 0;
+                string op = " ";
+                DataSet opset = new DataSet();
+                if (Difference > 0 && ValidityS.Month != defered.Month)
+                { 
+
+                    opset = _000.App_Code.BusinessClass.GetOpeningBalanceForMonth(ccnum, (defered.Month - 1), defered.Year);
+                    if (!IsEmpty(opset))
+                    {
+                        DataRow dr = opset.Tables[0].Rows[0];
+                       // op = dr["openingbalance"].ToString();
+
+                        decimal.TryParse(dr["openingbalance"].ToString(), out opp);
+                        
+
+                    }
+                    else
+                        opp = 0;
+                }
+
+                if (opp == 0)
+                {
+                    opp = 0;
+                }
+                else
+                {
+                    opp = opp;
+                }
+
+
+
+                if (ValidityS.Month == defered.Month && ValidityS.Day <= 15 && ValidityS.Year == defered.Year)
+                {
+                    if (Difference >= 0 && trial2 >= 0)
+                    {
+                        Difference = Difference + 1;
+                        trial2 = validity - Difference;
+                        openingbalance = 0;
+                        toRevenue = invoiceamount * 1 / validity;
+                        toRev += toRevenue;
+                        closingbalance = invoiceamount - toRevenue;
+                        if (Difference >= 0)
+                            closeBal += closingbalance;
+                        fromRevenue = invoiceamount;
+                        fromRev += fromRevenue;
+                        invoicestat = "yes";
+                        balancebf += openingbalance;
+                        invoiceTotalForYes += invoiceamount;
+                    }
+                    //Cellular
+                    if (glid == 5012)
+                    {
+                        if (Difference >= 0 && trial2 >= 0)
+                        {
+                            invoicetotcell += invoiceamount;
+                            torevcell += toRevenue;
+                            fromremcell += fromRevenue;
+                            closingtotcell += closingbalance;
+                            balancebfcell += openingbalance;
+
+                            cell.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(openingbalance, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+                    //Broadband
+                    else if (glid == 5013)
+                    {
+                        if (Difference >= 0 && trial2 >= 0)
+                        {
+
+                            invoicetotbb += invoiceamount;
+                            torevbb += toRevenue;
+                            fromrembb += fromRevenue;
+                            closingtotbb += closingbalance;
+                            balancebfbb += openingbalance;
+
+                            bbrand.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(openingbalance, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+                    //Microwave
+                    else if (glid == 5014)
+                    {
+                        if (Difference >= 0 && trial2 >= 0)
+                        {
+                            invoicetotmicro += invoiceamount;
+                            torevmicro += toRevenue;
+                            fromrevmicro += fromRevenue;
+                            closingtotmicro += closingbalance;
+                            balancebfmicro += openingbalance;
+
+                            micro.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(openingbalance, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+                    //Data and Services
+                    else if (glid == 5015)
+                    {
+                        if (Difference >= 0 && trial2 >= 0)
+                        {
+                            invoicetotds += invoiceamount;
+                            torevds += toRevenue;
+                            fromrevds += fromRevenue;
+                            closingtotds += closingbalance;
+                            balancebfds += openingbalance;
+
+                            dServices.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(openingbalance, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+
+                    //VSAT
+                    else if (glid == 5016)
+                    {
+                        if (Difference >= 0 && trial2 >= 0)
+                        {
+                            invoicetotvsat += invoiceamount;
+                            torevvsat += toRevenue;
+                            fromrevvsat += fromRevenue;
+                            closingtotvsat += closingbalance;
+                            balancebfvsat += openingbalance;
+
+                            vsat.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(openingbalance, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+
+                    //Aeuronautical
+                    else if (glid == 5017)
+                    {
+                        if (Difference >= 0 && trial2 >= 0)
+                        {
+                            invoicetotaero += invoiceamount;
+                            torevaero += toRevenue;
+                            fromrevaero += fromRevenue;
+                            closingtotaero += closingbalance;
+                            balancebfaero += openingbalance;
+
+                            aero.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(openingbalance, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+
+                    //Marine
+                    else if (glid == 5018)
+                    {
+                        if (Difference >= 0 && trial2 >= 0)
+                        {
+
+                            invoicetotmar += invoiceamount;
+                            torevmar += toRevenue;
+                            fromrevmar += fromRevenue;
+                            closingtotmar += closingbalance;
+                            balancebfmar += openingbalance;
+
+                            marine.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(openingbalance, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+
+                    //Trunking
+                    else if (glid == 5019)
+                    {
+                        if (Difference >= 0 && trial2 >= 0)
+                        {
+
+                            invoicetottrunk += invoiceamount;
+                            torevtrunk += toRevenue;
+                            fromrevtrunk += fromRevenue;
+                            closingtottrunk += closingbalance;
+                            balancebftrunk += openingbalance;
+
+                            trunking.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(openingbalance, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+
+                    // Non P/R - Other
+                    else if (glid == 5020)
+                    {
+                        if (Difference >= 0 && trial2 >= 0)
+                        {
+                            invoicetotother += invoiceamount;
+                            torevother += toRevenue;
+                            fromrevother += fromRevenue;
+                            closingtotother += closingbalance;
+                            balancebfother += openingbalance;
+
+                            other.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(openingbalance, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+                    else {
+                        table.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                    }
+                }
+
+                //drop here 
+
+                else if (ValidityS.Month == (defered.Month - 1) && ValidityS.Day > 15 && ValidityS.Year == defered.Year)
+                {
+                    if (Difference > 0 && trial2 >= 0)
+                    {
+                        openingbalance = 0;
+                        toRevenue = invoiceamount * 1 / validity;
+                        fromRevenue = invoiceamount;
+                        fromRev += fromRevenue;
+                        closingbalance = invoiceamount - toRevenue;
+                        closeBal += closingbalance;
+                        invoicestat = "yes";
+                       
+
+                        if (!IsEmpty(opset))
+                        {
+                            opp = opp;
+                            balancebf += opp;
+                        }
+                        else
+                            opp = 0;
+                        balancebf += opp;
+
+                        if(Difference>1 && IsEmpty(opset))
+                        {
+                            toRevenue = toRevenue * Difference;
+                        }
+                        toRev += toRevenue;
+                        // table.Rows.Add(ccnum, clientCompany, Math.Round(invoiceamount, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(openingbalance, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                    }
+                    if (glid == 5012)
+                    {
+                        if (Difference > 0 && trial2 >= 0)
+                        {
+                            invoicetotcell += invoiceamount;
+                            torevcell += toRevenue;
+                            fromremcell += fromRevenue;
+                            closingtotcell += closingbalance;
+                            balancebfcell += opp;
+                          
+                                cell.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+                    //Broadband
+                    else if (glid == 5013)
+                    {
+                        if (Difference > 0 && trial2 >= 0)
+                        {
+                            invoicetotbb += invoiceamount;
+                            torevbb += toRevenue;
+                            fromrembb += fromRevenue;
+                            closingtotbb += closingbalance;
+                            balancebfbb += opp;
+
+                            bbrand.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+                    //Microwave
+                    else if (glid == 5014)
+                    {
+                        if (Difference > 0 && trial2 >= 0)
+                        {
+                            invoicetotmicro += invoiceamount;
+                            torevmicro += toRevenue;
+                            fromrevmicro += fromRevenue;
+                            closingtotmicro += closingbalance;
+                            balancebfmicro += opp;
+
+                            micro.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+                    //Data and Services
+                    else if (glid == 5015)
+                    {
+                        if (Difference > 0 && trial2 >= 0)
+                        {
+                            invoicetotds += invoiceamount;
+                            torevds += toRevenue;
+                            fromrevds += fromRevenue;
+                            closingtotds += closingbalance;
+                            balancebfds += opp;
+
+                            dServices.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+
+                    //VSAT
+                    else if (glid == 5016)
+                    {
+                        if (Difference > 0 && trial2 >= 0)
+                        {
+                            invoicetotvsat += invoiceamount;
+                            torevvsat += toRevenue;
+                            fromrevvsat += fromRevenue;
+                            closingtotvsat += closingbalance;
+                            balancebfvsat += opp;
+
+                            vsat.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+
+                    //Aeuronautical
+                    else if (glid == 5017)
+                    {
+
+                        if (Difference > 0 && trial2 >= 0)
+                        {
+                            invoicetotaero += invoiceamount;
+                            torevaero += toRevenue;
+                            fromrevaero += fromRevenue;
+                            closingtotaero += closingbalance;
+                            balancebfaero += opp;
+
+                            aero.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+
+                    //Marine
+                    else if (glid == 5018)
+                    {
+                        if (Difference > 0 && trial2 >= 0)
+                        {
+                            invoicetotmar += invoiceamount;
+                            torevmar += toRevenue;
+                            fromrevmar += fromRevenue;
+                            closingtotmar += closingbalance;
+                            balancebfmar += opp;
+
+                           // marine.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+
+                    //Trunking
+                    else if (glid == 5019)
+                    {
+                        if (Difference > 0 && trial2 >= 0)
+                        {
+
+                            invoicetottrunk += invoiceamount;
+                            torevtrunk += toRevenue;
+                            fromrevtrunk += fromRevenue;
+                            closingtottrunk += closingbalance;
+                            balancebftrunk += opp;
+
+                            trunking.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+
+                    // Non P/R - Other
+                    else if (glid == 5020)
+                    {
+                        if (Difference > 0 && trial2 >= 0)
+                        {
+                            invoicetotother += invoiceamount;
+                            torevother += toRevenue;
+                            fromrevother += fromRevenue;
+                            closingtotother += closingbalance;
+                            balancebfother += opp;
+
+                            other.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+                    else {
+                        table.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                    }
+                }
+                else
+                {
+
+                    if (ValidityS.Month != defered.Month && ValidityS.Day <= 15)
+                    {
+                        if (Difference > 0 && trial2 >= 0)
+                        {
+                            //Changed
+                            Difference = Difference + 1;
+                            trial2 = validity - Difference;
+                            toRevenue = invoiceamount * 1 / validity;
+                            
+                            decimal amountalreadypaid = toRevenue * (Difference - 1);
+                            openingbalance = invoiceamount - amountalreadypaid;
+                            fromRevenue = 0;
+                            closingbalance = invoiceamount - (amountalreadypaid + toRevenue);
+                            closeBal += closingbalance;
+                            
+                            invoicestat = "no";
+
+                            if (!IsEmpty(opset))
+                            {
+                                opp = opp;
+                                balancebf += opp;
+                            }
+                            else
+                                opp = 0 ;
+                            balancebf += opp;
+
+                            if (Difference > 1 && IsEmpty(opset))
+                            {
+                                toRevenue = toRevenue * Difference;
+                            }
+                            toRev += toRevenue;
+                        }
+                        if (glid == 5012)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetotcell += invoiceamount;
+                                torevcell += toRevenue;
+                                fromremcell += fromRevenue;
+                                closingtotcell += closingbalance;
+                                balancebfcell += opp;
+
+                                cell.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5013)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetotbb += invoiceamount;
+                                torevbb += toRevenue;
+                                fromrembb += fromRevenue;
+                                closingtotbb += closingbalance;
+                                balancebfbb += opp;
+
+                                bbrand.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+                        else if (glid == 5014)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetotmicro += invoiceamount;
+                                torevmicro += toRevenue;
+                                fromrevmicro += fromRevenue;
+                                closingtotmicro += closingbalance;
+                                balancebfmicro += opp;
+
+                                micro.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5015)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetotds += invoiceamount;
+                                torevds += toRevenue;
+                                fromrevds += fromRevenue;
+                                closingtotds += closingbalance;
+                                balancebfds += opp;
+
+                                dServices.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5016)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetotvsat += invoiceamount;
+                                torevvsat += toRevenue;
+                                fromrevvsat += fromRevenue;
+                                closingtotvsat += closingbalance;
+                                balancebfvsat += opp;
+
+                                vsat.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5017)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+
+                                invoicetotaero += invoiceamount;
+                                torevaero += toRevenue;
+                                fromrevaero += fromRevenue;
+                                closingtotaero += closingbalance;
+                                balancebfaero += opp;
+
+                                aero.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5018)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetotmar += invoiceamount;
+                                torevmar += toRevenue;
+                                fromrevmar += fromRevenue;
+                                closingtotmar += closingbalance;
+                                balancebfmar += opp;
+
+                                marine.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5019)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetottrunk += invoiceamount;
+                                torevtrunk += toRevenue;
+                                fromrevtrunk += fromRevenue;
+                                closingtottrunk += closingbalance;
+                                balancebftrunk += opp;
+
+                                trunking.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5020)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetotother += invoiceamount;
+                                torevother += toRevenue;
+                                fromrevother += fromRevenue;
+                                closingtotother += closingbalance;
+                                balancebfother += opp;
+                                other.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+                        else {
+                            table.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+
+                    }
+
+                    //Drop Code here again
+                    else if (ValidityS.Day > 15 && trial2 == 0)
+                    {
+                        if (Difference > 0 && trial2 >= 0)
+                        {
+                            toRevenue = invoiceamount * 1 / validity;
+                            
+                            decimal amountalreadypaid = toRevenue * (Difference - 1);
+                            openingbalance = invoiceamount - amountalreadypaid;
+                            fromRevenue = 0;
+                            closingbalance = invoiceamount - (amountalreadypaid + toRevenue);
+                            closeBal += closingbalance;
+                            invoicestat = "no";
+                            balancebf += openingbalance;
+
+                            if (!IsEmpty(opset))
+                            {
+                                opp = opp;
+                                balancebf += opp;
+                            }
+                            else
+                                opp = 0;
+                            balancebf += opp;
+
+
+                            if (Difference > 1 && IsEmpty(opset))
+                            {
+                                toRevenue = toRevenue * Difference;
+                            }
+                            toRev += toRevenue;
+                        }
+                        if (glid == 5012)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+
+                                invoicetotcell += invoiceamount;
+                                torevcell += toRevenue;
+                                fromremcell += fromRevenue;
+                                closingtotcell += closingbalance;
+                                balancebfcell += opp;
+                                cell.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5013)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetotbb += invoiceamount;
+                                torevbb += toRevenue;
+                                fromrembb += fromRevenue;
+                                closingtotbb += closingbalance;
+                                balancebfbb += opp;
+                                bbrand.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+                        else if (glid == 5014)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetotmicro += invoiceamount;
+                                torevmicro += toRevenue;
+                                fromrevmicro += fromRevenue;
+                                closingtotmicro += closingbalance;
+                                balancebfmicro += opp;
+                                micro.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5015)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+
+                                invoicetotds += invoiceamount;
+                                torevds += toRevenue;
+                                fromrevds += fromRevenue;
+                                closingtotds += closingbalance;
+                                balancebfds += opp;
+                                dServices.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5016)
+                        {
+
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetotvsat += invoiceamount;
+                                torevvsat += toRevenue;
+                                fromrevvsat += fromRevenue;
+                                closingtotvsat += closingbalance;
+                                balancebfvsat += opp;
+
+                                vsat.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5017)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetotaero += invoiceamount;
+                                torevaero += toRevenue;
+                                fromrevaero += fromRevenue;
+                                closingtotaero += closingbalance;
+                                balancebfaero += opp;
+
+                                aero.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5018)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetotmar += invoiceamount;
+                                torevmar += toRevenue;
+                                fromrevmar += fromRevenue;
+                                closingtotmar += closingbalance;
+                                balancebfmar += opp;
+
+                                marine.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5019)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetottrunk += invoiceamount;
+                                torevtrunk += toRevenue;
+                                fromrevtrunk += fromRevenue;
+                                closingtottrunk += closingbalance;
+                                balancebftrunk += opp;
+
+                                trunking.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5020)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetotother += invoiceamount;
+                                torevother += toRevenue;
+                                fromrevother += fromRevenue;
+                                closingtotother += closingbalance;
+                                balancebfother += opp;
+                                other.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+                        else {
+                            table.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+                    else if (ValidityS.Month != defered.Month && ValidityS.Day > 15)
+                    {
+                        if (Difference > 0 && trial2 >= 0)
+                        {
+                            toRevenue = invoiceamount * 1 / validity;
+                            decimal amountalreadypaid = toRevenue * (Difference - 1);
+                            openingbalance = invoiceamount - amountalreadypaid;
+                            fromRevenue = 0;
+                            closingbalance = invoiceamount - (amountalreadypaid + toRevenue);
+                            closeBal += closingbalance;
+                            invoicestat = "no";
+                            
+                            if (!IsEmpty(opset))
+                            {
+                                opp = opp;
+                                balancebf += opp;
+                            }
+                            else
+                                opp = 0;
+                            balancebf += opp;
+
+                            if (Difference > 1 && IsEmpty(opset))
+                            {
+                                toRevenue = toRevenue * Difference;
+                            }
+                            toRev += toRevenue;
+                        }
+                        if (glid == 5012)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+
+                                invoicetotcell += invoiceamount;
+                                torevcell += toRevenue;
+                                fromremcell += fromRevenue;
+                                closingtotcell += closingbalance;
+                                balancebfcell += opp;
+                                cell.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5013)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetotbb += invoiceamount;
+                                torevbb += toRevenue;
+                                fromrembb += fromRevenue;
+                                closingtotbb += closingbalance;
+                                balancebfbb += opp;
+                                bbrand.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+                        else if (glid == 5014)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetotmicro += invoiceamount;
+                                torevmicro += toRevenue;
+                                fromrevmicro += fromRevenue;
+                                closingtotmicro += closingbalance;
+                                balancebfmicro += opp;
+                                micro.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5015)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+
+                                invoicetotds += invoiceamount;
+                                torevds += toRevenue;
+                                fromrevds += fromRevenue;
+                                closingtotds += closingbalance;
+                                balancebfds += opp;
+                                dServices.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5016)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetotvsat += invoiceamount;
+                                torevvsat += toRevenue;
+                                fromrevvsat += fromRevenue;
+                                closingtotvsat += closingbalance;
+                                balancebfvsat += opp;
+
+                                vsat.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5017)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetotaero += invoiceamount;
+                                torevaero += toRevenue;
+                                fromrevaero += fromRevenue;
+                                closingtotaero += closingbalance;
+                                balancebfaero += opp;
+
+                                aero.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5018)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetotmar += invoiceamount;
+                                torevmar += toRevenue;
+                                fromrevmar += fromRevenue;
+                                closingtotmar += closingbalance;
+                                balancebfmar += opp;
+
+                                marine.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5019)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetottrunk += invoiceamount;
+                                torevtrunk += toRevenue;
+                                fromrevtrunk += fromRevenue;
+                                closingtottrunk += closingbalance;
+                                balancebftrunk += opp;
+
+                                trunking.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+
+                        else if (glid == 5020)
+                        {
+                            if (Difference > 0 && trial2 >= 0)
+                            {
+                                invoicetotother += invoiceamount;
+                                torevother += toRevenue;
+                                fromrevother += fromRevenue;
+                                closingtotother += closingbalance;
+                                balancebfother += opp;
+                                other.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                            }
+                        }
+                        else {
+                            table.Rows.Add(ccnum, clientCompany, Math.Round(budget, 2), Math.Round(invoiceamount, 2), invoicestat, Math.Round(opp, 2), Math.Round(fromRevenue, 2), Math.Round(-toRevenue, 2), Math.Round(closingbalance, 2), validity, Difference, trial2/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, ValiditySS, ValidityFF);
+                        }
+                    }
+                }
+                if (Difference > 0)
+                    _000.App_Code.BusinessClass.InsertOpBal(ccnum, closingbalance, defered);
+            }
+
+
+            // cell.Rows.Add("Sub Total", " ", Math.Round(invoicetotcell, 2), Math.Round(invoicetotcell, 2), " ", 0, Math.Round(fromremcell, 2), Math.Round(torevcell, 2), 0, 0, 0, 0/*((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, DateTime.Now, DateTime.Now);
+            cell.Rows.Add("Sub Total", " ", Math.Round(invoicetotcell, 2), Math.Round(invoicetotcell, 2), " ", Math.Round(balancebfcell, 2), Math.Round(fromremcell, 2), Math.Round(torevcell, 2), Math.Round(closingtotcell, 2), 0, 0, 0/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, DateTime.Now.ToString("MM/dd/yyyy"), DateTime.Now.ToString("MM/dd/yyyy"));
+            bbrand.Rows.Add("Sub Total", " ", Math.Round(invoicetotbb, 2), Math.Round(invoicetotbb, 2), " ", Math.Round(balancebfbb, 2), Math.Round(fromrembb, 2), Math.Round(torevbb, 2), Math.Round(closingtotbb, 2), 0, 0, 0/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, DateTime.Now.ToString("MM/dd/yyyy"), DateTime.Now.ToString("MM/dd/yyyy"));
+            micro.Rows.Add("Sub Total", " ", Math.Round(invoicetotmicro, 2), Math.Round(invoicetotmicro, 2), " ", Math.Round(balancebfmicro, 2), Math.Round(fromrevmicro, 2), Math.Round(torevmicro, 2), Math.Round(closingtotmicro, 2), 0, 0, 0/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, DateTime.Now.ToString("MM/dd/yyyy"), DateTime.Now.ToString("MM/dd/yyyy"));
+            vsat.Rows.Add("Sub Total", " ", Math.Round(invoicetotvsat, 2), Math.Round(invoicetotvsat, 2), " ", Math.Round(balancebfvsat, 2), Math.Round(fromrevvsat, 2), Math.Round(torevvsat, 2), Math.Round(closingtotvsat, 2), 0, 0, 0/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, DateTime.Now.ToString("MM/dd/yyyy"), DateTime.Now.ToString("MM/dd/yyyy"));
+            aero.Rows.Add("Sub Total", " ", Math.Round(invoicetotaero, 2), Math.Round(invoicetotaero, 2), " ", Math.Round(balancebfaero, 2), Math.Round(fromrevaero, 2), Math.Round(torevaero, 2), Math.Round(closingtotaero, 2), 0, 0, 0/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, DateTime.Now.ToString("MM/dd/yyyy"), DateTime.Now.ToString("MM/dd/yyyy"));
+            marine.Rows.Add("Sub Total", " ", Math.Round(invoicetotmar, 2), Math.Round(invoicetotmar, 2), " ", Math.Round(balancebfmar, 2), Math.Round(fromrevmar, 2), Math.Round(torevmar, 2), Math.Round(closingtotmar, 2), 0, 0, 0/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, DateTime.Now.ToString("MM/dd/yyyy"), DateTime.Now.ToString("MM/dd/yyyy"));
+            dServices.Rows.Add("Sub Total", " ", Math.Round(invoicetotds, 2), Math.Round(invoicetotds, 2), " ", Math.Round(balancebfds, 2), Math.Round(fromrevds, 2), Math.Round(torevds, 2), Math.Round(closingtotds, 2), 0, 0, 0/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, DateTime.Now.ToString("MM/dd/yyyy"), DateTime.Now.ToString("MM/dd/yyyy"));
+            trunking.Rows.Add("Sub Total", " ", Math.Round(invoicetottrunk, 2), Math.Round(invoicetottrunk, 2), " ", Math.Round(balancebftrunk, 2), Math.Round(fromrevtrunk, 2), Math.Round(torevtrunk, 2), Math.Round(closingtottrunk, 2), 0, 0, 0/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, DateTime.Now.ToString("MM/dd/yyyy"), DateTime.Now.ToString("MM/dd/yyyy"));
+            other.Rows.Add("Sub Total", " ", Math.Round(invoicetotother, 2), Math.Round(invoicetotother, 2), " ", Math.Round(balancebfother, 2), Math.Round(fromrevother, 2), Math.Round(torevother, 2), Math.Round(closingtotother, 2), 0, 0, 0/* ((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, DateTime.Now.ToString("MM/dd/yyyy"), DateTime.Now.ToString("MM/dd/yyyy"));
+
+
+
+
+
+
+
+            table.Rows.Add("Total", " ", Math.Round(invoiceTotal, 2), Math.Round(invoiceTotal, 2), " ", 0, Math.Round(fromRev, 2), Math.Round(-toRev, 2), 0, 0, 0, 0/*((DateTime.Now.Year - ValidityS.Year) * 12) + validity - Difference*/, DateTime.Now, DateTime.Now);
+
+            //Button2_Click(invoiceTotal, closeBal, toRev, fromRev);
+            DataSet ds = new DataSet();
+
+            ds.Tables.Add(cell);
+            ds.Tables.Add(vsat);
+            ds.Tables.Add(marine);
+            ds.Tables.Add(dServices);
+            ds.Tables.Add(table);
+            ds.Tables.Add(aero);
+            ds.Tables.Add(trunking);
+            ds.Tables.Add(other);
+            ds.Tables.Add(bbrand);
+            ds.Tables.Add(micro);
+
+            return ds;
+        }
+
+
+
+        public void CreateCSVFile(ref DataTable dt, string strFilePath)
+        {
+            try
+            {
+                // Create the CSV file to which grid data will be exported.
+                StreamWriter sw = new StreamWriter(strFilePath, false);
+                // First we will write the headers.
+                //DataTable dt = m_dsProducts.Tables[0];
+                int iColCount = dt.Columns.Count;
+                for (int i = 0; i < iColCount; i++)
+                {
+                    sw.Write(dt.Columns[i]);
+                    if (i < iColCount - 1)
+                    {
+                        sw.Write(",");
+                    }
+                }
+                sw.Write(sw.NewLine);
+
+                // Now write all the rows.
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    for (int i = 0; i < iColCount; i++)
+                    {
+                        if (!Convert.IsDBNull(dr[i]))
+                        {
+                            sw.Write(dr[i].ToString());
+                        }
+                        if (i < iColCount - 1)
+                        {
+                            sw.Write(",");
+                        }
+                    }
+
+                    sw.Write(sw.NewLine);
+                }
+                sw.Close();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        bool IsEmpty(DataSet dataSet)
+        {
+            foreach (DataTable table in dataSet.Tables)
+                if (table.Rows.Count != 0) return false;
+
+            return true;
+        }
+
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            getdetails1();
+        }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+
+    }
+}

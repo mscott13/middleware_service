@@ -28,10 +28,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/03/2019 11:26:07</publishTime>
     </File>
     <File Include="bin/Interface.dll">
-      <publishTime>09/04/2019 10:08:57</publishTime>
+      <publishTime>09/05/2019 14:40:23</publishTime>
     </File>
     <File Include="bin/Interface.pdb">
-      <publishTime>09/04/2019 10:08:57</publishTime>
+      <publishTime>09/05/2019 14:40:23</publishTime>
     </File>
     <File Include="bin/itextsharp.dll">
       <publishTime>09/03/2019 11:26:07</publishTime>
@@ -396,6 +396,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="GridImages/wrench.png">
       <publishTime>09/03/2019 11:26:07</publishTime>
     </File>
+    <File Include="Images/0.svg">
+      <publishTime>09/03/2019 11:26:07</publishTime>
+    </File>
     <File Include="Images/496.gif">
       <publishTime>09/03/2019 11:26:07</publishTime>
     </File>
@@ -459,6 +462,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Images/geometry.png">
       <publishTime>09/03/2019 11:26:07</publishTime>
     </File>
+    <File Include="Images/Infinity.svg">
+      <publishTime>09/03/2019 11:26:07</publishTime>
+    </File>
     <File Include="Images/invoice-512.png">
       <publishTime>09/03/2019 11:26:07</publishTime>
     </File>
@@ -501,6 +507,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Images/receipt.png">
       <publishTime>09/03/2019 11:26:07</publishTime>
     </File>
+    <File Include="Images/Rolling.svg">
+      <publishTime>09/03/2019 11:26:07</publishTime>
+    </File>
     <File Include="Images/safe-transaction.png">
       <publishTime>09/03/2019 11:26:07</publishTime>
     </File>
@@ -509,6 +518,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Images/settings.png">
       <publishTime>09/03/2019 11:26:07</publishTime>
+    </File>
+    <File Include="Images/Spinner.svg">
+      <publishTime>09/05/2019 14:40:07</publishTime>
     </File>
     <File Include="Images/test2.png">
       <publishTime>09/03/2019 11:26:07</publishTime>
@@ -536,6 +548,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="MonthlyCustomers.aspx">
       <publishTime>09/03/2019 11:26:07</publishTime>
+    </File>
+    <File Include="MonthlyDeferredIncome.html">
+      <publishTime>09/05/2019 14:46:12</publishTime>
     </File>
     <File Include="MonthlyInvoices.aspx">
       <publishTime>09/03/2019 11:26:07</publishTime>

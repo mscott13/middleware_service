@@ -253,8 +253,6 @@ namespace middleware_service
             if (isAccpacSessionOpen())
             {
                 Log.Save("Database change detected, operation: " + e.ChangeType);
-                Thread.Sleep(150);
-
                 try
                 {
                     var docInfo = e.Entity;
@@ -264,8 +262,14 @@ namespace middleware_service
                         {
                             Log.Save("Incoming invoice...");
                             InvoiceInfo invoiceInfo = new InvoiceInfo();
-                            invoiceInfo = intLink.getInvoiceDetails(docInfo.OriginalDocumentID);
+
+                            while (invoiceInfo.amount == 0)
+                            {
+                                Log.Save("Waiting for invoice amount to update, current value: " + invoiceInfo.amount.ToString());
+                                invoiceInfo = intLink.getInvoiceDetails(docInfo.OriginalDocumentID);
+                            }
                             Log.Save("Invoice amount: " + invoiceInfo.amount);
+
                             List<string> clientInfo = intLink.getClientInfo_inv(invoiceInfo.CustomerId.ToString());
                             string companyName = clientInfo[0].ToString();
                             string cNum = clientInfo[1].ToString();
@@ -279,6 +283,9 @@ namespace middleware_service
                             {
                                 companyName = fname + " " + lname;
                             }
+
+                           
+
 
                             Log.Save("Client name: " + companyName);
                             Data dt = Translate(cNum, invoiceInfo.FeeType, companyName, "", invoiceInfo.notes, intLink.GetAccountNumber(invoiceInfo.Glid), invoiceInfo.FreqUsage); // application stops here...
@@ -743,11 +750,17 @@ namespace middleware_service
                         {
                             Log.Save("Incoming Receipt");
                             Data dt = new Data();
-                            PaymentInfo pinfo = intLink.getPaymentInfo(docInfo.OriginalDocumentID);
+                            PaymentInfo pinfo = new PaymentInfo();
 
                             List<string> paymentData = new List<string>(3);
                             List<string> clientData = new List<string>(3);
                             List<string> feeData = new List<string>(3);
+
+                            while (pinfo.ReceiptNumber == 0)
+                            {
+                                pinfo = intLink.getPaymentInfo(docInfo.OriginalDocumentID);
+                                Thread.Sleep(500);
+                            }
 
                             var receipt = pinfo.ReceiptNumber;
                             var transid = pinfo.GLTransactionID;
@@ -971,7 +984,13 @@ namespace middleware_service
                         {
                             Log.Save("New Credit Memo...");
                             CreditNoteInfo creditNote = new CreditNoteInfo();
-                            creditNote = intLink.getCreditNoteInfo(docInfo.OriginalDocumentID, docInfo.DocumentID);
+
+                            while (creditNote.amount == 0)
+                            {
+                                creditNote = intLink.getCreditNoteInfo(docInfo.OriginalDocumentID, docInfo.DocumentID);
+                                Thread.Sleep(1000);
+                            }
+
                             List<string> clientInfo = new List<string>(4);
                             clientInfo = intLink.getClientInfo_inv(creditNote.CustomerID.ToString());
                             var accountNum = intLink.GetAccountNumber(creditNote.CreditGL);
@@ -1265,6 +1284,7 @@ namespace middleware_service
                         string fname = clientInfo[2].ToString();
                         string lname = clientInfo[3].ToString();
 
+                       
 
                         if (companyName == "" || companyName == " " || companyName == null)
                         {

@@ -28,7 +28,7 @@ namespace middleware_service.Database_Operations
                     cGeneric = new SqlConnection(Constants.dbGeneric);
                     cGeneric.Open();
                     break;
-                case "cMsgQueue":
+                case "g":
                     cMsgQueue = new SqlConnection(Constants.dbIntegration);
                     cMsgQueue.Open();
                     break;

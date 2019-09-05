@@ -80,7 +80,6 @@ namespace middleware_service
         DateTime currentTime;
         System.Timers.Timer broadcastTimer = new System.Timers.Timer();
         System.Timers.Timer deferredTimer = new System.Timers.Timer();
-        private int Code = 21;
 
         public middleware_service()
         {
@@ -192,16 +191,7 @@ namespace middleware_service
                 Log.Save("Accpac Version: " + accpacSession.AppVersion);
                 Log.Save("Company: " + accpacSession.CompanyName);
                 Log.Save("Session Status: " + accpacSession.IsOpened);
-            }
-            catch (Exception e)
-            {
-                Log.Save(e.Message + " " + e.StackTrace);
-                Log.WriteEnd();
-            }
 
-            currentTime = DateTime.Now;
-            try
-            {
                 tableDependCancellation.Start();
                 tableDependInfo.Start();
 
@@ -209,13 +199,14 @@ namespace middleware_service
                 deferredTimer.Start();
                 Log.Save("middleware_service started.");
                 Log.WriteEnd();
-                Code = 3;
                 DeferredTimer_Elapsed(null, null);
+                currentTime = DateTime.Now;
             }
             catch (Exception e)
             {
-                Log.Save(e.Message+" "+e.StackTrace);
+                Log.Save(e.Message + " " + e.StackTrace);
                 Log.WriteEnd();
+                Stop();
             }
         }
 
@@ -234,11 +225,9 @@ namespace middleware_service
 
                 tableDependCancellation.Dispose();
                 tableDependInfo.Dispose();
-                Code = 2;
                 broadcastTimer.Stop();
                 deferredTimer.Stop();
 
-                Log.StopSocketConnection();
                 Log.Save("middleware_service stopped.");
                 Log.WriteEnd();
             }
@@ -264,6 +253,7 @@ namespace middleware_service
             if (isAccpacSessionOpen())
             {
                 Log.Save("Database change detected, operation: " + e.ChangeType);
+                Thread.Sleep(150);
 
                 try
                 {
@@ -274,12 +264,7 @@ namespace middleware_service
                         {
                             Log.Save("Incoming invoice...");
                             InvoiceInfo invoiceInfo = new InvoiceInfo();
-                            while (invoiceInfo.amount == 0)
-                            {
-                                Log.Save("Waiting for invoice amount to update, current value: " + invoiceInfo.amount.ToString());
-                                invoiceInfo = intLink.getInvoiceDetails(docInfo.OriginalDocumentID);
-                            }
-
+                            invoiceInfo = intLink.getInvoiceDetails(docInfo.OriginalDocumentID);
                             Log.Save("Invoice amount: " + invoiceInfo.amount);
                             List<string> clientInfo = intLink.getClientInfo_inv(invoiceInfo.CustomerId.ToString());
                             string companyName = clientInfo[0].ToString();
@@ -758,17 +743,11 @@ namespace middleware_service
                         {
                             Log.Save("Incoming Receipt");
                             Data dt = new Data();
-                            PaymentInfo pinfo = new PaymentInfo();
+                            PaymentInfo pinfo = intLink.getPaymentInfo(docInfo.OriginalDocumentID);
 
                             List<string> paymentData = new List<string>(3);
                             List<string> clientData = new List<string>(3);
                             List<string> feeData = new List<string>(3);
-
-                            while (pinfo.ReceiptNumber == 0)
-                            {
-                                pinfo = intLink.getPaymentInfo(docInfo.OriginalDocumentID);
-                                Thread.Sleep(500);
-                            }
 
                             var receipt = pinfo.ReceiptNumber;
                             var transid = pinfo.GLTransactionID;
@@ -789,13 +768,13 @@ namespace middleware_service
                             var customerId = clientData[1].ToString();
                             var fname = clientData[2].ToString();
                             var lname = clientData[3].ToString();
+                            var ftype = " ";
+                            var notes = " ";
 
                             if (companyName == "" || companyName == " " || companyName == null)
                             {
                                 companyName = fname + " " + lname;
                             }
-                            var ftype = " ";
-                            var notes = " ";
 
                             if (Convert.ToInt32(invoiceId) > 0)
                             {
@@ -992,13 +971,7 @@ namespace middleware_service
                         {
                             Log.Save("New Credit Memo...");
                             CreditNoteInfo creditNote = new CreditNoteInfo();
-
-                            while (creditNote.amount == 0)
-                            {
-                                creditNote = intLink.getCreditNoteInfo(docInfo.OriginalDocumentID, docInfo.DocumentID);
-                                Thread.Sleep(1000);
-                            }
-
+                            creditNote = intLink.getCreditNoteInfo(docInfo.OriginalDocumentID, docInfo.DocumentID);
                             List<string> clientInfo = new List<string>(4);
                             clientInfo = intLink.getClientInfo_inv(creditNote.CustomerID.ToString());
                             var accountNum = intLink.GetAccountNumber(creditNote.CreditGL);
@@ -1312,7 +1285,7 @@ namespace middleware_service
                                     Log.Save("Creating a credit memo");
                                     int cred_docNum = intLink.getCreditMemoNumber();
                                     int batchNumber = getBatch(CREDIT_NOTE, invoiceId.ToString());
-                                    intLink.storeInvoice(invoiceId, batchNumber, creditGl, companyName, dt.customerId, invoiceValidity, cancelledBy, amount, "no modification", 1, 0, 0, 1, cred_docNum);
+                                    intLink.storeInvoice(invoiceId, batchNumber, creditGl, companyName, dt.customerId, DateTime.Now, cancelledBy, amount, "no modification", 1, 0, 0, 1, cred_docNum);
                                     creditNoteInsert(batchNumber.ToString(), dt.customerId, accountNum, amount.ToString(), invoiceId.ToString(), cred_docNum.ToString(), creditNoteDesc);
                                 }
                                 else
@@ -1482,7 +1455,7 @@ namespace middleware_service
             if (_fcode == "PREPAYMENT" && intLink.getClientIdZRecord(false).Contains("-T"))
             {
                 dt.customerId = intLink.getClientIdZRecord(false);
-                dt.companyName = "Processing Fee for Type Approval Certificationn";
+                dt.companyName = "Processing Fee for Type Approval Certification";
                 dt.desc = "Processing Fee";
                 dt.debit = debit;
                 dt.success = true;
@@ -1647,7 +1620,6 @@ namespace middleware_service
                     }
 
                     dt.success = true;
-
                     return dt;
                 }
                 else

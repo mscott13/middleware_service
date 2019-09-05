@@ -357,7 +357,7 @@
 
             function sendInvoiceMessage(data) {
 
-                var max = 25
+                var max = 100
                 var len = $('._content ._content-pending .invoice-pending-detail');
                 if (len.length == 0) {
 
@@ -401,7 +401,7 @@
             }
 
             function sendPaymentMessage(data) {
-                var max = 25
+                var max = 100
                 var len = $('._content ._content-payments .invoice-payment-detail');
                 if (len.length == 0) {
                     setTimeout(function () {
@@ -446,7 +446,7 @@
             }
 
             function sendCustomerMessage(data) {
-                var max = 25
+                var max = 100
                 var len = $('._content ._content-customers .customer-detail');
                 if (len.length == 0) {
 
@@ -490,7 +490,7 @@
             }
 
             function sendInvoiceTMessage(data) {
-                var max = 25;
+                var max = 100;
                 var div = '';
                 var len = $('._content ._content-invoice .invoice-transfer-detail');
                 if (len.length == 0)
@@ -581,7 +581,7 @@
 
 
                 var lenx = $('._content ._content-invoice .invoice-transfer-detail');
-                maintainList(25, lenx.length, 'transfer');
+                maintainList(100, lenx.length, 'transfer');
                 var len4 = $('._content ._content-invoice .invoice-transfer-detail');
                 var ln = len4.length;
 
@@ -668,7 +668,7 @@
 
 
                 var lenx = $('._content ._content-customers .customer-detail');
-                maintainList(25, lenx.length, 'customer');
+                maintainList(100, lenx.length, 'customer');
 
 
                 var len2 = $('._content ._content-customers .customer-detail');
@@ -717,7 +717,7 @@
 
 
                 var lenx = $('._content ._content-payments .invoice-payment-detail');
-                maintainList(25, lenx.length, 'payment');
+                maintainList(100, lenx.length, 'payment');
 
 
                 var len2 = $('._content ._content-payments .invoice-payment-detail');
@@ -767,7 +767,7 @@
                 var left;
                 var canPrepend = true;
                 var lenx = $('._content ._content-pending .invoice-pending-detail');
-                maintainList(25, lenx.length, 'pending');
+                maintainList(100, lenx.length, 'pending');
 
                 $(lenx).each(function () {
 
@@ -1407,7 +1407,7 @@
 
             function populateMemoAndCancellations(data)
             {
-                var max = 25;
+                var max = 100;
                 var div = '';
                 var len = $('._content ._content-memo_cancellation .invoice-memo-cancellation');
 

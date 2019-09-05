@@ -51,7 +51,6 @@ namespace middleware_service.Other_Classes
 
         public static string Save(string msg)
         {
-
             if (!Directory.Exists(docPath))
             {
                 Directory.CreateDirectory(docPath);

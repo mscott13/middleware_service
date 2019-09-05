@@ -185,6 +185,7 @@
     <Content Include="Login.aspx" />
     <Content Include="MenuGrid.aspx" />
     <Content Include="MonthlyCustomers.aspx" />
+    <Content Include="MonthlyDeferredIncome.html" />
     <Content Include="MonthlyInvoices.aspx" />
     <Content Include="MonthlyPayments.aspx" />
     <Content Include="Notifications.aspx" />

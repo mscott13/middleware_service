@@ -28,10 +28,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/03/2019 11:26:07</publishTime>
     </File>
     <File Include="bin/Interface.dll">
-      <publishTime>09/05/2019 14:40:23</publishTime>
+      <publishTime>09/05/2019 16:12:30</publishTime>
     </File>
     <File Include="bin/Interface.pdb">
-      <publishTime>09/05/2019 14:40:23</publishTime>
+      <publishTime>09/05/2019 16:12:30</publishTime>
     </File>
     <File Include="bin/itextsharp.dll">
       <publishTime>09/03/2019 11:26:07</publishTime>
@@ -601,6 +601,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/03/2019 11:26:07</publishTime>
     </File>
     <File Include="Site.Master">
+      <publishTime>09/03/2019 11:26:07</publishTime>
+    </File>
+    <File Include="spec.jpg">
       <publishTime>09/03/2019 11:26:07</publishTime>
     </File>
     <File Include="style.css">

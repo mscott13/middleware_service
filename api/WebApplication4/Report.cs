@@ -554,8 +554,7 @@ namespace WebApplication4
 
         public void createPdfReport(string ReportType, DeferredData Report, DateTime startDate)
         {
-            //string path_local = @"C:\inetpub\wwwroot\Interface\pdf\" + ReportType + "DefferedIncomeReport" + startDate.Year.ToString() + startDate.Month.ToString("00") + "01.pdf";
-            string path_local = @"C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\pdf\" + ReportType + "DefferedIncomeReport" + startDate.Year.ToString() + startDate.Month.ToString("00") + "01.pdf";
+            string path_local = @"C:\Program Files (x86)\M.S\SMA Middleware\resources\reports\" + ReportType + "DefferedIncomeReport" + startDate.Year.ToString() + startDate.Month.ToString("00") + "01.pdf";
 
             // Document doc = new Document(iTextSharp.text.PageSize._11X17, 10, 10, 42, 35);
             Document doc = new Document(iTextSharp.text.PageSize.LEDGER);
@@ -576,8 +575,7 @@ namespace WebApplication4
 
             doc.Open();
 
-            //var imagePath = @"C:\inetpub\wwwroot\Interface\spec.jpg";
-            var imagePath = @"C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\spec.jpg";
+            var imagePath = @"C:\inetpub\wwwroot\Gui\spec.jpg";
             iTextSharp.text.Image PNG = iTextSharp.text.Image.GetInstance(imagePath);
             PNG.ScaleToFit(100f, 100f);
             PNG.Alignment = 1;
@@ -673,8 +671,7 @@ namespace WebApplication4
 
         public void createPdfTotalsReport(String ReportType, DeferredData Report, DateTime startDate)
         {
-            //string path_local = @"C:\inetpub\wwwroot\Interface\pdf\" + ReportType + "DefferedIncomeSummaryReport" + startDate.Year.ToString() + startDate.Month.ToString("00") + "01.pdf";
-            string path_local = @"C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\pdf\" + ReportType + "DefferedIncomeSummaryReport" + startDate.Year.ToString() + startDate.Month.ToString("00") + "01.pdf";
+            string path_local = @"C:\Program Files (x86)\M.S\SMA Middleware\resources\reports\" + ReportType + "DefferedIncomeSummaryReport" + startDate.Year.ToString() + startDate.Month.ToString("00") + "01.pdf";
 
             // Document doc = new Document(iTextSharp.text.PageSize._11X17, 10, 10, 42, 35);
             Document doc = new Document(iTextSharp.text.PageSize.LETTER, 0, 0, 20, 0);
@@ -698,8 +695,8 @@ namespace WebApplication4
             doc.Add(newLine);
             doc.Add(newLine);
             doc.Add(newLine);
-            //var imagePath = @"C:\inetpub\wwwroot\Interface\spec.jpg";
-            var imagePath = @"C:\Users\mscott\Desktop\Git Repositories\sma-middleware\Interface\Interface\spec.jpg";
+
+            var imagePath = @"C:\inetpub\wwwroot\Gui\spec.jpg";
             iTextSharp.text.Image PNG = iTextSharp.text.Image.GetInstance(imagePath);
             PNG.ScaleToFit(100f, 100f);
             PNG.Alignment = 1;

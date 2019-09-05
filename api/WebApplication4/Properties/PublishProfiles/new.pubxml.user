@@ -10,103 +10,103 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   </PropertyGroup>
   <ItemGroup>
     <File Include="ApplicationInsights.config">
-      <publishTime>08/30/2019 11:48:36</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/ApplicationInsights.config">
-      <publishTime>08/30/2019 11:48:36</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/DocumentFormat.OpenXml.dll">
-      <publishTime>08/30/2019 11:48:37</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/itextsharp.dll">
-      <publishTime>08/30/2019 11:48:37</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/itextsharp.pdfa.dll">
-      <publishTime>08/30/2019 11:48:37</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/itextsharp.xtra.dll">
-      <publishTime>08/30/2019 11:48:37</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.Agent.Intercept.dll">
-      <publishTime>08/30/2019 11:48:37</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.DependencyCollector.dll">
-      <publishTime>08/30/2019 11:48:37</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.PerfCounterCollector.dll">
-      <publishTime>08/30/2019 11:48:37</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.ServerTelemetryChannel.dll">
-      <publishTime>08/30/2019 11:48:38</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.Web.dll">
-      <publishTime>08/30/2019 11:48:37</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.WindowsServer.dll">
-      <publishTime>08/30/2019 11:48:37</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/Microsoft.ApplicationInsights.dll">
-      <publishTime>08/30/2019 11:48:37</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
-      <publishTime>08/30/2019 11:48:38</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/roslyn/csc.exe">
-      <publishTime>08/30/2019 11:48:38</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/roslyn/Microsoft.Build.Tasks.CodeAnalysis.dll">
-      <publishTime>08/30/2019 11:48:38</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/roslyn/Microsoft.CodeAnalysis.CSharp.dll">
-      <publishTime>08/30/2019 11:48:38</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/roslyn/Microsoft.CodeAnalysis.dll">
-      <publishTime>08/30/2019 11:48:38</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/roslyn/Microsoft.CodeAnalysis.VisualBasic.dll">
-      <publishTime>08/30/2019 11:48:38</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/roslyn/Microsoft.CSharp.Core.targets">
-      <publishTime>08/30/2019 11:48:38</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/roslyn/Microsoft.VisualBasic.Core.targets">
-      <publishTime>08/30/2019 11:48:38</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/roslyn/System.Collections.Immutable.dll">
-      <publishTime>08/30/2019 11:48:38</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/roslyn/System.Reflection.Metadata.dll">
-      <publishTime>08/30/2019 11:48:38</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/roslyn/vbc.exe">
-      <publishTime>08/30/2019 11:48:38</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/roslyn/VBCSCompiler.exe">
-      <publishTime>08/30/2019 11:48:38</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/roslyn/VBCSCompiler.exe.config">
-      <publishTime>08/30/2019 11:48:38</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="bin/WebApplication4.dll">
-      <publishTime>08/30/2019 16:37:27</publishTime>
+      <publishTime>09/05/2019 16:11:55</publishTime>
     </File>
     <File Include="bin/WebApplication4.pdb">
-      <publishTime>08/30/2019 16:37:27</publishTime>
+      <publishTime>09/05/2019 16:11:55</publishTime>
     </File>
     <File Include="IntegrationService.asmx">
-      <publishTime>08/30/2019 11:48:36</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>08/30/2019 11:48:37</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="scripts/ai.0.22.9-build00167.js">
-      <publishTime>08/30/2019 11:48:37</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="scripts/ai.0.22.9-build00167.min.js">
-      <publishTime>08/30/2019 11:48:37</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>08/30/2019 16:38:30</publishTime>
+      <publishTime>09/03/2019 11:26:05</publishTime>
     </File>
   </ItemGroup>
 </Project>

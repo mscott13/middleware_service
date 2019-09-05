@@ -300,6 +300,7 @@
     <Content Include="scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="scripts\jquery.mCustomScrollbar.concat.min.js" />
     <Content Include="SignUp.aspx" />
+    <Content Include="spec.jpg" />
     <Content Include="style.css" />
     <Content Include="UpdateBudget.aspx" />
     <Content Include="Web.config">

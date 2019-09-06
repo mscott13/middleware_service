@@ -1227,9 +1227,7 @@
                     dataType: 'json',
                     success: function (data) {
                         if (data.d == -1) {
-
                             $('#stat img').attr({ 'src': 'Images/offline.png' });
-
                         }
                         else if (data.d == 2 || data.d == 21) {
 
@@ -1239,10 +1237,10 @@
 
                             $('#stat img').attr({ 'src': 'Images/online.png' });
                         }
-
                     },
                     error: function () {
                         console.log("error");
+                        $('#stat img').attr({ 'src': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAIVBMVEX////VACvZACbYACfYACf/AADYACfYACfXACjYACcAAABiOUJsAAAACXRSTlMAJH6y5gFu9bQdqz9YAAAAAWJLR0QKaND0VgAAAAlwSFlzAAAN1wAADdcBQiibeAAAAAd0SU1FB+AFGQg4DC9bhy8AAABKSURBVAjXY2BgEDJxVmQAgrDKmTOnpzIwsHbOBIIZAQxsM8EggUEcwihk0IQwJjFYQhiTGTwhjCkIBlwKrhiuHW4g3Aq4pTBnAAAeiTmDuN/4+wAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNi0wNS0yNVQwODo1NjoxMiswMjowME8RE3AAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTYtMDUtMjVUMDg6NTY6MTIrMDI6MDA+TKvMAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAABJRU5ErkJggg==' });
                     }
                 });
             }

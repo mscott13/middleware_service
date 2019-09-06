@@ -147,6 +147,7 @@
     <Compile Include="Database Operations\Constants.cs" />
     <Compile Include="Database Operations\Integration.cs" />
     <Compile Include="Database Operations\Report.cs" />
+    <Compile Include="Hub.cs" />
     <Compile Include="middleware_service.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -164,6 +165,7 @@
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
     <Compile Include="TableDependencyDefinitions\SqlNotifyCancellation.cs" />
     <Compile Include="TableDependencyDefinitions\SqlNotify_DocumentInfo.cs" />
     <Compile Include="TableDependencyDefinitions\SqlNotify_Pay.cs" />

@@ -17,8 +17,10 @@ using TableDependency.Enums;
 using TableDependency.EventArgs;
 using TableDependency.SqlClient;
 using Newtonsoft.Json;
+using Microsoft.Owin;
+using Microsoft.Owin.Hosting;
 
-
+[assembly: OwinStartup(typeof(middleware_service.Startup))]
 namespace middleware_service
 {
     public partial class middleware_service : ServiceBase
@@ -204,6 +206,8 @@ namespace middleware_service
                 Log.WriteEnd();
                 DeferredTimer_Elapsed(null, null);
                 currentTime = DateTime.Now;
+
+                initSignalR();
             }
             catch (Exception e)
             {
@@ -239,6 +243,12 @@ namespace middleware_service
                 Log.Save(e.Message +" "+e.StackTrace);
                 Log.WriteEnd();
             }
+        }
+
+        private void initSignalR()
+        {
+            string url = "http://localhost:8080";
+            WebApp.Start(url);
         }
 
         private void TableDependCancellation_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)

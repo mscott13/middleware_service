@@ -20,33 +20,10 @@ namespace middleware_service.Other_Classes
         private static Integration intlink;
         private static EventLog evt;
         private static string message = "";
-        private static Socket handler;
-        private static Socket server;
-        private static bool run = true;
-        private static int port = 11000;
-
         public static void Init(Integration integration, EventLog _evt)
         {
             intlink = integration;
             evt = _evt;
-            Thread thread = new Thread(new ThreadStart(InitSocket));
-            thread.Start();
-        }
-
-        public static void StopSocketConnection()
-        {
-            try
-            {
-                server.Close();
-                handler.Shutdown(SocketShutdown.Both);
-                handler.Close();
-            }
-            catch (Exception e)
-            {
-                evt.WriteEntry(e.Message, EventLogEntryType.Information);
-            }
-
-            run = false;
         }
 
         public static string Save(string msg)
@@ -61,26 +38,11 @@ namespace middleware_service.Other_Classes
                 result = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString() + " - " + msg;
                 outputFile.WriteLine(result);
             }
-            evt.WriteEntry(msg, EventLogEntryType.Information);
 
+            evt.WriteEntry(msg, EventLogEntryType.Information);
             intlink.Log(msg);
             message = msg;
             return result;
-        }
-
-        public static void FileWrite(string msg)
-        {
-
-            if (!Directory.Exists(docPath))
-            {
-                Directory.CreateDirectory(docPath);
-            }
-
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "Log.txt"), true))
-            {
-                result = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString() + " - " + msg;
-                outputFile.WriteLine(result);
-            }
         }
 
         public static void WriteEnd()
@@ -105,53 +67,6 @@ namespace middleware_service.Other_Classes
             {
                 message = e.Message;
                 evt.WriteEntry(e.Message + " ~ ", EventLogEntryType.Information);
-            }
-        }
-
-        public static void InitSocket()
-        {
-            IPHostEntry host = Dns.GetHostEntry("localhost"); ;
-            IPAddress address = host.AddressList[0]; ;
-            IPEndPoint localEndPoint = new IPEndPoint(address, port); ;
-
-            while (run)
-            {
-                try
-                {
-                    server = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                    server.Bind(localEndPoint);
-                    server.Listen(10);
-
-                    handler = server.Accept();
-
-                    while (run)
-                    {
-                        Thread.Sleep(5);
-                        byte[] bytes = null;
-                        bytes = Encoding.ASCII.GetBytes(message);
-                        handler.Send(bytes);
-                        message = "";
-                    }
-
-                }
-                catch (Exception e)
-                {
-                    evt.WriteEntry(e.Message, EventLogEntryType.Information);
-                    server.Close();
-                    //handler.Shutdown(SocketShutdown.Both);
-                    //handler.Close();
-                }
-            }
-
-            try
-            {
-                server.Close();
-                handler.Shutdown(SocketShutdown.Both);
-                handler.Close();
-            }
-            catch (Exception e)
-            {
-                evt.WriteEntry(e.Message, EventLogEntryType.Information);
             }
         }
     }

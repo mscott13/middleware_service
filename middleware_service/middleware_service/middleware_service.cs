@@ -18,10 +18,12 @@ using TableDependency.EventArgs;
 using TableDependency.SqlClient;
 using Newtonsoft.Json;
 
+
 namespace middleware_service
 {
     public partial class middleware_service : ServiceBase
     {
+        #region Definitions
         SqlTableDependency<SqlNotifyCancellation> tableDependCancellation;
         SqlTableDependency<SqlNotify_DocumentInfo> tableDependInfo;
 
@@ -80,6 +82,7 @@ namespace middleware_service
         DateTime currentTime;
         System.Timers.Timer broadcastTimer = new System.Timers.Timer();
         System.Timers.Timer deferredTimer = new System.Timers.Timer();
+        #endregion
 
         public middleware_service()
         {
@@ -2631,7 +2634,6 @@ namespace middleware_service
         public void OnDebug()
         {
             OnStart(null);
-          
         }
 
         public void XrateInsert(string amt)

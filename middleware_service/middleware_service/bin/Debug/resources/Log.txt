@@ -883,3 +883,54 @@
 
 --------end
 
+9/6/2019 3:28:25 PM - Starting accpac session...
+9/6/2019 3:28:25 PM - The source was not found, but some or all event logs could not be searched.  To create the source, you need permission to read all event logs to make sure that the new source name is unique.  Inaccessible logs: Security.    at System.Diagnostics.EventLog.FindSourceRegistration(String source, String machineName, Boolean readOnly, Boolean wantToCreate)
+   at System.Diagnostics.EventLog.SourceExists(String source, String machineName, Boolean wantToCreate)
+   at System.Diagnostics.EventLogInternal.VerifyAndCreateSource(String sourceName, String currentMachineName)
+   at System.Diagnostics.EventLogInternal.WriteEntry(String message, EventLogEntryType type, Int32 eventID, Int16 category, Byte[] rawData)
+   at System.Diagnostics.EventLog.WriteEntry(String message, EventLogEntryType type)
+   at middleware_service.Other_Classes.Log.Save(String msg) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Other Classes\Log.cs:line 64
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 189
+9/6/2019 3:29:17 PM - Starting accpac session...
+9/6/2019 3:29:17 PM - The source was not found, but some or all event logs could not be searched.  To create the source, you need permission to read all event logs to make sure that the new source name is unique.  Inaccessible logs: Security.    at System.Diagnostics.EventLog.FindSourceRegistration(String source, String machineName, Boolean readOnly, Boolean wantToCreate)
+   at System.Diagnostics.EventLog.SourceExists(String source, String machineName, Boolean wantToCreate)
+   at System.Diagnostics.EventLogInternal.VerifyAndCreateSource(String sourceName, String currentMachineName)
+   at System.Diagnostics.EventLogInternal.WriteEntry(String message, EventLogEntryType type, Int32 eventID, Int16 category, Byte[] rawData)
+   at System.Diagnostics.EventLog.WriteEntry(String message, EventLogEntryType type)
+   at middleware_service.Other_Classes.Log.Save(String msg) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Other Classes\Log.cs:line 64
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 189
+9/6/2019 3:29:33 PM - Starting accpac session...
+9/6/2019 3:29:39 PM - Accpac Version: 65A
+9/6/2019 3:29:39 PM - Company: Spectrum Management Authority 2013-14
+9/6/2019 3:29:39 PM - Session Status: True
+9/6/2019 3:29:40 PM - middleware_service started.
+--------end
+
+9/6/2019 3:35:40 PM - Starting accpac session...
+9/6/2019 3:35:45 PM - Accpac Version: 65A
+9/6/2019 3:35:45 PM - Company: Spectrum Management Authority 2013-14
+9/6/2019 3:35:45 PM - Session Status: True
+9/6/2019 3:35:45 PM - middleware_service started.
+--------end
+
+9/6/2019 3:42:42 PM - Starting accpac session...
+9/6/2019 3:42:52 PM - Accpac Version: 65A
+9/6/2019 3:42:52 PM - Company: Spectrum Management Authority 2013-14
+9/6/2019 3:42:52 PM - Session Status: True
+9/6/2019 3:42:52 PM - middleware_service started.
+--------end
+
+9/6/2019 3:45:33 PM - Starting accpac session...
+9/6/2019 3:45:37 PM - Accpac Version: 65A
+9/6/2019 3:45:37 PM - Company: Spectrum Management Authority 2013-14
+9/6/2019 3:45:37 PM - Session Status: True
+9/6/2019 3:45:38 PM - middleware_service started.
+--------end
+
+9/6/2019 4:01:11 PM - Starting accpac session...
+9/6/2019 4:01:20 PM - Accpac Version: 65A
+9/6/2019 4:01:20 PM - Company: Spectrum Management Authority 2013-14
+9/6/2019 4:01:20 PM - Session Status: True
+9/6/2019 4:01:20 PM - middleware_service started.
+--------end
+

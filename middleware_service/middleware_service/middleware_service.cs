@@ -156,14 +156,15 @@ namespace middleware_service
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            
+            // will remove
         }
 
         protected override void OnStart(string[] args)
         {
             try
             {
-                intLink = new Integration();
+                #region disabled
+                /*intLink = new Integration();
                 Log.Init(intLink, event_logger);
                 accpacSession = new Session();
 
@@ -205,8 +206,8 @@ namespace middleware_service
                 Log.Save("middleware_service started.");
                 Log.WriteEnd();
                 DeferredTimer_Elapsed(null, null);
-                currentTime = DateTime.Now;
-
+                currentTime = DateTime.Now;*/
+                #endregion
                 initSignalR();
             }
             catch (Exception e)

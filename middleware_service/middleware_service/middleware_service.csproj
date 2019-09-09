@@ -147,6 +147,10 @@
     <Compile Include="Database Operations\Constants.cs" />
     <Compile Include="Database Operations\Integration.cs" />
     <Compile Include="Database Operations\Report.cs" />
+    <Compile Include="EventObjects\Cancellation_CreditMemo.cs" />
+    <Compile Include="EventObjects\Customer.cs" />
+    <Compile Include="EventObjects\Invoice.cs" />
+    <Compile Include="EventObjects\Receipt.cs" />
     <Compile Include="Hub.cs" />
     <Compile Include="middleware_service.cs">
       <SubType>Component</SubType>
@@ -186,6 +190,7 @@
     <Compile Include="Database Classes\DeferredData.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="index.html" />
     <Content Include="resources\icon.ico" />
     <Content Include="resources\spec.jpg" />
     <Content Include="Scripts\jquery-1.6.4-vsdoc.js" />

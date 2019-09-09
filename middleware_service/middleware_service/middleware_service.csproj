@@ -110,10 +110,19 @@
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Security" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Cors, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.0.0\lib\net45\System.Web.Cors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Owin, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.2.7\lib\net45\System.Web.Http.Owin.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -144,14 +153,16 @@
     <Compile Include="Database Classes\SubTotals.cs" />
     <Compile Include="Database Classes\Totals.cs" />
     <Compile Include="Database Classes\UIData.cs" />
-    <Compile Include="Database Operations\Constants.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Database Operations\Integration.cs" />
     <Compile Include="Database Operations\Report.cs" />
-    <Compile Include="EventObjects\Cancellation_CreditMemo.cs" />
-    <Compile Include="EventObjects\Customer.cs" />
-    <Compile Include="EventObjects\Invoice.cs" />
-    <Compile Include="EventObjects\Receipt.cs" />
-    <Compile Include="Hub.cs" />
+    <Compile Include="SignalR\EventBridge.cs" />
+    <Compile Include="SignalR\EventObjects\Cancellation_CreditMemo.cs" />
+    <Compile Include="SignalR\EventObjects\Customer.cs" />
+    <Compile Include="SignalR\EventObjects\Invoice.cs" />
+    <Compile Include="SignalR\EventObjects\Receipt.cs" />
+    <Compile Include="SignalR\EventObjects\SignalArgs.cs" />
+    <Compile Include="SignalR\Hub.cs" />
     <Compile Include="middleware_service.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -169,10 +180,11 @@
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Startup.cs" />
+    <Compile Include="SignalR\Startup.cs" />
     <Compile Include="TableDependencyDefinitions\SqlNotifyCancellation.cs" />
     <Compile Include="TableDependencyDefinitions\SqlNotify_DocumentInfo.cs" />
     <Compile Include="TableDependencyDefinitions\SqlNotify_Pay.cs" />
+    <Compile Include="Controllers\PortController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -190,17 +202,12 @@
     <Compile Include="Database Classes\DeferredData.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="index.html" />
-    <Content Include="resources\icon.ico" />
-    <Content Include="resources\spec.jpg" />
-    <Content Include="Scripts\jquery-1.6.4-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.6.4.js" />
-    <Content Include="Scripts\jquery-1.6.4.min.js" />
-    <Content Include="Scripts\jquery.signalR-2.4.1.js" />
-    <Content Include="Scripts\jquery.signalR-2.4.1.min.js" />
+    <Content Include="SignalR\signalR.html" />
+    <Content Include="Resources\icon.ico" />
+    <Content Include="Resources\spec.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="resources\reports\" />
+    <Folder Include="Resources\reports\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

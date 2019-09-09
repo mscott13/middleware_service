@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>SignalR Client Test</title>
+</head>
+<body>
+    <button id="send">Send</button>
+    <input type="hidden" id="displayname" value="mscott" />
+    <input type="text" id="in" value="" />
+    <script src="Scripts/jquery-1.6.4.min.js"></script>
+    <script src="Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <script src="http://localhost:8080/signalr/hubs"></script>
+
+    <script>
+        $(function () {
+            $.connection.hub.url = "http://localhost:8080/signalr";
+            var username = $("#displayname").val();
+            $.connection.hub.qs = { 'username': username }
+            var signal = $.connection.eventHub;
+
+            signal.client.event = function (e) {
+                console.log(e);
+            };
+
+            $.connection.hub.start().done(function () {
+                $('#send').click(function () {
+                    signal.server.send($("#in").val(), $("#displayname").val());
+                });
+            });
+        });
+    </script>
+</body>
+</html>

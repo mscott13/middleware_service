@@ -33,7 +33,7 @@ namespace middleware_service.Database_Operations
             if (ReportType == "Monthly") endDate = new DateTime(year, month, DateTime.DaysInMonth(year, month));
             if (ReportType == "Annual") endDate = new DateTime(year + 1, month - 1, DateTime.DaysInMonth(year + 1, month - 1));
 
-            List<ReportRawData> ReportInfo = intlink.getDIRInformation(ReportType, startDate, endDate);
+            List<ReportRawData> ReportInfo = intlink.GetDIRInformation(ReportType, startDate, endDate);
 
             List<DataWrapper> ReportCategories = new List<DataWrapper>();
 
@@ -449,7 +449,7 @@ namespace middleware_service.Database_Operations
 
             if (action == 0)
             {
-                Report.report_id = intlink.saveReport(ReportType, ReportCategories, ReportTotal);
+                Report.report_id = intlink.SaveReport(ReportType, ReportCategories, ReportTotal);
             }
 
             createPdfReport(ReportType, Report, startDate);

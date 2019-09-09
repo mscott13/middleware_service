@@ -9,11 +9,11 @@ namespace middleware_service
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
-            new middleware_service()
+            new MiddlewareService()
             };
             ServiceBase.Run(ServicesToRun);
 #else
-            middleware_service service = new middleware_service();
+            MiddlewareService service = new MiddlewareService();
             service.OnDebug();
 #endif
         }

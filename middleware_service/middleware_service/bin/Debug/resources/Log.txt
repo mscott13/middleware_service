@@ -934,3 +934,16 @@
 9/6/2019 4:01:20 PM - middleware_service started.
 --------end
 
+9/9/2019 1:28:23 PM - Exception has been thrown by the target of an invocation.    at System.RuntimeMethodHandle.InvokeMethod(Object target, Object[] arguments, Signature sig, Boolean constructor)
+   at System.Reflection.RuntimeMethodInfo.UnsafeInvokeInternal(Object obj, Object[] parameters, Object[] arguments)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at Microsoft.Owin.Hosting.ServerFactory.ServerFactoryAdapter.Create(IAppBuilder builder)
+   at Microsoft.Owin.Hosting.Engine.HostingEngine.StartServer(StartContext context)
+   at Microsoft.Owin.Hosting.Engine.HostingEngine.Start(StartContext context)
+   at Microsoft.Owin.Hosting.Starter.DirectHostingStarter.Start(StartOptions options)
+   at Microsoft.Owin.Hosting.Starter.HostingStarter.Start(StartOptions options)
+   at Microsoft.Owin.Hosting.WebApp.StartImplementation(IServiceProvider services, StartOptions options)
+   at Microsoft.Owin.Hosting.WebApp.Start(StartOptions options)
+   at Microsoft.Owin.Hosting.WebApp.Start(String url)
+   at middleware_service.MiddlewareService.InitSignalR() in C:\Users\amark\OneDrive\Documents\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 261
+   at middleware_service.MiddlewareService.OnStart(String[] args) in C:\Users\amark\OneDrive\Documents\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 213

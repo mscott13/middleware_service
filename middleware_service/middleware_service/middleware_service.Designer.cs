@@ -1,6 +1,6 @@
 ﻿namespace middleware_service
 {
-    partial class middleware_service
+    partial class MiddlewareService
     {
         /// <summary> 
         /// Required designer variable.

@@ -6,27 +6,30 @@ using System.Threading.Tasks;
 
 namespace middleware_service.EventObjects
 {
-    class Invoice
+    public class Invoice
     {
         public Invoice()
         {
-            eventType = "EVT_INVOICE";
+            eventType = "evt_invoice";
         }
-        public Invoice(int invoiceId, string customerName, string customerId, int batch, string amount, DateTime date, string author)
+        public Invoice(string invoiceId, string customerName, string customerId, string batch, string amount, DateTime date, string author, string status)
         {
-            eventType = "EVT_INVOICE";
+            eventType = "evt_invoice";
             this.invoiceId = invoiceId;
             this.customerId = customerId;
+            this.customerName = customerName;
             this.batch = batch;
             this.amount = amount;
             this.date = date;
+            this.status = status;
+            this.author = author;
         }
 
         public string eventType {get;}
-        public int invoiceId { get; set; }
+        public string invoiceId { get; set; }
         public string customerId { get; set; }
         public string customerName { get; set; }
-        public int batch { get; set; }
+        public string batch { get; set; }
         public string amount { get; set; }
         public DateTime date { get; set; }
         public string author { get; set; }

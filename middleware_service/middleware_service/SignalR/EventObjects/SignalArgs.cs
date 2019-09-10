@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace middleware_service.SignalR.EventObjects
 {
-    class SignalArgs : EventArgs
+    public class SignalArgs : EventArgs
     {
         public SignalArgs(string msg, string from, string uid)
         {

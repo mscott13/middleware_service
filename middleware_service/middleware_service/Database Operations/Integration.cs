@@ -950,6 +950,7 @@ namespace middleware_service.Database_Operations
 
         public void StoreInvoice(int invoiceId, int batchTarget, int CreditGL, string clientName, string clientId, DateTime date, string author, decimal amount, string state, decimal usrate, decimal usamount, int isvoid, int isCreditMemo, int creditMemoNumber)
         {
+            MiddlewareService.BroadcastEvent(new EventObjects.Invoice(invoiceId.ToString(), clientName, clientId, batchTarget.ToString(), amount.ToString(), DateTime.Now, author, state));
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand("exec sp_StoreInvoice @id, @target, @CreditGL, @clientName, @clientId, @dateCreated, @author, @amount, @state, @usrate, @usamount, @isvoid, @isCreditMemo, @credMemoNum", cIntegration);
 

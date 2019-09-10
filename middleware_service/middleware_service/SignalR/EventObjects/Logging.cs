@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace middleware_service.SignalR.EventObjects
 {
-    class Logging
+    public class Logging
     {
         public Logging()
         {
-            eventType = "EVT_LOGGING";
+            eventType = "evt_logging";
         }
 
         public Logging(string msg)
         {
-            eventType = "EVT_LOGGING";
+            eventType = "evt_logging";
             message = msg;
             date = DateTime.Now;
         }

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace middleware_service.EventObjects
 {
-    class Cancellation_CreditMemo
+    public class Cancellation_CreditMemo
     {
         public Cancellation_CreditMemo()
         {
-            eventType = "EVT_CANCELLATION_CREDIT_MEMO";
+            eventType = "evt_cancellation_credit_memo";
         }
         public string eventType { get; }
         public int invoiceId { get; set; }

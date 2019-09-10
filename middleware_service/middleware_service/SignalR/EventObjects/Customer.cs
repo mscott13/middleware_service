@@ -6,11 +6,19 @@ using System.Threading.Tasks;
 
 namespace middleware_service.EventObjects
 {
-    class Customer
+    public class Customer
     {
         public Customer()
         {
-            eventType = "EVT_CUSTOMER";
+            eventType = "evt_customer";
+        }
+
+        public Customer(string customerName, string clientId)
+        {
+            this.eventType = "evt_customer";
+            this.clientId = clientId;
+            this.customerName = customerName;
+            this.date = DateTime.Now;
         }
 
         public string eventType { get; }

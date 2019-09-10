@@ -3,29 +3,71 @@
 <head>
     <meta charset="utf-8" />
     <title>SignalR Client Test</title>
+
+    <style>
+        #events {
+            border: 1px solid grey;
+            width: 100%;
+            height: 100%;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .event-item {
+            width: 100%;
+            border-bottom: 1px solid grey;
+            padding: 3px;
+        }
+
+        body {
+            height: 100%;
+        }
+    </style>
 </head>
+
 <body>
-    <button id="send">Send</button>
+    <input style="display:block;" type="text" id="in" value="" />
+    <button style="display:block;" id="send">Send command</button>
+
+    <div id="events">
+
+    </div>
+
     <input type="hidden" id="displayname" value="mscott" />
-    <input type="text" id="in" value="" />
     <script src="Scripts/jquery-1.6.4.min.js"></script>
     <script src="Scripts/jquery.signalR-2.4.1.min.js"></script>
-    <script src="http://localhost:8080/signalr/hubs"></script>
+    <script src="http://server-erp2.sma.gov.jm:8080/signalr/hubs"></script>
 
     <script>
         $(function () {
-            $.connection.hub.url = "http://localhost:8080/signalr";
+            $.connection.hub.url = "http://server-erp2.sma.gov.jm:8080/signalr";
             var username = $("#displayname").val();
             $.connection.hub.qs = { 'username': username }
             var signal = $.connection.eventHub;
 
             signal.client.event = function (e) {
-                console.log(e);
+                var html = "<div class='event-item'>" +
+                    JSON.stringify(e) +
+                    "</div >";
+
+                $("#events").prepend(html);
             };
+
+            $.connection.hub.error(function (error) {
+                console.log(error)
+            });
+
+            $.connection.hub.disconnected(function () {
+                console.log("Connection disconnected, attempting reconnect...");
+                setTimeout(function () {
+                    $.connection.hub.start();
+                }, 5000);
+            });
 
             $.connection.hub.start().done(function () {
                 $('#send').click(function () {
                     signal.server.send($("#in").val(), $("#displayname").val());
+                    $("#in").val('');
                 });
             });
         });

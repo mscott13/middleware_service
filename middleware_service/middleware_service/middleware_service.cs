@@ -233,9 +233,9 @@ namespace middleware_service
             }
         }
 
-        public void SignalEventHandler(object source, EventArgs args)
+        public void SignalEventHandler(object source, SignalR.EventObjects.SignalArgs args)
         {
-            // will be used to send commands to the middleware
+            Log.Save("Command: " + args.message+ " received from: " + args.username);
         }
 
         private void InitSignalR()
@@ -247,7 +247,7 @@ namespace middleware_service
             Log.Save("Server running on port: " + Constants.PORT);
         }
 
-        private void BroadcastEvent(object e)
+        public static void BroadcastEvent(object e)
         {
             IHubContext hub = GlobalHost.ConnectionManager.GetHubContext<EventHub>();
             hub.Clients.All.Event(e);

@@ -1,12 +1,14 @@
-﻿using System.Web.Http;
+﻿using System.Net.Http;
+using System.Web.Http;
 
 namespace middleware_service
 {
-    class PortController : ApiController
+    public class PortController : ApiController
     {
-        public IHttpActionResult Get()
+        [HttpGet]
+        public HttpResponseMessage Current()
         {
-            return Ok(Constants.port);
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, Constants.PORT);
         }
     }
 }

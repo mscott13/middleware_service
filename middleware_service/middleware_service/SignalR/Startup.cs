@@ -6,15 +6,19 @@ namespace middleware_service
 {
     class Startup
     {
-        public void Configuration(IAppBuilder app)
+        public void Configuration(IAppBuilder appBuilder)
         {
             HttpConfiguration config = new HttpConfiguration();
-            config.Routes.MapHttpRoute(name: "DefaultApi", 
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi",
                 routeTemplate: "{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional });
+                defaults: new { id = RouteParameter.Optional }
+            );
 
-            app.UseCors(CorsOptions.AllowAll);
-            app.MapSignalR();
+            config.MapHttpAttributeRoutes();
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
+            appBuilder.UseWebApi(config);
+            appBuilder.MapSignalR();
         }
     }
 }

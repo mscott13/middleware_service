@@ -160,6 +160,7 @@
     <Compile Include="SignalR\EventObjects\Cancellation_CreditMemo.cs" />
     <Compile Include="SignalR\EventObjects\Customer.cs" />
     <Compile Include="SignalR\EventObjects\Invoice.cs" />
+    <Compile Include="SignalR\EventObjects\Logging.cs" />
     <Compile Include="SignalR\EventObjects\Receipt.cs" />
     <Compile Include="SignalR\EventObjects\SignalArgs.cs" />
     <Compile Include="SignalR\Hub.cs" />

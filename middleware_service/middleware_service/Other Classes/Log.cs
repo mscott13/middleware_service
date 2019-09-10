@@ -10,6 +10,8 @@ using middleware_service.Database_Operations;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
+using Microsoft.AspNet.SignalR;
+using middleware_service.SignalR.EventObjects;
 
 namespace middleware_service.Other_Classes
 {
@@ -18,12 +20,10 @@ namespace middleware_service.Other_Classes
         private static string docPath = AppDomain.CurrentDomain.BaseDirectory + "resources";
         private static string result = "";
         private static Integration intlink;
-        private static EventLog evt;
-        private static string message = "";
-        public static void Init(Integration integration, EventLog _evt)
+        
+        public static void Init(Integration integration)
         {
             intlink = integration;
-            evt = _evt;
         }
 
         public static string Save(string msg)
@@ -39,9 +39,8 @@ namespace middleware_service.Other_Classes
                 outputFile.WriteLine(result);
             }
 
-            evt.WriteEntry(msg, EventLogEntryType.Information);
             intlink.Log(msg);
-            message = msg;
+            BroadcastEvent(new Logging(msg));
             return result;
         }
 
@@ -58,16 +57,20 @@ namespace middleware_service.Other_Classes
                 {
                     Thread.Sleep(50);
                     outputFile.WriteLine("--------end\r\n");
-                    message = "--------end\r\n";
                     result = "newline";
                 }
                 Thread.Sleep(100);
             }
             catch (Exception e)
             {
-                message = e.Message;
-                evt.WriteEntry(e.Message + " ~ ", EventLogEntryType.Information);
+                intlink.Log(e.Message);
             }
+        }
+
+        private static void BroadcastEvent(object e)
+        {
+            IHubContext hub = GlobalHost.ConnectionManager.GetHubContext<EventHub>();
+            hub.Clients.All.Event(e);
         }
     }
 }

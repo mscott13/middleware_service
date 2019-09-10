@@ -20,15 +20,15 @@ namespace middleware_service.Database_Operations
             switch (target)
             {
                 case "cIntegration":
-                    cIntegration = new SqlConnection(Constants.dbIntegration);
+                    cIntegration = new SqlConnection(Constants.DBINTEGRATION);
                     cIntegration.Open();
                     break;
                 case "cGeneric":
-                    cGeneric = new SqlConnection(Constants.dbGeneric);
+                    cGeneric = new SqlConnection(Constants.DBGENERIC);
                     cGeneric.Open();
                     break;
                 case "g":
-                    cMsgQueue = new SqlConnection(Constants.dbIntegration);
+                    cMsgQueue = new SqlConnection(Constants.DBINTEGRATION);
                     cMsgQueue.Open();
                     break;
             }

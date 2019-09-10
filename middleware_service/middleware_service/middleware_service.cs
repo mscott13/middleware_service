@@ -19,7 +19,6 @@ using Microsoft.Owin;
 using Microsoft.Owin.Hosting;
 using Microsoft.AspNet.SignalR;
 
-[assembly: OwinStartup(typeof(middleware_service.Startup))]
 namespace middleware_service
 {
     public partial class MiddlewareService : ServiceBase
@@ -82,6 +81,7 @@ namespace middleware_service
         DateTime prevTime;
         DateTime currentTime;
         System.Timers.Timer deferredTimer = new System.Timers.Timer();
+        public IDisposable selfHost;
         #endregion
         public MiddlewareService()
         {
@@ -116,7 +116,6 @@ namespace middleware_service
 
                     if (result != null)
                     {
-                        //here we set the next Report Generation Date
                         int es = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month) - DateTime.Now.Day;
                         es++;
                         DateTime nextMonth = DateTime.Now.AddDays(es);
@@ -141,7 +140,6 @@ namespace middleware_service
 
                     if (result != null)
                     {
-                        //here we set the next Report Generation Date
                         DateTime nextGenDate = new DateTime(DateTime.Now.Year + 1, 4, 2);
                         nextGenDate = nextGenDate.AddHours(3);
                         intLink.SetNextGenDate("Annual", nextGenDate);
@@ -155,44 +153,44 @@ namespace middleware_service
         {
             try
             {
-                //intLink = new Integration();
-                //Log.Init(intLink, event_logger);
-                //accpacSession = new Session();
+                intLink = new Integration();
+                Log.Init(intLink);
+                accpacSession = new Session();
 
-                //using (tableDependCancellation = new SqlTableDependency<SqlNotifyCancellation>(Constants.dbGeneric, "tblARInvoices"))
-                //{
-                //    tableDependCancellation.OnChanged += TableDependCancellation_OnChanged;
-                //    tableDependCancellation.OnError += TableDependCancellation_OnError;
-                //}
+                using (tableDependCancellation = new SqlTableDependency<SqlNotifyCancellation>(Constants.DBGENERIC, "tblARInvoices"))
+                {
+                    tableDependCancellation.OnChanged += TableDependCancellation_OnChanged;
+                    tableDependCancellation.OnError += TableDependCancellation_OnError;
+                }
 
-                //using (tableDependInfo = new SqlTableDependency<SqlNotify_DocumentInfo>(Constants.dbGeneric, "tblGLDocuments"))
-                //{
-                //    tableDependInfo.OnChanged += TableDependInfo_OnChanged;
-                //    tableDependInfo.OnError += TableDependInfo_OnError;
-                //}
+                using (tableDependInfo = new SqlTableDependency<SqlNotify_DocumentInfo>(Constants.DBGENERIC, "tblGLDocuments"))
+                {
+                    tableDependInfo.OnChanged += TableDependInfo_OnChanged;
+                    tableDependInfo.OnError += TableDependInfo_OnError;
+                }
 
-                //deferredTimer.Elapsed += DeferredTimer_Elapsed;
-                //deferredTimer.Enabled = true;
-                //deferredTimer.Interval = 3600000;
+                deferredTimer.Elapsed += DeferredTimer_Elapsed;
+                deferredTimer.Enabled = true;
+                deferredTimer.Interval = 3600000;
 
-                ////////////////////////////////////////////////////////////////////// STARTING SESSION ///////////////////////////////////////////////////////////////////////
-                //Log.Save("Starting accpac session...");
-                //accpacSession.Init("", "XY", "XY1000", "65A");
-                //accpacSession.Open("ADMIN", "SPECTRUM9", "SMALTD", DateTime.Today, 0);
-                //dbLink = accpacSession.OpenDBLink(DBLinkType.Company, DBLinkFlags.ReadWrite);
+                //////////////////////////////////////////////////////////////////// STARTING SESSION ///////////////////////////////////////////////////////////////////////
+                Log.Save("Starting accpac session...");
+                accpacSession.Init("", "XY", "XY1000", "65A");
+                accpacSession.Open("ADMIN", "SPECTRUM9", "SMALTD", DateTime.Today, 0);
+                dbLink = accpacSession.OpenDBLink(DBLinkType.Company, DBLinkFlags.ReadWrite);
 
-                //Log.Save("Accpac Version: " + accpacSession.AppVersion);
-                //Log.Save("Company: " + accpacSession.CompanyName);
-                //Log.Save("Session Status: " + accpacSession.IsOpened);
+                Log.Save("Accpac Version: " + accpacSession.AppVersion);
+                Log.Save("Company: " + accpacSession.CompanyName);
+                Log.Save("Session Status: " + accpacSession.IsOpened);
 
-                //tableDependCancellation.Start();
-                //tableDependInfo.Start();
+                tableDependCancellation.Start();
+                tableDependInfo.Start();
 
-                //deferredTimer.Start();
-                //Log.Save("middleware_service started.");
-                //Log.WriteEnd();
-                //DeferredTimer_Elapsed(null, null);
-                //currentTime = DateTime.Now;
+                deferredTimer.Start();
+                Log.Save("middleware_service started.");
+                Log.WriteEnd();
+                DeferredTimer_Elapsed(null, null);
+                currentTime = DateTime.Now;
                 InitSignalR();
             }
             catch (Exception e)
@@ -220,6 +218,11 @@ namespace middleware_service
                 tableDependInfo.Dispose();
                 deferredTimer.Stop();
 
+                if (selfHost != null)
+                {
+                    selfHost.Dispose();
+                }
+
                 Log.Save("middleware_service stopped.");
                 Log.WriteEnd();
             }
@@ -237,9 +240,11 @@ namespace middleware_service
 
         private void InitSignalR()
         {
+            Log.Save("Starting server host...");
             EventBridge.SignalReceived += SignalEventHandler;
-            string url = "http://localhost:" + Constants.port;
-            WebApp.Start(url);
+            string url = Constants.BASE_ADDRESS + Constants.PORT;
+            selfHost = WebApp.Start<Startup>(url);
+            Log.Save("Server running on port: " + Constants.PORT);
         }
 
         private void BroadcastEvent(object e)
@@ -2051,7 +2056,7 @@ namespace middleware_service
 
         public bool ReceiptBatchAvail(string bankcode)
         {
-            connIntegration = new SqlConnection(Constants.dbIntegration);
+            connIntegration = new SqlConnection(Constants.DBINTEGRATION);
             connIntegration.Open();
 
             try

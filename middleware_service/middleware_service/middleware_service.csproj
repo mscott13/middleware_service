@@ -185,7 +185,6 @@
     <Compile Include="TableDependencyDefinitions\SqlNotifyCancellation.cs" />
     <Compile Include="TableDependencyDefinitions\SqlNotify_DocumentInfo.cs" />
     <Compile Include="TableDependencyDefinitions\SqlNotify_Pay.cs" />
-    <Compile Include="Controllers\PortController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -208,6 +207,7 @@
     <Content Include="Resources\spec.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controllers\" />
     <Folder Include="Resources\reports\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

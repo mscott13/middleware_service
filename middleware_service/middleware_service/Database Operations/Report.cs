@@ -18,23 +18,14 @@ namespace middleware_service.Database_Operations
         private string pdfImgPath = AppDomain.CurrentDomain.BaseDirectory + @"resources\spec.jpg";
         private string pdfFilePath = AppDomain.CurrentDomain.BaseDirectory + @"resources\reports\";
 
-        private Integration intlink;
-
-        public Report(Integration intlink)
-        {
-            this.intlink = intlink;
-        }
-
         public DeferredData gen_rpt(string ReportType, int action, int month, int year)
         {
-            DateTime period = new DateTime(year, month + 1, 1);
             DateTime startDate = new DateTime(year, month, 1);
             DateTime endDate = new DateTime();
             if (ReportType == "Monthly") endDate = new DateTime(year, month, DateTime.DaysInMonth(year, month));
             if (ReportType == "Annual") endDate = new DateTime(year + 1, month - 1, DateTime.DaysInMonth(year + 1, month - 1));
 
-            List<ReportRawData> ReportInfo = intlink.GetDIRInformation(ReportType, startDate, endDate);
-
+            List<ReportRawData> ReportInfo = Integration.GetDIRInformation(ReportType, startDate, endDate);
             List<DataWrapper> ReportCategories = new List<DataWrapper>();
 
             DataWrapper cell_category = new DataWrapper();
@@ -57,7 +48,7 @@ namespace middleware_service.Database_Operations
             trunking_category.label = "P/R - Trunking";
             other_category.label = "Other P/R Non-Commercial Clients";
 
-            List<String> ReportColumnNames = new List<string>();
+            List<string> ReportColumnNames = new List<string>();
             ReportColumnNames.Add("License Number");
             ReportColumnNames.Add("Client Company");
             ReportColumnNames.Add("Invoice ID");
@@ -86,7 +77,6 @@ namespace middleware_service.Database_Operations
             string ThisPeriodsInv = "";
             string clientCompany = "";
             string invoiceID = "";
-            int TotalMonths = 0;
             int MonthsUtilized = 0;
             int MonthsRemaining = 0;
             decimal fromRevAmt = 0;
@@ -162,7 +152,6 @@ namespace middleware_service.Database_Operations
             decimal tot_fromRev = 0;
             decimal tot_toRev = 0;
 
-
             for (int i = 0; i < ReportInfo.Count; i++)
             {
 
@@ -200,7 +189,7 @@ namespace middleware_service.Database_Operations
                     fromRevAmt = ReportInfo[i].InvAmount;
                 }
 
-                TotalMonths = getMonths(RecordsStartValPeriod, RecordsEndValPeriod);
+                int TotalMonths = getMonths(RecordsStartValPeriod, RecordsEndValPeriod);
                 MonthsUtilized = getMonths(RecordsStartValPeriod, endDate);
 
                 if (RecordsStartValPeriod.Day != 1 && RecordsStartValPeriod.Day <= 15) MonthsUtilized++;
@@ -449,7 +438,7 @@ namespace middleware_service.Database_Operations
 
             if (action == 0)
             {
-                Report.report_id = intlink.SaveReport(ReportType, ReportCategories, ReportTotal);
+                Report.report_id = Integration.SaveReport(ReportType, ReportCategories, ReportTotal);
             }
 
             createPdfReport(ReportType, Report, startDate);
@@ -547,7 +536,6 @@ namespace middleware_service.Database_Operations
             if (neg[0] == '-')
                 return "(" + formatted + ")";
             else return formatted;
-
         }
 
         public void createPdfReport(string ReportType, DeferredData Report, DateTime startDate)

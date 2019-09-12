@@ -18,53 +18,43 @@ namespace middleware_service.Other_Classes
     public static class Log
     {
         private static string docPath = AppDomain.CurrentDomain.BaseDirectory + "resources";
-        private static string result = "";
-        private static Integration intlink;
-        
-        public static void Init(Integration integration)
+        private static StreamWriter outputFile = null;
+        public static void Open(string filename)
         {
-            intlink = integration;
+            outputFile = new StreamWriter(Path.Combine(docPath, filename), true);
         }
 
-        public static string Save(string msg)
+        public static void Close()
+        {
+            if (outputFile != null)
+            {
+                outputFile.Close();
+                outputFile.Dispose();
+            }
+        }
+        
+        public static void Save(string msg)
+        {
+            if (!Directory.Exists(docPath))
+            {
+                Directory.CreateDirectory(docPath);
+            }
+            
+            outputFile.WriteLine(DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString() + " - " + msg);
+            outputFile.Flush();
+
+            BroadcastEvent(new Logging(msg));
+        }
+
+        public static void WriteEnd()
         {
             if (!Directory.Exists(docPath))
             {
                 Directory.CreateDirectory(docPath);
             }
 
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "Log.txt"), true))
-            {
-                result = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString() + " - " + msg;
-                outputFile.WriteLine(result);
-            }
-
-            intlink.Log(msg);
-            //BroadcastEvent(new Logging(msg));
-            return result;
-        }
-
-        public static void WriteEnd()
-        {
-            try
-            {
-                if (!Directory.Exists(docPath))
-                {
-                    Directory.CreateDirectory(docPath);
-                }
-
-                using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "Log.txt"), true))
-                {
-                    Thread.Sleep(50);
-                    outputFile.WriteLine("--------end\r\n");
-                    result = "newline";
-                }
-                Thread.Sleep(100);
-            }
-            catch (Exception e)
-            {
-                intlink.Log(e.Message);
-            }
+            outputFile.WriteLine("--------end\r\n");
+            outputFile.Flush();
         }
 
         private static void BroadcastEvent(object e)

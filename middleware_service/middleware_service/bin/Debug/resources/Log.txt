@@ -949,3 +949,39 @@
    at middleware_service.MiddlewareService.OnStart(String[] args) in C:\Users\amark\OneDrive\Documents\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 213
 9/11/2019 2:05:13 PM - Starting accpac session...
 9/11/2019 4:11:14 PM - Starting accpac session...
+9/12/2019 12:23:24 PM - Incorrect syntax near '@dbname'.
+Incorrect syntax near 'IMMEDIATE'.    at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at middleware_service.Database_Operations.Integration.SetBrokerEnabled(String databaseName) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Database Operations\Integration.cs:line 94
+   at middleware_service.MiddlewareService.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 153
+--------end
+
+9/12/2019 12:23:25 PM - Object reference not set to an instance of an object.    at middleware_service.MiddlewareService.OnStop() in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 210
+--------end
+
+9/12/2019 12:32:34 PM - Starting accpac session...
+9/12/2019 12:32:43 PM - Starting accpac session...
+9/12/2019 12:32:46 PM - Accpac Version: 65A
+9/12/2019 12:32:46 PM - Company: Spectrum Management Authority 2013-14
+9/12/2019 12:32:46 PM - Session Status: True
+9/12/2019 12:32:46 PM - middleware_service started.
+--------end
+
+9/12/2019 12:32:47 PM - Starting server host...
+9/12/2019 12:32:47 PM - Server running on port: 8080
+9/12/2019 12:33:01 PM - Starting accpac session...
+9/12/2019 12:33:03 PM - Accpac Version: 65A
+9/12/2019 12:33:03 PM - Company: Spectrum Management Authority 2013-14
+9/12/2019 12:33:03 PM - Session Status: True
+9/12/2019 12:33:03 PM - middleware_service started.
+--------end
+
+9/12/2019 12:33:03 PM - Starting server host...
+9/12/2019 12:33:03 PM - Server running on port: 8080

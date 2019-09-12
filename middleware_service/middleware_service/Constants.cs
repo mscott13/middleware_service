@@ -2,10 +2,16 @@
 {
     public static class Constants
     {
-        //--> Production  @"Data Source=ERP-SRVR\TCIASMS;Initial Catalog=ASMSGenericMaster;Integrated Security=True";
-        public static string DBGENERIC = @"Data Source=SERVER-ERP2\ASMSDEV;Initial Catalog=ASMSGenericMaster;Integrated Security=True";
-        public static string DBINTEGRATION = @"Data Source=SERVER-ERP2\ASMSDEV;Initial Catalog=ASMSSAGEINTEGRATION;Integrated Security=True";
+        public static string DB_GENERIC_NAME = "ASMSGenericMaster";
+        public static string DB_INTEGRATION_NAME = "ASMSSAGEINTEGRATION";
+        public static string DB_GENERIC = @"Data Source=SERVER-ERP2\ASMSDEV;Initial Catalog="+ DB_GENERIC_NAME + ";Integrated Security=True; MultipleActiveResultSets=true";
+        public static string DB_INTEGRATION = @"Data Source=SERVER-ERP2\ASMSDEV;Initial Catalog="+DB_INTEGRATION_NAME+ ";Integrated Security=True; MultipleActiveResultSets=true";
+
         public static int PORT = 8080;
         public static string BASE_ADDRESS = "http://*:";
+
+        public static string ACCPAC_USER = "ADMIN";
+        public static string ACCPAC_CRED = "SPECTRUM9";
+        public static string ACCPAC_COMPANY = "SMALTD";
     }
 }

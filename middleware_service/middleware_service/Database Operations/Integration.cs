@@ -10,13 +10,10 @@ namespace middleware_service.Database_Operations
     {
         public const string CINTEGRATION = "cIntegration";
         public const string CGENERIC = "cGeneric";
-        public const string CMSGQUEUE = "cMsgQueue";
-        public static SqlConnection cGeneric, cIntegration, cMsgQueue;
+        public static SqlConnection cGeneric, cIntegration;
 
         public void OpenConnection(string target)
         {
-            
-
             switch (target)
             {
                 case "cIntegration":
@@ -26,10 +23,6 @@ namespace middleware_service.Database_Operations
                 case "cGeneric":
                     cGeneric = new SqlConnection(Constants.DBGENERIC);
                     cGeneric.Open();
-                    break;
-                case "g":
-                    cMsgQueue = new SqlConnection(Constants.DBINTEGRATION);
-                    cMsgQueue.Open();
                     break;
             }
         }
@@ -50,17 +43,395 @@ namespace middleware_service.Database_Operations
                         cGeneric.Close();
                     }
                     break;
-                case "cMsgQueue":
-                    if (cMsgQueue != null)
-                    {
-                        cMsgQueue.Close();
-                    }
-                    break;
             }
         }
 
         public List<ReportRawData> GetDIRInformation(string ReportType, DateTime searchStartDate, DateTime searchEndDate)
         {
+            #region sp_getDIRInformation
+            string query = "CREATE TABLE #AllRecordsTable" +
+                            "(" +
+                            "clientID int," +
+                            "ccNum varchar(25)," +
+                            "clientCompany varchar(250)," +
+                            "clientFname varchar(30)," +
+                            "clientLname varchar(30)," +
+                            "budget varchar(50)," +
+                            "InvAmount money," +
+                            "ExistedBefore bit," +
+                            "LastRptsClosingBal varchar(50)," +
+                            "LastRptsStartValPeriod varchar(100)," +
+                            "LastRptsEndValPeriod varchar(100)," +
+                            "CurrentStartValPeriod datetime," +
+                            "CurrentEndValPeriod datetime," +
+                            "currCreditGLID int," +
+                            "notes varchar(255)," +
+                            "ARInvoiceID varchar(50)," +
+                            "InvoiceCreationDate datetime," +
+                            "isCancelled bit," +
+                            "isCreditMemo bit," +
+                            "CreditMemoNum varchar(50)," +
+                            "CreditMemoAmt money" +
+                            ");";
+
+            query += "CREATE TABLE #ModificationRecordsTable" +
+                    "(" +
+                    "clientID int," +
+                    "ccNum varchar(25)," +
+                    "clientCompany varchar(250)," +
+                    "clientFname varchar(30)," +
+                    "clientLname varchar(30)," +
+                    "budget varchar(50)," +
+                    "InvAmount money," +
+                    "ExistedBefore int," +
+                    "LastRptsClosingBal varchar(50)," +
+                    "LastRptsStartValPeriod varchar(100)," +
+                    "LastRptsEndValPeriod varchar(100)," +
+                    "CurrentStartValPeriod datetime," +
+                    "CurrentEndValPeriod datetime," +
+                    "currCreditGLID int," +
+                    "notes varchar(255)," +
+                    "ARInvoiceID varchar(50)," +
+                    "InvoiceCreationDate datetime," +
+                    "DebitTotal money," +
+                    "isCancelled bit," +
+                    "isCreditMemo bit," +
+                    "CreditMemoNum varchar(50)," +
+                    "CreditMemoAmt money" +
+                    ");";
+
+            query += "CREATE TABLE #CancellationRecordsTable" +
+                    "(" +
+                    "clientID int," +
+                    "ccNum varchar(25)," +
+                    "clientCompany varchar(250)," +
+                    "clientFname varchar(30)," +
+                    "clientLname varchar(30)," +
+                    "budget varchar(50)," +
+                    "InvAmount money," +
+                    "ExistedBefore int," +
+                    "LastRptsClosingBal varchar(50)," +
+                    "LastRptsStartValPeriod varchar(100)," +
+                    "LastRptsEndValPeriod varchar(100)," +
+                    "CurrentStartValPeriod datetime," +
+                    "CurrentEndValPeriod datetime," +
+                    "currCreditGLID int," +
+                    "notes varchar(255)," +
+                    "ARInvoiceID varchar(50)," +
+                    "InvoiceCreationDate datetime," +
+                    "isCancelled bit," +
+                    "isCreditMemo bit," +
+                    "CreditMemoNum varchar(50)," +
+                    "CreditMemoAmt money" +
+                    ");";
+
+            query += "CREATE TABLE #AllCreditMemosTable" +
+                    "(" +
+                    "ARInvoiceID varchar(50)," +
+                    "CreditMemoNum varchar(50)," +
+                    "CreditMemoAmt money" +
+                    ");";
+
+            query += "CREATE TABLE #CreditMemoInvoicesTobeDeletedTable" +
+                    "(" +
+                    "ARInvoiceID varchar(50)" +
+                    ");";
+
+            query += "CREATE TABLE #LastRptsInfoTable" +
+                    "(" +
+                    "ARInvoiceID varchar(50)," +
+                    "Budget varchar(50)," +
+                    "ClosingBal varchar(50)," +
+                    "StartValPeriod varchar(50)," +
+                    "EndValPeriod varchar(50)," +
+                    "CreditGLID int" +
+                    ");";
+
+            query += "CREATE TABLE #CreditGLIDInvoicesTobeDeletedTable" +
+                    "(" +
+                    "ARInvoiceID varchar(50)" +
+                    ");";
+
+            query += "INSERT INTO #AllRecordsTable (clientID, ccNum, clientCompany, clientFname, clientLname, budget, InvAmount, ExistedBefore, LastRptsClosingBal, LastRptsStartValPeriod, " +
+                    "LastRptsEndValPeriod, CurrentStartValPeriod, CurrentEndValPeriod, currCreditGLID, notes, ARInvoiceID, InvoiceCreationDate, isCancelled, isCreditMemo, CreditMemoNum, CreditMemoAmt)" +
+                    "SELECT distinct cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname, 0, inv.Amount, 0, '', '', ''," +
+                    "val.ValidFrom, val.ValidTo, GL.CreditGLID, inv.notes, inv.ARInvoiceID, inv.InvoiceCreationDate, 0, 0, '', '' " +
+                    "FROM[ASMSGenericMaster].[dbo].[tblARInvoices] inv, [ASMSGenericMaster].[dbo].[tbl_LicenseValidityHistory] val," +
+                    "[ASMSGenericMaster].[dbo].[Client] cus, [ASMSGenericMaster].[dbo].[tblARInvoiceDetail] GL " +
+                    "where inv.LicensevalidityHistoryID = val.LicenseValidityHistoryID " +
+                    "AND inv.isvoided!=1 " +
+                    "AND inv.notes!= 'Type Approval' " +
+                    "AND val.ClientID = cus.clientID " +
+                    "AND (cus.ccNum is not null) " +
+                    "AND inv.FeeType!='SLF' " +
+                    "AND inv.notes!='Radio Operator' " +
+                    "AND inv.notes != 'Modification' " +
+                    "AND val.ValidTo >= @searchStartDate " +
+                    "AND val.ValidFrom<@searchEndDate + 1 " +
+                    "AND inv.ARInvoiceID = GL.ARInvoiceID " +
+                    "AND GL.CreditGLID >=5156 " +
+                    "AND val.LicenseID != 0 " +
+                    "Group by cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname, inv.notes, " +
+                    "inv.FeeType, inv.ARInvoiceID, inv.Amount, val.ValidFrom, val.ValidTo, GL.CreditGLID, GL.Description, " +
+                    "inv.isvoided, inv.InvoiceCreationDate order by cus.ccNum desc; ";
+
+            query += "INSERT INTO #AllRecordsTable (clientID, ccNum, clientCompany, clientFname, clientLname, budget, InvAmount, ExistedBefore, LastRptsClosingBal, LastRptsStartValPeriod, " +
+                    "LastRptsEndValPeriod, CurrentStartValPeriod, CurrentEndValPeriod, currCreditGLID, notes, ARInvoiceID, InvoiceCreationDate, isCancelled, isCreditMemo, CreditMemoNum, CreditMemoAmt) " +
+                    "SELECT distinct cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname, 0, inv.Amount, 0, '', '', '', " +
+                    "val.ValidFrom, val.ValidTo, GL.CreditGLID, inv.notes, inv.ARInvoiceID, inv.InvoiceCreationDate, 0, 0, '', '' " +
+                    "FROM[ASMSGenericMaster].[dbo].[tblARInvoices] inv, [ASMSGenericMaster].[dbo].[tbl_LicenseValidityHistory] val, " +
+                    "[ASMSGenericMaster].[dbo].[client] cus, [ASMSGenericMaster].[dbo].[tblARInvoiceDetail] GL " +
+                    "WHERE inv.LicensevalidityHistoryID = val.LicenseValidityHistoryID " +
+                    "AND inv.isvoided!=1 " +
+                    "AND inv.notes!= 'Type Approval' " +
+                    "AND val.ClientID = cus.clientID " +
+                    "AND (cus.ccNum is not null) " +
+                    "AND inv.FeeType!='SLF' " +
+                    "AND inv.notes!='Radio Operator' " +
+                    "AND inv.notes != 'Modification' " +
+                    "AND val.ValidTo >= @searchStartDate " +
+                    "AND val.ValidFrom<@searchEndDate + 1 " +
+                    "AND inv.ARInvoiceID = GL.ARInvoiceID " +
+                    "AND GL.CreditGLID >=5156 " +
+                    "AND inv.CustomerID = 9569 " +
+                    "Group by cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname, inv.notes, " +
+                    "inv.FeeType, inv.ARInvoiceID, inv.Amount, val.ValidFrom, val.ValidTo, GL.CreditGLID, GL.Description, " +
+                    "inv.isvoided, inv.InvoiceCreationDate order by cus.ccNum desc ";
+
+            query += "INSERT INTO #AllRecordsTable (clientID, ccNum, clientCompany, clientFname, clientLname, budget, InvAmount, ExistedBefore, LastRptsClosingBal, LastRptsStartValPeriod, " +
+                    "LastRptsEndValPeriod, CurrentStartValPeriod, CurrentEndValPeriod, currCreditGLID, notes, ARInvoiceID, InvoiceCreationDate, isCancelled, isCreditMemo, CreditMemoNum, CreditMemoAmt) " +
+                    "SELECT distinct cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname, 0, inv.Amount, 0, '', '', '', " +
+                    "val.ValidFrom, val.ValidTo, GL.CreditGLID, inv.notes, inv.ARInvoiceID, inv.InvoiceCreationDate, 0, 0, '', '' " +
+                    "FROM[ASMSGenericMaster].[dbo].[tblARInvoices] inv, [ASMSGenericMaster].[dbo].[tbl_LicenseValidityHistory] val, " +
+                    "[ASMSGenericMaster].[dbo].[client] cus, [ASMSGenericMaster].[dbo].[tblARInvoiceDetail] GL " +
+                    "WHERE inv.LicensevalidityHistoryID = val.LicenseValidityHistoryID " +
+                    "AND inv.isvoided!=1 " +
+                    "AND inv.notes!= 'Type Approval' " +
+                    "AND val.ClientID = cus.clientID " +
+                    "AND (cus.ccNum is not null) " +
+                    "AND inv.FeeType!='SLF' " +
+                    "AND inv.notes!='Radio Operator' " +
+                    "AND inv.notes != 'Modification' " +
+                    "AND val.ValidTo >= @searchStartDate " +
+                    "AND val.ValidFrom<@searchEndDate + 1 " +
+                    "AND inv.ARInvoiceID = GL.ARInvoiceID " +
+                    "AND GL.CreditGLID >=5156 " +
+                    "AND inv.CustomerID = 9882 " +
+                    "Group by cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname, inv.notes, " +
+                    "inv.FeeType, inv.ARInvoiceID, inv.Amount, val.ValidFrom, val.ValidTo, GL.CreditGLID, GL.Description, " +
+                    "inv.isvoided, inv.InvoiceCreationDate order by cus.ccNum desc ";
+
+            query += "INSERT INTO #ModificationRecordsTable (clientID, ccNum, clientCompany, clientFname, clientLname, budget, InvAmount, ExistedBefore, LastRptsClosingBal, LastRptsStartValPeriod, " +
+                    "LastRptsEndValPeriod, CurrentStartValPeriod, CurrentEndValPeriod, currCreditGLID, notes, ARInvoiceID, InvoiceCreationDate, DebitTotal, isCancelled, isCreditMemo, CreditMemoNum, CreditMemoAmt) " +
+                    "SELECT distinct  cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname, 0, inv.Amount, 0, '', '', '', val.ValidFrom, val.ValidTo, GL.CreditGLID, " +
+                    "inv.notes, inv.ARInvoiceID, inv.InvoiceCreationDate, SUM(receipt.debit) as DebitTotal, 0, 0, '', '' FROM[ASMSGenericMaster].[dbo].[tblARInvoices] inv, " +
+                    "[ASMSGenericMaster].[dbo].[tbl_LicenseValidityHistory] val, [ASMSGenericMaster].[dbo].[client] cus, " +
+                    "[ASMSGenericMaster].[dbo].[tblARInvoiceDetail] GL, [ASMSGenericMaster].[dbo].[tblARPayments] receipt " +
+                    "where inv.LicensevalidityHistoryID = val.LicenseValidityHistoryID " +
+                    "AND inv.isvoided!=1 " +
+                    "AND inv.notes!= 'Type Approval' " +
+                    "AND val.ClientID = cus.clientID " +
+                    "AND (cus.ccNum is not null) " +
+                    "AND inv.FeeType!='SLF' " +
+                    "AND inv.notes!='Radio Operator' " +
+                    "AND inv.notes = 'Modification' " +
+                    "AND val.ValidTo >= @searchStartDate " +
+                    "AND val.ValidFrom<@searchEndDate + 1 " +
+                    "AND inv.ARInvoiceID = GL.ARInvoiceID " +
+                    "AND GL.CreditGLID >=5156 " +
+                    "AND receipt.InvoiceID = inv.ARInvoiceID " +
+                    "Group by cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname, inv.notes, " +
+                    "inv.FeeType, inv.ARInvoiceID, inv.Amount, val.ValidFrom, val.ValidTo, GL.CreditGLID, GL.Description, " +
+                    "inv.isvoided, inv.InvoiceCreationDate order by cus.ccNum desc ";
+
+            query += "INSERT INTO #CancellationRecordsTable (clientID, ccNum, clientCompany, clientFname, clientLname, budget, InvAmount, ExistedBefore, LastRptsClosingBal, " +
+                    "LastRptsStartValPeriod, LastRptsEndValPeriod, currCreditGLID, notes, ARInvoiceID, InvoiceCreationDate, isCancelled, isCreditMemo, CreditMemoNum, CreditMemoAmt) " +
+                    "SELECT distinct cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname, 0, inv.Amount, " +
+                    "0, '', '', '', GL.CreditGLID, inv.notes, inv.ARInvoiceID, inv.InvoiceCreationDate, inv.isvoided, 0, '', '' " +
+                    "FROM[ASMSGenericMaster].[dbo].[tblARInvoices] inv,	[ASMSGenericMaster].[dbo].[client] cus, " +
+                    "[ASMSGenericMaster].[dbo].[tblARInvoiceDetail] GL " +
+                    "WHERE inv.isvoided = 1 " +
+                    "AND inv.canceledDate >= @searchStartDate " +
+                    "AND inv.notes!= 'Type Approval' " +
+                    "AND cus.clientID = inv.CustomerID " +
+                    "AND (cus.ccNum is not null) " +
+                    "AND inv.FeeType!='SLF' " +
+                    "AND inv.notes!='Radio Operator' " +
+                    "AND inv.ARInvoiceID = GL.ARInvoiceID " +
+                    "AND GL.CreditGLID >=5156 " +
+                    "Group by cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname, inv.notes, " +
+                    "inv.FeeType, inv.ARInvoiceID, inv.Amount, GL.CreditGLID, GL.Description, " +
+                    "inv.isvoided, inv.InvoiceCreationDate order by cus.ccNum desc ";
+
+            query += "INSERT INTO #AllRecordsTable (clientID, ccNum, clientCompany, clientFname, clientLname, budget, InvAmount, ExistedBefore, LastRptsClosingBal, LastRptsStartValPeriod, " +
+                    "LastRptsEndValPeriod, CurrentStartValPeriod, CurrentEndValPeriod, currCreditGLID, notes, ARInvoiceID, InvoiceCreationDate, isCancelled, isCreditMemo, CreditMemoNum, CreditMemoAmt) " +
+                    "SELECT distinct clientID, ccNum, clientCompany, clientFname, clientLname, budget, InvAmount, ExistedBefore, LastRptsClosingBal, LastRptsStartValPeriod, LastRptsEndValPeriod, " +
+                    "CurrentStartValPeriod, CurrentEndValPeriod, currCreditGLID, notes, ARInvoiceID, InvoiceCreationDate, isCancelled, isCreditMemo, CreditMemoNum, CreditMemoAmt " +
+                    "FROM #ModificationRecordsTable where DebitTotal >= InvAmount ";
+
+            query += "INSERT INTO #AllRecordsTable (clientID, ccNum, clientCompany, clientFname, clientLname, budget, InvAmount, ExistedBefore, LastRptsClosingBal, LastRptsStartValPeriod, " +
+                    "LastRptsEndValPeriod, CurrentStartValPeriod, CurrentEndValPeriod, currCreditGLID, notes, ARInvoiceID, InvoiceCreationDate, isCancelled, isCreditMemo, CreditMemoNum, CreditMemoAmt) " +
+                    "SELECT DISTINCT clientID, ccNum, clientCompany, clientFname, clientLname, budget, InvAmount, ExistedBefore, LastRptsClosingBal, LastRptsStartValPeriod, " +
+                    "LastRptsEndValPeriod, @searchEndDate, @searchEndDate, currCreditGLID, notes, ARInvoiceID, InvoiceCreationDate, isCancelled, isCreditMemo, CreditMemoNum, CreditMemoAmt " +
+                    "FROM #CancellationRecordsTable ";
+
+            query += "INSERT INTO #AllCreditMemosTable (ARInvoiceID, CreditMemoNum, CreditMemoAmt) SELECT distinct CN.RelatedInvoice, DOC.DocumentDisplayNumber, CN.amount " +
+                    "FROM[ASMSGenericMaster].[dbo].[tblGLDocuments] DOC, [ASMSGenericMaster].[dbo].[ARCreditMemo] CN " +
+                    "WHERE DOC.DocumentType = 5 AND DOC.OriginalDocumentID = CN.CreditMemoId AND CN.date1 <= @searchEndDate ";
+
+            query += "declare @count as integer " +
+                    "declare @invoice as varchar (50) " +
+                    "declare @creditMemoNum as varchar (50) " +
+                    "declare @creditMemoAmt as money " +
+                    "declare @i as integer " +
+                    "set @i = 0 " +
+                    "set @count = (select count(*) from #AllCreditMemosTable) " +
+                    "while (@i < @count) " +
+                                "begin " +
+                                    "set @invoice = (SELECT TOP 1 ARInvoiceID FROM #AllCreditMemosTable order by ARInvoiceID asc) " +
+                                    "set @creditMemoNum = (SELECT TOP 1 CreditMemoNum FROM #AllCreditMemosTable order by ARInvoiceID asc) " +
+                                    "set @creditMemoAmt = (SELECT TOP 1 CreditMemoAmt FROM #AllCreditMemosTable order by ARInvoiceID asc) " +
+                                    "UPDATE #AllRecordsTable SET isCreditMemo = 1, CreditMemoNum = 'CN' + @creditMemoNum, CreditMemoAmt = @creditMemoAmt WHERE ARInvoiceID = @invoice " +
+                                    "DELETE FROM #AllCreditMemosTable WHERE ARInvoiceID =  @invoice " +
+                                    "set @i = @i + 1 " +
+                    "end ";
+
+            query += "INSERT INTO #CreditMemoInvoicesToBeDeletedTable (ARInvoiceID) SELECT distinct CN.RelatedInvoice " +
+                    "FROM[ASMSGenericMaster].[dbo].[tblGLDocuments] DOC, [ASMSGenericMaster].[dbo].[ARCreditMemo] CN " +
+                    "WHERE DOC.DocumentType = 5 AND DOC.OriginalDocumentID = CN.CreditMemoId AND CN.date1<@searchStartDate ";
+
+            query += "if (@ReportType = 'Annual' AND YEAR(@searchStartDate) = 2017) " +
+                    "begin " +
+                        "DELETE FROM #CreditMemoInvoicesToBeDeletedTable WHERE ARInvoiceID = '14613' " +
+                        "DELETE FROM #CreditMemoInvoicesToBeDeletedTable WHERE ARInvoiceID = '12607' " +
+                        "DELETE FROM #CreditMemoInvoicesToBeDeletedTable WHERE ARInvoiceID = '13695' " +
+                        "DELETE FROM #CreditMemoInvoicesToBeDeletedTable WHERE ARInvoiceID = '14370' " +
+                        "DELETE FROM #CreditMemoInvoicesToBeDeletedTable WHERE ARInvoiceID = '12099' " +
+                        "INSERT INTO #AllRecordsTable values ('','01013-1', 'Leslie West','','','0.00','35,000.00',1,'14,583.33','08/09/2016','07/09/2017','2016-09-08','2017-09-07','5164','','14759','',0,0,'','') " +
+                        "INSERT INTO #AllRecordsTable values ('','00205-4', 'Digicel (Jamaica) Limited','','','0.00','2,274,048.00',1,'947,520.00','31/08/2016','30/08/2017','2016-08-31','2017-08-31','5158','','14391','',0,0,'','') " +
+                        "INSERT INTO #AllRecordsTable values ('9966','01307-1', 'Posttopost Betting, Limited', '','','0.00','350,000.00',1,'145,833.33','08/09/2016','07/09/2017','2016-09-08','2017-09-07','5159','','14512','',0,0,'','') " +
+                        "INSERT INTO #AllRecordsTable values ('8378','00724-2', 'Axel Sonnenberg', '','','0.00','4,375.00',1,'729.17','01/11/2016','31/10/2017','2016-11-01','2017-10-31','5161','','14853','',0,0,'','') " +
+                        "INSERT INTO #AllRecordsTable values ('','00372-2', 'Mustard Seed Communities', '','','0.00','',1,'-3,045.00','25/10/2016','24/10/2017','2016-10-25','2017-10-24','5164','','','',0,0,'','') " +
+                        "INSERT INTO #AllRecordsTable values ('','00046-3', 'Guardsman Communications Limited', '','','0.00','',1,'29,166.67','01/04/2016','31/03/2017','2016-04-01','2017-03-31','5163','','','',0,0,'','') " +
+                    "end ";
+
+            query += "set @count = (select count(*) from #CreditMemoInvoicesToBeDeletedTable) " +
+                    "set @i = 0 " +
+                    "while (@i < @count) " +
+                    "begin " +
+                        "set @invoice = (SELECT TOP 1 * FROM #CreditMemoInvoicesToBeDeletedTable) " +
+                        "DELETE FROM #AllRecordsTable WHERE ARInvoiceID = @invoice " +
+                        "DELETE FROM #CreditMemoInvoicesToBeDeletedTable WHERE ARInvoiceID =  @invoice " +
+                        "set @i = @i + 1 " +
+                     "end ";
+
+            query += "INSERT INTO #CreditGLIDInvoicesTobeDeletedTable (ARInvoiceID) SELECT distinct tbl1.ARInvoiceID " +
+                    "FROM #AllRecordsTable tbl1, #AllRecordsTable tbl2 WHERE tbl1.ARInvoiceID = tbl2.ARInvoiceID " +
+                    "AND tbl1.currCreditGLID != tbl2.currCreditGLID " +
+                    "declare @creditGLID as int " +
+                    "set @count = (select count(*) from #CreditGLIDInvoicesToBeDeletedTable) " +
+                    "set @i = 0 " +
+                    "while (@i < @count) " +
+                     "begin " +
+                        "set @invoice = (SELECT TOP 1 * FROM #CreditGLIDInvoicesToBeDeletedTable) " +
+                        "set @creditGLID = (SELECT TOP 1 CreditGLID from[ASMSGenericMaster].[dbo].[tblARInvoiceDetail] WHERE ARInvoiceID = @invoice ORDER BY ARInvoiceDetailID) " +
+                        "DELETE FROM #AllRecordsTable WHERE ARInvoiceID = @invoice AND currCreditGLID != @creditGLID " +
+                        "DELETE FROM #CreditGLIDInvoicesTobeDeletedTable WHERE ARInvoiceID =  @invoice " +
+                        "set @i = @i + 1 " +
+                    "end ";
+
+            query += "declare @category as varchar (50) " +
+                    "declare @sql as nvarchar (max) " +
+                    "declare @report_id as varchar (100) " +
+                    "set @count = (select count(*) from DIRCategories) " +
+                    "set @i = 0 " +
+                    "CREATE table #ReportIDTable (ReportID varchar (100)) " +
+                    "set @sql = 'select report_id from ' + @ReportType + 'DIR_ReportMain where MONTH(report_date) = ' + " +
+                                "cast(MONTH(@searchStartDate) as varchar(10)) + ' and YEAR(report_date) = ' + cast(YEAR(@searchStartDate) as varchar (10)) + ';' " +
+                    "INSERT INTO #ReportIDTable exec (@sql) " +
+                    "set @report_id = (select ReportID from #ReportIDTable) " +
+                    "while (@i < @count) " +
+                    "begin " +
+                        "select @category = Description from DIRCategories where Category = @i " +
+                        "select @creditGLID = CreditGLID from DIRcategories where Category = @i " +
+                        "set @sql = 'SELECT distinct invoiceID, budget, closingBalance, validityStart, validityEnd, ' + cast(@creditGLID as varchar (10)) + ' FROM ' + @ReportType + 'DIR_' + " +
+                                    "@category + ' WHERE report_id = ' + @report_id + ';' " +
+                        "INSERT INTO #LastRptsInfoTable (ARInvoiceID, Budget, ClosingBal, StartValPeriod, EndValPeriod, CreditGLID) exec (@sql) " +
+                        "set @i = @i + 1 " +
+                    "end " +
+                    "DELETE FROM #LastRptsInfoTable WHERE ClosingBal = '0.00' ";
+
+            query += "declare @budget as varchar (50) " +
+                    "declare @LastRptsClosingBal as varchar (50) " +
+                    "declare @LastRptsStartValPeriod as varchar (100) " +
+                    "declare @LastRptsEndValPeriod as varchar (100) " +
+                    "declare @LastRptsCreditGLID as int " +
+                    "set @i = 0 " +
+                    "set @count = (select count(*) from #LastRptsInfoTable) " +
+                    "while (@i < @count) " +
+                    "begin " +
+                        "set @invoice = (SELECT TOP 1 ARInvoiceID FROM #LastRptsInfoTable order by ARInvoiceID asc) " +
+                        "set @budget = (SELECT TOP 1 Budget FROM #LastRptsInfoTable order by ARInvoiceID asc) " +
+                        "set @LastRptsClosingBal = (SELECT TOP 1 ClosingBal FROM #LastRptsInfoTable order by ARInvoiceID asc) " +
+                        "set @LastRptsStartValPeriod = (SELECT TOP 1 StartValPeriod FROM #LastRptsInfoTable order by ARInvoiceID asc) " +
+                        "set @LastRptsEndValPeriod = (SELECT TOP 1 EndValPeriod FROM #LastRptsInfoTable order by ARInvoiceID asc) " +
+                        "set @LastRptsCreditGLID = (SELECT TOP 1 CreditGLID FROM #LastRptsInfoTable order by ARInvoiceID asc) " +
+
+                        "UPDATE #AllRecordsTable SET budget = @budget, LastRptsClosingBal = @LastRptsClosingBal, ExistedBefore = 1, LastRptsStartValPeriod = @LastRptsStartValPeriod, " +
+                        "LastRptsEndValPeriod = @LastRptsEndValPeriod WHERE ARInvoiceID = @invoice and currCreditGLID = @LastRptsCreditGLID " +
+
+                        "INSERT INTO #AllRecordsTable (clientID, ccNum, clientCompany, clientFname, clientLname, budget, InvAmount, ExistedBefore, LastRptsClosingBal, LastRptsStartValPeriod, " +
+                        "LastRptsEndValPeriod, CurrentStartValPeriod, CurrentEndValPeriod, currCreditGLID, notes, ARInvoiceID, InvoiceCreationDate, isCancelled, isCreditMemo, CreditMemoNum, CreditMemoAmt) " +
+                        "SELECT distinct clientID, ccNum, clientCompany, clientFname, clientLname, budget, InvAmount, 1, @LastRptsClosingBal, @LastRptsStartValPeriod, " +
+                        "@LastRptsEndValPeriod, CurrentStartValPeriod, CurrentEndValPeriod, @LastRptsCreditGLID, notes, ARInvoiceID, InvoiceCreationDate, 1, isCreditMemo, CreditMemoNum, CreditMemoAmt " +
+                        "FROM #AllRecordsTable WHERE ARInvoiceID = @invoice AND currCreditGLID != @LastRptsCreditGLID " +
+
+                        "DELETE FROM #LastRptsInfoTable WHERE ARInvoiceID =  @invoice " +
+                        "set @i = @i + 1 " +
+                    "end ";
+
+            query += "set @i = 0 " +
+                    "set @count = (select count(*) from DeferredBudget) " +
+                    "while (@i < @count) " +
+                    "begin " +
+                        "set @invoice = (SELECT TOP 1 ARInvoiceID FROM DeferredBudget order by ARInvoiceID asc) " +
+                        "set @budget = (SELECT TOP 1 Budget FROM DeferredBudget order by ARInvoiceID asc) " +
+                        "UPDATE #AllRecordsTable SET budget = @budget WHERE ARInvoiceID = @invoice " +
+                        "DELETE FROM DeferredBudget WHERE ARInvoiceID = @invoice " +
+                        "set @i = @i + 1 " +
+                    "end ";
+
+            query += "if (@ReportType = 'Monthly' AND YEAR(@searchStartDate) = 2019 AND MONTH(@searchStartDate) = 1) " +
+                    "begin " +
+                        "DELETE FROM #AllRecordsTable WHERE ARInvoiceID = 18795 " +
+                        "INSERT INTO #AllRecordsTable values ('12779','02158-1', '', 'Paul','Thompson','0.00','2071.44',1,'1014.14','16/11/2018','15/11/2022','2018-11-16','2022-11-15','5162','Annual Fee','18795','2018-11-16',0,1,'CN417','72.60') " +
+                        "INSERT INTO #AllRecordsTable values ('12779','02158-1', '', 'Paul','Thompson','0.00','2071.44',1,'1014.14','16/11/2018','15/11/2022','2018-11-16','2022-11-15','5162','Annual Fee','18795','2018-11-16',0,1,'CN418','1998.84') " +
+                        "INSERT INTO #AllRecordsTable values ('9484','01106-1', 'Global Community Broadcasting Network (More FM) Limited', '','','0.00','35000.00',0,'','','','2018-02-09','2019-02-08','5159','Renewal','19007','2019-01-14',0,0,'','') " +
+                        "INSERT INTO #AllRecordsTable values ('9484','01106-1', 'Global Community Broadcasting Network (More FM) Limited', '','','0.00','35000.00',0,'','','','2018-02-09','2019-02-08','5159','Renewal','19009','2019-01-14',0,0,'','') " +
+                        "INSERT INTO #AllRecordsTable values ('9484','01106-1', 'Global Community Broadcasting Network (More FM) Limited', '','','0.00','35000.00',0,'','','','2018-02-09','2019-02-08','5159','Renewal','19011','2019-01-14',0,0,'','') " +
+                    "end ";
+
+            query += "if (@ReportType = 'Annual' AND YEAR(@searchStartDate) = 2018) " +
+                    "begin " +
+                        "INSERT INTO #AllRecordsTable values ('9484','01106-1', 'Global Community Broadcasting Network (More FM) Limited', '','','0.00','35000.00',0,'','','','2015-02-09','2016-02-08','5159','Renewal','19007','2019-01-14',0,0,'','') " +
+                        "INSERT INTO #AllRecordsTable values ('9484','01106-1', 'Global Community Broadcasting Network (More FM) Limited', '','','0.00','35000.00',0,'','','','2016-02-09','2017-02-08','5159','Renewal','19009','2019-01-14',0,0,'','') " +
+                        "INSERT INTO #AllRecordsTable values ('9484','01106-1', 'Global Community Broadcasting Network (More FM) Limited', '','','0.00','35000.00',0,'','','','2017-02-09','2018-02-08','5159','Renewal','19011','2019-01-14',0,0,'','') " +
+                    "end ";
+
+            query += "INSERT INTO DeferredBudget(ARInvoiceID, Budget) SELECT ARInvoiceID, Budget From #AllRecordsTable " +
+                    "DELETE FROM #AllRecordsTable WHERE InvoiceCreationDate >= @searchEndDate + 1 " +
+                    "SELECT* FROM #AllRecordsTable order by ccNum desc ";
+
+            query += "drop TABLE #AllRecordsTable " +
+                    "drop TABLE #ModificationRecordsTable " +
+                    "drop TABLE #CancellationRecordsTable " +
+                    "drop TABLE #AllCreditMemosTable " +
+                    "drop TABLE #CreditMemoInvoicesToBeDeletedTable " +
+                    "drop TABLE #CreditGLIDInvoicesTobeDeletedTable " +
+                    "drop TABLE #LastRptsInfoTable " +
+                    "drop TABLE #ReportIDTable ";
+            #endregion
+
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
@@ -69,7 +440,7 @@ namespace middleware_service.Database_Operations
             List<ReportRawData> reportInfo = new List<ReportRawData>();
             ReportRawData record = new ReportRawData();
             cmd.Connection = cIntegration;
-            cmd.CommandText = "EXEC sp_getDIRInformation @ReportType, @searchStartDate, @searchEndDate";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@ReportType", ReportType);
             cmd.Parameters.AddWithValue("@searchStartDate", searchStartDate);
             cmd.Parameters.AddWithValue("@searchEndDate", searchEndDate);
@@ -116,69 +487,17 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public List<Batch> GetExpiryBatchDate()
+        public void CloseInvoiceBatch()
         {
-            OpenConnection(CINTEGRATION);
-            List<Batch> lstInvoiceBatchData = new List<Batch>(2);
-            List<Batch> lstInvoiceBatchDataRet = new List<Batch>(2);
-            Batch batch;
+            string query = 
+                     "Update InvoiceBatch set Status='Closed' where Status='Open' ";
+            query += "Update counters set transferredInvoices = 0 where id = 1 ";
+            query += "Update counters set createdCustomers = 0 where id = 1 ";
 
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader = null;
-            cmd.Connection = cIntegration;
-            cmd.CommandText = "EXEC sp_GetOpenBatch";
-            reader = cmd.ExecuteReader();
-            int i = 0;
-            while (reader.Read())
-            {
-                batch = new Batch();
-                batch.BatchId = Convert.ToInt32(reader["BatchId"].ToString());
-                batch.CreatedDate = Convert.ToDateTime(reader["CreatedDate"].ToString());
-                batch.ExpiryDate = Convert.ToDateTime(reader["ExpiryDate"].ToString());
-                batch.BatchType = reader["BatchType"].ToString();
-                batch.Status = reader["Status"].ToString();
-                batch.Count = Convert.ToInt32(reader["Count"]);
-
-                lstInvoiceBatchData.Add(batch);
-                i++;
-            }
-
-            lstInvoiceBatchDataRet.Add(new Batch());
-            lstInvoiceBatchDataRet.Add(new Batch());
-
-            for (int b = 0; b < lstInvoiceBatchData.Count; b++)
-            {
-                if (lstInvoiceBatchData[b].BatchType == "Spectrum")
-                {
-                    lstInvoiceBatchDataRet[0].BankCode = lstInvoiceBatchData[b].BankCode;
-                    lstInvoiceBatchDataRet[0].BatchId = lstInvoiceBatchData[b].BatchId;
-                    lstInvoiceBatchDataRet[0].BatchType = lstInvoiceBatchData[b].BatchType;
-                    lstInvoiceBatchDataRet[0].Count = lstInvoiceBatchData[b].Count;
-                    lstInvoiceBatchDataRet[0].CreatedDate = lstInvoiceBatchData[b].CreatedDate;
-                    lstInvoiceBatchDataRet[0].ExpiryDate = lstInvoiceBatchData[b].ExpiryDate;
-                }
-                else
-                {
-                    lstInvoiceBatchDataRet[1].BankCode = lstInvoiceBatchData[b].BankCode;
-                    lstInvoiceBatchDataRet[1].BatchId = lstInvoiceBatchData[b].BatchId;
-                    lstInvoiceBatchDataRet[1].BatchType = lstInvoiceBatchData[b].BatchType;
-                    lstInvoiceBatchDataRet[1].Count = lstInvoiceBatchData[b].Count;
-                    lstInvoiceBatchDataRet[1].CreatedDate = lstInvoiceBatchData[b].CreatedDate;
-                    lstInvoiceBatchDataRet[1].ExpiryDate = lstInvoiceBatchData[b].ExpiryDate;
-                }
-            }
-
-
-            CloseConnection(CINTEGRATION);
-            return lstInvoiceBatchDataRet;
-        }
-
-        public void CloseInvoiceBatch(int batchId)
-        {
+    
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "EXEC closeBatch @batchId";
-            cmd.Parameters.AddWithValue("@batchId", batchId);
+            cmd.CommandText = query;
             cmd.Connection = cIntegration;
 
             cmd.ExecuteNonQuery();
@@ -187,13 +506,15 @@ namespace middleware_service.Database_Operations
 
         public Maj GetMajDetail(int referenceNumber)
         {
+            string query =
+                "select TOP 1 stationType, CertificateType, subStationType, Proj from tbl_site where referenceNum=@referenceNumber ";
             OpenConnection(CGENERIC);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
 
             Maj mj = new Maj();
             cmd.Connection = cGeneric;
-            cmd.CommandText = "EXEC getMajDetail @referenceNumber";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@referenceNumber", referenceNumber);
             reader = cmd.ExecuteReader();
 
@@ -210,7 +531,7 @@ namespace middleware_service.Database_Operations
             return mj;
         }
 
-        public DataSet GetRenewalInvoiceValidity(int invoiceid)
+        public DataSet GetRenewalInvoiceValidity(int invoiceid) // could not find stored procedure
         {
             OpenConnection(CGENERIC);
 
@@ -225,31 +546,11 @@ namespace middleware_service.Database_Operations
             da.Dispose();
             CloseConnection(CGENERIC);
             return ds;
-
-
         }
 
-        public DataSet GetRenewalInvoiceValidity1(int invoiceid)
-        {
-            OpenConnection(CGENERIC);
-
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = cGeneric;
-            cmd.CommandText = "EXEC sp_getValidityRenewalInvoice @invoiceid";
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@invoiceid", invoiceid);
-
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-
-            DataSet ds = new DataSet();
-            da.Fill(ds);
-            da.Dispose();
-            CloseConnection(CGENERIC);
-            return ds;
-
-        }
         public int GetInvoiceReference(int invoiceId)
         {
+            string query = "select Ref# from tblARInvoices where ARInvoiceID = @invoiceId ";
             OpenConnection(CGENERIC);
 
             SqlCommand cmd = new SqlCommand();
@@ -257,7 +558,7 @@ namespace middleware_service.Database_Operations
             int refNumber = -1;
 
             cmd.Connection = cGeneric;
-            cmd.CommandText = "EXEC getInvoiceRef @invoiceId";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
 
             reader = cmd.ExecuteReader();
@@ -275,33 +576,35 @@ namespace middleware_service.Database_Operations
             return refNumber;
         }
 
-        public void CreateInvoiceBatch(double daysTillEx, int batchId, string batchType, string renstat)
+        public void CreateInvoiceBatch(double daysExpire, int batchId, string batchType, string renstat)
         {
+            string query = "INSERT INTO InvoiceBatch VALUES(@batchId, @date, @expiryDate, 'Open', 0, @batchType, 0, @renstat) ";
             OpenConnection(CINTEGRATION);
 
             SqlCommand cmd = new SqlCommand();
-            var expiryDate = DateTime.Now.AddDays(daysTillEx);
+            var expiryDate = DateTime.Now.AddDays(daysExpire);
 
-            cmd.CommandText = "EXEC createBatch @batchId, @expirydate, @batchType, @renstat";
+            cmd.CommandText = query;
             cmd.Connection = cIntegration;
             cmd.Parameters.AddWithValue("@batchId", batchId);
             cmd.Parameters.AddWithValue("@expirydate", expiryDate);
             cmd.Parameters.AddWithValue("@batchType", batchType);
             cmd.Parameters.AddWithValue("@renstat", renstat);
-
+            cmd.Parameters.AddWithValue("@date", DateTime.Now);
             cmd.ExecuteNonQuery();
             CloseConnection(CINTEGRATION);
         }
 
         public bool BatchAvail(string batchType)
         {
+            string query = "select count(*) from InvoiceBatch where BatchType=@batchType and Status = 'Open' ";
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
             int result = -1;
 
             cmd.Connection = cIntegration;
-            cmd.CommandText = "EXEC batchAvail @batchType";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@batchType", batchType);
 
 
@@ -326,6 +629,7 @@ namespace middleware_service.Database_Operations
 
         public bool IsBatchExpired(int batchId)
         {
+            string query = "select ExpiryDate, renstat from InvoiceBatch where BatchId=@batchId";
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
@@ -333,7 +637,7 @@ namespace middleware_service.Database_Operations
             string renstat = " ";
 
             cmd.Connection = cIntegration;
-            cmd.CommandText = "EXEC getBatchExpiry @batchId";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@batchId", batchId);
 
 
@@ -363,6 +667,7 @@ namespace middleware_service.Database_Operations
 
         public int GetAvailBatch(string batchType)
         {
+            string query = "select batchId from InvoiceBatch where BatchType=@batchType and status='Open' ";
             OpenConnection(CINTEGRATION);
 
             SqlCommand cmd = new SqlCommand();
@@ -370,9 +675,8 @@ namespace middleware_service.Database_Operations
             int result = -1;
 
             cmd.Connection = cIntegration;
-            cmd.CommandText = "EXEC getBatch @batchType";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@batchType", batchType);
-
 
             reader = cmd.ExecuteReader();
             if (reader.HasRows)
@@ -381,66 +685,27 @@ namespace middleware_service.Database_Operations
                 result = Convert.ToInt32(reader[0]);
             }
 
-
             CloseConnection(CINTEGRATION);
             return result;
         }
 
-        public List<Batch> GetExpiryBatchDate_Payment()
-        {
-            OpenConnection(CINTEGRATION);
-            List<Batch> lstInvoiceBatchData = new List<Batch>(2);
-            Batch batch;
-
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader = null;
-            cmd.Connection = cIntegration;
-            cmd.CommandText = "EXEC sp_GetOpenBatch_Payment";
-
-            reader = cmd.ExecuteReader();
-            int i = 0;
-            while (reader.Read())
-            {
-                batch = new Batch();
-                batch.BatchId = Convert.ToInt32(reader[0].ToString());
-                batch.CreatedDate = Convert.ToDateTime(reader[1].ToString());
-                batch.ExpiryDate = Convert.ToDateTime(reader[2].ToString());
-
-                batch.Status = reader[3].ToString();
-                batch.BankCode = reader[4].ToString();
-                batch.Count = Convert.ToInt32(reader[5].ToString());
-
-                lstInvoiceBatchData.Add(batch);
-                i++;
-            }
-
-
-            CloseConnection(CINTEGRATION);
-            return lstInvoiceBatchData;
-        }
-
-        public void OpenNewBatchSet(double DaysTillExpired, int LastBatchId)
-        {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand();
-
-            var CreatedDate = DateTime.Now;
-            var ExpiryDate = DateTime.Now.AddDays(DaysTillExpired);
-
-            cmd.Connection = cIntegration;
-            cmd.CommandText = "Exec sp_NewBatchSet @FirstBatchId, @CreatedDate, @ExpiryDate";
-            cmd.Parameters.AddWithValue("@FirstBatchId", LastBatchId + 1);
-            cmd.Parameters.AddWithValue("@CreatedDate", CreatedDate);
-            cmd.Parameters.AddWithValue("@ExpiryDate", ExpiryDate);
-
-            cmd.ExecuteNonQuery();
-            CloseConnection(CINTEGRATION);
-
-        }
-
         public void OpenNewReceiptBatch(double DaysTillExpired, int LastBatchId, string bankcode)
         {
-
+            string query = "if(@bankcode='FGBJMREC') " +
+            "begin " +
+                "INSERT INTO PaymentBatch " +
+                "VALUES(@batchId, @CreatedDate, @ExpiryDate, 'Open', '10010-100', 0, 0) " +
+            "end " +
+            "else if (@bankcode = 'FGBUSMRC') " +
+                        "begin " +
+                            "INSERT INTO PaymentBatch " +
+                            "VALUES(@batchId, @CreatedDate, @ExpiryDate, 'Open', '10012-100', 0, 0) " +
+            "end " +
+            "else if (@bankcode = 'NCBJMREC') " +
+                        "begin " +
+                            "INSERT INTO PaymentBatch " +
+                            "VALUES(@batchId, @CreatedDate, @ExpiryDate, 'Open', '10020-100', 0, 0) " +
+            "end ";
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
@@ -448,25 +713,24 @@ namespace middleware_service.Database_Operations
             var ExpiryDate = DateTime.Now.AddDays(DaysTillExpired);
 
             cmd.Connection = cIntegration;
-            cmd.CommandText = "Exec sp_NewBatchSet_Payment @batchId, @CreatedDate, @ExpiryDate, @bankcode";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@batchId", LastBatchId);
             cmd.Parameters.AddWithValue("@CreatedDate", CreatedDate);
             cmd.Parameters.AddWithValue("@ExpiryDate", ExpiryDate);
             cmd.Parameters.AddWithValue("@bankcode", bankcode);
 
-
-            int i = cmd.ExecuteNonQuery();
+            cmd.ExecuteNonQuery();
             CloseConnection(CINTEGRATION);
         }
 
         public void CloseReceiptBatch(int batchId)
         {
-
+            string query = "update PaymentBatch set Status='Closed' where BatchId=@batchId ";
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             cmd.Connection = cIntegration;
-            cmd.CommandText = "EXEC closeReceiptBatch @batchId";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@batchId", batchId);
 
             cmd.ExecuteNonQuery();
@@ -476,29 +740,56 @@ namespace middleware_service.Database_Operations
 
         public void UpdateBatchAmount(string batchType, decimal amount)
         {
+            string query = "if((select amount from InvoiceBatch where Status='Open' and BatchType=@batchType) is NULL) " +
+                            "begin " +
+                                "update InvoiceBatch set amount = @amount where BatchType = @batchType and Status = 'Open' " +
+                            "end " +
+                            "else " +
+                            "begin " +
+                                "update InvoiceBatch set amount = amount + @amount where Status = 'Open' and BatchType = @batchType " +
+                            "end " +
 
+                            "if ((select count(*) from invoiceTotal)= 0) " +
+                            "begin " +
+                                "insert into invoiceTotal values(@amount) " +
+                            "end " +
+                            "else " +
+                            "begin " +
+                                "update invoiceTotal set total = total + @amount " +
+                            "end ";
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             cmd.Connection = cIntegration;
-            cmd.CommandText = "EXEC updateBatchAmount @batchType, @amount";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@batchType", batchType);
             cmd.Parameters.AddWithValue("@amount", amount);
 
             cmd.ExecuteNonQuery();
             CloseConnection(CINTEGRATION);
-
         }
 
         public string GetBankCodeId(string bankcode)
         {
+            string query = "if(@bankcode='FGBJMREC') " +
+                            "begin " +
+                                "select '10010-100' " +
+                            "end " +
+                            "else if (@bankcode = 'FGBUSMRC') " +
+                            "begin " +
+                                "select '10012-100' " +
+                            "end " +
+                            "else if (@bankcode = 'NCBJMREC') " +
+                            "begin " +
+                                "select '10020-100' " +
+                            "end ";
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
             string bankcodeid = "";
 
             cmd.Connection = cIntegration;
-            cmd.CommandText = "EXEC getBankCode @bankcode";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@bankcode", bankcode);
 
             reader = cmd.ExecuteReader();
@@ -515,13 +806,14 @@ namespace middleware_service.Database_Operations
 
         public DateTime GetDocDate(int docNumber)
         {
-            OpenConnection(CINTEGRATION);
+            string query = "select top 1 StartPeriod from [ASMSGenericMaster].[dbo].[tblArInvoiceDetail] where arinvoiceid=@docNumber ";
+            OpenConnection(CGENERIC);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
             DateTime date = DateTime.Now;
 
-            cmd.Connection = cIntegration;
-            cmd.CommandText = "EXEC getInvDocDate @docNumber";
+            cmd.Connection = cGeneric;
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@docNumber", docNumber);
 
             reader = cmd.ExecuteReader();
@@ -532,249 +824,22 @@ namespace middleware_service.Database_Operations
                 date = Convert.ToDateTime(reader[0]);
             }
 
-
-            CloseConnection(CINTEGRATION);
+            CloseConnection(CGENERIC);
             return date;
-        }
-
-        public void CloseOldBatchSet()
-        {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand();
-
-            cmd.Connection = cIntegration;
-            cmd.CommandText = "Exec sp_CloseBatch";
-
-
-            cmd.ExecuteNonQuery();
-            CloseConnection(CINTEGRATION);
-        }
-
-        public void CloseOldBatchSet_payment()
-        {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand();
-
-            cmd.Connection = cIntegration;
-            cmd.CommandText = "Exec sp_CloseBatch_Payment";
-            cmd.ExecuteNonQuery();
-            CloseConnection(CINTEGRATION);
-        }
-
-        public int GetLastBatchId()
-        {
-            OpenConnection(CINTEGRATION);
-            int BatchId = -1;
-
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader = null;
-
-            cmd.Connection = cIntegration;
-            cmd.CommandText = "Exec sp_GetLastBatchId";
-
-            reader = cmd.ExecuteReader();
-
-            reader.Read();
-            if (reader.HasRows)
-            {
-                BatchId = Convert.ToInt32(reader[0]);
-            }
-
-
-            CloseConnection(CINTEGRATION);
-            return BatchId;
-        }
-
-        public int GetLastBatchId_payment()
-        {
-            OpenConnection(CINTEGRATION);
-            int BatchId = -1;
-
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader = null;
-
-
-            cmd.Connection = cIntegration;
-            cmd.CommandText = "Exec sp_GetLastBatchId_Payment";
-
-            reader = cmd.ExecuteReader();
-
-            reader.Read();
-            if (reader.HasRows)
-            {
-                BatchId = Convert.ToInt32(reader[0]);
-            }
-
-
-            CloseConnection(CINTEGRATION);
-            return BatchId;
-        }
-
-        public void Init(int LastBatchId, double DaysTillExpired)
-        {
-
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand();
-
-
-            var CreatedDate = DateTime.Now;
-            var ExpiryDate = DateTime.Now.AddDays(DaysTillExpired);
-            LastBatchId += 1;
-
-            cmd.Connection = cIntegration;
-            cmd.CommandText = "Exec sp_NewBatchSet @FirstBatchId, @CreatedDate, @ExpiryDate";
-            cmd.Parameters.AddWithValue("@FirstBatchId", LastBatchId);
-            cmd.Parameters.AddWithValue("@CreatedDate", CreatedDate);
-            cmd.Parameters.AddWithValue("@ExpiryDate", ExpiryDate);
-
-
-            cmd.ExecuteNonQuery();
-            CloseConnection(CINTEGRATION);
-        }
-
-        public void UpdateReference(string Bank, string reference)
-        {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand();
-
-            cmd.Connection = cIntegration;
-            cmd.CommandText = "Exec sp_UpdateReference @Bank, @reference";
-            cmd.Parameters.AddWithValue("@Bank", Bank);
-            cmd.Parameters.AddWithValue("@reference", reference);
-
-
-            cmd.ExecuteNonQuery();
-            CloseConnection(CINTEGRATION);
-        }
-
-        public int GetReferenceCount(string bank)
-        {
-            OpenConnection(CINTEGRATION);
-            string bankcode = "";
-            int count = 0;
-
-            if (bank == "FGBJMREC")
-            {
-                bankcode = "10010-100";
-            }
-            else if (bank == "FGBUSMRC")
-            {
-                bankcode = "10012-100";
-            }
-            else if (bank == "NCBJMREC")
-            {
-                bankcode = "10020-100";
-            }
-
-
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader = null;
-
-
-            cmd.Connection = cIntegration;
-            cmd.CommandText = "Exec sp_CountReference @Bank";
-            cmd.Parameters.AddWithValue("@Bank", bankcode);
-
-
-            reader = cmd.ExecuteReader();
-            reader.Read();
-
-            if (reader.HasRows)
-            {
-                count = Convert.ToInt32(reader[0].ToString());
-            }
-
-            CloseConnection(CINTEGRATION);
-            return count;
-        }
-
-        public void InitPayment(int LastBatchId, double DaysTillExpired)
-        {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand();
-
-            var CreatedDate = DateTime.Now;
-            var ExpiryDate = DateTime.Now.AddDays(DaysTillExpired);
-            LastBatchId += 1;
-
-            cmd.Connection = cIntegration;
-            cmd.CommandText = "Exec sp_NewBatchSet_Payment @FirstBatchId, @CreatedDate, @ExpiryDate";
-            cmd.Parameters.AddWithValue("@FirstBatchId", LastBatchId);
-            cmd.Parameters.AddWithValue("@CreatedDate", CreatedDate);
-            cmd.Parameters.AddWithValue("@ExpiryDate", ExpiryDate);
-
-
-            cmd.ExecuteNonQuery();
-            CloseConnection(CINTEGRATION);
-        }
-
-        public bool IsInitialized()
-        {
-            OpenConnection(CINTEGRATION);
-            bool truth = false;
-
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader = null;
-            int count = 0;
-
-            cmd.CommandText = "Exec sp_getCount";
-            cmd.Connection = cIntegration;
-
-
-            reader = cmd.ExecuteReader();
-            reader.Read();
-
-            if (reader.HasRows)
-            {
-                count = Convert.ToInt32(reader[0].ToString());
-            }
-            if (count > 0)
-            {
-                truth = true;
-            }
-
-            CloseConnection(CINTEGRATION);
-            return truth;
-        }
-
-        public bool IsInitializedPayment()
-        {
-            OpenConnection(CINTEGRATION);
-            bool truth = false;
-
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader = null;
-            int count = 0;
-
-            cmd.CommandText = "Exec sp_GetCount_payment";
-            cmd.Connection = cIntegration;
-
-
-            reader = cmd.ExecuteReader();
-            reader.Read();
-
-            if (reader.HasRows)
-            {
-                count = Convert.ToInt32(reader[0].ToString());
-            }
-            if (count > 0)
-            {
-                truth = true;
-            }
-
-            CloseConnection(CINTEGRATION);
-            return truth;
         }
 
         public void UpdateBatchCount(string BatchType)
         {
+            string query = "Declare @count integer" +
+                           "select @count = Count from InvoiceBatch where BatchType = @BatchType_ AND Status = 'Open'" +
+                           "set @count = @count + 1" +
+                           "Update InvoiceBatch set Count = @count where BatchType = @BatchType_ AND Status = 'Open'";
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             cmd.Connection = cIntegration;
-            cmd.CommandText = "Exec UpdateBatchCount @BatchType";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@BatchType", BatchType);
-
 
             cmd.ExecuteNonQuery();
             CloseConnection(CINTEGRATION);
@@ -782,12 +847,25 @@ namespace middleware_service.Database_Operations
 
         public void IncrementReferenceNumber(string BankCode, decimal amount)
         {
+            string query = "Declare @var1 integer " +
+                            "Declare @var2 decimal(19, 2) " +
+                            "SELECT @var1 = CurrentRefNumber from BankCode where BankCode.BankCodeId = @BankCodeId " +
+                            "set @var1 = @var1 + 1 " +
+                            "select @var2 = Total from PaymentBatch where BankCodeId = @BankCodeId and Status = 'Open' " +
+                            "if (@var2 is null) " +
+                            "begin " +
+                                "set @var2 = 0 " +
+                            "end " +
+                            "set @var2 = @amount + @var2 " +
+                            "update PaymentBatch set Total = @var2 where BankCodeId = @BankCodeId and Status = 'Open' " +
+                            "update BankCode set CurrentRefNumber = @var1 where BankCode.BankCodeId = @BankCodeId ";
+
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             cmd.Connection = cIntegration;
-            cmd.CommandText = "Exec sp_IncrementRefNumber @BankCode, @amount";
-            cmd.Parameters.AddWithValue("@BankCode", BankCode);
+            cmd.CommandText = query;
+            cmd.Parameters.AddWithValue("@BankCodeId", BankCode);
             cmd.Parameters.AddWithValue("@amount", amount);
 
             cmd.ExecuteNonQuery();
@@ -796,13 +874,14 @@ namespace middleware_service.Database_Operations
 
         public decimal GetRate()
         {
-            OpenConnection(CINTEGRATION);
+            string query = "select top 1 CurrencyExchangeRate from [ASMSGenericMaster].[dbo].tbl_CurrencyExchangeRates order by SavedDate desc ";
+            OpenConnection(CGENERIC);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
             decimal result = 0;
 
-            cmd.Connection = cIntegration;
-            cmd.CommandText = "EXEC sp_GetAsmsRate";
+            cmd.Connection = cGeneric;
+            cmd.CommandText = query;
             reader = cmd.ExecuteReader();
 
             if (reader.HasRows)
@@ -811,17 +890,22 @@ namespace middleware_service.Database_Operations
                 result = Convert.ToDecimal(reader[0].ToString());
             }
 
-            CloseConnection(CINTEGRATION);
+            CloseConnection(CGENERIC);
             return result;
         }
 
         public void UpdateBatchCountPayment(string BatchId)
         {
+            string query = "Declare @count integer " +
+                          "select @count = [Count] from PaymentBatch where BatchId = @BatchId " +
+                          "set @count = @count + 1 " +
+                          "update PaymentBatch set[Count] = @count where BatchId = @BatchId ";
+
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             cmd.Connection = cIntegration;
-            cmd.CommandText = "Exec sp_IncrementEntryCount_payment @BatchId";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@BatchId", BatchId);
 
 
@@ -829,37 +913,15 @@ namespace middleware_service.Database_Operations
             CloseConnection(CINTEGRATION);
         }
 
-        public string GetInitialRef(string BankCodeId)
-        {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader;
-            string refNumber = "";
-
-            cmd.CommandText = "exec sp_GetInitialRefNumber @BankCodeId";
-            cmd.Parameters.AddWithValue("@BankCodeId", BankCodeId);
-
-            cmd.Connection = cIntegration;
-            reader = cmd.ExecuteReader();
-            reader.Read();
-
-            if (reader.HasRows)
-            {
-                refNumber = reader[0].ToString();
-            }
-
-            CloseConnection(CINTEGRATION);
-            return refNumber;
-        }
-
         public decimal GetUsRateByInvoice(int invoiceid)
         {
+            string query = "select usrate from InvoiceList where invoiceId = @invoiceid ";
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
             decimal rate = 1;
 
-            cmd.CommandText = "exec sp_GetUsRateByInvoice @invoiceid";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@invoiceid", invoiceid);
 
             cmd.Connection = cIntegration;
@@ -878,13 +940,14 @@ namespace middleware_service.Database_Operations
 
         public string GetCurrentRef(string BankCode)
         {
+            string query = "select CurrentRefNumber from BankCode where BankCode=@BankCode";
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
             string refNumber = "";
 
-            cmd.CommandText = "exec sp_GetLastRefNumber @BankCodeId";
-            cmd.Parameters.AddWithValue("@BankCodeId", BankCode);
+            cmd.CommandText = query;
+            cmd.Parameters.AddWithValue("@BankCode", BankCode);
 
             cmd.Connection = cIntegration;
 
@@ -903,12 +966,27 @@ namespace middleware_service.Database_Operations
 
         public string GetRecieptBatch(string bankcode)
         {
+            string query = "DECLARE @bankcodeId varchar(50) " +
+            "if (@bankcode = 'FGBJMREC') " +
+            "begin " +
+                "set @bankcode = '10010-100' " +
+            "end " +
+            "else if (@bankcode = 'FGBUSMRC') " +
+            "begin " +
+                "set @bankcode = '10012-100' " +
+            "end " +
+            "else if (@bankcode = 'NCBJMREC') " +
+            "begin " +
+                "set @bankcode = '10020-100' " +
+            "end " +
+            "select BatchId from PaymentBatch where BankCodeId = @bankcode and Status = 'Open'";
+
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
             string batch = "";
 
-            cmd.CommandText = "EXEC sp_getReceiptBatch @bankcode";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@bankcode", bankcode);
             cmd.Connection = cIntegration;
 
@@ -925,10 +1003,11 @@ namespace middleware_service.Database_Operations
 
         public List<string> CheckInvoiceAvail(string invoiceId)
         {
+            string query = "select * from InvoiceList where invoiceId=@invoiceId";
             OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand("exec sp_GetInvoice @id", cIntegration);
+            SqlCommand cmd = new SqlCommand(query, cIntegration);
             SqlDataReader reader;
-            cmd.Parameters.AddWithValue("@id", invoiceId);
+            cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
             List<string> data = new List<string>(3);
 
             reader = cmd.ExecuteReader();
@@ -950,12 +1029,34 @@ namespace middleware_service.Database_Operations
 
         public void StoreInvoice(int invoiceId, int batchTarget, int CreditGL, string clientName, string clientId, DateTime date, string author, decimal amount, string state, decimal usrate, decimal usamount, int isvoid, int isCreditMemo, int creditMemoNumber)
         {
+            string query = "declare @var1 integer" +
+                        "declare @var2 integer " +
+                        "declare @tBatch integer " +
+                        "declare @originalAmt decimal(19, 2) " +
+
+                        "set @var1 = (select[Count] FROM InvoiceBatch where BatchId = @targetBatch) " +
+                        "set @var2 = (select COUNT(@invoiceId) from InvoiceList) " +
+                        "set @var2 = @var2 + 1; " +
+
+                        "if (@state = 'updated') " +
+                            "begin " +
+                                "set @originalAmt = (select top 1 amount from InvoiceList where invoiceId = @invoiceId order by LastModified desc " +
+                                "insert into InvoiceList values(@invoiceId, 'T', @targetBatch, @var1, @CreditGl, @var2, @clientName, @clientId, @dateCreated, @author, @amount, GETDATE(), @state, @usrate, @usamount, @isvoid, @isCreditMemo, @credMemoNum); " +
+                                    "set @tBatch = (select top 1 TargetBatch from invoiceList where invoiceId = @invoiceId and state = 'no modification') " +
+                                "update InvoiceBatch set amount = amount - @originalAmt + @amount where BatchId = @tBatch " +
+                            "end " +
+                        "else " +
+                            "begin " +
+                                "insert into InvoiceList values(@invoiceId, 'NT', @targetBatch, @var1, @CreditGl, @var2, @clientName, @clientId, @dateCreated, @author, @amount, GETDATE(), @state, @usrate, @usamount, @isvoid, @isCreditMemo, @credMemoNum); " +
+                                "update InvoiceBatch set[Count] = @var1 where BatchId = @targetBatch " +
+                            "end ";
+
             MiddlewareService.BroadcastEvent(new EventObjects.Invoice(invoiceId.ToString(), clientName, clientId, batchTarget.ToString(), amount.ToString(), DateTime.Now, author, state));
             OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand("exec sp_StoreInvoice @id, @target, @CreditGL, @clientName, @clientId, @dateCreated, @author, @amount, @state, @usrate, @usamount, @isvoid, @isCreditMemo, @credMemoNum", cIntegration);
+            SqlCommand cmd = new SqlCommand(query, cIntegration);
 
-            cmd.Parameters.AddWithValue("@id", invoiceId);
-            cmd.Parameters.AddWithValue("@target", batchTarget);
+            cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
+            cmd.Parameters.AddWithValue("@targetBatch", batchTarget);
             cmd.Parameters.AddWithValue("@CreditGL", CreditGL);
             cmd.Parameters.AddWithValue("@clientName", clientName);
             cmd.Parameters.AddWithValue("@clientId", clientId);
@@ -975,8 +1076,41 @@ namespace middleware_service.Database_Operations
 
         public void StorePayment(string clientId, string clientName, DateTime createdDate, string invoiceId, decimal amount, decimal usamount, string prepstat, int referenceNumber, int destinationBank, string isPayByCredit, decimal prepaymentUsRate)
         {
+            string query = "DECLARE @var1 integer " +
+                        "select top 1 @var1 = [sequence] from PaymentList order by sequence desc " +
+                        "if (@var1 is null) " +
+                        "begin " +
+                            "set @var1 = 1 " +
+                        "end " +
+                        "else " +
+                        "begin " +
+                            "set @var1 = @var1 + 1 " +
+                        "end " +
+                        "if (@prepstat = 'Yes') " +
+                        "begin " +
+                            "insert into PaymentList values(@clientId, @clientName, @createdDate, @invoiceId, @amount, 'NO', @var1, @usamount, @prepstat, @referenceNumber, @amount, @destinationBank, @isPayByCredit, @prepaymentUsRate) " +
+                        "end " +
+                        "else " +
+                        "begin " +
+                             "insert into PaymentList values(@clientId, @clientName, @createdDate, @invoiceId, @amount, 'NO', @var1, @usamount, @prepstat, @referenceNumber, 0, @destinationBank, @isPayByCredit, @prepaymentUsRate) " +
+                        "end " +
+                        "if (@prepstat = 'Yes' and @clientId like '%-T' and @destinationBank = 5147) " +
+                        "begin " +
+                            "update PaymentList set prepaymentRemainder = @usamount where referenceNumber = @referenceNumber " +
+                        "end " +
+                        "if ((Select transferredReceipts from counters) is null) " +
+                        "begin " +
+                            "update counters set transferredReceipts = 1 where id = 1 " +
+                        "end " +
+                        "else " +
+                        "begin " +
+                            "update counters set transferredReceipts = transferredReceipts + 1 where id = 1 " +
+                            "select* from counters " +
+                        "end ";
+
+
             OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand("exec sp_StorePayment @clientId, @clientName, @createdDate, @invoiceId, @amount, @usamount, @prepstat, @referenceNumber, @destinationBank, @isPayByCredit, @prepaymentUsRate", cIntegration);
+            SqlCommand cmd = new SqlCommand(query, cIntegration);
 
             cmd.Parameters.AddWithValue("@clientId", clientId);
             cmd.Parameters.AddWithValue("@clientName", clientName);
@@ -995,8 +1129,9 @@ namespace middleware_service.Database_Operations
 
         public string GetAccountNumber(int GLID)
         {
+            string query = "select  [GLAccountNumber] from [ASMSGenericMaster].[dbo].[tblGLAccounts] where GLAccountID=@GLID ";
             OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand("exec sp_GetGLAcctNumber @GLID", cIntegration);
+            SqlCommand cmd = new SqlCommand(query, cIntegration);
             SqlDataReader reader;
 
             string accountNumber = "";
@@ -1010,43 +1145,19 @@ namespace middleware_service.Database_Operations
                 accountNumber = reader[0].ToString();
             }
 
-
             CloseConnection(CINTEGRATION);
             return accountNumber;
         }
 
-        public int GetIsInvoiceCancelled(int invoiceid)
-        {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand("exec sp_GetIsInvoiceCancelled @invoiceid", cIntegration);
-            SqlDataReader reader;
-            int isvoided = 0;
-            cmd.Parameters.AddWithValue("@invoiceid", invoiceid);
-
-
-            reader = cmd.ExecuteReader();
-
-            if (reader.HasRows)
-            {
-                reader.Read();
-                isvoided = Convert.ToInt32(reader[0].ToString());
-            }
-
-
-            CloseConnection(CINTEGRATION);
-            return isvoided;
-        }
-
         public List<string> GetInvoiceDetails(int invoiceId)
         {
+            string query = "select TargetBatch, EntryNumber, CreditGL, Amount from InvoiceList where invoiceId=@invoiceId ";
             OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand("exec sp_GetInvoiceDetail @invoiceId", cIntegration);
+            SqlCommand cmd = new SqlCommand(query, cIntegration);
             SqlDataReader reader;
             List<string> data = new List<string>(3);
 
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
-
-
             reader = cmd.ExecuteReader();
 
             if (reader.HasRows)
@@ -1068,59 +1179,32 @@ namespace middleware_service.Database_Operations
 
         public void MarkAsTransferred(int invoiceId)
         {
+            string query = "update InvoiceList set status='T', LastModified=GETDATE() where invoiceId=@invoiceId " +
+                            "if((Select transferredInvoices from counters) is null) " +
+                            "begin " +
+                                "update counters set transferredInvoices = 1 where id = 1 " +
+                                "select '2' " +
+                            "end " +
+                            "else " +
+                            "begin " +
+                                "update counters set transferredInvoices = transferredInvoices + 1 where id = 1 " +
+                                "select* from counters " +
+                            "end ";
+
+       
             OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand("exec sp_UpdateInvoiceToTransferred @invoiceId", cIntegration);
+            SqlCommand cmd = new SqlCommand(query, cIntegration);
 
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
             cmd.ExecuteNonQuery();
             CloseConnection(CINTEGRATION);
         }
 
-        public int GetInvDetailOccurence(string invoiceId)
-        {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand("exec sp_InvoiceDetailOccurenceCount @invoiceId", cIntegration);
-            SqlDataReader reader;
-            cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
-
-            reader = cmd.ExecuteReader();
-            int i = 0;
-
-            if (reader.HasRows)
-            {
-                reader.Read();
-                i = Convert.ToInt32(reader[0].ToString());
-            }
-
-            CloseConnection(CINTEGRATION);
-            return i;
-        }
-
-        public int GetInvoicePosted(int invoiceId)
-        {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand("exec sp_GetInvoicePosted @invoiceId", cIntegration);
-            SqlDataReader reader;
-            cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
-
-            reader = cmd.ExecuteReader();
-            int batchid = 0;
-            if (reader.HasRows)
-            {
-                reader.Read();
-                batchid = Convert.ToInt32(reader[0].ToString());
-            }
-
-
-            CloseConnection(CINTEGRATION);
-            return batchid;
-        }
-
         public int GetCreditGl(string invoiceiD)
         {
-
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand("exec sp_GetCreditGL @invoiceId", cIntegration);
+            string query = "SELECT top 1 CreditGLID FROM tblARInvoiceDetail where ARInvoiceID = @invoiceId ";
+            OpenConnection(CGENERIC);
+            SqlCommand cmd = new SqlCommand(query, cGeneric);
             SqlDataReader reader;
             cmd.Parameters.AddWithValue("@invoiceId", invoiceiD);
 
@@ -1133,14 +1217,15 @@ namespace middleware_service.Database_Operations
                 i = Convert.ToInt32(reader[0].ToString());
             }
 
-            CloseConnection(CINTEGRATION);
+            CloseConnection(CGENERIC);
             return i;
         }
 
         public int GetCreditGlID(string GLTransactionID)
         {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand("exec sp_GetPrepaymentGlID @GLTransactionID", cIntegration);
+            string query = "SELECT GLID FROM tblARPayments WHERE GLTransactionID = @GLTransactionID ";
+            OpenConnection(CGENERIC);
+            SqlCommand cmd = new SqlCommand(query, cGeneric);
             SqlDataReader reader;
             cmd.Parameters.AddWithValue("@GLTransactionID", GLTransactionID);
 
@@ -1154,15 +1239,15 @@ namespace middleware_service.Database_Operations
                 i = Convert.ToInt32(reader[0].ToString());
             }
 
-            CloseConnection(CINTEGRATION);
+            CloseConnection(CGENERIC);
             return i;
         }
 
         public string IsAnnualFee(int invoiceid)
         {
-
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand("exec sp_isAnnualFee @invoiceid", cIntegration);
+            string query = "select notes from [ASMSGenericMaster].dbo.TblARInvoices where ARInvoiceID = @invoiceId";
+            OpenConnection(CGENERIC);
+            SqlCommand cmd = new SqlCommand(query, cGeneric);
             SqlDataReader reader;
             cmd.Parameters.AddWithValue("@invoiceid", invoiceid);
 
@@ -1175,15 +1260,15 @@ namespace middleware_service.Database_Operations
                 notes = reader[0].ToString();
             }
 
-            CloseConnection(CINTEGRATION);
+            CloseConnection(CGENERIC);
             return notes;
         }
 
-
         public void UpdateCreditGl(int invoiceId, int newCreditGl)
         {
+            string query = "update InvoiceList set CreditGl=@newCreditGl where invoiceId=@invoiceId";
             OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand("exec sp_UpdateCreditGl @invoiceId, @newCreditGl", cIntegration);
+            SqlCommand cmd = new SqlCommand(query, cIntegration);
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
             cmd.Parameters.AddWithValue("@newCreditGl", newCreditGl);
 
@@ -1193,8 +1278,10 @@ namespace middleware_service.Database_Operations
 
         public void ModifyInvoiceList(int invoiceId, decimal rate, string customerId)
         {
+            string query = "update InvoiceList set usrate = @usrate where invoiceId = @invoiceid " +
+                          "update InvoiceList set clientId = @customerId where invoiceId = @invoiceid ";
             OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand("exec sp_UpdateInvoice @invoiceid, @usrate, @customerId", cIntegration);
+            SqlCommand cmd = new SqlCommand(query, cIntegration);
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
             cmd.Parameters.AddWithValue("@usrate", rate);
             cmd.Parameters.AddWithValue("@customerId", customerId);
@@ -1202,10 +1289,17 @@ namespace middleware_service.Database_Operations
             cmd.ExecuteNonQuery();
             CloseConnection(CINTEGRATION);
         }
+
         public void UpdateEntryNumber(int invoiceId)
         {
+            string query = "declare @var1 int " +
+                        "declare @var2 int " +
+                        "select @var2 = TargetBatch from InvoiceList where invoiceId = @invoiceId " +
+                        "select @var1 =[Count] from InvoiceBatch where BatchId = @var2 " +
+                        "update InvoiceList set EntryNumber = @var1 where invoiceId = @invoiceId";
+
             OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand("exec sp_UpdateEntry @invoiceId", cIntegration);
+            SqlCommand cmd = new SqlCommand(query, cIntegration);
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
 
             cmd.ExecuteNonQuery();
@@ -1214,13 +1308,14 @@ namespace middleware_service.Database_Operations
 
         public List<string> GetPaymentInfo(int gl_id)
         {
-            OpenConnection(CINTEGRATION);
+            string query = "SELECT Debit, GLID, InvoiceID, Date1 from tblARPayments where GLTransactionID=@id ";
+            OpenConnection(CGENERIC);
             SqlCommand cmd_pay = new SqlCommand();
             SqlDataReader reader_pay;
 
             List<string> data = new List<string>(4);
-            cmd_pay.Connection = cIntegration;
-            cmd_pay.CommandText = "EXEC sp_GetPayInfo @id";
+            cmd_pay.Connection = cGeneric;
+            cmd_pay.CommandText = query;
             cmd_pay.Parameters.AddWithValue("@id", gl_id);
 
             reader_pay = cmd_pay.ExecuteReader();
@@ -1239,52 +1334,21 @@ namespace middleware_service.Database_Operations
                 data.Add(paymentDate);
             }
             reader_pay.Close();
-            CloseConnection(CINTEGRATION);
+            CloseConnection(CGENERIC);
             return data;
         }
 
         public List<string> GetClientInfoInv(string id)
         {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader;
-            List<string> data = new List<string>(4);
-
-            cmd.Connection = cIntegration;
-            cmd.CommandText = "EXEC sp_GetClientInfo @id";
-            cmd.Parameters.AddWithValue("@id", id);
-
-            reader = cmd.ExecuteReader();
-            if (reader.HasRows)
-            {
-                reader.Read();
-                var companyName = reader[0].ToString();
-                var ccNum = reader[1].ToString();
-                var clientFname = reader[2].ToString();
-                var clientLname = reader[3].ToString();
-
-                data.Add(companyName);
-                data.Add(ccNum);
-                data.Add(clientFname);
-                data.Add(clientLname);
-            }
-
-
-            CloseConnection(CINTEGRATION);
-            return data;
-        }
-
-        public List<string> GetClientInfoPay(string id)
-        {
+            string query = "SELECT clientCompany, ccNum, clientFname, clientLname from ASMSGenericMaster.dbo.client where clientId=@clientId ";
             OpenConnection(CGENERIC);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
             List<string> data = new List<string>(4);
 
             cmd.Connection = cGeneric;
-            cmd.CommandText = "SELECT clientCompany, ccNum from client where clientId=@id";
+            cmd.CommandText = "EXEC sp_GetClientInfo @clientId";
             cmd.Parameters.AddWithValue("@id", id);
-
 
             reader = cmd.ExecuteReader();
             if (reader.HasRows)
@@ -1301,29 +1365,6 @@ namespace middleware_service.Database_Operations
                 data.Add(clientLname);
             }
 
-            CloseConnection(CGENERIC);
-            return data;
-        }
-
-        public List<string> GetInvoiceInfo(string pInvoice)
-        {
-            OpenConnection(CGENERIC);
-            SqlCommand cmdAmt = new SqlCommand();
-            SqlDataReader readerAmt;
-            List<string> data = new List<string>(2);
-
-            cmdAmt.Connection = cGeneric;
-            cmdAmt.CommandText = "select Amount, Author from tblArInvoices where ArInvoiceId=@arInv";
-            cmdAmt.Parameters.AddWithValue("@arInv", pInvoice);
-
-
-            readerAmt = cmdAmt.ExecuteReader();
-            if (readerAmt.HasRows)
-            {
-                readerAmt.Read();
-                data.Add(readerAmt[0].ToString());
-                data.Add(readerAmt[1].ToString());
-            }
 
             CloseConnection(CGENERIC);
             return data;
@@ -1356,39 +1397,26 @@ namespace middleware_service.Database_Operations
             return data;
         }
 
-        public bool GetInvoiceExists(int invoiceId)
-        {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd_inv = new SqlCommand();
-            SqlDataReader reader_inv;
-
-            cmd_inv.Connection = cIntegration;
-            cmd_inv.CommandText = "Exec sp_GetInvoiceExists @invoiceid";
-            cmd_inv.Parameters.AddWithValue("@invoiceid", invoiceId);
-
-
-            reader_inv = cmd_inv.ExecuteReader();
-            bool ans;
-            if (reader_inv.HasRows)
-            {
-                ans = true;
-            }
-            else
-            {
-                ans = false;
-            }
-
-
-            CloseConnection(CINTEGRATION);
-            return ans;
-        }
-
         public void UpdateCustomerCount()
         {
+            string query = "declare @var1 integer " +
+                            "select @var1 = Count from tblCustomerCreatedCount " +
+                            "if (@var1 is null) " +
+                            "begin " +
+                                "select 'null' " +
+                                "set @var1 = 1 " +
+                                "insert into tblCustomerCreatedCount " +
+                                "values(@var1, GETDATE()) " +
+                            "end " +
+                            "else " +
+                            "begin " +
+                            "set @var1 = @var1 + 1 " +
+                                 "update tblCustomerCreatedCount set Count = @var1, LastUpdate = GETDATE() " +
+                            "end";
             OpenConnection(CINTEGRATION);
             SqlCommand cmd_inv = new SqlCommand();
 
-            cmd_inv.CommandText = "exec sp_UpdateCustomerCount";
+            cmd_inv.CommandText = query;
             cmd_inv.Connection = cIntegration;
 
             cmd_inv.ExecuteNonQuery();
@@ -1397,10 +1425,22 @@ namespace middleware_service.Database_Operations
 
         public void StoreCustomer(string clientId, string clientName)
         {
+            string query = "insert into CustomerCreatedDetail " +
+                            "values(@clientId, @clientName, GETDATE()) " +
+                            "if((Select createdCustomers from counters) is null) " +
+                            "begin " +
+                                "update counters set createdCustomers = 1 where id = 1 " +
+                            "end " +
+                            "else " +
+                            "begin " +
+                                "update counters set createdCustomers = createdCustomers + 1 where id = 1 " +
+                                "select* from counters " +
+                           "end";
+
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
-            cmd.CommandText = "exec sp_StoreCreatedCustomer @clientId, @clientName";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@clientId", clientId);
             cmd.Parameters.AddWithValue("@clientName", clientName);
             cmd.Connection = cIntegration;
@@ -1410,40 +1450,13 @@ namespace middleware_service.Database_Operations
             CloseConnection(CINTEGRATION);
         }
 
-        public List<Queue> ReadMessageQueue()
-        {
-            OpenConnection(CMSGQUEUE);
-            SqlCommand cmd_inv = new SqlCommand();
-            SqlDataReader reader_inv;
-            List<Queue> data = new List<Queue>();
-            Queue q;
-
-            cmd_inv.Connection = cMsgQueue;
-            cmd_inv.CommandText = "EXEC sp_ReadQueue";
-
-            reader_inv = cmd_inv.ExecuteReader();
-
-            if (reader_inv.HasRows)
-            {
-                reader_inv.Read();
-                q = new Queue();
-                q.date = Convert.ToDateTime(reader_inv[0].ToString());
-                q.msg = reader_inv[1].ToString();
-
-                data.Add(q);
-                data.Add(q);
-            }
-
-            CloseConnection(CMSGQUEUE);
-            return data;
-        }
-
         public void UpdateReceiptNumber(int transactionId, string referenceNumber)
         {
+            string query = "update tblARPayments set ReceiptNumber=@reference where ReceiptNumber=@receiptNum";
             OpenConnection(CGENERIC);
             SqlCommand cmd = new SqlCommand();
 
-            cmd.CommandText = "exec sp_UpdateReceipt @receiptNum, @reference";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@receiptNum", transactionId.ToString());
             cmd.Parameters.AddWithValue("@reference", referenceNumber);
             cmd.Connection = cGeneric;
@@ -1454,10 +1467,16 @@ namespace middleware_service.Database_Operations
 
         public void Log(string msg)
         {
+            string query = "declare @count integer " +
+                            "set @count = (select COUNT(*) from log) +1 " +
+                            "select @count " +
+                            "insert into Log " +
+                            "values(GETDATE(), @msg, @count) ";
+
             OpenConnection(CINTEGRATION);
             SqlCommand cmd_inv = new SqlCommand();
 
-            cmd_inv.CommandText = "exec sp_Log @msg";
+            cmd_inv.CommandText = query;
             cmd_inv.Parameters.AddWithValue("@msg", msg);
             cmd_inv.Connection = cIntegration;
             cmd_inv.ExecuteNonQuery();
@@ -1467,16 +1486,23 @@ namespace middleware_service.Database_Operations
 
         public DateTime GetValidity(int invoiceId)
         {
-            OpenConnection(CINTEGRATION);
+            string query = "SELECT  cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname, Amount, val.ValidFrom, val.ValidTo," +
+                            " GL.CreditGLID, Gl.Description, inv.ARInvoiceID" +
+                            "  FROM  [ASMSGenericMaster].[dbo].tblARInvoices inv, tbl_LicenseValidityHistory val, client cus," +
+                            " tblARInvoiceDetail GL where inv.LicensevalidityHistoryID = val.LicenseValidityHistoryID " +
+                            "AND val.ClientID = cus.clientID AND (cus.ccNum is not null) AND val.ValidTo >=GETDATE() AND inv.ARInvoiceID = GL.ARInvoiceID" +
+                            " AND inv.ARInvoiceID =@invoiceId Group by cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname," +
+                            " inv.notes, inv.FeeType, inv.ARInvoiceID, inv.Amount, val.ValidFrom, val.ValidTo, GL.CreditGLID, GL.Description, inv.ARInvoiceID  order by inv.ARInvoiceID  desc";
+            OpenConnection(CGENERIC);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
 
             var datetime = DateTime.Now;
             DateTime startdate = DateTime.Now;
 
-            cmd.CommandText = "exec sp_GetValidity @invoiceId";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
-            cmd.Connection = cIntegration;
+            cmd.Connection = cGeneric;
             reader = cmd.ExecuteReader();
 
             if (reader.HasRows)
@@ -1485,24 +1511,30 @@ namespace middleware_service.Database_Operations
                 datetime = Convert.ToDateTime(reader[6]);
             }
 
-
-            CloseConnection(CINTEGRATION);
+            CloseConnection(CGENERIC);
             return datetime;
         }
 
         public DateTime GetValidityEnd(int invoiceId)
         {
-            OpenConnection(CINTEGRATION);
+
+            string query = "SELECT  cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname, Amount, val.ValidFrom, val.ValidTo," +
+                            " GL.CreditGLID, Gl.Description, inv.ARInvoiceID" +
+                            "  FROM  [ASMSGenericMaster].[dbo].tblARInvoices inv, tbl_LicenseValidityHistory val, client cus," +
+                            " tblARInvoiceDetail GL where inv.LicensevalidityHistoryID = val.LicenseValidityHistoryID " +
+                            "AND val.ClientID = cus.clientID AND (cus.ccNum is not null) AND val.ValidTo >=GETDATE() AND inv.ARInvoiceID = GL.ARInvoiceID" +
+                            " AND inv.ARInvoiceID =@invoiceId Group by cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname," +
+                            " inv.notes, inv.FeeType, inv.ARInvoiceID, inv.Amount, val.ValidFrom, val.ValidTo, GL.CreditGLID, GL.Description, inv.ARInvoiceID  order by inv.ARInvoiceID  desc";
+            OpenConnection(CGENERIC);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
 
             var datetime = DateTime.Now;
             DateTime startdate = DateTime.Now;
-            cmd.CommandText = "exec sp_GetValidity @invoiceId";
+
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
-            cmd.Connection = cIntegration;
-
-
+            cmd.Connection = cGeneric;
             reader = cmd.ExecuteReader();
 
             if (reader.HasRows)
@@ -1511,16 +1543,17 @@ namespace middleware_service.Database_Operations
                 datetime = Convert.ToDateTime(reader[7]);
             }
 
-            CloseConnection(CINTEGRATION);
+            CloseConnection(CGENERIC);
             return datetime;
         }
 
         public void ResetInvoiceTotal()
         {
+            string query = "update InvoiceTotal set total=0";
             OpenConnection(CINTEGRATION);
             SqlCommand cmd_inv = new SqlCommand();
 
-            cmd_inv.CommandText = "exec resetInvoiceTotal";
+            cmd_inv.CommandText = query;
             cmd_inv.Connection = cIntegration;
 
             cmd_inv.ExecuteNonQuery();
@@ -1529,15 +1562,15 @@ namespace middleware_service.Database_Operations
 
         public string GetFreqUsage(int invoiceId)
         {
-            OpenConnection(CINTEGRATION);
+            string query = "select FreqUsage FROM tblARInvoiceDetail where ARInvoiceID=@invoiceId ";
+            OpenConnection(CGENERIC);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
 
             string result = "";
-            cmd.CommandText = "exec sp_freqUsage @invoiceId";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
-            cmd.Connection = cIntegration;
-
+            cmd.Connection = cGeneric;
 
             reader = cmd.ExecuteReader();
 
@@ -1547,20 +1580,21 @@ namespace middleware_service.Database_Operations
                 result = reader[0].ToString();
             }
 
-            CloseConnection(CINTEGRATION);
+            CloseConnection(CGENERIC);
             return result;
         }
 
         public int GetCreditMemoNumber()
         {
+            string query = "select creditMemoSequence from counters " +
+                          "update counters set creditMemoSequence = creditMemoSequence + 1";
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
             int num = -1;
 
-            cmd.CommandText = "exec sp_getCMemoSeq";
+            cmd.CommandText = query;
             cmd.Connection = cIntegration;
-
 
             reader = cmd.ExecuteReader();
 
@@ -1576,31 +1610,35 @@ namespace middleware_service.Database_Operations
 
         public void UpdateAsmsCreditMemoNumber(int docId, int newCredNum)
         {
-            OpenConnection(CINTEGRATION);
+            string query = "update tblGLDocuments set DocumentDisplayNumber = @newCredNum where DocumentID=@documentId";
+            OpenConnection(CGENERIC);
             SqlCommand cmd = new SqlCommand();
 
-            cmd.CommandText = "exec sp_UpdateCreditMemoNum @documentId, @newCredNum";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@documentId", docId);
             cmd.Parameters.AddWithValue("@newCredNum", newCredNum);
-            cmd.Connection = cIntegration;
-
+            cmd.Connection = cGeneric;
 
             cmd.ExecuteNonQuery();
-            CloseConnection(CINTEGRATION);
-
+            CloseConnection(CGENERIC);
         }
 
         public InvoiceInfo GetInvoiceInfo(int invoiceId)
         {
-            OpenConnection(CINTEGRATION);
+            string query = "Declare @Glid integer " +
+                        "Declare @FreqUsage varchar(50) " +
+                        "set @Glid = (select top 1 CreditGLID from tblARInvoiceDetail where ARInvoiceID = @invoiceId) " +
+                        "set @FreqUsage = (select top 1 FreqUsage from tblARInvoiceDetail where ARInvoiceID = @invoiceId) " +
+                        "select CustomerId, FeeType, notes, Amount, isvoided, @Glid as Glid, @FreqUsage as FreqUsage, Author from tblARInvoices where ARInvoiceID = @invoiceId ";
 
+            OpenConnection(CGENERIC);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
             InvoiceInfo inv = new InvoiceInfo();
 
-            cmd.CommandText = "exec sp_getInvoiceInfo @invoiceId";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
-            cmd.Connection = cIntegration;
+            cmd.Connection = cGeneric;
             reader = cmd.ExecuteReader();
 
             if (reader.HasRows)
@@ -1617,20 +1655,21 @@ namespace middleware_service.Database_Operations
 
             }
 
-            CloseConnection(CINTEGRATION);
+            CloseConnection(CGENERIC);
             return inv;
         }
 
         public PaymentInfo GetReceiptInfo(int originalDocNum)
         {
-            OpenConnection(CINTEGRATION);
+            string query = "select ReceiptNumber, GLTransactionID, CustomerID, Debit, InvoiceID, Date1, GLID from tblARPayments where GLTransactionID=@OriginalDocNum ";
+            OpenConnection(CGENERIC);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
             PaymentInfo rct = new PaymentInfo();
 
-            cmd.CommandText = "exec sp_getReceiptInfo @originalDocNum";
+            cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@originalDocNum", originalDocNum);
-            cmd.Connection = cIntegration;
+            cmd.Connection = cGeneric;
 
             reader = cmd.ExecuteReader();
 
@@ -1646,21 +1685,32 @@ namespace middleware_service.Database_Operations
                 rct.GLID = Convert.ToInt32(reader["GLID"]);
 
             }
-            CloseConnection(CINTEGRATION);
+            CloseConnection(CGENERIC);
             return rct;
         }
 
         public CreditNoteInfo GetCreditNoteInfo(int creditMemoNum, int documentId)
         {
-            OpenConnection(CINTEGRATION);
+            string query = "Declare @relatedInvoice integer " +
+                            "Declare @cglid integer " +
+                            "Declare @cmemoAmt decimal " +
+                            "Declare @memoDesc varchar(max) " +
+                            "select @relatedInvoice = relatedInvoice from ARCreditMemo where CreditMemoId = @creditMemoNum " +
+                            "select @cglid = CreditGLID from TblARInvoiceDetail where ARInvoiceID = @relatedInvoice " +
+                            "select @memoDesc = Memo from tblGLDocumentLines where DocumentID = @documentId " +
+
+                            "set @cmemoAmt = (select BalanceCompanyCurrency from tblGLDocuments where OriginalDocumentID = @creditMemoNum and DocumentType = 5) " +
+                            "select ARInvoiceID, @cglid as CreditGl, @cmemoAmt as Amount, CustomerID, FeeType, notes, canceledBy, @memoDesc as Remarks from TblARInvoices where ARInvoiceID = @relatedInvoice ";
+            
+            OpenConnection(CGENERIC);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
             CreditNoteInfo creditNote = new CreditNoteInfo();
 
-            cmd.CommandText = "exec sp_getCreditMemoInfo @creditNoteNum, @documentId";
-            cmd.Parameters.AddWithValue("@creditNoteNum", creditMemoNum);
+            cmd.CommandText = query;
+            cmd.Parameters.AddWithValue("@creditMemoNum", creditMemoNum);
             cmd.Parameters.AddWithValue("@documentId", documentId);
-            cmd.Connection = cIntegration;
+            cmd.Connection = cGeneric;
             reader = cmd.ExecuteReader();
 
             if (reader.HasRows)
@@ -1675,22 +1725,8 @@ namespace middleware_service.Database_Operations
                 creditNote.remarks = reader["Remarks"].ToString();
             }
 
-            CloseConnection(CINTEGRATION);
+            CloseConnection(CGENERIC);
             return creditNote;
-        }
-
-        public void UpdateAsmsCreditMNum(int currentNum, int newNum)
-        {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand();
-
-            cmd.CommandText = "exec sp_UpdateCreditMemoNum @currentNum, @newNum";
-            cmd.Parameters.AddWithValue("@currentNum", currentNum);
-            cmd.Parameters.AddWithValue("@newNum", newNum);
-            cmd.Connection = cIntegration;
-
-            cmd.ExecuteNonQuery();
-            CloseConnection(CINTEGRATION);
         }
 
         public string GetClientIdZRecord(bool stripExtention)
@@ -1734,68 +1770,6 @@ namespace middleware_service.Database_Operations
 
             CloseConnection(CINTEGRATION);
             return result;
-        }
-
-        public void CheckResetCounters(int mExpiry, int dExpiry)
-        {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader = null;
-
-            DateTime monthlyExpiry = DateTime.Now;
-            DateTime dailyExpiry = DateTime.Now;
-
-            cmd.CommandText = "exec getCountersExpiry";
-            cmd.Connection = cIntegration;
-
-            reader = cmd.ExecuteReader();
-
-            if (reader.HasRows)
-            {
-                reader.Read();
-                monthlyExpiry = Convert.ToDateTime(reader["monthlyReset"]);
-                dailyExpiry = Convert.ToDateTime(reader["dailyReset"]);
-            }
-
-            CloseConnection(CINTEGRATION);
-
-            if (monthlyExpiry.Day == DateTime.Now.Day && monthlyExpiry.Month == DateTime.Now.Month && monthlyExpiry.Year == DateTime.Now.Year)
-            {
-                ResetMonthlyCounters(mExpiry);
-            }
-
-            if (dailyExpiry.Day == DateTime.Now.Day && dailyExpiry.Month == DateTime.Now.Month && dailyExpiry.Year == DateTime.Now.Year)
-            {
-                ResetDailyCounters(dExpiry);
-            }
-        }
-
-        public void ResetMonthlyCounters(int daysToNExpiry)
-        {
-
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand();
-
-            cmd.CommandText = "exec resetMonthlyCounters @nextExpiry";
-            cmd.Parameters.AddWithValue("@nextExpiry", DateTime.Now.AddDays(daysToNExpiry));
-            cmd.Connection = cIntegration;
-
-            cmd.ExecuteNonQuery();
-            CloseConnection(CINTEGRATION);
-        }
-
-        public void ResetDailyCounters(int daysToNExpiry)
-        {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand();
-
-
-            cmd.CommandText = "exec resetDailyCounters @nextExpiry";
-            cmd.Parameters.AddWithValue("@nextExpiry", DateTime.Now.AddDays(daysToNExpiry));
-            cmd.Connection = cIntegration;
-
-            cmd.ExecuteNonQuery();
-            CloseConnection(CINTEGRATION);
         }
 
         public PrepaymentData CheckPrepaymentAvail(string customerId)
@@ -1843,44 +1817,6 @@ namespace middleware_service.Database_Operations
             cmd.ExecuteNonQuery();
             CloseConnection(CINTEGRATION);
         }
-
-        public decimal GetTotalPrepaymentRemainder(string customerId)
-        {
-            decimal result = 0;
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "exec sp_getTotalPrepaymentRemainder @customerId";
-            cmd.Parameters.AddWithValue("@customerId", customerId);
-            cmd.Connection = cIntegration;
-
-            cmd.ExecuteNonQuery();
-            CloseConnection(CINTEGRATION);
-            return result;
-        }
-
-        public decimal GetPrepaymentURate(int sequence)
-        {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader = null;
-            decimal urate = 0;
-
-            cmd.CommandText = "exec sp_getPrepRate @sequence";
-            cmd.Parameters.AddWithValue("@sequence", sequence);
-            cmd.Connection = cIntegration;
-
-            reader = cmd.ExecuteReader();
-
-            if (reader.HasRows)
-            {
-                reader.Read();
-                urate = Convert.ToDecimal(reader["usrate"]);
-            }
-
-            CloseConnection(CINTEGRATION);
-            return urate;
-        }
-
 
         public string GenerateReportId(string ReportType)
         {
@@ -1971,7 +1907,6 @@ namespace middleware_service.Database_Operations
             CloseConnection(CINTEGRATION);
         }
 
-
         public void InsertTotals(string ReportType, string reportID, Totals total)
         {
             OpenConnection(CINTEGRATION);
@@ -1990,188 +1925,6 @@ namespace middleware_service.Database_Operations
 
             cmd.ExecuteNonQuery();
             CloseConnection(CINTEGRATION);
-        }
-
-        public DeferredData GetDeferredRpt(string ReportType, string report_id)
-        {
-            List<DataWrapper> tables = new List<DataWrapper>();
-            DataWrapper cell_table = new DataWrapper();
-            DataWrapper micro_table = new DataWrapper();
-            DataWrapper bbrand_table = new DataWrapper();
-            DataWrapper vsat_table = new DataWrapper();
-            DataWrapper other_table = new DataWrapper();
-            DataWrapper trunking_table = new DataWrapper();
-            DataWrapper aero_table = new DataWrapper();
-            DataWrapper marine_table = new DataWrapper();
-            DataWrapper dservices_table = new DataWrapper();
-
-            cell_table.label = "Cellular";
-            cell_table.records = GetDeferredPartial(ReportType, 0, report_id);
-            cell_table.setSubTotals(GetDeferredPartialSubs(ReportType, 0, report_id));
-
-            bbrand_table.label = "Broadband";
-            bbrand_table.records = GetDeferredPartial(ReportType, 1, report_id);
-            bbrand_table.setSubTotals(GetDeferredPartialSubs(ReportType, 1, report_id));
-
-            micro_table.label = "Microwave";
-            micro_table.records = GetDeferredPartial(ReportType, 2, report_id);
-            micro_table.setSubTotals(GetDeferredPartialSubs(ReportType, 2, report_id));
-
-            vsat_table.label = "Vsat";
-            vsat_table.records = GetDeferredPartial(ReportType, 3, report_id);
-            vsat_table.setSubTotals(GetDeferredPartialSubs(ReportType, 3, report_id));
-
-            marine_table.label = "Marine";
-            marine_table.records = GetDeferredPartial(ReportType, 4, report_id);
-            marine_table.setSubTotals(GetDeferredPartialSubs(ReportType, 4, report_id));
-
-            dservices_table.label = "Data & Services";
-            dservices_table.records = GetDeferredPartial(ReportType, 5, report_id);
-            dservices_table.setSubTotals(GetDeferredPartialSubs(ReportType, 5, report_id));
-
-            aero_table.label = "Aeronautical";
-            aero_table.records = GetDeferredPartial(ReportType, 6, report_id);
-            aero_table.setSubTotals(GetDeferredPartialSubs(ReportType, 6, report_id));
-
-            trunking_table.label = "Trunking";
-            trunking_table.records = GetDeferredPartial(ReportType, 7, report_id);
-            trunking_table.setSubTotals(GetDeferredPartialSubs(ReportType, 7, report_id));
-
-            other_table.label = "Other";
-            other_table.records = GetDeferredPartial(ReportType, 8, report_id);
-            other_table.setSubTotals(GetDeferredPartialSubs(ReportType, 8, report_id));
-
-            tables.Add(cell_table);
-            tables.Add(bbrand_table);
-            tables.Add(micro_table);
-            tables.Add(vsat_table);
-            tables.Add(marine_table);
-            tables.Add(dservices_table);
-            tables.Add(aero_table);
-            tables.Add(trunking_table);
-            tables.Add(other_table);
-
-            DeferredData d = new DeferredData();
-            d.Categories = tables;
-            d.Total = GetDeferredTotal(ReportType, report_id);
-
-            return d;
-        }
-
-        private List<UIData> GetDeferredPartial(string ReportType, int index, string report_id)
-        {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader;
-
-            List<UIData> udt = new List<UIData>();
-            cmd.CommandText = "EXEC sp_getDeferredPartial @ReportType, @index, @report_id";
-            cmd.Parameters.AddWithValue("@ReportType", ReportType);
-            cmd.Parameters.AddWithValue("@index", index);
-            cmd.Parameters.AddWithValue("@report_id", report_id);
-            reader = cmd.ExecuteReader();
-
-            if (reader.HasRows)
-            {
-                while (reader.Read())
-                {
-                    UIData record = new UIData();
-                    record.licenseNumber = reader["licenseNumber"].ToString();
-                    record.clientCompany = reader["clientCompany"].ToString();
-                    record.invoiceID = reader["invoiceID"].ToString();
-                    record.budget = reader["budget"].ToString();
-                    record.invoiceTotal = reader["invoiceTotal"].ToString();
-                    record.thisPeriodsInv = reader["thisPeriodsInvoice"].ToString();
-                    record.balBFwd = reader["balanceBFoward"].ToString();
-                    record.fromRev = reader["fromRevenue"].ToString();
-                    record.toRev = reader["toRevenue"].ToString();
-                    record.closingBal = reader["closingBalance"].ToString();
-                    record.totalMonths = Convert.ToInt32(reader["totalMonths"]);
-                    record.monthUtil = Convert.ToInt32(reader["monthsUtilized"]);
-                    record.monthRemain = Convert.ToInt32(reader["monthsRemaining"]);
-                    record.valPStart = reader["validityStart"].ToString();
-                    record.valPEnd = reader["validityEnd"].ToString();
-
-                    udt.Add(record);
-                }
-
-                CloseConnection(CINTEGRATION);
-                return udt;
-            }
-            else
-            {
-                CloseConnection(CINTEGRATION);
-                return udt;
-            }
-        }
-
-        private SubTotals GetDeferredPartialSubs(string ReportType, int index, string report_id)
-        {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader;
-
-            SubTotals subs = new SubTotals();
-            cmd.CommandText = "EXEC sp_getDeferredPartialSubs @ReportType, @index, @record_id";
-            cmd.Parameters.AddWithValue("@ReportType", ReportType);
-            cmd.Parameters.AddWithValue("@index", index);
-            cmd.Parameters.AddWithValue("@record_id", report_id);
-            cmd.Connection = cIntegration;
-
-            reader = cmd.ExecuteReader();
-
-            if (reader.HasRows)
-            {
-                reader.Read();
-                subs.invoiceTotal = reader["invoiceTotal"].ToString();
-                subs.balanceBFwd = reader["balanceBFwd"].ToString();
-                subs.toRev = reader["toRev"].ToString();
-                subs.closingBal = reader["closingBal"].ToString();
-                subs.fromRev = reader["fromRev"].ToString();
-                subs.budget = reader["budget"].ToString();
-
-                CloseConnection(CINTEGRATION);
-                return subs;
-            }
-            else
-            {
-                CloseConnection(CINTEGRATION);
-                return subs;
-            }
-        }
-
-
-        public Totals GetDeferredTotal(string ReportType, string recordID)
-        {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader;
-            Totals totals = new Totals();
-            
-            cmd.CommandText = "EXEC sp_getDeferredRptTotals @ReportType, @record_id";
-            cmd.Parameters.AddWithValue("@ReportType", ReportType);
-            cmd.Parameters.AddWithValue("@record_id", recordID);
-            cmd.Connection = cIntegration;
-            reader = cmd.ExecuteReader();
-
-            if (reader.HasRows)
-            {
-                reader.Read();
-                totals.tot_invoiceTotal = reader["invoiceTotal"].ToString();
-                totals.tot_balBFwd = reader["balanceBFwd"].ToString();
-                totals.tot_toRev = reader["toRev"].ToString();
-                totals.tot_closingBal = reader["closingBal"].ToString();
-                totals.tot_fromRev = reader["fromRev"].ToString();
-                totals.tot_budget = reader["budget"].ToString();
-
-                CloseConnection(CINTEGRATION);
-                return totals;
-            }
-            else
-            {
-                CloseConnection(CINTEGRATION);
-                return totals;
-            }
         }
 
         public void SetNextGenDate(string ReportType, DateTime date)
@@ -2205,43 +1958,6 @@ namespace middleware_service.Database_Operations
 
             CloseConnection(CINTEGRATION);
             return date;
-        }
-
-        public void SetIntegrationStat(int stat)
-        {
-            System.Threading.Thread.Sleep(1000);
-            OpenConnection(CMSGQUEUE);
-            SqlCommand cmd = new SqlCommand();
-
-            cmd.Connection = cMsgQueue;
-            cmd.CommandText = "sp_UpdateStat @stat";
-            cmd.Parameters.AddWithValue("@stat", stat);
-            cmd.ExecuteNonQuery();
-            CloseConnection(CMSGQUEUE);
-        }
-
-        public bool CheckReportExist(DateTime date)
-        {
-            OpenConnection(CINTEGRATION);
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader;
-
-            cmd.Connection = cIntegration;
-            cmd.CommandText = "EXEC sp_checkRptExist @period";
-            cmd.Parameters.AddWithValue("@period", date);
-       
-            reader = cmd.ExecuteReader();
-
-            if (reader.HasRows)
-            {
-                CloseConnection(CINTEGRATION);
-                return true;
-            }
-            else
-            {
-                CloseConnection(CINTEGRATION);
-                return false;
-            }
         }
     }
 }

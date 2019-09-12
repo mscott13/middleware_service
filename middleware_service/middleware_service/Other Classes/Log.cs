@@ -40,7 +40,7 @@ namespace middleware_service.Other_Classes
             }
 
             intlink.Log(msg);
-            BroadcastEvent(new Logging(msg));
+            //BroadcastEvent(new Logging(msg));
             return result;
         }
 

@@ -155,6 +155,7 @@ namespace middleware_service
             {
                 intLink = new Integration();
                 Log.Init(intLink);
+               var detail = intLink.GetMajDetail(2069);
                 accpacSession = new Session();
 
                 using (tableDependCancellation = new SqlTableDependency<SqlNotifyCancellation>(Constants.DBGENERIC, "tblARInvoices"))
@@ -191,7 +192,7 @@ namespace middleware_service
                 Log.WriteEnd();
                 DeferredTimer_Elapsed(null, null);
                 currentTime = DateTime.Now;
-                InitSignalR();
+                //InitSignalR();
             }
             catch (Exception e)
             {
@@ -544,11 +545,9 @@ namespace middleware_service
                                             DateTime val = DateTime.Now;
                                             if (!IsEmpty(df))
                                             {
-
                                                 DataRow dr = df.Tables[0].Rows[0];
                                                 string date = dr.ItemArray.GetValue(0).ToString();
                                                 val = Convert.ToDateTime(date);
-
                                             }
 
                                             intLink.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
@@ -1293,8 +1292,6 @@ namespace middleware_service
                         string fname = clientInfo[2].ToString();
                         string lname = clientInfo[3].ToString();
 
-
-
                         if (companyName == "" || companyName == " " || companyName == null)
                         {
                             companyName = fname + " " + lname;
@@ -1735,7 +1732,7 @@ namespace middleware_service
                     }
                     else
                     {
-                        intLink.CloseInvoiceBatch(batch);
+                        intLink.CloseInvoiceBatch();
 
                         int newbatch = GetLastInvoiceBatch() + 1;
 
@@ -1771,7 +1768,7 @@ namespace middleware_service
                         intLink.ResetInvoiceTotal();
                     }
 
-                    intLink.CloseInvoiceBatch(batch);
+                    intLink.CloseInvoiceBatch();
                     int newbatch = GetLastInvoiceBatch() + 1;
 
                     if (batchType == renreg)

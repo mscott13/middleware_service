@@ -55,6 +55,7 @@ namespace middleware_service.Other_Classes
 
             outputFile.WriteLine("--------end\r\n");
             outputFile.Flush();
+            BroadcastEvent(new Logging("--------end\r\n"));
         }
 
         private static void BroadcastEvent(object e)

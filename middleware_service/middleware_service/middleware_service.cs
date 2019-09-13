@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.IO;
 using System.ServiceProcess;
 using System.Threading;
@@ -23,8 +22,10 @@ namespace middleware_service
     public partial class MiddlewareService : ServiceBase
     {
         #region Definitions
-        SqlTableDependency<SqlNotifyCancellation> tableDependCancellation;
-        SqlTableDependency<SqlNotify_DocumentInfo> tableDependInfo;
+        SqlTableDependency<SqlNotify_ArInvoices> tableDependencyArInvoices;
+        SqlTableDependency<SqlNotify_ArInvoiceDetail> tableDependencyArInvoiceDetail;
+        SqlTableDependency<SqlNotify_GlDocuments> tableDependencyGlDocuments;
+        SqlTableDependency<SqlNotify_ArPayments> tableDependencyArPayments;
 
         public SqlConnection connGeneric;
         public SqlConnection connIntegration;
@@ -155,17 +156,30 @@ namespace middleware_service
                     Integration.SetBrokerEnabled(Constants.DB_GENERIC_NAME);
                 }
 
-                using (tableDependCancellation = new SqlTableDependency<SqlNotifyCancellation>(Constants.DB_GENERIC, "tblARInvoices"))
+                using (tableDependencyArInvoices = new SqlTableDependency<SqlNotify_ArInvoices>(Constants.TEST_DB_GENERIC, "tblARInvoices"))
                 {
-                    tableDependCancellation.OnChanged += TableDependCancellation_OnChanged;
-                    tableDependCancellation.OnError += TableDependCancellation_OnError;
+                    tableDependencyArInvoices.OnChanged += TableDependencyArInvoices_OnChanged;
+                    tableDependencyArInvoices.OnError += TableDependencyArInvoices_OnError;
                 }
 
-                using (tableDependInfo = new SqlTableDependency<SqlNotify_DocumentInfo>(Constants.DB_GENERIC, "tblGLDocuments"))
+                using (tableDependencyArInvoiceDetail = new SqlTableDependency<SqlNotify_ArInvoiceDetail>(Constants.TEST_DB_GENERIC, "tblARInvoiceDetail"))
                 {
-                    tableDependInfo.OnChanged += TableDependInfo_OnChanged;
-                    tableDependInfo.OnError += TableDependInfo_OnError;
+                    tableDependencyArInvoiceDetail.OnChanged += TableDependencyArInvoiceDetail_OnChanged;
+                    tableDependencyArInvoiceDetail.OnError += TableDependencyArInvoiceDetail_OnError;
                 }
+
+                using (tableDependencyGlDocuments = new SqlTableDependency<SqlNotify_GlDocuments>(Constants.TEST_DB_GENERIC, "tblGLDocuments"))
+                {
+                    tableDependencyGlDocuments.OnChanged += TableDependencyGlDocuments_OnChanged;
+                    tableDependencyGlDocuments.OnError += TableDependencyGlDocuments_OnError;
+                }
+
+                using (tableDependencyArPayments = new SqlTableDependency<SqlNotify_ArPayments>(Constants.TEST_DB_GENERIC, "tblARPayments"))
+                {
+                    tableDependencyArPayments.OnChanged += TableDependencyArPayments_OnChanged;
+                    tableDependencyArPayments.OnError += TableDependencyArPayments_OnError;
+                }
+
 
                 deferredTimer.Elapsed += DeferredTimer_Elapsed;
                 deferredTimer.Enabled = true;
@@ -181,8 +195,14 @@ namespace middleware_service
                 Log.Save("Company: " + accpacSession.CompanyName);
                 Log.Save("Session Status: " + accpacSession.IsOpened);
 
-                tableDependCancellation.Start();
-                tableDependInfo.Start();
+                tableDependencyArInvoices.Start();
+                tableDependencyGlDocuments.Start();
+
+                if (Constants.PARALLEL_RUN)
+                {
+                    tableDependencyArInvoiceDetail.Start();
+                    tableDependencyArPayments.Start();
+                }
 
                 deferredTimer.Start();
                 Log.Save("middleware_service started.");
@@ -209,13 +229,20 @@ namespace middleware_service
         {
             try
             {
-                tableDependCancellation.Stop();
-                tableDependInfo.Stop();
+                tableDependencyArInvoices.Stop();
+                tableDependencyGlDocuments.Stop();
 
-                tableDependCancellation.Dispose();
-                tableDependInfo.Dispose();
+                if (Constants.PARALLEL_RUN)
+                {
+                    tableDependencyArInvoiceDetail.Stop();
+                    tableDependencyArPayments.Stop();
+                    tableDependencyArInvoiceDetail.Dispose();
+                    tableDependencyArPayments.Dispose();
+                }
+
+                tableDependencyArInvoices.Dispose();
+                tableDependencyGlDocuments.Dispose();
                 deferredTimer.Stop();
-                
 
                 if (selfHost != null)
                 {
@@ -254,278 +281,351 @@ namespace middleware_service
             hub.Clients.All.Event(e);
         }
 
-        private void TableDependCancellation_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
+        private void TableDependencyArInvoices_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
         {
             Log.Save("Table Dependency error: " + e.Error.Message);
         }
 
-        private void TableDependInfo_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
+        private void TableDependencyGlDocuments_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
         {
             Log.Save("Table Dependency error: " + e.Error.Message);
         }
 
-        private void TableDependInfo_OnChanged(object sender, RecordChangedEventArgs<SqlNotify_DocumentInfo> e)
+        private void TableDependencyArInvoiceDetail_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
         {
-            if (IsAccpacSessionOpen())
+            Log.Save("Table Dependency error: " + e.Error.Message);
+        }
+
+        private void TableDependencyArPayments_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
+        {
+            Log.Save("Table Dependency error: " + e.Error.Message);
+        }
+
+        private void TableDependencyArPayments_OnChanged(object sender, RecordChangedEventArgs<SqlNotify_ArPayments> e)
+        {
+            e.Entity.TransferToGeneric(Constants.TEST_DB_GENERIC);
+        }
+
+        private void TableDependencyArInvoiceDetail_OnChanged(object sender, RecordChangedEventArgs<SqlNotify_ArInvoiceDetail> e)
+        {
+            e.Entity.TransferToGeneric(Constants.TEST_DB_GENERIC);
+        }
+
+        private void TableDependencyGlDocuments_OnChanged(object sender, RecordChangedEventArgs<SqlNotify_GlDocuments> e)
+        {
+            Thread.Sleep(1000);
+            if (!Constants.IGNORE_EVENTS)
             {
-                Log.Save("Database change detected, operation: " + e.ChangeType);
-                try
+                if (IsAccpacSessionOpen())
                 {
-                    var docInfo = e.Entity;
-                    if (e.ChangeType == ChangeType.Insert)
+                    Log.Save("Database change detected, operation: " + e.ChangeType);
+                    try
                     {
-                        if (docInfo.DocumentType == INVOICE)
+                        var docInfo = e.Entity;
+                        if (e.ChangeType == ChangeType.Insert)
                         {
-                            Log.Save("Incoming invoice...");
-                            InvoiceInfo invoiceInfo = new InvoiceInfo();
-
-                            while (invoiceInfo.amount == 0)
+                            if (docInfo.DocumentType == INVOICE)
                             {
-                                Log.Save("Waiting for invoice amount to update, current value: " + invoiceInfo.amount.ToString());
-                                invoiceInfo = Integration.GetInvoiceInfo(docInfo.OriginalDocumentID);
-                            }
-                            Log.Save("Invoice amount: " + invoiceInfo.amount);
+                                Log.Save("Incoming invoice...");
+                                InvoiceInfo invoiceInfo = new InvoiceInfo();
 
-                            List<string> clientInfo = Integration.GetClientInfoInv(invoiceInfo.CustomerId.ToString());
-                            string companyName = clientInfo[0].ToString();
-                            string cNum = clientInfo[1].ToString();
-                            string fname = clientInfo[2].ToString();
-                            string lname = clientInfo[3].ToString();
-                            Maj m = new Maj();
-
-                            InsertionReturn stat = new InsertionReturn();
-                            if (companyName == "" || companyName == " " || companyName == null)
-                            {
-                                companyName = fname + " " + lname;
-                            }
-
-                            Log.Save("Client name: " + companyName);
-                            Data dt = Translate(cNum, invoiceInfo.FeeType, companyName, "", invoiceInfo.notes, Integration.GetAccountNumber(invoiceInfo.Glid), invoiceInfo.FreqUsage);
-                            DateTime invoiceValidity = Integration.GetValidity(docInfo.OriginalDocumentID);
-                            Log.Save("Invoice Validity: " + invoiceValidity);
-
-                            int financialyear = 0;
-                            if (invoiceValidity.Month > 3)
-                            {
-                                financialyear = invoiceValidity.Year + 1;
-                            }
-                            else
-                            {
-                                financialyear = invoiceValidity.Year;
-                            }
-
-                            Log.Save("Financial Year: " + financialyear);
-                            List<string> data = Integration.CheckInvoiceAvail(docInfo.OriginalDocumentID.ToString());
-                            int r = Integration.GetInvoiceReference(docInfo.OriginalDocumentID);
-                            Log.Save("Invoice Reference number: " + r);
-
-                            if (r != -1)
-                            {
-                                Log.Save("Getting Maj Details...");
-                                m = Integration.GetMajDetail(r);
-                                Log.Save(m.ToString());
-                            }
-
-                            if (IsPeriodCreated(financialyear))
-                            {
-                                if (invoiceInfo.Glid < 5000 || data != null)
+                                while (invoiceInfo.amount == 0)
                                 {
-                                    Log.Save("CreditGL: " + invoiceInfo.Glid);
-                                    if (data != null)
+                                    Log.Save("Waiting for invoice amount to update, current value: " + invoiceInfo.amount.ToString());
+                                    invoiceInfo = Integration.GetInvoiceInfo(docInfo.OriginalDocumentID);
+                                }
+                                Log.Save("Invoice amount: " + invoiceInfo.amount);
+
+                                List<string> clientInfo = Integration.GetClientInfoInv(invoiceInfo.CustomerId.ToString());
+                                string companyName = clientInfo[0].ToString();
+                                string cNum = clientInfo[1].ToString();
+                                string fname = clientInfo[2].ToString();
+                                string lname = clientInfo[3].ToString();
+                                Maj m = new Maj();
+
+                                InsertionReturn stat = new InsertionReturn();
+                                if (companyName == "" || companyName == " " || companyName == null)
+                                {
+                                    companyName = fname + " " + lname;
+                                }
+
+                                Log.Save("Client name: " + companyName);
+                                Data dt = Translate(cNum, invoiceInfo.FeeType, companyName, "", invoiceInfo.notes, Integration.GetAccountNumber(invoiceInfo.Glid), invoiceInfo.FreqUsage);
+                                DateTime invoiceValidity = Integration.GetValidity(docInfo.OriginalDocumentID);
+                                Log.Save("Invoice Validity: " + invoiceValidity);
+
+                                int financialyear = 0;
+                                if (invoiceValidity.Month > 3)
+                                {
+                                    financialyear = invoiceValidity.Year + 1;
+                                }
+                                else
+                                {
+                                    financialyear = invoiceValidity.Year;
+                                }
+
+                                Log.Save("Financial Year: " + financialyear);
+                                List<string> data = Integration.CheckInvoiceAvail(docInfo.OriginalDocumentID.ToString());
+                                int r = Integration.GetInvoiceReference(docInfo.OriginalDocumentID);
+                                Log.Save("Invoice Reference number: " + r);
+
+                                if (r != -1)
+                                {
+                                    Log.Save("Getting Maj Details...");
+                                    m = Integration.GetMajDetail(r);
+                                    Log.Save(m.ToString());
+                                }
+
+                                if (IsPeriodCreated(financialyear))
+                                {
+                                    if (invoiceInfo.Glid < 5000 || data != null)
                                     {
-                                        if (data[1].ToString() == "NT")
+                                        Log.Save("CreditGL: " + invoiceInfo.Glid);
+                                        if (data != null)
                                         {
-                                            if (dt.feeType == "SLF" && invoiceInfo.notes == "Renewal")
+                                            if (data[1].ToString() == "NT")
                                             {
-                                                stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()).ToString());
-
-                                                if (stat.status == "Not Exist")
+                                                if (dt.feeType == "SLF" && invoiceInfo.notes == "Renewal")
                                                 {
-                                                    CreateCustomer(dt.customerId, dt.companyName_NewCust);
-                                                    InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()).ToString());
+                                                    stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()).ToString());
 
-                                                    Integration.UpdateBatchCount(RENEWAL_SPEC + "For " + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString());
-                                                    Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-                                                    Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-
-                                                    prevInvoice = currentInvoice;
-
-                                                    Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                                    Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                                    prevInvoice = currentInvoice;
-                                                }
-                                                else
-                                                {
-                                                    Integration.UpdateBatchCount(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString());
-                                                    Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-                                                    Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-
-                                                    prevInvoice = currentInvoice;
-                                                    Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString() + " For " + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                                    Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                                    prevInvoice = currentInvoice;
-                                                }
-                                            }
-                                            else if (dt.feeType == "RF" && invoiceInfo.notes == "Renewal")
-                                            {
-                                                stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()).ToString());
-
-                                                if (stat.status == "Not Exist")
-                                                {
-                                                    CreateCustomer(dt.customerId, dt.companyName_NewCust);
-                                                    InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()).ToString());
-
-                                                    Integration.UpdateBatchCount(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString());
-                                                    Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-                                                    Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-
-                                                    prevInvoice = currentInvoice;
-                                                    Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                                    Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                                    prevInvoice = currentInvoice;
-                                                }
-                                                else
-                                                {
-                                                    Integration.UpdateBatchCount(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString());
-                                                    Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-
-                                                    Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-
-                                                    prevInvoice = currentInvoice;
-                                                    Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                                    Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                                    prevInvoice = currentInvoice;
-                                                }
-                                            }
-                                            else if ((invoiceInfo.notes == "Annual Fee" && m.stationType == "SSL" && m.certificateType == 0 && m.proj == "JMC") || (invoiceInfo.FreqUsage == "PRS55"))
-                                            {
-                                                stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(MAJ, docInfo.OriginalDocumentID.ToString()).ToString());
-
-                                                if (stat.status == "Not Exist")
-                                                {
-                                                    CreateCustomer(dt.customerId, dt.companyName_NewCust);
-                                                    InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(MAJ, docInfo.OriginalDocumentID.ToString()).ToString());
-
-                                                    Integration.UpdateBatchCount(MAJ);
-                                                    Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-                                                    Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-
-                                                    prevInvoice = currentInvoice;
-                                                    Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                                    Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                                    prevInvoice = currentInvoice;
-                                                }
-                                                else
-                                                {
-                                                    Integration.UpdateBatchCount(MAJ);
-                                                    Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-                                                    Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-
-                                                    prevInvoice = currentInvoice;
-                                                    Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                                    Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                                    prevInvoice = currentInvoice;
-                                                }
-                                            }
-                                            else if (invoiceInfo.notes == "Type Approval" || invoiceInfo.FreqUsage == "TA-ProAmend")
-                                            {
-                                                stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, ChangeToUS(invoiceInfo.amount).ToString(), GetBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()).ToString());
-
-                                                if (stat.status == "Not Exist")
-                                                {
-                                                    CreateCustomer(dt.customerId, dt.companyName_NewCust);
-                                                    InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, ChangeToUS(invoiceInfo.amount).ToString(), GetBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()).ToString());
-
-                                                    Integration.UpdateBatchCount(TYPE_APPROVAL);
-                                                    Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-                                                    Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-
-                                                    prevInvoice = currentInvoice;
-                                                    Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", Integration.GetRate(), ChangeToUS(invoiceInfo.amount), invoiceInfo.isvoided, 0, 0);
-                                                    Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                                    prevInvoice = currentInvoice;
-                                                }
-                                                else
-                                                {
-                                                    Integration.UpdateBatchCount(TYPE_APPROVAL);
-                                                    Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-                                                    Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-
-                                                    prevInvoice = currentInvoice;
-                                                    Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", Integration.GetRate(), ChangeToUS(invoiceInfo.amount), invoiceInfo.isvoided, 0, 0);
-                                                    Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                                    prevInvoice = currentInvoice;
-                                                }
-                                            }
-
-                                            else if (invoiceInfo.notes == "Annual Fee" || invoiceInfo.notes == "Modification" || invoiceInfo.notes == "Radio Operator")
-                                            {
-                                                stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()).ToString());
-
-                                                if (stat.status == "Not Exist")
-                                                {
-                                                    CreateCustomer(dt.customerId, dt.companyName_NewCust);
-                                                    InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()).ToString());
-
-                                                    Integration.UpdateBatchCount(NON_MAJ);
-                                                    Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-                                                    Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-
-                                                    prevInvoice = currentInvoice;
-                                                    Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                                    Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                                    prevInvoice = currentInvoice;
-                                                }
-                                                else
-                                                {
-                                                    Integration.UpdateBatchCount(NON_MAJ);
-                                                    Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-                                                    Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-
-                                                    prevInvoice = currentInvoice;
-                                                    Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                                    Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                                    prevInvoice = currentInvoice;
-                                                }
-                                            }
-                                        }
-                                        else if (data[1].ToString() == "T")
-                                        {
-                                            List<string> detail = new List<string>(3);
-                                            detail = Integration.GetInvoiceDetails(docInfo.OriginalDocumentID);
-                                            int batchNumber = GetIbatchNumber(docInfo.OriginalDocumentID);
-
-
-                                            if (!CheckAccpacIBatchPosted(batchNumber))
-                                            {
-                                                if (invoiceInfo.Glid != Convert.ToInt32(detail[2].ToString()) || invoiceInfo.amount.ToString() != detail[3].ToString())
-                                                {
-                                                    if (invoiceInfo.notes == "Type Approval" || invoiceInfo.FreqUsage == "TA-ProAmend")
+                                                    if (stat.status == "Not Exist")
                                                     {
-                                                        string usamt = "";
-                                                        usamt = ChangeToUSupdated(invoiceInfo.amount, docInfo.OriginalDocumentID).ToString();
-                                                        UpdateInvoice(dt.fcode, Math.Round(ChangeToUSupdated(invoiceInfo.amount, docInfo.OriginalDocumentID), 2).ToString(), batchNumber.ToString().ToString(), GetEntryNumber(docInfo.OriginalDocumentID).ToString());
-                                                        Integration.StoreInvoice(docInfo.OriginalDocumentID, batchNumber, invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "updated", 1, Convert.ToDecimal(usamt), invoiceInfo.isvoided, 0, 0);
+                                                        CreateCustomer(dt.customerId, dt.companyName_NewCust);
+                                                        InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()).ToString());
+
+                                                        Integration.UpdateBatchCount(RENEWAL_SPEC + "For " + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString());
+                                                        Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
+                                                        Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+
+                                                        prevInvoice = currentInvoice;
+
+                                                        Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                        Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                        prevInvoice = currentInvoice;
                                                     }
                                                     else
                                                     {
-                                                        UpdateInvoice(dt.fcode, invoiceInfo.amount.ToString(), batchNumber.ToString().ToString(), GetEntryNumber(docInfo.OriginalDocumentID).ToString());
-                                                        Integration.StoreInvoice(docInfo.OriginalDocumentID, batchNumber, invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "updated", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                        Integration.UpdateBatchCount(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString());
+                                                        Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
+                                                        Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
 
+                                                        prevInvoice = currentInvoice;
+                                                        Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString() + " For " + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                        Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                        prevInvoice = currentInvoice;
                                                     }
-                                                    Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-                                                    Log.Save("Updated Invoice: " + docInfo.OriginalDocumentID.ToString());
-                                                    prevInvoice = currentInvoice;
+                                                }
+                                                else if (dt.feeType == "RF" && invoiceInfo.notes == "Renewal")
+                                                {
+                                                    stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()).ToString());
+
+                                                    if (stat.status == "Not Exist")
+                                                    {
+                                                        CreateCustomer(dt.customerId, dt.companyName_NewCust);
+                                                        InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()).ToString());
+
+                                                        Integration.UpdateBatchCount(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString());
+                                                        Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
+                                                        Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+
+                                                        prevInvoice = currentInvoice;
+                                                        Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                        Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                        prevInvoice = currentInvoice;
+                                                    }
+                                                    else
+                                                    {
+                                                        Integration.UpdateBatchCount(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString());
+                                                        Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
+
+                                                        Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+
+                                                        prevInvoice = currentInvoice;
+                                                        Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                        Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                        prevInvoice = currentInvoice;
+                                                    }
+                                                }
+                                                else if ((invoiceInfo.notes == "Annual Fee" && m.stationType == "SSL" && m.certificateType == 0 && m.proj == "JMC") || (invoiceInfo.FreqUsage == "PRS55"))
+                                                {
+                                                    stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(MAJ, docInfo.OriginalDocumentID.ToString()).ToString());
+
+                                                    if (stat.status == "Not Exist")
+                                                    {
+                                                        CreateCustomer(dt.customerId, dt.companyName_NewCust);
+                                                        InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(MAJ, docInfo.OriginalDocumentID.ToString()).ToString());
+
+                                                        Integration.UpdateBatchCount(MAJ);
+                                                        Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
+                                                        Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+
+                                                        prevInvoice = currentInvoice;
+                                                        Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                        Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                        prevInvoice = currentInvoice;
+                                                    }
+                                                    else
+                                                    {
+                                                        Integration.UpdateBatchCount(MAJ);
+                                                        Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
+                                                        Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+
+                                                        prevInvoice = currentInvoice;
+                                                        Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                        Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                        prevInvoice = currentInvoice;
+                                                    }
+                                                }
+                                                else if (invoiceInfo.notes == "Type Approval" || invoiceInfo.FreqUsage == "TA-ProAmend")
+                                                {
+                                                    stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, ChangeToUS(invoiceInfo.amount).ToString(), GetBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()).ToString());
+
+                                                    if (stat.status == "Not Exist")
+                                                    {
+                                                        CreateCustomer(dt.customerId, dt.companyName_NewCust);
+                                                        InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, ChangeToUS(invoiceInfo.amount).ToString(), GetBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()).ToString());
+
+                                                        Integration.UpdateBatchCount(TYPE_APPROVAL);
+                                                        Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
+                                                        Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+
+                                                        prevInvoice = currentInvoice;
+                                                        Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", Integration.GetRate(), ChangeToUS(invoiceInfo.amount), invoiceInfo.isvoided, 0, 0);
+                                                        Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                        prevInvoice = currentInvoice;
+                                                    }
+                                                    else
+                                                    {
+                                                        Integration.UpdateBatchCount(TYPE_APPROVAL);
+                                                        Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
+                                                        Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+
+                                                        prevInvoice = currentInvoice;
+                                                        Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", Integration.GetRate(), ChangeToUS(invoiceInfo.amount), invoiceInfo.isvoided, 0, 0);
+                                                        Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                        prevInvoice = currentInvoice;
+                                                    }
+                                                }
+
+                                                else if (invoiceInfo.notes == "Annual Fee" || invoiceInfo.notes == "Modification" || invoiceInfo.notes == "Radio Operator")
+                                                {
+                                                    stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()).ToString());
+
+                                                    if (stat.status == "Not Exist")
+                                                    {
+                                                        CreateCustomer(dt.customerId, dt.companyName_NewCust);
+                                                        InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()).ToString());
+
+                                                        Integration.UpdateBatchCount(NON_MAJ);
+                                                        Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
+                                                        Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+
+                                                        prevInvoice = currentInvoice;
+                                                        Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                        Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                        prevInvoice = currentInvoice;
+                                                    }
+                                                    else
+                                                    {
+                                                        Integration.UpdateBatchCount(NON_MAJ);
+                                                        Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
+                                                        Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+
+                                                        prevInvoice = currentInvoice;
+                                                        Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                        Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                        prevInvoice = currentInvoice;
+                                                    }
+                                                }
+                                            }
+                                            else if (data[1].ToString() == "T")
+                                            {
+                                                List<string> detail = new List<string>(3);
+                                                detail = Integration.GetInvoiceDetails(docInfo.OriginalDocumentID);
+                                                int batchNumber = GetIbatchNumber(docInfo.OriginalDocumentID);
+
+
+                                                if (!CheckAccpacIBatchPosted(batchNumber))
+                                                {
+                                                    if (invoiceInfo.Glid != Convert.ToInt32(detail[2].ToString()) || invoiceInfo.amount.ToString() != detail[3].ToString())
+                                                    {
+                                                        if (invoiceInfo.notes == "Type Approval" || invoiceInfo.FreqUsage == "TA-ProAmend")
+                                                        {
+                                                            string usamt = "";
+                                                            usamt = ChangeToUSupdated(invoiceInfo.amount, docInfo.OriginalDocumentID).ToString();
+                                                            UpdateInvoice(dt.fcode, Math.Round(ChangeToUSupdated(invoiceInfo.amount, docInfo.OriginalDocumentID), 2).ToString(), batchNumber.ToString().ToString(), GetEntryNumber(docInfo.OriginalDocumentID).ToString());
+                                                            Integration.StoreInvoice(docInfo.OriginalDocumentID, batchNumber, invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "updated", 1, Convert.ToDecimal(usamt), invoiceInfo.isvoided, 0, 0);
+                                                        }
+                                                        else
+                                                        {
+                                                            UpdateInvoice(dt.fcode, invoiceInfo.amount.ToString(), batchNumber.ToString().ToString(), GetEntryNumber(docInfo.OriginalDocumentID).ToString());
+                                                            Integration.StoreInvoice(docInfo.OriginalDocumentID, batchNumber, invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "updated", 1, 0, invoiceInfo.isvoided, 0, 0);
+
+                                                        }
+                                                        Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+                                                        Log.Save("Updated Invoice: " + docInfo.OriginalDocumentID.ToString());
+                                                        prevInvoice = currentInvoice;
+                                                    }
+                                                    else
+                                                    {
+                                                        prevInvoice = currentInvoice;
+                                                        Log.Save("Update is not needed." + docInfo.OriginalDocumentID.ToString());
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    prevInvoice = currentInvoice;
-                                                    Log.Save("Update is not needed." + docInfo.OriginalDocumentID.ToString());
+                                                    Log.Save("Batch number already posted");
                                                 }
                                             }
-                                            else
+                                        }
+                                        else
+                                        {
+                                            if (dt.feeType == "SLF" && invoiceInfo.notes == "Renewal")
                                             {
-                                                Log.Save("Batch number already posted");
+                                                Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
+                                                prevInvoice = currentInvoice;
+                                                prevTime = DateTime.Now;
+                                            }
+                                            else if (dt.feeType == "RF" && invoiceInfo.notes == "Renewal")
+                                            {
+                                                DataSet df = new DataSet();
+                                                df = Integration.GetRenewalInvoiceValidity(docInfo.OriginalDocumentID);
+                                                DateTime val = DateTime.Now;
+                                                if (!IsEmpty(df))
+                                                {
+                                                    DataRow dr = df.Tables[0].Rows[0];
+                                                    string date = dr.ItemArray.GetValue(0).ToString();
+                                                    val = Convert.ToDateTime(date);
+                                                }
+
+                                                Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
+                                                prevInvoice = currentInvoice;
+                                                prevTime = DateTime.Now;
+                                            }
+
+                                            else if ((invoiceInfo.notes == "Annual Fee" && m.stationType == "SSL" && m.certificateType == 0 && m.proj == "JMC") || (invoiceInfo.FreqUsage == "PRS55"))
+                                            {
+                                                Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
+                                                prevInvoice = currentInvoice;
+                                                prevTime = DateTime.Now;
+                                            }
+                                            else if (invoiceInfo.notes == "Type Approval" || invoiceInfo.FreqUsage == "TA-ProAmend")
+                                            {
+                                                Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", Integration.GetRate(), ChangeToUS(invoiceInfo.amount), invoiceInfo.isvoided, 0, 0);
+                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
+                                                prevInvoice = currentInvoice;
+                                                prevTime = DateTime.Now;
+                                            }
+                                            else if (invoiceInfo.notes == "Annual Fee" || invoiceInfo.notes == "Modification" || invoiceInfo.notes == "Radio Operator")
+                                            {
+                                                Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
+                                                prevInvoice = currentInvoice;
+                                                prevTime = DateTime.Now;
                                             }
                                         }
                                     }
@@ -533,850 +633,805 @@ namespace middleware_service
                                     {
                                         if (dt.feeType == "SLF" && invoiceInfo.notes == "Renewal")
                                         {
-                                            Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                            Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
-                                            prevInvoice = currentInvoice;
-                                            prevTime = DateTime.Now;
+                                            stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()).ToString());
+
+                                            if (stat.status == "Not Exist")
+                                            {
+                                                CreateCustomer(dt.customerId, dt.companyName_NewCust);
+                                                InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()).ToString());
+
+                                                Integration.UpdateBatchCount(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString());
+                                                Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
+                                                Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+
+                                                prevInvoice = currentInvoice;
+                                                Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                prevInvoice = currentInvoice;
+                                                Integration.UpdateBatchAmount(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), invoiceInfo.amount);
+                                            }
+                                            else
+                                            {
+                                                Integration.UpdateBatchCount(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString());
+                                                Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
+
+                                                Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+                                                prevInvoice = currentInvoice;
+                                                Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                prevInvoice = currentInvoice;
+                                                Integration.UpdateBatchAmount(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), invoiceInfo.amount);
+                                            }
                                         }
                                         else if (dt.feeType == "RF" && invoiceInfo.notes == "Renewal")
                                         {
-                                            DataSet df = new DataSet();
-                                            df = Integration.GetRenewalInvoiceValidity(docInfo.OriginalDocumentID);
-                                            DateTime val = DateTime.Now;
-                                            if (!IsEmpty(df))
+                                            stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()).ToString());
+
+                                            if (stat.status == "Not Exist")
                                             {
-                                                DataRow dr = df.Tables[0].Rows[0];
-                                                string date = dr.ItemArray.GetValue(0).ToString();
-                                                val = Convert.ToDateTime(date);
+                                                CreateCustomer(dt.customerId, dt.companyName_NewCust);
+                                                InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()).ToString());
+
+                                                Integration.UpdateBatchCount(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString());
+                                                Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
+                                                Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+
+                                                prevInvoice = currentInvoice;
+                                                Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                prevInvoice = currentInvoice;
+                                                Integration.UpdateBatchAmount(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), invoiceInfo.amount);
                                             }
+                                            else
+                                            {
+                                                Integration.UpdateBatchCount(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString());
+                                                Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
 
-                                            Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                            Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
-                                            prevInvoice = currentInvoice;
-                                            prevTime = DateTime.Now;
+                                                Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+
+                                                prevInvoice = currentInvoice;
+                                                Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                prevInvoice = currentInvoice;
+                                                Integration.UpdateBatchAmount(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), invoiceInfo.amount);
+                                            }
                                         }
-
                                         else if ((invoiceInfo.notes == "Annual Fee" && m.stationType == "SSL" && m.certificateType == 0 && m.proj == "JMC") || (invoiceInfo.FreqUsage == "PRS55"))
                                         {
-                                            Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                            Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
-                                            prevInvoice = currentInvoice;
-                                            prevTime = DateTime.Now;
+                                            stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(MAJ, docInfo.OriginalDocumentID.ToString()).ToString());
+
+                                            if (stat.status == "Not Exist")
+                                            {
+                                                CreateCustomer(dt.customerId, dt.companyName_NewCust);
+                                                InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(MAJ, docInfo.OriginalDocumentID.ToString()).ToString());
+
+                                                Integration.UpdateBatchCount(MAJ);
+                                                Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
+
+                                                Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+
+                                                prevInvoice = currentInvoice;
+                                                Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                prevInvoice = currentInvoice;
+                                                Integration.UpdateBatchAmount(MAJ, invoiceInfo.amount);
+                                            }
+                                            else
+                                            {
+                                                Integration.UpdateBatchCount(MAJ);
+                                                Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
+                                                Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+
+                                                prevInvoice = currentInvoice;
+                                                Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                prevInvoice = currentInvoice;
+                                                Integration.UpdateBatchAmount(MAJ, invoiceInfo.amount);
+                                            }
                                         }
                                         else if (invoiceInfo.notes == "Type Approval" || invoiceInfo.FreqUsage == "TA-ProAmend")
                                         {
-                                            Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", Integration.GetRate(), ChangeToUS(invoiceInfo.amount), invoiceInfo.isvoided, 0, 0);
-                                            Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
-                                            prevInvoice = currentInvoice;
-                                            prevTime = DateTime.Now;
+                                            stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, ChangeToUS(invoiceInfo.amount).ToString(), GetBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()).ToString());
+
+                                            if (stat.status == "Not Exist")
+                                            {
+                                                CreateCustomer(dt.customerId, dt.companyName_NewCust);
+                                                InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, ChangeToUS(invoiceInfo.amount).ToString(), GetBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()).ToString());
+
+                                                Integration.UpdateBatchCount(TYPE_APPROVAL);
+                                                Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
+                                                Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+
+                                                prevInvoice = currentInvoice;
+                                                Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", Integration.GetRate(), ChangeToUS(invoiceInfo.amount), invoiceInfo.isvoided, 0, 0);
+                                                Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                prevInvoice = currentInvoice;
+                                                Integration.UpdateBatchAmount(TYPE_APPROVAL, invoiceInfo.amount);
+                                            }
+                                            else
+                                            {
+                                                Integration.UpdateBatchCount(TYPE_APPROVAL);
+                                                Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
+                                                Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+
+                                                prevInvoice = currentInvoice;
+                                                Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", Integration.GetRate(), ChangeToUS(invoiceInfo.amount), invoiceInfo.isvoided, 0, 0);
+                                                Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                prevInvoice = currentInvoice;
+                                                Integration.UpdateBatchAmount(TYPE_APPROVAL, invoiceInfo.amount);
+                                            }
                                         }
+
                                         else if (invoiceInfo.notes == "Annual Fee" || invoiceInfo.notes == "Modification" || invoiceInfo.notes == "Radio Operator")
                                         {
-                                            Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                            Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
-                                            prevInvoice = currentInvoice;
-                                            prevTime = DateTime.Now;
+                                            stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()).ToString());
+
+                                            if (stat.status == "Not Exist")
+                                            {
+                                                CreateCustomer(dt.customerId, dt.companyName_NewCust);
+                                                InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()).ToString());
+
+                                                Integration.UpdateBatchCount(NON_MAJ);
+                                                Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
+                                                Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+
+                                                prevInvoice = currentInvoice;
+                                                Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                prevInvoice = currentInvoice;
+                                                Integration.UpdateBatchAmount(NON_MAJ, invoiceInfo.amount);
+                                            }
+                                            else
+                                            {
+                                                Integration.UpdateBatchCount(NON_MAJ);
+                                                Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
+                                                Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
+
+                                                prevInvoice = currentInvoice;
+                                                Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
+                                                Integration.MarkTransferred(docInfo.OriginalDocumentID);
+                                                prevInvoice = currentInvoice;
+                                                Integration.UpdateBatchAmount(NON_MAJ, invoiceInfo.amount);
+                                            }
+                                        }
+                                    }
+
+                                    prevInvoice = currentInvoice;
+                                    prevTime = DateTime.Now;
+                                }
+                                else
+                                {
+                                    Log.Save("Invoice not Transferred as fiscal year " + financialyear + " not yet Created in Sage. ");
+                                }
+                            }
+                            else if (docInfo.DocumentType == RECEIPT && docInfo.PaymentMethod != 99)
+                            {
+                                Log.Save("Incoming Receipt");
+                                Data dt = new Data();
+                                PaymentInfo pinfo = new PaymentInfo();
+
+                                List<string> paymentData = new List<string>(3);
+                                List<string> clientData = new List<string>(3);
+                                List<string> feeData = new List<string>(3);
+
+                                while (pinfo.ReceiptNumber == 0)
+                                {
+                                    pinfo = Integration.GetReceiptInfo(docInfo.OriginalDocumentID);
+                                    Thread.Sleep(500);
+                                }
+
+                                var receipt = pinfo.ReceiptNumber;
+                                var transid = pinfo.GLTransactionID;
+                                var id = pinfo.CustomerID.ToString();
+
+                                paymentData = Integration.GetPaymentInfo(transid);
+                                var debit = pinfo.Debit.ToString();
+                                var glid = pinfo.GLID.ToString();
+                                var invoiceId = pinfo.InvoiceID.ToString();
+
+                                DateTime paymentDate = pinfo.Date1;
+                                string prepstat = " ";
+                                DateTime valstart = DateTime.Now.Date;
+                                DateTime valend = DateTime.Now.Date;
+
+                                clientData = Integration.GetClientInfoInv(id);
+                                var companyName = clientData[0].ToString();
+                                var customerId = clientData[1].ToString();
+                                var fname = clientData[2].ToString();
+                                var lname = clientData[3].ToString();
+                                var ftype = " ";
+                                var notes = " ";
+
+                                if (companyName == "" || companyName == " " || companyName == null)
+                                {
+                                    companyName = fname + " " + lname;
+                                }
+
+                                if (Convert.ToInt32(invoiceId) > 0)
+                                {
+                                    feeData = Integration.GetFeeInfo(Convert.ToInt32(invoiceId));
+                                    ftype = feeData[0].ToString();
+                                    notes = feeData[1].ToString();
+
+                                    Log.Save("Invoice Id: " + invoiceId.ToString());
+                                    Log.Save("Customer Id: " + customerId);
+
+                                    prepstat = "No";
+                                    valstart = Integration.GetValidity(Convert.ToInt32(invoiceId));
+                                    valend = Integration.GetValidityEnd(Convert.ToInt32(invoiceId));
+                                }
+                                else
+                                {
+                                    prepstat = "Yes";
+                                    Log.Save("Prepayment");
+                                    Log.Save("Customer Id: " + customerId);
+
+                                    var gl = Integration.GetCreditGlID((transid + 1).ToString());
+
+                                    if (gl == 5321)
+                                    {
+                                        ftype = "SLF";
+                                    }
+                                    else if (gl == 5149)
+                                    {
+                                        ftype = "RF";
+                                    }
+                                }
+
+                                if (prepstat == "Yes")
+                                {
+                                    dt = Translate(customerId, ftype, companyName, debit, notes, "PREPAYMENT", Integration.GetFreqUsage(Convert.ToInt32(invoiceId)));
+                                }
+                                else
+                                {
+                                    dt = Translate(customerId, ftype, companyName, debit, notes, "", Integration.GetFreqUsage(Convert.ToInt32(invoiceId)));
+                                }
+
+                                bool cusexists;
+                                cusexists = CustomerExists(dt.customerId);
+                                if (Convert.ToInt32(invoiceId) == 0)
+                                {
+                                    if (!cusexists)
+                                    {
+                                        CreateCustomer(dt.customerId, companyName);
+                                        Integration.StoreCustomer(dt.customerId, companyName);
+                                    }
+                                }
+
+                                if (cusexists || Convert.ToInt32(invoiceId) == 0 && Convert.ToInt32(glid) > 0)
+                                {
+                                    if (glid == "5146")
+                                    {
+                                        Log.Save("Bank: FGB JA$ CURRENT A/C");
+                                        if (dt.success)
+                                        {
+                                            if (ReceiptBatchAvail("FGBJMREC"))
+                                            {
+                                                string reference = Integration.GetCurrentRef("FGBJMREC");
+                                                Log.Save("Target Batch: " + Integration.GetRecieptBatch("FGBJMREC"));
+                                                Log.Save("Transferring Receipt");
+
+                                                ReceiptTransfer(Integration.GetRecieptBatch("FGBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
+                                                Integration.UpdateBatchCountPayment(Integration.GetRecieptBatch("FGBJMREC"));
+                                                Integration.UpdateReceiptNumber(receipt, Integration.GetCurrentRef("FGBJMREC"));
+                                                Integration.IncrementReferenceNumber(Integration.GetBankCodeId("FGBJMREC"), Convert.ToDecimal(dt.debit));
+                                                Integration.StorePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), 0, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", 0);
+                                            }
+                                            else
+                                            {
+                                                string reference = Integration.GetCurrentRef("FGBJMREC");
+                                                CreateReceiptBatchEx("FGBJMREC", "Middleware Generated Batch for FGBJMREC");
+                                                Integration.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "FGBJMREC");
+
+                                                Log.Save("Target Batch: " + Integration.GetRecieptBatch("FGBJMREC"));
+                                                Log.Save("Transferring Receipt");
+
+                                                ReceiptTransfer(Integration.GetRecieptBatch("FGBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
+                                                Integration.UpdateBatchCountPayment(Integration.GetRecieptBatch("FGBJMREC"));
+                                                Integration.UpdateReceiptNumber(receipt, Integration.GetCurrentRef("FGBJMREC"));
+                                                Integration.IncrementReferenceNumber(Integration.GetBankCodeId("FGBJMREC"), Convert.ToDecimal(dt.debit));
+                                                Integration.StorePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), 0, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", 0);
+                                            }
+                                        }
+                                    }
+                                    else if (glid == "5147")
+                                    {
+                                        Log.Save("Bank: FGB US$ SAVINGS A/C");
+                                        decimal usamount = 0;
+                                        decimal transferedAmt = Convert.ToDecimal(dt.debit) / Integration.GetUsRateByInvoice(Convert.ToInt32(invoiceId));
+                                        string clientIdPrefix = "";
+                                        decimal currentRate = 1;
+
+                                        for (int i = 0; i < dt.customerId.Length; i++)
+                                        {
+                                            if (dt.customerId[i] != '-')
+                                            {
+                                                clientIdPrefix += dt.customerId[i];
+                                            }
+                                            else
+                                            {
+                                                i = dt.customerId.Length;
+                                            }
+                                        }
+
+                                        if (prepstat == "Yes" && clientIdPrefix == Integration.GetClientIdZRecord(true))
+                                        {
+                                            dt.customerId = clientIdPrefix + "-T";
+                                            currentRate = Integration.GetRate();
+                                        }
+
+                                        if (dt.customerId[6] == 'T')
+                                        {
+                                            usamount = Math.Round(Convert.ToDecimal(dt.debit) / Integration.GetUsRateByInvoice(Convert.ToInt32(invoiceId)), 2);
+                                            Integration.ModifyInvoiceList(0, Integration.GetUsRateByInvoice(Convert.ToInt32(invoiceId)), dt.customerId);
+                                            currentRate = Integration.GetRate();
+                                        }
+
+                                        if (dt.success)
+                                        {
+                                            if (ReceiptBatchAvail("FGBUSMRC"))
+                                            {
+                                                string reference = Integration.GetCurrentRef("FGBUSMRC");
+                                                Log.Save("Target Batch: " + Integration.GetRecieptBatch("FGBUSMRC"));
+                                                Log.Save("Transferring Receipt");
+
+                                                ReceiptTransfer(Integration.GetRecieptBatch("FGBUSMRC"), dt.customerId, Math.Round(transferedAmt, 2).ToString(), dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
+                                                Integration.UpdateBatchCountPayment(Integration.GetRecieptBatch("FGBUSMRC"));
+                                                Integration.UpdateReceiptNumber(receipt, Integration.GetCurrentRef("FGBUSMRC"));
+                                                Integration.IncrementReferenceNumber(Integration.GetBankCodeId("FGBUSMRC"), Convert.ToDecimal(dt.debit));
+                                                Integration.StorePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), usamount, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", currentRate);
+                                            }
+                                            else
+                                            {
+                                                string reference = Integration.GetCurrentRef("FGBUSMRC");
+                                                CreateReceiptBatchEx("FGBUSMRC", "Middleware Generated Batch for FGBUSMRC");
+                                                Integration.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "FGBUSMRC");
+
+                                                Log.Save("Target Batch: " + Integration.GetRecieptBatch("FGBUSMRC"));
+                                                Log.Save("Transferring Receipt");
+
+                                                ReceiptTransfer(Integration.GetRecieptBatch("FGBUSMRC"), dt.customerId, Math.Round(transferedAmt, 2).ToString(), dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
+                                                Integration.UpdateBatchCountPayment(Integration.GetRecieptBatch("FGBUSMRC"));
+                                                Integration.UpdateReceiptNumber(receipt, Integration.GetCurrentRef("FGBUSMRC"));
+                                                Integration.IncrementReferenceNumber(Integration.GetBankCodeId("FGBUSMRC"), Convert.ToDecimal(dt.debit));
+                                                Integration.StorePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), usamount, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", currentRate);
+                                            }
+                                        }
+                                    }
+                                    else if (glid == "5148")
+                                    {
+                                        Log.Save("NCB JA$ SAVINGS A/C");
+                                        if (dt.success)
+                                        {
+                                            if (ReceiptBatchAvail("NCBJMREC"))
+                                            {
+                                                string reference = Integration.GetCurrentRef("NCBJMREC");
+                                                Log.Save("Target Batch: " + Integration.GetRecieptBatch("NCBJMREC"));
+                                                Log.Save("Transferring Receipt");
+
+                                                ReceiptTransfer(Integration.GetRecieptBatch("NCBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
+                                                Integration.UpdateBatchCountPayment(Integration.GetRecieptBatch("NCBJMREC"));
+                                                Integration.UpdateReceiptNumber(receipt, Integration.GetCurrentRef("NCBJMREC"));
+                                                Integration.IncrementReferenceNumber(Integration.GetBankCodeId("NCBJMREC"), Convert.ToDecimal(dt.debit));
+                                                Integration.StorePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), 0, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", 1);
+                                            }
+                                            else
+                                            {
+                                                string reference = Integration.GetCurrentRef("NCBJMREC");
+                                                CreateReceiptBatchEx("NCBJMREC", "Middleware Generated Batch for NCBJMREC");
+                                                Integration.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "NCBJMREC");
+
+                                                Log.Save("Target Batch: " + Integration.GetRecieptBatch("NCBJMREC"));
+                                                Log.Save("Transferring Receipt");
+
+                                                ReceiptTransfer(Integration.GetRecieptBatch("NCBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
+                                                Integration.UpdateBatchCountPayment(Integration.GetRecieptBatch("NCBJMREC"));
+                                                Integration.UpdateReceiptNumber(receipt, Integration.GetCurrentRef("NCBJMREC"));
+                                                Integration.IncrementReferenceNumber(Integration.GetBankCodeId("NCBJMREC"), Convert.ToDecimal(dt.debit));
+                                                Integration.StorePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), 0, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", 1);
+                                            }
                                         }
                                     }
                                 }
                                 else
                                 {
-                                    if (dt.feeType == "SLF" && invoiceInfo.notes == "Renewal")
-                                    {
-                                        stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()).ToString());
+                                    Log.Save("Customer not found in accpac");
+                                }
+                            }
+                            else if (docInfo.DocumentType == CREDIT_MEMO)
+                            {
+                                Log.Save("New Credit Memo...");
+                                CreditNoteInfo creditNote = new CreditNoteInfo();
 
-                                        if (stat.status == "Not Exist")
-                                        {
-                                            CreateCustomer(dt.customerId, dt.companyName_NewCust);
-                                            InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()).ToString());
-
-                                            Integration.UpdateBatchCount(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString());
-                                            Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-                                            Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-
-                                            prevInvoice = currentInvoice;
-                                            Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                            Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                            prevInvoice = currentInvoice;
-                                            Integration.UpdateBatchAmount(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), invoiceInfo.amount);
-                                        }
-                                        else
-                                        {
-                                            Integration.UpdateBatchCount(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString());
-                                            Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-
-                                            Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-                                            prevInvoice = currentInvoice;
-                                            Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                            Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                            prevInvoice = currentInvoice;
-                                            Integration.UpdateBatchAmount(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), invoiceInfo.amount);
-                                        }
-                                    }
-                                    else if (dt.feeType == "RF" && invoiceInfo.notes == "Renewal")
-                                    {
-                                        stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()).ToString());
-
-                                        if (stat.status == "Not Exist")
-                                        {
-                                            CreateCustomer(dt.customerId, dt.companyName_NewCust);
-                                            InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()).ToString());
-
-                                            Integration.UpdateBatchCount(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString());
-                                            Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-                                            Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-
-                                            prevInvoice = currentInvoice;
-                                            Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                            Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                            prevInvoice = currentInvoice;
-                                            Integration.UpdateBatchAmount(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), invoiceInfo.amount);
-                                        }
-                                        else
-                                        {
-                                            Integration.UpdateBatchCount(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString());
-                                            Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-
-                                            Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-
-                                            prevInvoice = currentInvoice;
-                                            Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                            Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                            prevInvoice = currentInvoice;
-                                            Integration.UpdateBatchAmount(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), invoiceInfo.amount);
-                                        }
-                                    }
-                                    else if ((invoiceInfo.notes == "Annual Fee" && m.stationType == "SSL" && m.certificateType == 0 && m.proj == "JMC") || (invoiceInfo.FreqUsage == "PRS55"))
-                                    {
-                                        stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(MAJ, docInfo.OriginalDocumentID.ToString()).ToString());
-
-                                        if (stat.status == "Not Exist")
-                                        {
-                                            CreateCustomer(dt.customerId, dt.companyName_NewCust);
-                                            InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(MAJ, docInfo.OriginalDocumentID.ToString()).ToString());
-
-                                            Integration.UpdateBatchCount(MAJ);
-                                            Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-
-                                            Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-
-                                            prevInvoice = currentInvoice;
-                                            Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                            Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                            prevInvoice = currentInvoice;
-                                            Integration.UpdateBatchAmount(MAJ, invoiceInfo.amount);
-                                        }
-                                        else
-                                        {
-                                            Integration.UpdateBatchCount(MAJ);
-                                            Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-                                            Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-
-                                            prevInvoice = currentInvoice;
-                                            Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                            Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                            prevInvoice = currentInvoice;
-                                            Integration.UpdateBatchAmount(MAJ, invoiceInfo.amount);
-                                        }
-                                    }
-                                    else if (invoiceInfo.notes == "Type Approval" || invoiceInfo.FreqUsage == "TA-ProAmend")
-                                    {
-                                        stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, ChangeToUS(invoiceInfo.amount).ToString(), GetBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()).ToString());
-
-                                        if (stat.status == "Not Exist")
-                                        {
-                                            CreateCustomer(dt.customerId, dt.companyName_NewCust);
-                                            InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, ChangeToUS(invoiceInfo.amount).ToString(), GetBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()).ToString());
-
-                                            Integration.UpdateBatchCount(TYPE_APPROVAL);
-                                            Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-                                            Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-
-                                            prevInvoice = currentInvoice;
-                                            Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", Integration.GetRate(), ChangeToUS(invoiceInfo.amount), invoiceInfo.isvoided, 0, 0);
-                                            Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                            prevInvoice = currentInvoice;
-                                            Integration.UpdateBatchAmount(TYPE_APPROVAL, invoiceInfo.amount);
-                                        }
-                                        else
-                                        {
-                                            Integration.UpdateBatchCount(TYPE_APPROVAL);
-                                            Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-                                            Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-
-                                            prevInvoice = currentInvoice;
-                                            Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", Integration.GetRate(), ChangeToUS(invoiceInfo.amount), invoiceInfo.isvoided, 0, 0);
-                                            Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                            prevInvoice = currentInvoice;
-                                            Integration.UpdateBatchAmount(TYPE_APPROVAL, invoiceInfo.amount);
-                                        }
-                                    }
-
-                                    else if (invoiceInfo.notes == "Annual Fee" || invoiceInfo.notes == "Modification" || invoiceInfo.notes == "Radio Operator")
-                                    {
-                                        stat = InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()).ToString());
-
-                                        if (stat.status == "Not Exist")
-                                        {
-                                            CreateCustomer(dt.customerId, dt.companyName_NewCust);
-                                            InvBatchInsert(dt.customerId, docInfo.OriginalDocumentID.ToString(), dt.companyName, dt.fcode, invoiceInfo.amount.ToString(), GetBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()).ToString());
-
-                                            Integration.UpdateBatchCount(NON_MAJ);
-                                            Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-                                            Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-
-                                            prevInvoice = currentInvoice;
-                                            Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                            Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                            prevInvoice = currentInvoice;
-                                            Integration.UpdateBatchAmount(NON_MAJ, invoiceInfo.amount);
-                                        }
-                                        else
-                                        {
-                                            Integration.UpdateBatchCount(NON_MAJ);
-                                            Integration.UpdateEntryNumber(docInfo.OriginalDocumentID);
-                                            Integration.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.Glid);
-
-                                            prevInvoice = currentInvoice;
-                                            Integration.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.Glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.Author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isvoided, 0, 0);
-                                            Integration.MarkTransferred(docInfo.OriginalDocumentID);
-                                            prevInvoice = currentInvoice;
-                                            Integration.UpdateBatchAmount(NON_MAJ, invoiceInfo.amount);
-                                        }
-                                    }
+                                while (creditNote.amount == 0)
+                                {
+                                    creditNote = Integration.GetCreditNoteInfo(docInfo.OriginalDocumentID, docInfo.DocumentID);
+                                    Thread.Sleep(1000);
                                 }
 
-                                prevInvoice = currentInvoice;
-                                prevTime = DateTime.Now;
+                                List<string> clientInfo = new List<string>(4);
+                                clientInfo = Integration.GetClientInfoInv(creditNote.CustomerID.ToString());
+                                var accountNum = Integration.GetAccountNumber(creditNote.CreditGL);
+                                DateTime invoiceValidity = Integration.GetValidity(creditNote.ARInvoiceID);
+
+                                string companyName = clientInfo[0].ToString();
+                                string cNum = clientInfo[1].ToString();
+                                string fname = clientInfo[2].ToString();
+                                string lname = clientInfo[3].ToString();
+                                string creditNoteDesc = creditNote.remarks;
+                                int cred_docNum = 0;
+
+                                if (creditNoteDesc == "" || creditNoteDesc == null)
+                                {
+                                    creditNoteDesc = companyName + " - Credit Note";
+                                }
+
+                                if (companyName == "" || companyName == " " || companyName == null)
+                                {
+                                    companyName = fname + " " + lname;
+                                }
+
+                                Data dt = Translate(cNum, creditNote.FeeType, companyName, creditNote.amount.ToString(), creditNote.notes, accountNum, Integration.GetFreqUsage(creditNote.ARInvoiceID));
+
+                                if (CheckAccpacInvoiceAvail(creditNote.ARInvoiceID))
+                                {
+                                    cred_docNum = Integration.GetCreditMemoNumber();
+                                    Log.Save("Creating credit memo");
+                                    int batchNumber = GetBatch(CREDIT_NOTE, creditNote.ARInvoiceID.ToString());
+
+                                    Integration.StoreInvoice(creditNote.ARInvoiceID, batchNumber, creditNote.CreditGL, companyName, dt.customerId, DateTime.Now, "", creditNote.amount, "no modification", 1, 0, 0, 1, cred_docNum);
+                                    CreditNoteInsert(batchNumber.ToString(), dt.customerId, accountNum, creditNote.amount.ToString(), creditNote.ARInvoiceID.ToString(), cred_docNum.ToString(), creditNoteDesc);
+                                    Integration.UpdateAsmsCreditMemoNumber(docInfo.DocumentID, cred_docNum);
+                                }
+                                else
+                                {
+                                    Log.Save("The Credit Memo was not created. The Invoice does not exist.");
+                                    cred_docNum = Integration.GetCreditMemoNumber();
+                                    Integration.UpdateAsmsCreditMemoNumber(docInfo.DocumentID, cred_docNum);
+                                    Log.Save("The Credit Memo number in ASMS updated.");
+                                }
                             }
-                            else
+                            else if (docInfo.DocumentType == RECEIPT && docInfo.PaymentMethod == 99)
                             {
-                                Log.Save("Invoice not Transferred as fiscal year " + financialyear + " not yet Created in Sage. ");
+                                Log.Save("Payment By Credit");
+                                PaymentInfo pinfo = Integration.GetReceiptInfo(docInfo.OriginalDocumentID);
+                                List<string> clientData = Integration.GetClientInfoInv(pinfo.CustomerID.ToString());
+                                List<string> feeData = new List<string>(3);
+
+                                var companyName = clientData[0].ToString();
+                                var customerId = clientData[1].ToString();
+                                var fname = clientData[2].ToString();
+                                var lname = clientData[3].ToString();
+
+                                if (companyName == "" || companyName == " " || companyName == null)
+                                {
+                                    companyName = fname + " " + lname;
+                                }
+
+                                feeData = Integration.GetFeeInfo(pinfo.InvoiceID);
+                                var ftype = feeData[0].ToString();
+                                var notes = feeData[1].ToString();
+
+                                Data dt = Translate(customerId, ftype, companyName, pinfo.Debit.ToString(), notes, "", Integration.GetFreqUsage(pinfo.InvoiceID).ToString());
+                                PrepaymentData pData = Integration.CheckPrepaymentAvail(dt.customerId);
+                                int invoiceBatch = GetIbatchNumber(pinfo.InvoiceID);
+                                int receiptBatch = GetRBatchNumber(pData.referenceNumber);
+
+                                if (pData.dataAvail)
+                                {
+                                    if (CheckAccpacIBatchPosted(invoiceBatch) && CheckAccpacRBatchPosted(receiptBatch))
+                                    {
+                                        var glid = pData.destinationBank.ToString();
+
+                                        if (glid == "5146")
+                                        {
+                                            Log.Save("Bank: FGB JA$ CURRENT A/C");
+                                            if (pData.totalPrepaymentRemainder >= pinfo.Debit)
+                                            {
+                                                Log.Save("Carrying out Payment By Credit Transaction");
+                                                decimal reducingAmt = pinfo.Debit;
+
+                                                if (ReceiptBatchAvail("FGBJMREC"))
+                                                {
+                                                    while (reducingAmt > 0)
+                                                    {
+                                                        pData = Integration.CheckPrepaymentAvail(dt.customerId);
+                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatch("FGBJMREC"), GetDocNumber(pData.referenceNumber));
+                                                        if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
+                                                        else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
+                                                        reducingAmt = reducingAmt - pData.remainder;
+                                                    }
+                                                    Integration.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, 0, "No", 0, Convert.ToInt32(glid), "Yes", 1);
+                                                    Log.Save("Payment by credit transaction complete");
+                                                }
+                                                else
+                                                {
+                                                    CreateReceiptBatchEx("FGBJMREC", "Middleware Generated Batch for FGBJMREC");
+                                                    Integration.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "FGBJMREC");
+                                                    Log.Save("Target Batch: " + Integration.GetRecieptBatch("FGBJMREC"));
+                                                    while (reducingAmt > 0)
+                                                    {
+                                                        pData = Integration.CheckPrepaymentAvail(dt.customerId);
+                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatch("FGBJMREC"), GetDocNumber(pData.referenceNumber));
+                                                        if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
+                                                        else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
+                                                        reducingAmt = reducingAmt - pData.remainder;
+                                                    }
+                                                    Integration.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, 0, "No", 0, Convert.ToInt32(glid), "Yes", 1);
+                                                    Log.Save("Payment by credit transaction complete");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Log.Save("Prepayment balance not enough to carry out Transaction");
+                                            }
+                                        }
+
+                                        if (glid == "5147")
+                                        {
+                                            Log.Save("Bank: FGB US$ SAVINGS A/C");
+                                            decimal usRate = Integration.GetUsRateByInvoice(pinfo.InvoiceID);
+                                            decimal usAmount = Convert.ToDecimal(dt.debit) / usRate;
+                                            if (pData.totalPrepaymentRemainder >= usAmount)
+                                            {
+                                                Log.Save("Carrying out Payment By Credit Transaction");
+                                                decimal reducingAmt = usAmount;
+
+                                                if (ReceiptBatchAvail("FGBUSMRC"))
+                                                {
+                                                    while (reducingAmt > 0)
+                                                    {
+                                                        pData = Integration.CheckPrepaymentAvail(dt.customerId);
+                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatch("FGBUSMRC"), GetDocNumber(pData.referenceNumber));
+                                                        if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
+                                                        else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
+                                                        reducingAmt = reducingAmt - pData.remainder;
+                                                    }
+                                                    if (usRate == 1) Integration.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, 0, "No", 0, Convert.ToInt32(glid), "Yes", 1);
+                                                    else Integration.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, usAmount, "No", 0, Convert.ToInt32(glid), "Yes", 1);
+                                                    Log.Save("Payment by credit transaction complete");
+                                                }
+                                                else
+                                                {
+                                                    CreateReceiptBatchEx("FGBUSMRC", "Middleware Generated Batch for FGBUSMRC");
+                                                    Integration.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "FGBUSMRC");
+                                                    Log.Save("Target Batch: " + Integration.GetRecieptBatch("FGBUSMRC"));
+
+                                                    while (reducingAmt > 0)
+                                                    {
+                                                        pData = Integration.CheckPrepaymentAvail(dt.customerId);
+                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatch("FGBUSMRC"), GetDocNumber(pData.referenceNumber));
+                                                        if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
+                                                        else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
+                                                        reducingAmt = reducingAmt - pData.remainder;
+                                                    }
+
+                                                    if (usRate == 1)
+                                                    {
+                                                        Integration.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, 0, "No", 0, Convert.ToInt32(glid), "Yes", 1);
+                                                    }
+                                                    else
+                                                    {
+                                                        Integration.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, usAmount, "No", 0, Convert.ToInt32(glid), "Yes", 1);
+
+                                                    }
+                                                    Log.Save("Payment by credit transaction complete");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Log.Save("Prepayment balance not enough to carry out Transaction");
+                                            }
+                                        }
+
+                                        if (glid == "5148")
+                                        {
+                                            Log.Save("Bank: NCB JA$ SAVINGS A/C");
+                                            if (pData.totalPrepaymentRemainder >= pinfo.Debit)
+                                            {
+                                                Log.Save("Carrying out Payment By Credit Transaction");
+                                                decimal reducingAmt = pinfo.Debit;
+
+                                                if (ReceiptBatchAvail("NCBJMREC"))
+                                                {
+                                                    while (reducingAmt > 0)
+                                                    {
+                                                        pData = Integration.CheckPrepaymentAvail(dt.customerId);
+                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatch("NCBJMREC"), GetDocNumber(pData.referenceNumber));
+                                                        if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
+                                                        else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
+                                                        reducingAmt = reducingAmt - pData.remainder;
+                                                    }
+                                                    Integration.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, 0, "No", 0, Convert.ToInt32(glid), "Yes", 1);
+                                                    Log.Save("Payment by credit transaction complete");
+                                                }
+                                                else
+                                                {
+                                                    CreateReceiptBatchEx("NCBJMREC", "Middleware Generated Batch for NCBJMREC");
+                                                    Integration.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "NCBJMREC");
+                                                    Log.Save("Target Batch: " + Integration.GetRecieptBatch("NCBJMREC"));
+                                                    while (reducingAmt > 0)
+                                                    {
+                                                        pData = Integration.CheckPrepaymentAvail(dt.customerId);
+                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatch("NCBJMREC"), GetDocNumber(pData.referenceNumber));
+                                                        if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
+                                                        else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
+                                                        reducingAmt = reducingAmt - pData.remainder;
+                                                    }
+                                                    Integration.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, 0, "No", 0, Convert.ToInt32(glid), "Yes", 1);
+                                                    Log.Save("Payment by credit transaction complete");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Log.Save("Prepayment balance not enough to carry out Transaction");
+                                            }
+                                        }
+
+                                        if (glid != "5146" && glid != "5147" && glid != "5148")
+                                        {
+                                            Log.Save("Bank Selected Not found, Cannot complete Transaction");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Log.Save("Both invoice and receipt must be posted before attempting this transaction");
+                                    }
+                                }
+                                else
+                                {
+                                    Log.Save("No prepayment record found for customer: " + dt.customerId);
+                                }
                             }
                         }
-                        else if (docInfo.DocumentType == RECEIPT && docInfo.PaymentMethod != 99)
+                        Log.WriteEnd();
+                    }
+                    catch (Exception ex)
+                    {
+                        if (accpacSession.Errors.Count > 0)
                         {
-                            Log.Save("Incoming Receipt");
-                            Data dt = new Data();
-                            PaymentInfo pinfo = new PaymentInfo();
-
-                            List<string> paymentData = new List<string>(3);
-                            List<string> clientData = new List<string>(3);
-                            List<string> feeData = new List<string>(3);
-
-                            while (pinfo.ReceiptNumber == 0)
+                            Log.Save(ex.Message + " " + ex.StackTrace);
+                            for (int i = 0; i < accpacSession.Errors.Count; i++)
                             {
-                                pinfo = Integration.GetReceiptInfo(docInfo.OriginalDocumentID);
-                                Thread.Sleep(500);
+                                Log.Save(accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
                             }
-
-                            var receipt = pinfo.ReceiptNumber;
-                            var transid = pinfo.GLTransactionID;
-                            var id = pinfo.CustomerID.ToString();
-
-                            paymentData = Integration.GetPaymentInfo(transid);
-                            var debit = pinfo.Debit.ToString();
-                            var glid = pinfo.GLID.ToString();
-                            var invoiceId = pinfo.InvoiceID.ToString();
-
-                            DateTime paymentDate = pinfo.Date1;
-                            string prepstat = " ";
-                            DateTime valstart = DateTime.Now.Date;
-                            DateTime valend = DateTime.Now.Date;
-
-                            clientData = Integration.GetClientInfoInv(id);
-                            var companyName = clientData[0].ToString();
-                            var customerId = clientData[1].ToString();
-                            var fname = clientData[2].ToString();
-                            var lname = clientData[3].ToString();
-                            var ftype = " ";
-                            var notes = " ";
-
-                            if (companyName == "" || companyName == " " || companyName == null)
-                            {
-                                companyName = fname + " " + lname;
-                            }
-
-                            if (Convert.ToInt32(invoiceId) > 0)
-                            {
-                                feeData = Integration.GetFeeInfo(Convert.ToInt32(invoiceId));
-                                ftype = feeData[0].ToString();
-                                notes = feeData[1].ToString();
-
-                                Log.Save("Invoice Id: " + invoiceId.ToString());
-                                Log.Save("Customer Id: " + customerId);
-
-                                prepstat = "No";
-                                valstart = Integration.GetValidity(Convert.ToInt32(invoiceId));
-                                valend = Integration.GetValidityEnd(Convert.ToInt32(invoiceId));
-                            }
-                            else
-                            {
-                                prepstat = "Yes";
-                                Log.Save("Prepayment");
-                                Log.Save("Customer Id: " + customerId);
-
-                                var gl = Integration.GetCreditGlID((transid + 1).ToString());
-
-                                if (gl == 5321)
-                                {
-                                    ftype = "SLF";
-                                }
-                                else if (gl == 5149)
-                                {
-                                    ftype = "RF";
-                                }
-                            }
-
-                            if (prepstat == "Yes")
-                            {
-                                dt = Translate(customerId, ftype, companyName, debit, notes, "PREPAYMENT", Integration.GetFreqUsage(Convert.ToInt32(invoiceId)));
-                            }
-                            else
-                            {
-                                dt = Translate(customerId, ftype, companyName, debit, notes, "", Integration.GetFreqUsage(Convert.ToInt32(invoiceId)));
-                            }
-
-                            bool cusexists;
-                            cusexists = CustomerExists(dt.customerId);
-                            if (Convert.ToInt32(invoiceId) == 0)
-                            {
-                                if (!cusexists)
-                                {
-                                    CreateCustomer(dt.customerId, companyName);
-                                    Integration.StoreCustomer(dt.customerId, companyName);
-                                }
-                            }
-
-                            if (cusexists || Convert.ToInt32(invoiceId) == 0 && Convert.ToInt32(glid) > 0)
-                            {
-                                if (glid == "5146")
-                                {
-                                    Log.Save("Bank: FGB JA$ CURRENT A/C");
-                                    if (dt.success)
-                                    {
-                                        if (ReceiptBatchAvail("FGBJMREC"))
-                                        {
-                                            string reference = Integration.GetCurrentRef("FGBJMREC");
-                                            Log.Save("Target Batch: " + Integration.GetRecieptBatch("FGBJMREC"));
-                                            Log.Save("Transferring Receipt");
-
-                                            ReceiptTransfer(Integration.GetRecieptBatch("FGBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
-                                            Integration.UpdateBatchCountPayment(Integration.GetRecieptBatch("FGBJMREC"));
-                                            Integration.UpdateReceiptNumber(receipt, Integration.GetCurrentRef("FGBJMREC"));
-                                            Integration.IncrementReferenceNumber(Integration.GetBankCodeId("FGBJMREC"), Convert.ToDecimal(dt.debit));
-                                            Integration.StorePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), 0, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", 0);
-                                        }
-                                        else
-                                        {
-                                            string reference = Integration.GetCurrentRef("FGBJMREC");
-                                            CreateReceiptBatchEx("FGBJMREC", "Middleware Generated Batch for FGBJMREC");
-                                            Integration.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "FGBJMREC");
-
-                                            Log.Save("Target Batch: " + Integration.GetRecieptBatch("FGBJMREC"));
-                                            Log.Save("Transferring Receipt");
-
-                                            ReceiptTransfer(Integration.GetRecieptBatch("FGBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
-                                            Integration.UpdateBatchCountPayment(Integration.GetRecieptBatch("FGBJMREC"));
-                                            Integration.UpdateReceiptNumber(receipt, Integration.GetCurrentRef("FGBJMREC"));
-                                            Integration.IncrementReferenceNumber(Integration.GetBankCodeId("FGBJMREC"), Convert.ToDecimal(dt.debit));
-                                            Integration.StorePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), 0, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", 0);
-                                        }
-                                    }
-                                }
-                                else if (glid == "5147")
-                                {
-                                    Log.Save("Bank: FGB US$ SAVINGS A/C");
-                                    decimal usamount = 0;
-                                    decimal transferedAmt = Convert.ToDecimal(dt.debit) / Integration.GetUsRateByInvoice(Convert.ToInt32(invoiceId));
-                                    string clientIdPrefix = "";
-                                    decimal currentRate = 1;
-
-                                    for (int i = 0; i < dt.customerId.Length; i++)
-                                    {
-                                        if (dt.customerId[i] != '-')
-                                        {
-                                            clientIdPrefix += dt.customerId[i];
-                                        }
-                                        else
-                                        {
-                                            i = dt.customerId.Length;
-                                        }
-                                    }
-
-                                    if (prepstat == "Yes" && clientIdPrefix == Integration.GetClientIdZRecord(true))
-                                    {
-                                        dt.customerId = clientIdPrefix + "-T";
-                                        currentRate = Integration.GetRate();
-                                    }
-
-                                    if (dt.customerId[6] == 'T')
-                                    {
-                                        usamount = Math.Round(Convert.ToDecimal(dt.debit) / Integration.GetUsRateByInvoice(Convert.ToInt32(invoiceId)), 2);
-                                        Integration.ModifyInvoiceList(0, Integration.GetUsRateByInvoice(Convert.ToInt32(invoiceId)), dt.customerId);
-                                        currentRate = Integration.GetRate();
-                                    }
-
-                                    if (dt.success)
-                                    {
-                                        if (ReceiptBatchAvail("FGBUSMRC"))
-                                        {
-                                            string reference = Integration.GetCurrentRef("FGBUSMRC");
-                                            Log.Save("Target Batch: " + Integration.GetRecieptBatch("FGBUSMRC"));
-                                            Log.Save("Transferring Receipt");
-
-                                            ReceiptTransfer(Integration.GetRecieptBatch("FGBUSMRC"), dt.customerId, Math.Round(transferedAmt, 2).ToString(), dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
-                                            Integration.UpdateBatchCountPayment(Integration.GetRecieptBatch("FGBUSMRC"));
-                                            Integration.UpdateReceiptNumber(receipt, Integration.GetCurrentRef("FGBUSMRC"));
-                                            Integration.IncrementReferenceNumber(Integration.GetBankCodeId("FGBUSMRC"), Convert.ToDecimal(dt.debit));
-                                            Integration.StorePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), usamount, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", currentRate);
-                                        }
-                                        else
-                                        {
-                                            string reference = Integration.GetCurrentRef("FGBUSMRC");
-                                            CreateReceiptBatchEx("FGBUSMRC", "Middleware Generated Batch for FGBUSMRC");
-                                            Integration.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "FGBUSMRC");
-
-                                            Log.Save("Target Batch: " + Integration.GetRecieptBatch("FGBUSMRC"));
-                                            Log.Save("Transferring Receipt");
-
-                                            ReceiptTransfer(Integration.GetRecieptBatch("FGBUSMRC"), dt.customerId, Math.Round(transferedAmt, 2).ToString(), dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
-                                            Integration.UpdateBatchCountPayment(Integration.GetRecieptBatch("FGBUSMRC"));
-                                            Integration.UpdateReceiptNumber(receipt, Integration.GetCurrentRef("FGBUSMRC"));
-                                            Integration.IncrementReferenceNumber(Integration.GetBankCodeId("FGBUSMRC"), Convert.ToDecimal(dt.debit));
-                                            Integration.StorePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), usamount, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", currentRate);
-                                        }
-                                    }
-                                }
-                                else if (glid == "5148")
-                                {
-                                    Log.Save("NCB JA$ SAVINGS A/C");
-                                    if (dt.success)
-                                    {
-                                        if (ReceiptBatchAvail("NCBJMREC"))
-                                        {
-                                            string reference = Integration.GetCurrentRef("NCBJMREC");
-                                            Log.Save("Target Batch: " + Integration.GetRecieptBatch("NCBJMREC"));
-                                            Log.Save("Transferring Receipt");
-
-                                            ReceiptTransfer(Integration.GetRecieptBatch("NCBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
-                                            Integration.UpdateBatchCountPayment(Integration.GetRecieptBatch("NCBJMREC"));
-                                            Integration.UpdateReceiptNumber(receipt, Integration.GetCurrentRef("NCBJMREC"));
-                                            Integration.IncrementReferenceNumber(Integration.GetBankCodeId("NCBJMREC"), Convert.ToDecimal(dt.debit));
-                                            Integration.StorePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), 0, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", 1);
-                                        }
-                                        else
-                                        {
-                                            string reference = Integration.GetCurrentRef("NCBJMREC");
-                                            CreateReceiptBatchEx("NCBJMREC", "Middleware Generated Batch for NCBJMREC");
-                                            Integration.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "NCBJMREC");
-
-                                            Log.Save("Target Batch: " + Integration.GetRecieptBatch("NCBJMREC"));
-                                            Log.Save("Transferring Receipt");
-
-                                            ReceiptTransfer(Integration.GetRecieptBatch("NCBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
-                                            Integration.UpdateBatchCountPayment(Integration.GetRecieptBatch("NCBJMREC"));
-                                            Integration.UpdateReceiptNumber(receipt, Integration.GetCurrentRef("NCBJMREC"));
-                                            Integration.IncrementReferenceNumber(Integration.GetBankCodeId("NCBJMREC"), Convert.ToDecimal(dt.debit));
-                                            Integration.StorePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), 0, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", 1);
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                Log.Save("Customer not found in accpac");
-                            }
+                            accpacSession.Errors.Clear();
+                            Log.WriteEnd();
                         }
-                        else if (docInfo.DocumentType == CREDIT_MEMO)
+                        else
                         {
-                            Log.Save("New Credit Memo...");
-                            CreditNoteInfo creditNote = new CreditNoteInfo();
+                            Log.Save(ex.Message + " " + ex.StackTrace);
+                            Log.WriteEnd();
+                        }
+                    }
+                }
+                else
+                {
+                    Log.Save("Accpac Version: " + accpacSession.AppVersion);
+                    Log.Save("Company: " + accpacSession.CompanyName);
+                    Log.Save("Session Status: " + accpacSession.IsOpened);
+                }
+            }
+        }
 
-                            while (creditNote.amount == 0)
-                            {
-                                creditNote = Integration.GetCreditNoteInfo(docInfo.OriginalDocumentID, docInfo.DocumentID);
-                                Thread.Sleep(1000);
-                            }
+        private void TableDependencyArInvoices_OnChanged(object sender, RecordChangedEventArgs<SqlNotify_ArInvoices> e)
+        {
+            Thread.Sleep(150);
+            if (!Constants.IGNORE_EVENTS)
+            {
+                if (IsAccpacSessionOpen())
+                {
+                    try
+                    {
+                        var values = e.Entity;
+                        var customerId = values.CustomerID;
+                        var invoiceId = values.ARInvoiceID;
+                        var amount = values.Amount;
+                        var feeType = values.FeeType;
+                        var notes = values.notes;
+                        var cancelledBy = values.canceledBy;
 
+                        if (cancelledBy != null)
+                        {
+                            string freqUsage = Integration.GetFreqUsage(invoiceId);
+                            DateTime invoiceValidity = Integration.GetValidity(invoiceId);
+                            var creditGl = Integration.GetCreditGl(invoiceId.ToString());
+                            var accountNum = Integration.GetAccountNumber(creditGl);
                             List<string> clientInfo = new List<string>(4);
-                            clientInfo = Integration.GetClientInfoInv(creditNote.CustomerID.ToString());
-                            var accountNum = Integration.GetAccountNumber(creditNote.CreditGL);
-                            DateTime invoiceValidity = Integration.GetValidity(creditNote.ARInvoiceID);
+                            clientInfo = Integration.GetClientInfoInv(customerId.ToString());
+                            Integration.GetClientInfoInv(customerId.ToString());
 
                             string companyName = clientInfo[0].ToString();
                             string cNum = clientInfo[1].ToString();
                             string fname = clientInfo[2].ToString();
                             string lname = clientInfo[3].ToString();
-                            string creditNoteDesc = creditNote.remarks;
-                            int cred_docNum = 0;
-
-                            if (creditNoteDesc == "" || creditNoteDesc == null)
-                            {
-                                creditNoteDesc = companyName + " - Credit Note";
-                            }
 
                             if (companyName == "" || companyName == " " || companyName == null)
                             {
                                 companyName = fname + " " + lname;
                             }
 
-                            Data dt = Translate(cNum, creditNote.FeeType, companyName, creditNote.amount.ToString(), creditNote.notes, accountNum, Integration.GetFreqUsage(creditNote.ARInvoiceID));
+                            string creditNoteDesc = companyName + " - Credit Note";
+                            Data dt = Translate(cNum, feeType, companyName, "", notes, accountNum, freqUsage);
 
-                            if (CheckAccpacInvoiceAvail(creditNote.ARInvoiceID))
+                            if (values.isVoided == 1 && e.ChangeType == ChangeType.Update)
                             {
-                                cred_docNum = Integration.GetCreditMemoNumber();
-                                Log.Save("Creating credit memo");
-                                int batchNumber = GetBatch(CREDIT_NOTE, creditNote.ARInvoiceID.ToString());
-
-                                Integration.StoreInvoice(creditNote.ARInvoiceID, batchNumber, creditNote.CreditGL, companyName, dt.customerId, DateTime.Now, "", creditNote.amount, "no modification", 1, 0, 0, 1, cred_docNum);
-                                CreditNoteInsert(batchNumber.ToString(), dt.customerId, accountNum, creditNote.amount.ToString(), creditNote.ARInvoiceID.ToString(), cred_docNum.ToString(), creditNoteDesc);
-                                Integration.UpdateAsmsCreditMemoNumber(docInfo.DocumentID, cred_docNum);
-                            }
-                            else
-                            {
-                                Log.Save("The Credit Memo was not created. The Invoice does not exist.");
-                                cred_docNum = Integration.GetCreditMemoNumber();
-                                Integration.UpdateAsmsCreditMemoNumber(docInfo.DocumentID, cred_docNum);
-                                Log.Save("The Credit Memo number in ASMS updated.");
-                            }
-                        }
-                        else if (docInfo.DocumentType == RECEIPT && docInfo.PaymentMethod == 99)
-                        {
-                            Log.Save("Payment By Credit");
-                            PaymentInfo pinfo = Integration.GetReceiptInfo(docInfo.OriginalDocumentID);
-                            List<string> clientData = Integration.GetClientInfoInv(pinfo.CustomerID.ToString());
-                            List<string> feeData = new List<string>(3);
-
-                            var companyName = clientData[0].ToString();
-                            var customerId = clientData[1].ToString();
-                            var fname = clientData[2].ToString();
-                            var lname = clientData[3].ToString();
-
-                            if (companyName == "" || companyName == " " || companyName == null)
-                            {
-                                companyName = fname + " " + lname;
-                            }
-
-                            feeData = Integration.GetFeeInfo(pinfo.InvoiceID);
-                            var ftype = feeData[0].ToString();
-                            var notes = feeData[1].ToString();
-
-                            Data dt = Translate(customerId, ftype, companyName, pinfo.Debit.ToString(), notes, "", Integration.GetFreqUsage(pinfo.InvoiceID).ToString());
-                            PrepaymentData pData = Integration.CheckPrepaymentAvail(dt.customerId);
-                            int invoiceBatch = GetIbatchNumber(pinfo.InvoiceID);
-                            int receiptBatch = GetRBatchNumber(pData.referenceNumber);
-
-                            if (pData.dataAvail)
-                            {
-                                if (CheckAccpacIBatchPosted(invoiceBatch) && CheckAccpacRBatchPosted(receiptBatch))
+                                Log.Save("Cancellation request for invoice: " + invoiceId);
+                                if (CheckAccpacInvoiceAvail(invoiceId))
                                 {
-                                    var glid = pData.destinationBank.ToString();
-
-                                    if (glid == "5146")
+                                    int postedBatch = GetIbatchNumber(invoiceId);
+                                    if (!InvoiceDelete(invoiceId))
                                     {
-                                        Log.Save("Bank: FGB JA$ CURRENT A/C");
-                                        if (pData.totalPrepaymentRemainder >= pinfo.Debit)
-                                        {
-                                            Log.Save("Carrying out Payment By Credit Transaction");
-                                            decimal reducingAmt = pinfo.Debit;
-
-                                            if (ReceiptBatchAvail("FGBJMREC"))
-                                            {
-                                                while (reducingAmt > 0)
-                                                {
-                                                    pData = Integration.CheckPrepaymentAvail(dt.customerId);
-                                                    ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatch("FGBJMREC"), GetDocNumber(pData.referenceNumber));
-                                                    if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
-                                                    else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
-                                                    reducingAmt = reducingAmt - pData.remainder;
-                                                }
-                                                Integration.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, 0, "No", 0, Convert.ToInt32(glid), "Yes", 1);
-                                                Log.Save("Payment by credit transaction complete");
-                                            }
-                                            else
-                                            {
-                                                CreateReceiptBatchEx("FGBJMREC", "Middleware Generated Batch for FGBJMREC");
-                                                Integration.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "FGBJMREC");
-                                                Log.Save("Target Batch: " + Integration.GetRecieptBatch("FGBJMREC"));
-                                                while (reducingAmt > 0)
-                                                {
-                                                    pData = Integration.CheckPrepaymentAvail(dt.customerId);
-                                                    ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatch("FGBJMREC"), GetDocNumber(pData.referenceNumber));
-                                                    if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
-                                                    else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
-                                                    reducingAmt = reducingAmt - pData.remainder;
-                                                }
-                                                Integration.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, 0, "No", 0, Convert.ToInt32(glid), "Yes", 1);
-                                                Log.Save("Payment by credit transaction complete");
-                                            }
-                                        }
-                                        else
-                                        {
-                                            Log.Save("Prepayment balance not enough to carry out Transaction");
-                                        }
+                                        Log.Save("Creating a credit memo");
+                                        int cred_docNum = Integration.GetCreditMemoNumber();
+                                        int batchNumber = GetBatch(CREDIT_NOTE, invoiceId.ToString());
+                                        Integration.StoreInvoice(invoiceId, batchNumber, creditGl, companyName, dt.customerId, DateTime.Now, cancelledBy, amount, "no modification", 1, 0, 0, 1, cred_docNum);
+                                        CreditNoteInsert(batchNumber.ToString(), dt.customerId, accountNum, amount.ToString(), invoiceId.ToString(), cred_docNum.ToString(), creditNoteDesc);
                                     }
-
-                                    if (glid == "5147")
+                                    else
                                     {
-                                        Log.Save("Bank: FGB US$ SAVINGS A/C");
-                                        decimal usRate = Integration.GetUsRateByInvoice(pinfo.InvoiceID);
-                                        decimal usAmount = Convert.ToDecimal(dt.debit) / usRate;
-                                        if (pData.totalPrepaymentRemainder >= usAmount)
+                                        Maj m = new Maj();
+                                        int r = Integration.GetInvoiceReference(invoiceId);
+
+                                        if (r != -1)
                                         {
-                                            Log.Save("Carrying out Payment By Credit Transaction");
-                                            decimal reducingAmt = usAmount;
-
-                                            if (ReceiptBatchAvail("FGBUSMRC"))
-                                            {
-                                                while (reducingAmt > 0)
-                                                {
-                                                    pData = Integration.CheckPrepaymentAvail(dt.customerId);
-                                                    ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatch("FGBUSMRC"), GetDocNumber(pData.referenceNumber));
-                                                    if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
-                                                    else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
-                                                    reducingAmt = reducingAmt - pData.remainder;
-                                                }
-                                                if (usRate == 1) Integration.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, 0, "No", 0, Convert.ToInt32(glid), "Yes", 1);
-                                                else Integration.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, usAmount, "No", 0, Convert.ToInt32(glid), "Yes", 1);
-                                                Log.Save("Payment by credit transaction complete");
-                                            }
-                                            else
-                                            {
-                                                CreateReceiptBatchEx("FGBUSMRC", "Middleware Generated Batch for FGBUSMRC");
-                                                Integration.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "FGBUSMRC");
-                                                Log.Save("Target Batch: " + Integration.GetRecieptBatch("FGBUSMRC"));
-
-                                                while (reducingAmt > 0)
-                                                {
-                                                    pData = Integration.CheckPrepaymentAvail(dt.customerId);
-                                                    ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatch("FGBUSMRC"), GetDocNumber(pData.referenceNumber));
-                                                    if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
-                                                    else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
-                                                    reducingAmt = reducingAmt - pData.remainder;
-                                                }
-
-                                                if (usRate == 1)
-                                                {
-                                                    Integration.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, 0, "No", 0, Convert.ToInt32(glid), "Yes", 1);
-                                                }
-                                                else
-                                                {
-                                                    Integration.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, usAmount, "No", 0, Convert.ToInt32(glid), "Yes", 1);
-
-                                                }
-                                                Log.Save("Payment by credit transaction complete");
-                                            }
+                                            m = Integration.GetMajDetail(r);
                                         }
-                                        else
+
+                                        if (dt.feeType == "SLF" && notes == "Renewal")
                                         {
-                                            Log.Save("Prepayment balance not enough to carry out Transaction");
+                                            Integration.StoreInvoice(Convert.ToInt32(invoiceId), postedBatch, creditGl, companyName, dt.customerId, DateTime.Now, cancelledBy, Convert.ToDecimal(amount), "no modification", 1, 0, 1, 0, 0);
                                         }
-                                    }
-
-                                    if (glid == "5148")
-                                    {
-                                        Log.Save("Bank: NCB JA$ SAVINGS A/C");
-                                        if (pData.totalPrepaymentRemainder >= pinfo.Debit)
+                                        else if (dt.feeType == "RF" && notes == "Renewal")
                                         {
-                                            Log.Save("Carrying out Payment By Credit Transaction");
-                                            decimal reducingAmt = pinfo.Debit;
-
-                                            if (ReceiptBatchAvail("NCBJMREC"))
-                                            {
-                                                while (reducingAmt > 0)
-                                                {
-                                                    pData = Integration.CheckPrepaymentAvail(dt.customerId);
-                                                    ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatch("NCBJMREC"), GetDocNumber(pData.referenceNumber));
-                                                    if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
-                                                    else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
-                                                    reducingAmt = reducingAmt - pData.remainder;
-                                                }
-                                                Integration.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, 0, "No", 0, Convert.ToInt32(glid), "Yes", 1);
-                                                Log.Save("Payment by credit transaction complete");
-                                            }
-                                            else
-                                            {
-                                                CreateReceiptBatchEx("NCBJMREC", "Middleware Generated Batch for NCBJMREC");
-                                                Integration.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "NCBJMREC");
-                                                Log.Save("Target Batch: " + Integration.GetRecieptBatch("NCBJMREC"));
-                                                while (reducingAmt > 0)
-                                                {
-                                                    pData = Integration.CheckPrepaymentAvail(dt.customerId);
-                                                    ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatch("NCBJMREC"), GetDocNumber(pData.referenceNumber));
-                                                    if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
-                                                    else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
-                                                    reducingAmt = reducingAmt - pData.remainder;
-                                                }
-                                                Integration.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, 0, "No", 0, Convert.ToInt32(glid), "Yes", 1);
-                                                Log.Save("Payment by credit transaction complete");
-                                            }
+                                            Integration.StoreInvoice(Convert.ToInt32(invoiceId), postedBatch, creditGl, companyName, dt.customerId, DateTime.Now, cancelledBy, Convert.ToDecimal(amount), "no modification", 1, 0, 1, 0, 0);
                                         }
-                                        else
+                                        else if ((notes == "Annual Fee" && m.stationType == "SSL" && m.certificateType == 0 && m.proj == "JMC") || (freqUsage == "PRS55"))
                                         {
-                                            Log.Save("Prepayment balance not enough to carry out Transaction");
+                                            Integration.StoreInvoice(Convert.ToInt32(invoiceId), postedBatch, creditGl, companyName, dt.customerId, DateTime.Now, cancelledBy, Convert.ToDecimal(amount), "no modification", 1, 0, 1, 0, 0);
                                         }
-                                    }
-
-                                    if (glid != "5146" && glid != "5147" && glid != "5148")
-                                    {
-                                        Log.Save("Bank Selected Not found, Cannot complete Transaction");
+                                        else if (notes == "Type Approval" || freqUsage == "TA-ProAmend")
+                                        {
+                                            Integration.StoreInvoice(Convert.ToInt32(invoiceId), postedBatch, creditGl, companyName, dt.customerId, DateTime.Now, cancelledBy, Convert.ToDecimal(amount), "no modification", Integration.GetRate(), ChangeToUS(Convert.ToDecimal(amount)), 1, 0, 0);
+                                        }
+                                        else if (notes == "Annual Fee" || notes == "Modification" || notes == "Radio Operator")
+                                        {
+                                            Integration.StoreInvoice(Convert.ToInt32(invoiceId), postedBatch, creditGl, companyName, dt.customerId, DateTime.Now, cancelledBy, Convert.ToDecimal(amount), "no modification", 1, 0, 1, 0, 0);
+                                        }
                                     }
                                 }
                                 else
                                 {
-                                    Log.Save("Both invoice and receipt must be posted before attempting this transaction");
+                                    Log.Save("Invoice: " + invoiceId.ToString() + " was not found in Sage. Cannot delete.");
                                 }
                             }
-                            else
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        if (accpacSession.Errors.Count > 0)
+                        {
+                            Log.Save(ex.Message + " " + ex.StackTrace);
+                            for (int i = 0; i < accpacSession.Errors.Count; i++)
                             {
-                                Log.Save("No prepayment record found for customer: " + dt.customerId);
+                                Log.Save(accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
                             }
+                            accpacSession.Errors.Clear();
+                            Log.WriteEnd();
+                        }
+                        else
+                        {
+                            Log.Save(ex.Message + " " + ex.StackTrace);
+                            Log.WriteEnd();
                         }
                     }
-                    Log.WriteEnd();
                 }
-                catch (Exception ex)
+                else
                 {
-                    if (accpacSession.Errors.Count > 0)
-                    {
-                        Log.Save(ex.Message + " " + ex.StackTrace);
-                        for (int i = 0; i < accpacSession.Errors.Count; i++)
-                        {
-                            Log.Save(accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
-                        }
-                        accpacSession.Errors.Clear();
-                        Log.WriteEnd();
-                    }
-                    else
-                    {
-                        Log.Save(ex.Message + " " + ex.StackTrace);
-                        Log.WriteEnd();
-                    }
+                    Log.Save("Accpac Version: " + accpacSession.AppVersion);
+                    Log.Save("Company: " + accpacSession.CompanyName);
+                    Log.Save("Session Status: " + accpacSession.IsOpened);
                 }
-            }
-            else
-            {
-                Log.Save("Accpac Version: " + accpacSession.AppVersion);
-                Log.Save("Company: " + accpacSession.CompanyName);
-                Log.Save("Session Status: " + accpacSession.IsOpened);
-            }
-        }
-
-        private void TableDependCancellation_OnChanged(object sender, RecordChangedEventArgs<SqlNotifyCancellation> e)
-        {
-            if (IsAccpacSessionOpen())
-            {
-                try
-                {
-                    var values = e.Entity;
-                    var customerId = values.CustomerID;
-                    var invoiceId = values.ARInvoiceID;
-                    var amount = values.Amount;
-                    var feeType = values.FeeType;
-                    var notes = values.notes;
-                    var cancelledBy = values.canceledBy;
-
-                    if (cancelledBy != null)
-                    {
-                        string freqUsage = Integration.GetFreqUsage(invoiceId);
-                        DateTime invoiceValidity = Integration.GetValidity(invoiceId);
-                        var creditGl = Integration.GetCreditGl(invoiceId.ToString());
-                        var accountNum = Integration.GetAccountNumber(creditGl);
-                        List<string> clientInfo = new List<string>(4);
-                        clientInfo = Integration.GetClientInfoInv(customerId.ToString());
-                        Integration.GetClientInfoInv(customerId.ToString());
-
-                        string companyName = clientInfo[0].ToString();
-                        string cNum = clientInfo[1].ToString();
-                        string fname = clientInfo[2].ToString();
-                        string lname = clientInfo[3].ToString();
-
-                        if (companyName == "" || companyName == " " || companyName == null)
-                        {
-                            companyName = fname + " " + lname;
-                        }
-
-                        string creditNoteDesc = companyName + " - Credit Note";
-                        Data dt = Translate(cNum, feeType, companyName, "", notes, accountNum, freqUsage);
-
-                        if (values.isVoided == 1 && e.ChangeType == ChangeType.Update)
-                        {
-                            Log.Save("Cancellation found.");
-                            if (CheckAccpacInvoiceAvail(invoiceId))
-                            {
-                                int postedBatch = GetIbatchNumber(invoiceId);
-                                if (!InvoiceDelete(invoiceId))
-                                {
-                                    Log.Save("Creating a credit memo");
-                                    int cred_docNum = Integration.GetCreditMemoNumber();
-                                    int batchNumber = GetBatch(CREDIT_NOTE, invoiceId.ToString());
-                                    Integration.StoreInvoice(invoiceId, batchNumber, creditGl, companyName, dt.customerId, DateTime.Now, cancelledBy, amount, "no modification", 1, 0, 0, 1, cred_docNum);
-                                    CreditNoteInsert(batchNumber.ToString(), dt.customerId, accountNum, amount.ToString(), invoiceId.ToString(), cred_docNum.ToString(), creditNoteDesc);
-                                }
-                                else
-                                {
-                                    Maj m = new Maj();
-                                    int r = Integration.GetInvoiceReference(invoiceId);
-
-                                    if (r != -1)
-                                    {
-                                        m = Integration.GetMajDetail(r);
-                                    }
-
-                                    if (dt.feeType == "SLF" && notes == "Renewal")
-                                    {
-                                        Integration.StoreInvoice(Convert.ToInt32(invoiceId), postedBatch, creditGl, companyName, dt.customerId, DateTime.Now, cancelledBy, Convert.ToDecimal(amount), "no modification", 1, 0, 1, 0, 0);
-                                    }
-                                    else if (dt.feeType == "RF" && notes == "Renewal")
-                                    {
-                                        Integration.StoreInvoice(Convert.ToInt32(invoiceId), postedBatch, creditGl, companyName, dt.customerId, DateTime.Now, cancelledBy, Convert.ToDecimal(amount), "no modification", 1, 0, 1, 0, 0);
-                                    }
-                                    else if ((notes == "Annual Fee" && m.stationType == "SSL" && m.certificateType == 0 && m.proj == "JMC") || (freqUsage == "PRS55"))
-                                    {
-                                        Integration.StoreInvoice(Convert.ToInt32(invoiceId), postedBatch, creditGl, companyName, dt.customerId, DateTime.Now, cancelledBy, Convert.ToDecimal(amount), "no modification", 1, 0, 1, 0, 0);
-                                    }
-                                    else if (notes == "Type Approval" || freqUsage == "TA-ProAmend")
-                                    {
-                                        Integration.StoreInvoice(Convert.ToInt32(invoiceId), postedBatch, creditGl, companyName, dt.customerId, DateTime.Now, cancelledBy, Convert.ToDecimal(amount), "no modification", Integration.GetRate(), ChangeToUS(Convert.ToDecimal(amount)), 1, 0, 0);
-                                    }
-                                    else if (notes == "Annual Fee" || notes == "Modification" || notes == "Radio Operator")
-                                    {
-                                        Integration.StoreInvoice(Convert.ToInt32(invoiceId), postedBatch, creditGl, companyName, dt.customerId, DateTime.Now, cancelledBy, Convert.ToDecimal(amount), "no modification", 1, 0, 1, 0, 0);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                Log.Save("Invoice: " + invoiceId.ToString() + " was not found in Sage. Cannot delete.");
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (accpacSession.Errors.Count > 0)
-                    {
-                        Log.Save(ex.Message + " " + ex.StackTrace);
-                        for (int i = 0; i < accpacSession.Errors.Count; i++)
-                        {
-                            Log.Save(accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
-                        }
-                        accpacSession.Errors.Clear();
-                        Log.WriteEnd();
-                    }
-                    else
-                    {
-                        Log.Save(ex.Message + " " + ex.StackTrace);
-                        Log.WriteEnd();
-                    }
-                }
-            }
-            else
-            {
-                Log.Save("Accpac Version: " + accpacSession.AppVersion);
-                Log.Save("Company: " + accpacSession.CompanyName);
-                Log.Save("Session Status: " + accpacSession.IsOpened);
             }
         }
 
@@ -1386,19 +1441,16 @@ namespace middleware_service
             InsertionReturn success = new InsertionReturn();
             DateTime postDate = Integration.GetValidity(Convert.ToInt32(docNum));
 
-            if (postDate < DateTime.Now) postDate = DateTime.Now;
+            if (postDate < DateTime.Now)
+                postDate = DateTime.Now;
 
-            DateTime docDate = Integration.GetDocDate(Convert.ToInt32(docNum));
-            DateTime now = DateTime.Now;
             bool gotOne;
-
             b1_arInvoiceBatch = dbLink.OpenView("AR0031");
             b1_arInvoiceHeader = dbLink.OpenView("AR0032");
             b1_arInvoiceDetail = dbLink.OpenView("AR0033");
             b1_arInvoicePaymentSchedules = dbLink.OpenView("AR0034");
             b1_arInvoiceHeaderOptFields = dbLink.OpenView("AR0402");
             b1_arInvoiceDetailOptFields = dbLink.OpenView("AR0401");
-
 
             b1_arInvoiceBatch.Compose(new View[] { b1_arInvoiceHeader });
             b1_arInvoiceHeader.Compose(new View[] { b1_arInvoiceBatch, b1_arInvoiceDetail, b1_arInvoicePaymentSchedules, b1_arInvoiceHeaderOptFields });

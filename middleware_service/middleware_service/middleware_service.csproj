@@ -182,9 +182,10 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalR\Startup.cs" />
-    <Compile Include="TableDependencyDefinitions\SqlNotifyCancellation.cs" />
-    <Compile Include="TableDependencyDefinitions\SqlNotify_DocumentInfo.cs" />
-    <Compile Include="TableDependencyDefinitions\SqlNotify_Pay.cs" />
+    <Compile Include="TableDependencyDefinitions\SqlNotify_ArInvoices.cs" />
+    <Compile Include="TableDependencyDefinitions\SqlNotify_ArInvoiceDetail.cs" />
+    <Compile Include="TableDependencyDefinitions\SqlNotify_GlDocuments.cs" />
+    <Compile Include="TableDependencyDefinitions\SqlNotify_ArPayments.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

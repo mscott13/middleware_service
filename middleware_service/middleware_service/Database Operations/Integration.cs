@@ -17,39 +17,33 @@ namespace middleware_service.Database_Operations
             switch (target)
             {
                 case "cIntegration":
-                    if (cIntegration == null)
-                    {
-                        cIntegration = new SqlConnection(Constants.DB_INTEGRATION);
-                        cIntegration.Open();
-                    }
+                    cIntegration = new SqlConnection(Constants.TEST_DB_INTEGRATION);
+                    cIntegration.Open();
                     break;
                 case "cGeneric":
-                    if (cGeneric == null)
-                    {
-                        cGeneric = new SqlConnection(Constants.DB_GENERIC);
-                        cGeneric.Open();
-                    }
+                    cGeneric = new SqlConnection(Constants.TEST_DB_GENERIC);
+                    cGeneric.Open();
                     break;
             }
         }
 
         private static void CloseConnection(string target)
         {
-            //switch (target)
-            //{
-            //    case "cIntegration":
-            //        if (cIntegration != null)
-            //        {
-            //            cIntegration.Close();
-            //        }
-            //        break;
-            //    case "cGeneric":
-            //        if (cGeneric != null)
-            //        {
-            //            cGeneric.Close();
-            //        }
-            //        break;
-            //}
+            switch (target)
+            {
+                case "cIntegration":
+                    if (cIntegration != null)
+                    {
+                        cIntegration.Close();
+                    }
+                    break;
+                case "cGeneric":
+                    if (cGeneric != null)
+                    {
+                        cGeneric.Close();
+                    }
+                    break;
+            }
         }
 
         public static bool IsBrokerEnabled(string databaseName)
@@ -89,7 +83,7 @@ namespace middleware_service.Database_Operations
 
         public static void SetBrokerEnabled(string databaseName)
         {
-            string query = "alter database "+databaseName+" set ENABLE_BROKER WITH ROLLBACK IMMEDIATE";
+            string query = "alter database " + databaseName + " set ENABLE_BROKER WITH ROLLBACK IMMEDIATE";
             OpenConnection(CGENERIC);
 
             SqlCommand cmd = new SqlCommand();
@@ -496,7 +490,7 @@ namespace middleware_service.Database_Operations
             cmd.Parameters.AddWithValue("@ReportType", ReportType);
             cmd.Parameters.AddWithValue("@searchStartDate", searchStartDate);
             cmd.Parameters.AddWithValue("@searchEndDate", searchEndDate);
-            
+
             reader = cmd.ExecuteReader();
 
             if (reader.HasRows)
@@ -541,12 +535,12 @@ namespace middleware_service.Database_Operations
 
         public static void CloseInvoiceBatch()
         {
-            string query = 
-                     "Update InvoiceBatch set Status='Closed' where Status='Open' "+
-                     "Update counters set transferredInvoices = 0 where id = 1 "+
+            string query =
+                     "Update InvoiceBatch set Status='Closed' where Status='Open' " +
+                     "Update counters set transferredInvoices = 0 where id = 1 " +
                      "Update counters set createdCustomers = 0 where id = 1;";
 
-    
+
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             cmd.CommandText = query;
@@ -758,6 +752,7 @@ namespace middleware_service.Database_Operations
                             "INSERT INTO PaymentBatch " +
                             "VALUES(@batchId, @CreatedDate, @ExpiryDate, 'Open', '10020-100', 0, 0) " +
             "end";
+
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
@@ -787,7 +782,6 @@ namespace middleware_service.Database_Operations
 
             cmd.ExecuteNonQuery();
             CloseConnection(CINTEGRATION);
-
         }
 
         public static void UpdateBatchAmount(string batchType, decimal amount)
@@ -809,6 +803,7 @@ namespace middleware_service.Database_Operations
                             "begin " +
                                 "update invoiceTotal set total = total + @amount " +
                             "end";
+
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
@@ -835,6 +830,7 @@ namespace middleware_service.Database_Operations
                             "begin " +
                                 "select '10020-100' " +
                             "end";
+
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
@@ -886,6 +882,7 @@ namespace middleware_service.Database_Operations
                            "select @count = Count from InvoiceBatch where BatchType = @BatchType_ AND Status = 'Open' " +
                            "set @count = @count + 1 " +
                            "Update InvoiceBatch set Count = @count where BatchType = @BatchType_ AND Status = 'Open'";
+
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
@@ -978,10 +975,10 @@ namespace middleware_service.Database_Operations
 
             cmd.Connection = cIntegration;
             reader = cmd.ExecuteReader();
-            reader.Read();
 
             if (reader.HasRows)
             {
+                reader.Read();
                 rate = Convert.ToDecimal(reader[0].ToString());
             }
 
@@ -1000,14 +997,12 @@ namespace middleware_service.Database_Operations
 
             cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@BankCode", BankCode);
-
             cmd.Connection = cIntegration;
-
             reader = cmd.ExecuteReader();
-            reader.Read();
 
             if (reader.HasRows)
             {
+                reader.Read();
                 int i = Convert.ToInt32(reader[0]);
                 refNumber = i.ToString();
             }
@@ -1241,7 +1236,6 @@ namespace middleware_service.Database_Operations
                                 "select* from counters " +
                             "end";
 
-       
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand(query, cIntegration);
 
@@ -1361,29 +1355,28 @@ namespace middleware_service.Database_Operations
             string query = "SELECT Debit, GLID, InvoiceID, Date1 from tblARPayments where GLTransactionID=@id ";
             OpenConnection(CGENERIC);
             SqlCommand cmd_pay = new SqlCommand();
-            SqlDataReader reader_pay;
+            SqlDataReader reader;
 
             List<string> data = new List<string>(4);
             cmd_pay.Connection = cGeneric;
             cmd_pay.CommandText = query;
             cmd_pay.Parameters.AddWithValue("@id", gl_id);
 
-            reader_pay = cmd_pay.ExecuteReader();
-            if (reader_pay.HasRows)
+            reader = cmd_pay.ExecuteReader();
+            if (reader.HasRows)
             {
-                reader_pay.Read();
-
-                var debit = reader_pay[0].ToString();
-                var glid = reader_pay[1].ToString();
-                var invoiceId = reader_pay[2].ToString();
-                var paymentDate = reader_pay[3].ToString();
+                reader.Read();
+                var debit = reader[0].ToString();
+                var glid = reader[1].ToString();
+                var invoiceId = reader[2].ToString();
+                var paymentDate = reader[3].ToString();
 
                 data.Add(debit);
                 data.Add(glid);
                 data.Add(invoiceId);
                 data.Add(paymentDate);
             }
-            reader_pay.Close();
+
             CloseConnection(CGENERIC);
             return data;
         }
@@ -1423,20 +1416,20 @@ namespace middleware_service.Database_Operations
         {
             OpenConnection(CGENERIC);
             SqlCommand cmd_inv = new SqlCommand();
-            SqlDataReader reader_inv;
+            SqlDataReader reader;
             List<string> data = new List<string>(2);
 
             cmd_inv.Connection = cGeneric;
             cmd_inv.CommandText = "Select FeeType, notes from tblARInvoices where ARInvoiceID=@id_inv";
             cmd_inv.Parameters.AddWithValue("@id_inv", invoiceId);
 
-            reader_inv = cmd_inv.ExecuteReader();
+            reader = cmd_inv.ExecuteReader();
 
-            if (reader_inv.HasRows)
+            if (reader.HasRows)
             {
-                reader_inv.Read();
-                var ftype = reader_inv[0].ToString();
-                var notes = reader_inv[1].ToString();
+                reader.Read();
+                var ftype = reader[0].ToString();
+                var notes = reader[1].ToString();
 
                 data.Add(ftype);
                 data.Add(notes);
@@ -1462,6 +1455,7 @@ namespace middleware_service.Database_Operations
                             "set @var1 = @var1 + 1 " +
                                  "update tblCustomerCreatedCount set Count = @var1, LastUpdate = GETDATE() " +
                             "end";
+
             OpenConnection(CINTEGRATION);
             SqlCommand cmd_inv = new SqlCommand();
 
@@ -1523,6 +1517,7 @@ namespace middleware_service.Database_Operations
                             "AND val.ClientID = cus.clientID AND (cus.ccNum is not null) AND val.ValidTo >=GETDATE() AND inv.ARInvoiceID = GL.ARInvoiceID " +
                             "AND inv.ARInvoiceID =@invoiceId Group by cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname, " +
                             "inv.notes, inv.FeeType, inv.ARInvoiceID, inv.Amount, val.ValidFrom, val.ValidTo, GL.CreditGLID, GL.Description, inv.ARInvoiceID  order by inv.ARInvoiceID desc";
+
             OpenConnection(CGENERIC);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
@@ -1555,12 +1550,11 @@ namespace middleware_service.Database_Operations
                             "AND val.ClientID = cus.clientID AND (cus.ccNum is not null) AND val.ValidTo >=GETDATE() AND inv.ARInvoiceID = GL.ARInvoiceID " +
                             "AND inv.ARInvoiceID =@invoiceId Group by cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname, " +
                             "inv.notes, inv.FeeType, inv.ARInvoiceID, inv.Amount, val.ValidFrom, val.ValidTo, GL.CreditGLID, GL.Description, inv.ARInvoiceID  order by inv.ARInvoiceID desc";
+
             OpenConnection(CGENERIC);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
-
             var datetime = DateTime.Now;
-            DateTime startdate = DateTime.Now;
 
             cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
@@ -1618,6 +1612,7 @@ namespace middleware_service.Database_Operations
         {
             string query = "select creditMemoSequence from counters " +
                           "update counters set creditMemoSequence = creditMemoSequence + 1";
+
             OpenConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
@@ -1625,7 +1620,6 @@ namespace middleware_service.Database_Operations
 
             cmd.CommandText = query;
             cmd.Connection = cIntegration;
-
             reader = cmd.ExecuteReader();
 
             if (reader.HasRows)
@@ -1682,7 +1676,6 @@ namespace middleware_service.Database_Operations
                 inv.Glid = Convert.ToInt32(reader["Glid"]);
                 inv.FreqUsage = reader["FreqUsage"].ToString();
                 inv.Author = reader["Author"].ToString();
-
             }
 
             CloseConnection(CGENERIC);
@@ -1731,7 +1724,7 @@ namespace middleware_service.Database_Operations
 
                             "set @cmemoAmt = (select BalanceCompanyCurrency from tblGLDocuments where OriginalDocumentID = @creditMemoNum and DocumentType = 5) " +
                             "select ARInvoiceID, @cglid as CreditGl, @cmemoAmt as Amount, CustomerID, FeeType, notes, canceledBy, @memoDesc as Remarks from TblARInvoices where ARInvoiceID = @relatedInvoice";
-            
+
             OpenConnection(CGENERIC);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
@@ -1794,6 +1787,7 @@ namespace middleware_service.Database_Operations
                 }
                 else
                 {
+                    CloseConnection(CINTEGRATION);
                     return result;
                 }
             }
@@ -1995,7 +1989,7 @@ namespace middleware_service.Database_Operations
             cmd.Parameters.AddWithValue("@closingBal", data.subT_closingBal);
             cmd.Parameters.AddWithValue("@fromRev", data.subT_fromRev);
             cmd.Parameters.AddWithValue("@budget", data.subT_budget);
-            
+
             cmd.ExecuteNonQuery();
             CloseConnection(CINTEGRATION);
         }
@@ -2069,7 +2063,7 @@ namespace middleware_service.Database_Operations
 
         public static DateTime GetNextGenDate(string ReportType)
         {
-            string query= "declare @sql as nvarchar (max) "+
+            string query = "declare @sql as nvarchar (max) " +
                         "declare @lastReportsDate as datetime " +
                         "declare @month as integer " +
                         "declare @year as integer " +

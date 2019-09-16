@@ -12,16 +12,6 @@ namespace middleware_service.TableDependencyDefinitions
     {
         public void TransferToGeneric(string database)
         {
-            string query = "INSERT INTO dbo.tblGLDocuments(IsSystemVoided,IsVoided,IsValid,DocumentType,DocumentDisplayNumber,FinancialDateTime " +
-                            ",CreatedByDocumentID,OriginalDocumentID,CreatedBy,CreatedDateTime,ModifiedBy,ModifiedDateTime,UpdateFromEntityID " +
-                            ",Balance,CurrencyID,ExchangeRate,BalanceCompanyCurrency,TotalAmount,TotalAmountCompanyCurrency,TotalAmountBeforeTax " +
-                            ",TotalAmountBeforeTaxCompanyCurrency,PaymentMethod,clientId,Remarks,PostingStatus,Proj) " +
-
-                       "VALUES " +
-                           "(@IsSystemVoided,@IsVoided,@IsValid,@DocumentType,@DocumentDisplayNumber,@FinancialDateTime,@CreatedByDocumentID,@OriginalDocumentID " +
-                            ",@CreatedBy,@CreatedDateTime,@ModifiedBy,@ModifiedDateTime,@UpdateFromEntityID,@Balance,@CurrencyID,@ExchangeRate " +
-                            ",@BalanceCompanyCurrency,@TotalAmount,@TotalAmountCompanyCurrency,@TotalAmountBeforeTax,@TotalAmountBeforeTaxCompanyCurrency, " +
-                            "@PaymentMethod,@clientId,@Remarks,@PostingStatus,@Proj)";
 
             DocumentDisplayNumber = fixNulls(DocumentDisplayNumber);
             CreatedBy = fixNulls(CreatedBy);
@@ -29,53 +19,52 @@ namespace middleware_service.TableDependencyDefinitions
             Remarks = fixNulls(Remarks);
             Proj = fixNulls(Proj);
 
-            SqlConnection conn = new SqlConnection(database);
-            conn.Open();
-
-
-            try
+            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
             {
-                SqlCommand cmd = new SqlCommand();
-                cmd.Connection = conn;
-                cmd.CommandText = query;
+                string query = "INSERT INTO dbo.tblGLDocuments(IsSystemVoided,IsVoided,IsValid,DocumentType,DocumentDisplayNumber,FinancialDateTime " +
+                           ",CreatedByDocumentID,OriginalDocumentID,CreatedBy,CreatedDateTime,ModifiedBy,ModifiedDateTime,UpdateFromEntityID " +
+                           ",Balance,CurrencyID,ExchangeRate,BalanceCompanyCurrency,TotalAmount,TotalAmountCompanyCurrency,TotalAmountBeforeTax " +
+                           ",TotalAmountBeforeTaxCompanyCurrency,PaymentMethod,clientId,Remarks,PostingStatus,Proj) " +
 
-                cmd.Parameters.AddWithValue("@IsSystemVoided", IsSystemVoided);
-                cmd.Parameters.AddWithValue("@IsVoided", IsVoided);
-                cmd.Parameters.AddWithValue("@IsValid", IsValid);
-                cmd.Parameters.AddWithValue("@DocumentType", DocumentType);
-                cmd.Parameters.AddWithValue("@DocumentDisplayNumber", DocumentDisplayNumber);
-                cmd.Parameters.AddWithValue("@FinancialDateTime", FinancialDateTime);
-                cmd.Parameters.AddWithValue("@CreatedByDocumentID", CreatedByDocumentID);
-                cmd.Parameters.AddWithValue("@OriginalDocumentID", OriginalDocumentID);
-                cmd.Parameters.AddWithValue("@CreatedBy", CreatedBy);
-                cmd.Parameters.AddWithValue("@CreatedDateTime", CreatedDateTime);
-                cmd.Parameters.AddWithValue("@ModifiedBy", ModifiedBy);
-                cmd.Parameters.AddWithValue("@ModifiedDateTime", ModifiedDateTime);
-                cmd.Parameters.AddWithValue("@UpdateFromEntityID", UpdateFromEntityID);
-                cmd.Parameters.AddWithValue("@Balance", Balance);
-                cmd.Parameters.AddWithValue("@CurrencyID", CurrencyID);
-                cmd.Parameters.AddWithValue("@ExchangeRate", ExchangeRate);
-                cmd.Parameters.AddWithValue("@BalanceCompanyCurrency", BalanceCompanyCurrency);
-                cmd.Parameters.AddWithValue("@TotalAmount", TotalAmount);
-                cmd.Parameters.AddWithValue("@TotalAmountCompanyCurrency", TotalAmountCompanyCurrency);
-                cmd.Parameters.AddWithValue("@TotalAmountBeforeTax", TotalAmountBeforeTax);
-                cmd.Parameters.AddWithValue("@TotalAmountBeforeTaxCompanyCurrency", TotalAmountBeforeTaxCompanyCurrency);
-                cmd.Parameters.AddWithValue("@PaymentMethod", PaymentMethod);
-                cmd.Parameters.AddWithValue("@clientId", clientId);
-                cmd.Parameters.AddWithValue("@Remarks", Remarks);
-                cmd.Parameters.AddWithValue("@PostingStatus", PostingStatus);
-                cmd.Parameters.AddWithValue("@Proj", Proj);
-                cmd.ExecuteNonQuery();
+                      "VALUES " +
+                          "(@IsSystemVoided,@IsVoided,@IsValid,@DocumentType,@DocumentDisplayNumber,@FinancialDateTime,@CreatedByDocumentID,@OriginalDocumentID " +
+                           ",@CreatedBy,@CreatedDateTime,@ModifiedBy,@ModifiedDateTime,@UpdateFromEntityID,@Balance,@CurrencyID,@ExchangeRate " +
+                           ",@BalanceCompanyCurrency,@TotalAmount,@TotalAmountCompanyCurrency,@TotalAmountBeforeTax,@TotalAmountBeforeTaxCompanyCurrency, " +
+                           "@PaymentMethod,@clientId,@Remarks,@PostingStatus,@Proj)";
 
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@IsSystemVoided", IsSystemVoided);
+                    command.Parameters.AddWithValue("@IsVoided", IsVoided);
+                    command.Parameters.AddWithValue("@IsValid", IsValid);
+                    command.Parameters.AddWithValue("@DocumentType", DocumentType);
+                    command.Parameters.AddWithValue("@DocumentDisplayNumber", DocumentDisplayNumber);
+                    command.Parameters.AddWithValue("@FinancialDateTime", FinancialDateTime);
+                    command.Parameters.AddWithValue("@CreatedByDocumentID", CreatedByDocumentID);
+                    command.Parameters.AddWithValue("@OriginalDocumentID", OriginalDocumentID);
+                    command.Parameters.AddWithValue("@CreatedBy", CreatedBy);
+                    command.Parameters.AddWithValue("@CreatedDateTime", CreatedDateTime);
+                    command.Parameters.AddWithValue("@ModifiedBy", ModifiedBy);
+                    command.Parameters.AddWithValue("@ModifiedDateTime", ModifiedDateTime);
+                    command.Parameters.AddWithValue("@UpdateFromEntityID", UpdateFromEntityID);
+                    command.Parameters.AddWithValue("@Balance", Balance);
+                    command.Parameters.AddWithValue("@CurrencyID", CurrencyID);
+                    command.Parameters.AddWithValue("@ExchangeRate", ExchangeRate);
+                    command.Parameters.AddWithValue("@BalanceCompanyCurrency", BalanceCompanyCurrency);
+                    command.Parameters.AddWithValue("@TotalAmount", TotalAmount);
+                    command.Parameters.AddWithValue("@TotalAmountCompanyCurrency", TotalAmountCompanyCurrency);
+                    command.Parameters.AddWithValue("@TotalAmountBeforeTax", TotalAmountBeforeTax);
+                    command.Parameters.AddWithValue("@TotalAmountBeforeTaxCompanyCurrency", TotalAmountBeforeTaxCompanyCurrency);
+                    command.Parameters.AddWithValue("@PaymentMethod", PaymentMethod);
+                    command.Parameters.AddWithValue("@clientId", clientId);
+                    command.Parameters.AddWithValue("@Remarks", Remarks);
+                    command.Parameters.AddWithValue("@PostingStatus", PostingStatus);
+                    command.Parameters.AddWithValue("@Proj", Proj);
+                    command.ExecuteNonQuery();
+                }
             }
-            catch (Exception e)
-            {
-                Log.Save(e.Message + " " + e.StackTrace);
-            }
-
-            conn.Close();
         }
-
         private string fixNulls(string input)
         {
             if (input == null)

@@ -120,7 +120,6 @@ C:\Users\Mark\Documents\Git Ripositories\middleware_service\middleware_service\m
 C:\Users\Mark\Documents\Git Ripositories\middleware_service\middleware_service\middleware_service\bin\Debug\Microsoft.Owin.Hosting.xml
 C:\Users\Mark\Documents\Git Ripositories\middleware_service\middleware_service\middleware_service\bin\Debug\Microsoft.Owin.Security.xml
 C:\Users\Mark\Documents\Git Ripositories\middleware_service\middleware_service\middleware_service\bin\Debug\Newtonsoft.Json.xml
-C:\Users\Mark\Documents\Git Ripositories\middleware_service\middleware_service\middleware_service\obj\Debug\middleware_service.middleware_service.resources
 C:\Users\Mark\Documents\Git Ripositories\middleware_service\middleware_service\middleware_service\obj\Debug\middleware_service.ProjectInstaller.resources
 C:\Users\Mark\Documents\Git Ripositories\middleware_service\middleware_service\middleware_service\obj\Debug\middleware_service.csproj.GenerateResource.cache
 C:\Users\Mark\Documents\Git Ripositories\middleware_service\middleware_service\middleware_service\obj\Debug\middleware_service.csproj.CoreCompileInputs.cache
@@ -187,3 +186,11 @@ C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\m
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\System.Web.Http.Owin.xml
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\obj\Debug\middleware_service.MiddlewareService.resources
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\obj\Debug\middleware_service.csprojAssemblyReference.cache
+C:\Users\Mark\Documents\Git Ripositories\middleware_service\middleware_service\middleware_service\bin\Debug\System.Net.Http.Formatting.dll
+C:\Users\Mark\Documents\Git Ripositories\middleware_service\middleware_service\middleware_service\bin\Debug\System.Web.Http.dll
+C:\Users\Mark\Documents\Git Ripositories\middleware_service\middleware_service\middleware_service\bin\Debug\System.Web.Http.Owin.dll
+C:\Users\Mark\Documents\Git Ripositories\middleware_service\middleware_service\middleware_service\bin\Debug\System.Net.Http.Formatting.xml
+C:\Users\Mark\Documents\Git Ripositories\middleware_service\middleware_service\middleware_service\bin\Debug\System.Web.Http.xml
+C:\Users\Mark\Documents\Git Ripositories\middleware_service\middleware_service\middleware_service\bin\Debug\System.Web.Http.Owin.xml
+C:\Users\Mark\Documents\Git Ripositories\middleware_service\middleware_service\middleware_service\obj\Debug\middleware_service.csprojAssemblyReference.cache
+C:\Users\Mark\Documents\Git Ripositories\middleware_service\middleware_service\middleware_service\obj\Debug\middleware_service.MiddlewareService.resources

@@ -140,15 +140,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database Classes\Batch.cs" />
     <Compile Include="Database Classes\CreditNoteInfo.cs" />
-    <Compile Include="Database Classes\ClientDataWrapper.cs" />
     <Compile Include="Database Classes\DataWrapper.cs" />
     <Compile Include="Database Classes\InvoiceInfo.cs" />
     <Compile Include="Database Classes\Maj.cs" />
     <Compile Include="Database Classes\PaymentInfo.cs" />
     <Compile Include="Database Classes\PrepaymentData.cs" />
-    <Compile Include="Database Classes\Queue.cs" />
     <Compile Include="Database Classes\ReportRawData.cs" />
     <Compile Include="Database Classes\SubTotals.cs" />
     <Compile Include="Database Classes\Totals.cs" />

@@ -8,10 +8,6 @@ namespace middleware_service.Database_Classes
 {
     public class Totals
     {
-        public Totals()
-        {
-        }
-
         public string tot_invoiceTotal { get; set; }
         public string tot_balBFwd { get; set; }
         public string tot_toRev { get; set; }

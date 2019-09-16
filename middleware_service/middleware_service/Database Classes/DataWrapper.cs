@@ -8,11 +8,6 @@ namespace middleware_service.Database_Classes
 {
     public class DataWrapper
     {
-        public DataWrapper()
-        {
-
-        }
-
         public void setSubTotals(SubTotals subs)
         {
             subT_invoiceTotal = subs.invoiceTotal.ToString();

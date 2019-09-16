@@ -12,7 +12,20 @@ namespace middleware_service.TableDependencyDefinitions
     {
         public void TransferToGeneric(string database)
         {
-            string query = "INSERT INTO tblARInvoiceDetail (ARInvoiceID,CreditGLID,UnitPrice,Quantity,SplitAmount,Description,InternationalID,InternationalAmount,CountryID " +
+            Description = fixNulls(Description);
+            FreqUsage = fixNulls(FreqUsage);
+            CostCenter = fixNulls(CostCenter);
+            SystemCode = fixNulls(SystemCode);
+            TypeOfSystem = fixNulls(TypeOfSystem);
+            SiteCode = fixNulls(SiteCode);
+            SiteCategory = fixNulls(SiteCategory);
+            StationName = fixNulls(StationName);
+            ServiceTypeCode = fixNulls(ServiceTypeCode);
+            Proj = fixNulls(Proj);
+
+            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            {
+                string query = "INSERT INTO tblARInvoiceDetail (ARInvoiceID,CreditGLID,UnitPrice,Quantity,SplitAmount,Description,InternationalID,InternationalAmount,CountryID " +
                           ",CountryAmount,StateID,StateAmount,CountyID,CountyAmount,CityID,CityAmount,OtherID,OtherAmount,Type,Disc,Discount " +
                           ",YPeriod,DQty,DExt,FreqUsage,CostCenter,StartPeriod,EndPeriod,ARItemId,DebitGLId,ExchangeRate,SystemCode,ECCoefficient,NCCoefficient " +
                           ",POCoefficient,TCCoefficient,SUCoefficient,QECoefficient,VRCoefficient,TypeOfSystem,AntennaPower,SiteCode,SiteCategory,StationName,ServiceTypeCode,Proj) " +
@@ -26,81 +39,59 @@ namespace middleware_service.TableDependencyDefinitions
                                 ",@TypeOfSystem,@AntennaPower,@SiteCode,@SiteCategory " +
                                 ",@StationName,@ServiceTypeCode,@Proj)";
 
-            SqlConnection conn = new SqlConnection(database);
-            conn.Open();
-
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = conn;
-            cmd.CommandText = query;
-
-            Description = fixNulls(Description);
-            FreqUsage = fixNulls(FreqUsage);
-            CostCenter = fixNulls(CostCenter);
-            SystemCode = fixNulls(SystemCode);
-            TypeOfSystem = fixNulls(TypeOfSystem);
-            SiteCode = fixNulls(SiteCode);
-            SiteCategory = fixNulls(SiteCategory);
-            StationName = fixNulls(StationName);
-            ServiceTypeCode = fixNulls(ServiceTypeCode);
-            Proj = fixNulls(Proj);
-
-            try
-            {
-                cmd.Parameters.AddWithValue("@ARInvoiceID", ARInvoiceID);
-                cmd.Parameters.AddWithValue("@CreditGLID", CreditGLID);
-                cmd.Parameters.AddWithValue("@UnitPrice", UnitPrice);
-                cmd.Parameters.AddWithValue("@Quantity", Quantity);
-                cmd.Parameters.AddWithValue("@SplitAmount", SplitAmount);
-                cmd.Parameters.AddWithValue("@Description", Description);
-                cmd.Parameters.AddWithValue("@InternationalID", InternationalID);
-                cmd.Parameters.AddWithValue("@InternationalAmount", InternationalAmount);
-                cmd.Parameters.AddWithValue("@CountryID", CountryID);
-                cmd.Parameters.AddWithValue("@CountryAmount", CountryAmount);
-                cmd.Parameters.AddWithValue("@StateID", StateID);
-                cmd.Parameters.AddWithValue("@StateAmount", StateAmount);
-                cmd.Parameters.AddWithValue("@CountyID", CountyID);
-                cmd.Parameters.AddWithValue("@CountyAmount", CountyAmount);
-                cmd.Parameters.AddWithValue("@CityID", CityID);
-                cmd.Parameters.AddWithValue("@CityAmount", CityAmount);
-                cmd.Parameters.AddWithValue("@OtherID", OtherID);
-                cmd.Parameters.AddWithValue("@OtherAmount", OtherAmount);
-                cmd.Parameters.AddWithValue("@Type", Type);
-                cmd.Parameters.AddWithValue("@Disc", Disc);
-                cmd.Parameters.AddWithValue("@Discount", Discount);
-                cmd.Parameters.AddWithValue("@YPeriod", YPeriod);
-                cmd.Parameters.AddWithValue("@DQty", DQty);
-                cmd.Parameters.AddWithValue("@DExt", DExt);
-                cmd.Parameters.AddWithValue("@FreqUsage", FreqUsage);
-                cmd.Parameters.AddWithValue("@CostCenter", CostCenter);
-                cmd.Parameters.AddWithValue("@StartPeriod", StartPeriod);
-                cmd.Parameters.AddWithValue("@EndPeriod", EndPeriod);
-                cmd.Parameters.AddWithValue("@ARItemId", ARItemId);
-                cmd.Parameters.AddWithValue("@DebitGLId", DebitGLId);
-                cmd.Parameters.AddWithValue("@ExchangeRate", ExchangeRate);
-                cmd.Parameters.AddWithValue("@SystemCode", SystemCode);
-                cmd.Parameters.AddWithValue("@ECCoefficient", ECCoefficient);
-                cmd.Parameters.AddWithValue("@NCCoefficient", NCCoefficient);
-                cmd.Parameters.AddWithValue("@POCoefficient", POCoefficient);
-                cmd.Parameters.AddWithValue("@TCCoefficient", TCCoefficient);
-                cmd.Parameters.AddWithValue("@SUCoefficient", SUCoefficient);
-                cmd.Parameters.AddWithValue("@QECoefficient", QECoefficient);
-                cmd.Parameters.AddWithValue("@VRCoefficient", VRCoefficient);
-                cmd.Parameters.AddWithValue("@TypeOfSystem", TypeOfSystem);
-                cmd.Parameters.AddWithValue("@AntennaPower", AntennaPower);
-                cmd.Parameters.AddWithValue("@SiteCode", SiteCode);
-                cmd.Parameters.AddWithValue("@SiteCategory", SiteCategory);
-                cmd.Parameters.AddWithValue("@StationName", StationName);
-                cmd.Parameters.AddWithValue("@ServiceTypeCode", ServiceTypeCode);
-                cmd.Parameters.AddWithValue("@Proj", Proj);
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@ARInvoiceID", ARInvoiceID);
+                    command.Parameters.AddWithValue("@CreditGLID", CreditGLID);
+                    command.Parameters.AddWithValue("@UnitPrice", UnitPrice);
+                    command.Parameters.AddWithValue("@Quantity", Quantity);
+                    command.Parameters.AddWithValue("@SplitAmount", SplitAmount);
+                    command.Parameters.AddWithValue("@Description", Description);
+                    command.Parameters.AddWithValue("@InternationalID", InternationalID);
+                    command.Parameters.AddWithValue("@InternationalAmount", InternationalAmount);
+                    command.Parameters.AddWithValue("@CountryID", CountryID);
+                    command.Parameters.AddWithValue("@CountryAmount", CountryAmount);
+                    command.Parameters.AddWithValue("@StateID", StateID);
+                    command.Parameters.AddWithValue("@StateAmount", StateAmount);
+                    command.Parameters.AddWithValue("@CountyID", CountyID);
+                    command.Parameters.AddWithValue("@CountyAmount", CountyAmount);
+                    command.Parameters.AddWithValue("@CityID", CityID);
+                    command.Parameters.AddWithValue("@CityAmount", CityAmount);
+                    command.Parameters.AddWithValue("@OtherID", OtherID);
+                    command.Parameters.AddWithValue("@OtherAmount", OtherAmount);
+                    command.Parameters.AddWithValue("@Type", Type);
+                    command.Parameters.AddWithValue("@Disc", Disc);
+                    command.Parameters.AddWithValue("@Discount", Discount);
+                    command.Parameters.AddWithValue("@YPeriod", YPeriod);
+                    command.Parameters.AddWithValue("@DQty", DQty);
+                    command.Parameters.AddWithValue("@DExt", DExt);
+                    command.Parameters.AddWithValue("@FreqUsage", FreqUsage);
+                    command.Parameters.AddWithValue("@CostCenter", CostCenter);
+                    command.Parameters.AddWithValue("@StartPeriod", StartPeriod);
+                    command.Parameters.AddWithValue("@EndPeriod", EndPeriod);
+                    command.Parameters.AddWithValue("@ARItemId", ARItemId);
+                    command.Parameters.AddWithValue("@DebitGLId", DebitGLId);
+                    command.Parameters.AddWithValue("@ExchangeRate", ExchangeRate);
+                    command.Parameters.AddWithValue("@SystemCode", SystemCode);
+                    command.Parameters.AddWithValue("@ECCoefficient", ECCoefficient);
+                    command.Parameters.AddWithValue("@NCCoefficient", NCCoefficient);
+                    command.Parameters.AddWithValue("@POCoefficient", POCoefficient);
+                    command.Parameters.AddWithValue("@TCCoefficient", TCCoefficient);
+                    command.Parameters.AddWithValue("@SUCoefficient", SUCoefficient);
+                    command.Parameters.AddWithValue("@QECoefficient", QECoefficient);
+                    command.Parameters.AddWithValue("@VRCoefficient", VRCoefficient);
+                    command.Parameters.AddWithValue("@TypeOfSystem", TypeOfSystem);
+                    command.Parameters.AddWithValue("@AntennaPower", AntennaPower);
+                    command.Parameters.AddWithValue("@SiteCode", SiteCode);
+                    command.Parameters.AddWithValue("@SiteCategory", SiteCategory);
+                    command.Parameters.AddWithValue("@StationName", StationName);
+                    command.Parameters.AddWithValue("@ServiceTypeCode", ServiceTypeCode);
+                    command.Parameters.AddWithValue("@Proj", Proj);
+                    command.ExecuteNonQuery();
+                }
             }
-            catch (Exception e)
-            {
-                Log.Save(e.Message + " " + e.StackTrace);
-            }
-            conn.Close();
         }
-
         private string fixNulls(string input)
         {
             if (input == null)
@@ -112,7 +103,6 @@ namespace middleware_service.TableDependencyDefinitions
                 return input;
             }
         }
-
         public int ARInvoiceID { get; set; }
         public int ARInvoiceDetailID { get; set; }
         public int CreditGLID { get; set; }

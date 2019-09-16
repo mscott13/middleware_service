@@ -17,6 +17,7 @@ namespace middleware_service.Database_Operations
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
+                    command.Parameters.AddWithValue("@dbname", databaseName);
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.HasRows)
@@ -60,7 +61,7 @@ namespace middleware_service.Database_Operations
             List<ReportRawData> reportInfo = new List<ReportRawData>();
             ReportRawData record = new ReportRawData();
 
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 #region lengthQuery
                 string query = "CREATE TABLE #AllRecordsTable" +
@@ -492,7 +493,7 @@ namespace middleware_service.Database_Operations
 
         public static void CloseInvoiceBatch()
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query =
                      "Update InvoiceBatch set Status='Closed' where Status='Open' " +
@@ -510,7 +511,7 @@ namespace middleware_service.Database_Operations
         public static Maj GetMajDetail(int referenceNumber)
         {
             Maj maj = new Maj();
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "select TOP 1 stationType, CertificateType, subStationType, Proj from tbl_site where referenceNum=@referenceNumber";
                 connection.Open();
@@ -536,7 +537,7 @@ namespace middleware_service.Database_Operations
         public static DataSet GetRenewalInvoiceValidity(int invoiceid) // could not find stored procedure sp_getValidityRenewalInvoice
         {
             DataSet ds = new DataSet();
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "";
                 connection.Open();
@@ -555,7 +556,7 @@ namespace middleware_service.Database_Operations
         public static int GetInvoiceReference(int invoiceId)
         {
             int refNumber = -1;
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "select Ref# from tblARInvoices where ARInvoiceID = @invoiceId";
                 connection.Open();
@@ -581,7 +582,7 @@ namespace middleware_service.Database_Operations
         public static void CreateInvoiceBatch(double daysExpire, int batchId, string batchType, string renstat)
         {
 
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "INSERT INTO InvoiceBatch VALUES(@batchId, @date, @expiryDate, 'Open', 0, @batchType, 0, @renstat)";
                 connection.Open();
@@ -601,7 +602,7 @@ namespace middleware_service.Database_Operations
         public static bool BatchAvail(string batchType)
         {
             bool result = false;
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "select count(*) from InvoiceBatch where BatchType=@batchType and Status = 'Open'";
                 connection.Open();
@@ -629,7 +630,7 @@ namespace middleware_service.Database_Operations
         public static bool IsBatchExpired(int batchId)
         {
             bool result = false;
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "select ExpiryDate, renstat from InvoiceBatch where BatchId=@batchId";
                 connection.Open();
@@ -666,7 +667,7 @@ namespace middleware_service.Database_Operations
         public static int GetAvailBatch(string batchType)
         {
             int result = -1;
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "select batchId from InvoiceBatch where BatchType=@batchType and status='Open'";
                 connection.Open();
@@ -689,7 +690,7 @@ namespace middleware_service.Database_Operations
 
         public static void OpenNewReceiptBatch(double DaysTillExpired, int LastBatchId, string bankcode)
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "if(@bankcode='FGBJMREC') " +
                                 "begin " +
@@ -724,7 +725,7 @@ namespace middleware_service.Database_Operations
 
         public static void CloseReceiptBatch(int batchId)
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "update PaymentBatch set Status='Closed' where BatchId=@batchId";
                 connection.Open();
@@ -738,7 +739,7 @@ namespace middleware_service.Database_Operations
 
         public static void UpdateBatchAmount(string batchType, decimal amount)
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "if((select amount from InvoiceBatch where Status='Open' and BatchType=@batchType) is NULL) " +
                             "begin " +
@@ -771,7 +772,7 @@ namespace middleware_service.Database_Operations
         public static string GetBankCodeId(string bankcode)
         {
             string bankcodeid = "";
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "if(@bankcode='FGBJMREC') " +
                             "begin " +
@@ -806,7 +807,7 @@ namespace middleware_service.Database_Operations
         public static DateTime GetDocDate(int docNumber)
         {
             DateTime date = DateTime.Now;
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "select top 1 StartPeriod from tblArInvoiceDetail where arinvoiceid=@docNumber ";
                 connection.Open();
@@ -828,7 +829,7 @@ namespace middleware_service.Database_Operations
 
         public static void UpdateBatchCount(string BatchType)
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "Declare @count integer " +
                          "select @count = Count from InvoiceBatch where BatchType = @BatchType_ AND Status = 'Open' " +
@@ -839,7 +840,6 @@ namespace middleware_service.Database_Operations
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@BatchType_", BatchType);
-                    command.Parameters.AddWithValue("@BatchType_", BatchType);
                     command.ExecuteNonQuery();
                 }
             }
@@ -847,7 +847,7 @@ namespace middleware_service.Database_Operations
 
         public static void IncrementReferenceNumber(string BankCode, decimal amount)
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "Declare @var1 integer " +
                           "Declare @var2 decimal(19, 2) " +
@@ -875,7 +875,7 @@ namespace middleware_service.Database_Operations
         public static decimal GetRate()
         {
             decimal result = 0;
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "select top 1 CurrencyExchangeRate from tbl_CurrencyExchangeRates order by SavedDate desc";
                 connection.Open();
@@ -896,7 +896,7 @@ namespace middleware_service.Database_Operations
 
         public static void UpdateBatchCountPayment(string BatchId)
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "Declare @count integer " +
                           "select @count = [Count] from PaymentBatch where BatchId = @BatchId " +
@@ -915,7 +915,7 @@ namespace middleware_service.Database_Operations
         public static decimal GetUsRateByInvoice(int invoiceid)
         {
             decimal rate = 1;
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "select usrate from InvoiceList where invoiceId = @invoiceid";
                 connection.Open();
@@ -938,7 +938,7 @@ namespace middleware_service.Database_Operations
         public static string GetCurrentRef(string bankCode)
         {
             string refNumber = "";
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "select CurrentRefNumber from BankCode where BankCode=@BankCode";
                 connection.Open();
@@ -959,7 +959,7 @@ namespace middleware_service.Database_Operations
             return refNumber;
         }
 
-        public static string GetRecieptBatch(string bankcode)
+        public static string GetRecieptBatchId(string bankcode)
         {
             string batch = "";
             switch (bankcode)
@@ -975,7 +975,7 @@ namespace middleware_service.Database_Operations
                     break;
             }
 
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "select BatchId from PaymentBatch where BankCodeId = @bankcode and Status = 'Open'";
                 connection.Open();
@@ -995,10 +995,54 @@ namespace middleware_service.Database_Operations
             return batch;
         }
 
+        public static ReceiptBatch GetReceiptBatchDetail(string bankcode)
+        {
+            ReceiptBatch batch = new ReceiptBatch();
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
+            {
+                string query = "if (@bankcode = 'FGBJMREC') " +
+                            "begin " +
+                                "select BatchId, CreatedDate, ExpiryDate, Status, BankCodeId, Count, Total from PaymentBatch where Status = 'Open' and BankCodeId = '10010-100' " +
+                            "end " +
+                            "else if (@bankcode = 'FGBUSMRC') " +
+                            "begin " +
+                                "select BatchId, CreatedDate, ExpiryDate, Status, BankCodeId, Count, Total from PaymentBatch where Status = 'Open' and BankCodeId = '10012-100' " +
+                            "end " +
+                            "else if (@bankcode = 'NCBJMREC') " +
+                            "begin " +
+                                "select BatchId, CreatedDate, ExpiryDate, Status, BankCodeId, Count, Total from PaymentBatch where Status = 'Open' and BankCodeId = '10020-100' " +
+                            "end";
+
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@bankcode", bankcode);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            reader.Read();
+                            batch.batchId = Convert.ToInt32(reader["BatchId"]);
+                            batch.createdDate = Convert.ToDateTime(reader["CreatedDate"]);
+                            batch.expiryDate = Convert.ToDateTime(reader["ExpiryDate"]);
+                            batch.status = reader["Status"].ToString();
+                            batch.count = Convert.ToInt32(reader["Count"]);
+                            batch.total = Convert.ToDecimal(reader["Total"]);
+                        }
+                        else
+                        {
+                            batch = null;
+                        }
+                    }
+                }
+            }
+            return batch;
+        }
+
         public static List<string> CheckInvoiceAvail(string invoiceId)
         {
             List<string> data = new List<string>(3);
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "select * from InvoiceList where invoiceId=@invoiceId";
                 connection.Open();
@@ -1026,7 +1070,7 @@ namespace middleware_service.Database_Operations
 
         public static void StoreInvoice(int invoiceId, int batchTarget, int CreditGL, string clientName, string clientId, DateTime date, string author, decimal amount, string state, decimal usrate, decimal usamount, int isvoid, int isCreditMemo, int creditMemoNumber)
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "declare @var1 integer " +
                         "declare @var2 integer " +
@@ -1075,7 +1119,7 @@ namespace middleware_service.Database_Operations
 
         public static void StorePayment(string clientId, string clientName, DateTime createdDate, string invoiceId, decimal amount, decimal usamount, string prepstat, int referenceNumber, int destinationBank, string isPayByCredit, decimal prepaymentUsRate)
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "DECLARE @var1 integer " +
                        "select top 1 @var1 = [sequence] from PaymentList order by sequence desc " +
@@ -1124,6 +1168,7 @@ namespace middleware_service.Database_Operations
                     command.Parameters.AddWithValue("@isPayByCredit", isPayByCredit);
                     command.Parameters.AddWithValue("@prepaymentUsRate", prepaymentUsRate);
                     command.ExecuteNonQuery();
+                    MiddlewareService.BroadcastEvent(new EventObjects.Receipt(createdDate,clientName, clientId, invoiceId, amount, usamount, referenceNumber, prepstat, destinationBank, isPayByCredit));
                 }
             }
         }
@@ -1131,7 +1176,7 @@ namespace middleware_service.Database_Operations
         public static string GetAccountNumber(int GLID)
         {
             string accountNumber = "";
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "select GLAccountNumber from tblGLAccounts where GLAccountID=@GLID";
                 connection.Open();
@@ -1154,7 +1199,7 @@ namespace middleware_service.Database_Operations
         public static List<string> GetInvoiceDetails(int invoiceId)
         {
             List<string> data = new List<string>(3);
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "select TargetBatch, EntryNumber, CreditGL, Amount from InvoiceList where invoiceId=@invoiceId ";
                 connection.Open();
@@ -1183,7 +1228,7 @@ namespace middleware_service.Database_Operations
 
         public static void MarkTransferred(int invoiceId)
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "update InvoiceList set status='T', LastModified=GETDATE() where invoiceId=@invoiceId " +
                             "if((Select transferredInvoices from counters) is null) " +
@@ -1209,7 +1254,7 @@ namespace middleware_service.Database_Operations
         public static int GetCreditGl(string invoiceiD)
         {
             int i = 0;
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "SELECT top 1 CreditGLID FROM tblARInvoiceDetail where ARInvoiceID = @invoiceId ";
                 connection.Open();
@@ -1232,7 +1277,7 @@ namespace middleware_service.Database_Operations
         public static int GetCreditGlID(string GLTransactionID)
         {
             int i = 0;
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "SELECT GLID FROM tblARPayments WHERE GLTransactionID = @GLTransactionID ";
                 connection.Open();
@@ -1255,7 +1300,7 @@ namespace middleware_service.Database_Operations
         public static string IsAnnualFee(int invoiceid)
         {
             string notes = " ";
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "select notes from tblARInvoices where ARInvoiceID = @invoiceId";
                 connection.Open();
@@ -1277,7 +1322,7 @@ namespace middleware_service.Database_Operations
 
         public static void UpdateCreditGl(int invoiceId, int newCreditGl)
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "update InvoiceList set CreditGl=@newCreditGl where invoiceId=@invoiceId";
                 connection.Open();
@@ -1292,7 +1337,7 @@ namespace middleware_service.Database_Operations
 
         public static void ModifyInvoiceList(int invoiceId, decimal rate, string customerId)
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "update InvoiceList set usrate = @usrate where invoiceId = @invoiceid " +
                                "update InvoiceList set clientId = @customerId where invoiceId = @invoiceid ";
@@ -1310,7 +1355,7 @@ namespace middleware_service.Database_Operations
 
         public static void UpdateEntryNumber(int invoiceId)
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "declare @var1 int " +
                         "declare @var2 int " +
@@ -1330,7 +1375,7 @@ namespace middleware_service.Database_Operations
         public static List<string> GetPaymentInfo(int gl_id)
         {
             List<string> data = new List<string>(4);
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "SELECT Debit, GLID, InvoiceID, Date1 from tblARPayments where GLTransactionID=@id ";
                 connection.Open();
@@ -1361,7 +1406,7 @@ namespace middleware_service.Database_Operations
         public static List<string> GetClientInfoInv(string id)
         {
             List<string> data = new List<string>(4);
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "SELECT clientCompany, ccNum, clientFname, clientLname from client where clientId=@clientId ";
                 connection.Open();
@@ -1392,7 +1437,7 @@ namespace middleware_service.Database_Operations
         public static List<string> GetFeeInfo(int invoiceId)
         {
             List<string> data = new List<string>(2);
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "Select FeeType, notes from tblARInvoices where ARInvoiceID=@id_inv";
                 connection.Open();
@@ -1418,7 +1463,7 @@ namespace middleware_service.Database_Operations
 
         public static void UpdateCustomerCount()
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "declare @var1 integer " +
                           "select @var1 = Count from tblCustomerCreatedCount " +
@@ -1445,7 +1490,7 @@ namespace middleware_service.Database_Operations
 
         public static void StoreCustomer(string clientId, string clientName)
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "insert into CustomerCreatedDetail " +
                           "values(@clientId, @clientName, GETDATE()) " +
@@ -1467,11 +1512,12 @@ namespace middleware_service.Database_Operations
                     command.ExecuteNonQuery();
                 }
             }
+            MiddlewareService.BroadcastEvent(new EventObjects.Customer(clientName, clientId));
         }
 
         public static void UpdateReceiptNumber(int transactionId, string referenceNumber)
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "update tblARPayments set ReceiptNumber=@reference where ReceiptNumber=@receiptNum";
                 connection.Open();
@@ -1487,7 +1533,7 @@ namespace middleware_service.Database_Operations
         public static DateTime GetValidity(int invoiceId)
         {
             var datetime = DateTime.Now;
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "SELECT cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname, Amount, val.ValidFrom, val.ValidTo, " +
                            "GL.CreditGLID, Gl.Description, inv.ARInvoiceID " +
@@ -1517,7 +1563,7 @@ namespace middleware_service.Database_Operations
         public static DateTime GetValidityEnd(int invoiceId)
         {
             var datetime = DateTime.Now;
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "SELECT cus.clientID, cus.ccNum, cus.clientCompany, cus.clientFname, cus.clientLname, Amount, val.ValidFrom, val.ValidTo, " +
                            "GL.CreditGLID, Gl.Description, inv.ARInvoiceID " +
@@ -1546,7 +1592,7 @@ namespace middleware_service.Database_Operations
 
         public static void ResetInvoiceTotal()
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "update InvoiceTotal set total=0";
                 connection.Open();
@@ -1560,7 +1606,7 @@ namespace middleware_service.Database_Operations
         public static string GetFreqUsage(int invoiceId)
         {
             string result = "";
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "select FreqUsage FROM tblARInvoiceDetail where ARInvoiceID=@invoiceId";
                 connection.Open();
@@ -1583,7 +1629,7 @@ namespace middleware_service.Database_Operations
         public static int GetCreditMemoNumber()
         {
             int num = -1;
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "select creditMemoSequence from counters " +
                                 "update counters set creditMemoSequence = creditMemoSequence + 1";
@@ -1606,7 +1652,7 @@ namespace middleware_service.Database_Operations
 
         public static void UpdateAsmsCreditMemoNumber(int docId, int newCredNum)
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "update tblGLDocuments set DocumentDisplayNumber = @newCredNum where DocumentID=@documentId";
                 connection.Open();
@@ -1622,7 +1668,7 @@ namespace middleware_service.Database_Operations
         public static InvoiceInfo GetInvoiceInfo(int invoiceId)
         {
             InvoiceInfo inv = new InvoiceInfo();
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "Declare @Glid integer " +
                         "Declare @FreqUsage varchar(50) " +
@@ -1657,7 +1703,7 @@ namespace middleware_service.Database_Operations
         public static PaymentInfo GetReceiptInfo(int originalDocNum)
         {
             PaymentInfo rct = new PaymentInfo();
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "select ReceiptNumber, GLTransactionID, CustomerID, Debit, InvoiceID, Date1, GLID from tblARPayments where GLTransactionID=@originalDocNum";
                 connection.Open();
@@ -1686,7 +1732,7 @@ namespace middleware_service.Database_Operations
         public static CreditNoteInfo GetCreditNoteInfo(int creditMemoNum, int documentId)
         {
             CreditNoteInfo creditNote = new CreditNoteInfo();
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "Declare @relatedInvoice integer " +
                            "Declare @cglid integer " +
@@ -1727,7 +1773,7 @@ namespace middleware_service.Database_Operations
         {
             string result = "";
             string temp = "";
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "select * from InvoiceList where invoiceId=0";
                 connection.Open();
@@ -1765,7 +1811,7 @@ namespace middleware_service.Database_Operations
         public static PrepaymentData CheckPrepaymentAvail(string customerId)
         {
             PrepaymentData data = new PrepaymentData();
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "declare @CustomerPrepaymentTable TABLE " +
                         "( " +
@@ -1811,7 +1857,7 @@ namespace middleware_service.Database_Operations
 
         public static void AdjustPrepaymentRemainder(decimal amount, int sequenceNumber)
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "update PaymentList set prepaymentRemainder=prepaymentRemainder-@amount where sequence=@sequenceNumber";
                 connection.Open();
@@ -1827,7 +1873,7 @@ namespace middleware_service.Database_Operations
         public static string GenerateReportId(string ReportType)
         {
             string result = "";
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "declare @count as integer " +
                        "declare @id as integer " +
@@ -1869,7 +1915,7 @@ namespace middleware_service.Database_Operations
         {
             for (int i = 0; i < data.records.Count; i++)
             {
-                using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+                using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
                 {
                     string query = "declare @category as varchar (50) " +
                             "declare @sql as Nvarchar (max) " +
@@ -1933,7 +1979,7 @@ namespace middleware_service.Database_Operations
 
         public static void InsertSubtotals(string ReportType, string reportID, DataWrapper data, int destination)
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "declare @sql as nvarchar (max) " +
                         "set @sql = 'insert into ' + @ReportType + 'DIR_SubTotals (record_id, category, invoiceTotal, balanceBFwd, toRev, closingBal, fromRev, budget) " +
@@ -1963,7 +2009,7 @@ namespace middleware_service.Database_Operations
 
         public static void InsertTotals(string ReportType, string reportID, Totals total)
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "declare @sql as nvarchar (max) " +
                         "set @sql = 'insert into ' + @ReportType + 'DIR_Totals (record_id, invoiceTotal, balanceBFwd, toRev, closingBal, fromRev, budget) " +
@@ -1993,7 +2039,7 @@ namespace middleware_service.Database_Operations
 
         public static void SetNextGenDate(string ReportType, DateTime date)
         {
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "declare @month as integer " +
                         "declare @year as integer " +
@@ -2032,7 +2078,7 @@ namespace middleware_service.Database_Operations
         public static DateTime GetNextGenDate(string ReportType)
         {
             DateTime date = DateTime.Now;
-            using (SqlConnection connection = new SqlConnection(Constants.DB_INTEGRATION))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_INTEGRATION))
             {
                 string query = "declare @sql as nvarchar (max) " +
                         "declare @lastReportsDate as datetime " +

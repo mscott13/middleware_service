@@ -12,25 +12,7 @@ namespace middleware_service.TableDependencyDefinitions
     {
         public void TransferToGeneric(string database)
         {
-            canceledBy = fixNulls(canceledBy);
-            notes = fixNulls(notes);
-            FeeType = fixNulls(FeeType);
-            Ref = fixNulls(Ref);
-            Author = fixNulls(Author);
-            PO = fixNulls(PO);
-            Job = fixNulls(Job);
-            LiqNum = fixNulls(LiqNum);
-            Form = fixNulls(Form);
-            ResolutionNum = fixNulls(ResolutionNum);
-            Printed = fixNulls(Printed);
-            Remarks = fixNulls(Remarks);
-            reasonforCancellation = fixNulls(reasonforCancellation);
-            PurchaseOrder = fixNulls(PurchaseOrder);
-            Proj = fixNulls(Proj);
-            InvoiceCode = fixNulls(InvoiceCode);
-            IDINVC = fixNulls(IDINVC);
-
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(database))
             {
                 string query = "INSERT INTO dbo.tblARInvoices " +
                         "(Invoice#,Batch#,Ref#,Date1,DebitGLID,Amount,ARBalance,CustomerID,Processed,Author,PO#,ToApply,AdjustmentAmount " +
@@ -54,70 +36,84 @@ namespace middleware_service.TableDependencyDefinitions
                 {
                     command.Parameters.AddWithValue("@Invoice#", Invoice);
                     command.Parameters.AddWithValue("@Batch#", Batch);
-                    command.Parameters.AddWithValue("@Ref#", Ref);
-                    command.Parameters.AddWithValue("@Date1", Date1);
+                    command.Parameters.AddWithValue("@Ref#", FixNulls(Ref));
+                    command.Parameters.AddWithValue("@Date1", FixDate(Date1));
                     command.Parameters.AddWithValue("@DebitGLID", DebitGLID);
                     command.Parameters.AddWithValue("@Amount", Amount);
                     command.Parameters.AddWithValue("@ARBalance", ARBalance);
                     command.Parameters.AddWithValue("@CustomerID", CustomerID);
                     command.Parameters.AddWithValue("@Processed", Processed);
-                    command.Parameters.AddWithValue("@Author", Author);
-                    command.Parameters.AddWithValue("@PO#", PO);
+                    command.Parameters.AddWithValue("@Author", FixNulls(Author));
+                    command.Parameters.AddWithValue("@PO#", FixNulls(PO));
                     command.Parameters.AddWithValue("@ToApply", ToApply);
                     command.Parameters.AddWithValue("@AdjustmentAmount", AdjustmentAmount);
-                    command.Parameters.AddWithValue("@GLUpdateDate", GLUpdateDate);
-                    command.Parameters.AddWithValue("@Job#", Job);
+                    command.Parameters.AddWithValue("@GLUpdateDate", FixDate(GLUpdateDate));
+                    command.Parameters.AddWithValue("@Job#", FixNulls(Job));
                     command.Parameters.AddWithValue("@SalesmanID", SalesmanID);
                     command.Parameters.AddWithValue("@DocType", DocType);
-                    command.Parameters.AddWithValue("@DueDate", DueDate);
-                    command.Parameters.AddWithValue("@FCDate", FCDate);
-                    command.Parameters.AddWithValue("@DiscountDate", DiscountDate);
+                    command.Parameters.AddWithValue("@DueDate", FixDate(DueDate));
+                    command.Parameters.AddWithValue("@FCDate", FixDate(FCDate));
+                    command.Parameters.AddWithValue("@DiscountDate", FixDate(DiscountDate));
                     command.Parameters.AddWithValue("@DTotal", DTotal);
-                    command.Parameters.AddWithValue("@NextPostingDate", NextPostingDate);
-                    command.Parameters.AddWithValue("@notes", notes);
-                    command.Parameters.AddWithValue("@InvoiceCreationDate", InvoiceCreationDate);
+                    command.Parameters.AddWithValue("@NextPostingDate", FixDate(NextPostingDate));
+                    command.Parameters.AddWithValue("@notes", FixNulls(notes));
+                    command.Parameters.AddWithValue("@InvoiceCreationDate", FixDate(InvoiceCreationDate));
                     command.Parameters.AddWithValue("@Transferred", Transferred);
                     command.Parameters.AddWithValue("@Quarter", Quarter);
                     command.Parameters.AddWithValue("@Year", Year);
                     command.Parameters.AddWithValue("@FeeTaxesId", FeeTaxesId);
                     command.Parameters.AddWithValue("@relatedInvoice", relatedInvoice);
                     command.Parameters.AddWithValue("@DocId", DocId);
-                    command.Parameters.AddWithValue("@LiqNum", LiqNum);
+                    command.Parameters.AddWithValue("@LiqNum", FixNulls(LiqNum));
                     command.Parameters.AddWithValue("@NotificationId", NotificationId);
                     command.Parameters.AddWithValue("@LegalStatus", LegalStatus);
-                    command.Parameters.AddWithValue("@Form", Form);
-                    command.Parameters.AddWithValue("@ResolutionNum", ResolutionNum);
-                    command.Parameters.AddWithValue("@Printed", Printed);
+                    command.Parameters.AddWithValue("@Form", FixNulls(Form));
+                    command.Parameters.AddWithValue("@ResolutionNum", FixNulls(ResolutionNum));
+                    command.Parameters.AddWithValue("@Printed", FixNulls(Printed));
                     command.Parameters.AddWithValue("@ARGLID", ARGLID);
                     command.Parameters.AddWithValue("@Exported", Exported);
-                    command.Parameters.AddWithValue("@ExportDate", ExportDate);
+                    command.Parameters.AddWithValue("@ExportDate", FixDate(ExportDate));
                     command.Parameters.AddWithValue("@InternationalID", InternationalID);
                     command.Parameters.AddWithValue("@InternationalAmount", InternationalAmount);
-                    command.Parameters.AddWithValue("@FeeType", FeeType);
+                    command.Parameters.AddWithValue("@FeeType", FixNulls(FeeType));
                     command.Parameters.AddWithValue("@ExchangeRate", ExchangeRate);
-                    command.Parameters.AddWithValue("@EndofPeriodInvoiced", EndofPeriodInvoiced);
-                    command.Parameters.AddWithValue("@Remarks", Remarks);
+                    command.Parameters.AddWithValue("@EndofPeriodInvoiced", FixDate(EndofPeriodInvoiced));
+                    command.Parameters.AddWithValue("@Remarks", FixNulls(Remarks));
                     command.Parameters.AddWithValue("@isvoided", isVoided);
                     command.Parameters.AddWithValue("@canceledDate", canceledDate);
-                    command.Parameters.AddWithValue("@canceledBy", canceledBy);
+                    command.Parameters.AddWithValue("@canceledBy", FixNulls(canceledBy));
                     command.Parameters.AddWithValue("@subType", subType);
                     command.Parameters.AddWithValue("@LicensevalidityHistoryID", LicensevalidityHistoryID);
                     command.Parameters.AddWithValue("@LogId", LogId);
                     command.Parameters.AddWithValue("@AutoGenerated", AutoGenerated);
-                    command.Parameters.AddWithValue("@reasonforCancellation", reasonforCancellation);
-                    command.Parameters.AddWithValue("@PurchaseOrder", PurchaseOrder);
+                    command.Parameters.AddWithValue("@reasonforCancellation", FixNulls(reasonforCancellation));
+                    command.Parameters.AddWithValue("@PurchaseOrder", FixNulls(PurchaseOrder));
                     command.Parameters.AddWithValue("@ExportedToEpayment", ExportedToEpayment);
                     command.Parameters.AddWithValue("@EpaymentExportDate", EpaymentExportDate);
                     command.Parameters.AddWithValue("@InvoiceType", InvoiceType);
-                    command.Parameters.AddWithValue("@Proj", Proj);
-                    command.Parameters.AddWithValue("@InvoiceCode", InvoiceCode);
+                    command.Parameters.AddWithValue("@Proj", FixNulls(Proj));
+                    command.Parameters.AddWithValue("@InvoiceCode", FixNulls(InvoiceCode));
                     command.Parameters.AddWithValue("@BalanceForward", BalanceForward);
-                    command.Parameters.AddWithValue("@IDINVC", IDINVC);
+                    command.Parameters.AddWithValue("@IDINVC", FixNulls(IDINVC));
                     command.ExecuteNonQuery();
+                    Log.Save("Parallel transfer completed");
                 }
             }
         }
-        private string fixNulls(string input)
+
+        private object FixDate(DateTime date)
+        {
+            if (date == null || date == DateTime.MinValue)
+            {
+                return DBNull.Value;
+            }
+            else
+            {
+                return date;
+            }
+        }
+
+        private string FixNulls(string input)
         {
             if (input == null)
             {

@@ -16,6 +16,7 @@ using TableDependency.EventArgs;
 using TableDependency.SqlClient;
 using Microsoft.Owin.Hosting;
 using Microsoft.AspNet.SignalR;
+using TableDependency.Mappers;
 
 namespace middleware_service
 {
@@ -86,7 +87,7 @@ namespace middleware_service
         {
             InitializeComponent();
         }
-      
+
         private void DeferredTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             DateTime MonthlyRptDate = Integration.GetNextGenDate("Monthly");
@@ -156,7 +157,14 @@ namespace middleware_service
                     Integration.SetBrokerEnabled(Constants.DB_GENERIC_NAME);
                 }
 
-                using (tableDependencyArInvoices = new SqlTableDependency<SqlNotify_ArInvoices>(Constants.TEST_DB_GENERIC, "tblARInvoices"))
+                var mapperArInvoices = new ModelToTableMapper<SqlNotify_ArInvoices>();
+                mapperArInvoices.AddMapping(inv => inv.Invoice, "Invoice#");
+                mapperArInvoices.AddMapping(inv => inv.Batch, "Batch#");
+                mapperArInvoices.AddMapping(inv => inv.Ref, "Ref#");
+                mapperArInvoices.AddMapping(inv => inv.PO, "PO#");
+                mapperArInvoices.AddMapping(inv => inv.Job, "Job#");
+
+                using (tableDependencyArInvoices = new SqlTableDependency<SqlNotify_ArInvoices>(Constants.TEST_DB_GENERIC, "tblARInvoices", mapper:mapperArInvoices))
                 {
                     tableDependencyArInvoices.OnChanged += TableDependencyArInvoices_OnChanged;
                     tableDependencyArInvoices.OnError += TableDependencyArInvoices_OnError;
@@ -174,7 +182,12 @@ namespace middleware_service
                     tableDependencyGlDocuments.OnError += TableDependencyGlDocuments_OnError;
                 }
 
-                using (tableDependencyArPayments = new SqlTableDependency<SqlNotify_ArPayments>(Constants.TEST_DB_GENERIC, "tblARPayments"))
+                var mapperArPayments = new ModelToTableMapper<SqlNotify_ArPayments>();
+                mapperArPayments.AddMapping(pay => pay.Batch, "Batch#");
+                mapperArPayments.AddMapping(pay => pay.Check, "Check#");
+                mapperArPayments.AddMapping(pay => pay.Ref, "Ref#");
+
+                using (tableDependencyArPayments = new SqlTableDependency<SqlNotify_ArPayments>(Constants.TEST_DB_GENERIC, "tblARPayments", mapper:mapperArPayments))
                 {
                     tableDependencyArPayments.OnChanged += TableDependencyArPayments_OnChanged;
                     tableDependencyArPayments.OnError += TableDependencyArPayments_OnError;
@@ -244,14 +257,14 @@ namespace middleware_service
                 tableDependencyGlDocuments.Dispose();
                 deferredTimer.Stop();
 
+                Log.Save("middleware_service stopped.");
+                Log.WriteEnd();
+                Log.Close();
+
                 if (selfHost != null)
                 {
                     selfHost.Dispose();
                 }
-
-                Log.Save("middleware_service stopped.");
-                Log.WriteEnd();
-                Log.Close();
             }
             catch (Exception e)
             {
@@ -263,7 +276,7 @@ namespace middleware_service
 
         public void SignalEventHandler(object source, SignalR.EventObjects.SignalArgs args)
         {
-            Log.Save("Command: " + args.message+ " received from: " + args.username);
+            Log.Save("Command: " + args.message + " received from: " + args.username);
         }
 
         private void InitSignalR()
@@ -284,31 +297,53 @@ namespace middleware_service
         private void TableDependencyArInvoices_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
         {
             Log.Save("Table Dependency error: " + e.Error.Message);
+            Stop();
         }
 
         private void TableDependencyGlDocuments_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
         {
             Log.Save("Table Dependency error: " + e.Error.Message);
+            Stop();
         }
 
         private void TableDependencyArInvoiceDetail_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
         {
             Log.Save("Table Dependency error: " + e.Error.Message);
+            Stop();
         }
 
         private void TableDependencyArPayments_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
         {
             Log.Save("Table Dependency error: " + e.Error.Message);
+            Stop();
         }
 
         private void TableDependencyArPayments_OnChanged(object sender, RecordChangedEventArgs<SqlNotify_ArPayments> e)
         {
-            e.Entity.TransferToGeneric(Constants.TEST_DB_GENERIC);
+            try
+            {
+                e.Entity.TransferToGeneric(Constants.TEST_DB_GENERIC);
+            }
+            catch (Exception ex)
+            {
+                Log.Save(ex.Message + " " + ex.StackTrace);
+                Stop();
+            }
         }
 
         private void TableDependencyArInvoiceDetail_OnChanged(object sender, RecordChangedEventArgs<SqlNotify_ArInvoiceDetail> e)
         {
-            e.Entity.TransferToGeneric(Constants.TEST_DB_GENERIC);
+            try
+            {
+                e.Entity.TransferToGeneric(Constants.TEST_DB_GENERIC);
+                tableDependencyArInvoiceDetail.Stop();
+                tableDependencyArInvoiceDetail.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Log.Save(ex.Message + " " + ex.StackTrace);
+                Stop();
+            }
         }
 
         private void TableDependencyGlDocuments_OnChanged(object sender, RecordChangedEventArgs<SqlNotify_GlDocuments> e)
@@ -326,6 +361,11 @@ namespace middleware_service
                         {
                             if (docInfo.DocumentType == INVOICE)
                             {
+                                if (Constants.PARALLEL_RUN)
+                                {
+                                    e.Entity.TransferToTestGeneric(Constants.TEST_DB_GENERIC);
+                                }
+
                                 Log.Save("Incoming invoice...");
                                 InvoiceInfo invoiceInfo = new InvoiceInfo();
 
@@ -807,6 +847,11 @@ namespace middleware_service
                             else if (docInfo.DocumentType == RECEIPT && docInfo.PaymentMethod != 99)
                             {
                                 Log.Save("Incoming Receipt");
+                                if (Constants.PARALLEL_RUN)
+                                {
+                                    e.Entity.TransferToTestGeneric(Constants.TEST_DB_GENERIC);
+                                }
+
                                 Data dt = new Data();
                                 PaymentInfo pinfo = new PaymentInfo();
 
@@ -855,6 +900,8 @@ namespace middleware_service
 
                                     Log.Save("Invoice Id: " + invoiceId.ToString());
                                     Log.Save("Customer Id: " + customerId);
+                                    Log.Save("Client Name: " + companyName);
+                                    Log.Save("Receipt Amount: " + pinfo.Debit);
 
                                     prepstat = "No";
                                     valstart = Integration.GetValidity(Convert.ToInt32(invoiceId));
@@ -908,11 +955,11 @@ namespace middleware_service
                                             if (ReceiptBatchAvail("FGBJMREC"))
                                             {
                                                 string reference = Integration.GetCurrentRef("FGBJMREC");
-                                                Log.Save("Target Batch: " + Integration.GetRecieptBatch("FGBJMREC"));
+                                                Log.Save("Target Batch: " + Integration.GetRecieptBatchId("FGBJMREC"));
                                                 Log.Save("Transferring Receipt");
 
-                                                ReceiptTransfer(Integration.GetRecieptBatch("FGBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
-                                                Integration.UpdateBatchCountPayment(Integration.GetRecieptBatch("FGBJMREC"));
+                                                ReceiptTransfer(Integration.GetRecieptBatchId("FGBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
+                                                Integration.UpdateBatchCountPayment(Integration.GetRecieptBatchId("FGBJMREC"));
                                                 Integration.UpdateReceiptNumber(receipt, Integration.GetCurrentRef("FGBJMREC"));
                                                 Integration.IncrementReferenceNumber(Integration.GetBankCodeId("FGBJMREC"), Convert.ToDecimal(dt.debit));
                                                 Integration.StorePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), 0, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", 0);
@@ -923,11 +970,11 @@ namespace middleware_service
                                                 CreateReceiptBatchEx("FGBJMREC", "Middleware Generated Batch for FGBJMREC");
                                                 Integration.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "FGBJMREC");
 
-                                                Log.Save("Target Batch: " + Integration.GetRecieptBatch("FGBJMREC"));
+                                                Log.Save("Target Batch: " + Integration.GetRecieptBatchId("FGBJMREC"));
                                                 Log.Save("Transferring Receipt");
 
-                                                ReceiptTransfer(Integration.GetRecieptBatch("FGBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
-                                                Integration.UpdateBatchCountPayment(Integration.GetRecieptBatch("FGBJMREC"));
+                                                ReceiptTransfer(Integration.GetRecieptBatchId("FGBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
+                                                Integration.UpdateBatchCountPayment(Integration.GetRecieptBatchId("FGBJMREC"));
                                                 Integration.UpdateReceiptNumber(receipt, Integration.GetCurrentRef("FGBJMREC"));
                                                 Integration.IncrementReferenceNumber(Integration.GetBankCodeId("FGBJMREC"), Convert.ToDecimal(dt.debit));
                                                 Integration.StorePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), 0, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", 0);
@@ -972,11 +1019,11 @@ namespace middleware_service
                                             if (ReceiptBatchAvail("FGBUSMRC"))
                                             {
                                                 string reference = Integration.GetCurrentRef("FGBUSMRC");
-                                                Log.Save("Target Batch: " + Integration.GetRecieptBatch("FGBUSMRC"));
+                                                Log.Save("Target Batch: " + Integration.GetRecieptBatchId("FGBUSMRC"));
                                                 Log.Save("Transferring Receipt");
 
-                                                ReceiptTransfer(Integration.GetRecieptBatch("FGBUSMRC"), dt.customerId, Math.Round(transferedAmt, 2).ToString(), dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
-                                                Integration.UpdateBatchCountPayment(Integration.GetRecieptBatch("FGBUSMRC"));
+                                                ReceiptTransfer(Integration.GetRecieptBatchId("FGBUSMRC"), dt.customerId, Math.Round(transferedAmt, 2).ToString(), dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
+                                                Integration.UpdateBatchCountPayment(Integration.GetRecieptBatchId("FGBUSMRC"));
                                                 Integration.UpdateReceiptNumber(receipt, Integration.GetCurrentRef("FGBUSMRC"));
                                                 Integration.IncrementReferenceNumber(Integration.GetBankCodeId("FGBUSMRC"), Convert.ToDecimal(dt.debit));
                                                 Integration.StorePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), usamount, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", currentRate);
@@ -987,11 +1034,11 @@ namespace middleware_service
                                                 CreateReceiptBatchEx("FGBUSMRC", "Middleware Generated Batch for FGBUSMRC");
                                                 Integration.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "FGBUSMRC");
 
-                                                Log.Save("Target Batch: " + Integration.GetRecieptBatch("FGBUSMRC"));
+                                                Log.Save("Target Batch: " + Integration.GetRecieptBatchId("FGBUSMRC"));
                                                 Log.Save("Transferring Receipt");
 
-                                                ReceiptTransfer(Integration.GetRecieptBatch("FGBUSMRC"), dt.customerId, Math.Round(transferedAmt, 2).ToString(), dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
-                                                Integration.UpdateBatchCountPayment(Integration.GetRecieptBatch("FGBUSMRC"));
+                                                ReceiptTransfer(Integration.GetRecieptBatchId("FGBUSMRC"), dt.customerId, Math.Round(transferedAmt, 2).ToString(), dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
+                                                Integration.UpdateBatchCountPayment(Integration.GetRecieptBatchId("FGBUSMRC"));
                                                 Integration.UpdateReceiptNumber(receipt, Integration.GetCurrentRef("FGBUSMRC"));
                                                 Integration.IncrementReferenceNumber(Integration.GetBankCodeId("FGBUSMRC"), Convert.ToDecimal(dt.debit));
                                                 Integration.StorePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), usamount, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", currentRate);
@@ -1006,11 +1053,11 @@ namespace middleware_service
                                             if (ReceiptBatchAvail("NCBJMREC"))
                                             {
                                                 string reference = Integration.GetCurrentRef("NCBJMREC");
-                                                Log.Save("Target Batch: " + Integration.GetRecieptBatch("NCBJMREC"));
+                                                Log.Save("Target Batch: " + Integration.GetRecieptBatchId("NCBJMREC"));
                                                 Log.Save("Transferring Receipt");
 
-                                                ReceiptTransfer(Integration.GetRecieptBatch("NCBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
-                                                Integration.UpdateBatchCountPayment(Integration.GetRecieptBatch("NCBJMREC"));
+                                                ReceiptTransfer(Integration.GetRecieptBatchId("NCBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
+                                                Integration.UpdateBatchCountPayment(Integration.GetRecieptBatchId("NCBJMREC"));
                                                 Integration.UpdateReceiptNumber(receipt, Integration.GetCurrentRef("NCBJMREC"));
                                                 Integration.IncrementReferenceNumber(Integration.GetBankCodeId("NCBJMREC"), Convert.ToDecimal(dt.debit));
                                                 Integration.StorePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), 0, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", 1);
@@ -1021,11 +1068,11 @@ namespace middleware_service
                                                 CreateReceiptBatchEx("NCBJMREC", "Middleware Generated Batch for NCBJMREC");
                                                 Integration.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "NCBJMREC");
 
-                                                Log.Save("Target Batch: " + Integration.GetRecieptBatch("NCBJMREC"));
+                                                Log.Save("Target Batch: " + Integration.GetRecieptBatchId("NCBJMREC"));
                                                 Log.Save("Transferring Receipt");
 
-                                                ReceiptTransfer(Integration.GetRecieptBatch("NCBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
-                                                Integration.UpdateBatchCountPayment(Integration.GetRecieptBatch("NCBJMREC"));
+                                                ReceiptTransfer(Integration.GetRecieptBatchId("NCBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
+                                                Integration.UpdateBatchCountPayment(Integration.GetRecieptBatchId("NCBJMREC"));
                                                 Integration.UpdateReceiptNumber(receipt, Integration.GetCurrentRef("NCBJMREC"));
                                                 Integration.IncrementReferenceNumber(Integration.GetBankCodeId("NCBJMREC"), Convert.ToDecimal(dt.debit));
                                                 Integration.StorePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), 0, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", 1);
@@ -1136,7 +1183,7 @@ namespace middleware_service
                                                     while (reducingAmt > 0)
                                                     {
                                                         pData = Integration.CheckPrepaymentAvail(dt.customerId);
-                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatch("FGBJMREC"), GetDocNumber(pData.referenceNumber));
+                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatchId("FGBJMREC"), GetDocNumber(pData.referenceNumber));
                                                         if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
                                                         else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
                                                         reducingAmt = reducingAmt - pData.remainder;
@@ -1148,11 +1195,11 @@ namespace middleware_service
                                                 {
                                                     CreateReceiptBatchEx("FGBJMREC", "Middleware Generated Batch for FGBJMREC");
                                                     Integration.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "FGBJMREC");
-                                                    Log.Save("Target Batch: " + Integration.GetRecieptBatch("FGBJMREC"));
+                                                    Log.Save("Target Batch: " + Integration.GetRecieptBatchId("FGBJMREC"));
                                                     while (reducingAmt > 0)
                                                     {
                                                         pData = Integration.CheckPrepaymentAvail(dt.customerId);
-                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatch("FGBJMREC"), GetDocNumber(pData.referenceNumber));
+                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatchId("FGBJMREC"), GetDocNumber(pData.referenceNumber));
                                                         if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
                                                         else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
                                                         reducingAmt = reducingAmt - pData.remainder;
@@ -1182,7 +1229,7 @@ namespace middleware_service
                                                     while (reducingAmt > 0)
                                                     {
                                                         pData = Integration.CheckPrepaymentAvail(dt.customerId);
-                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatch("FGBUSMRC"), GetDocNumber(pData.referenceNumber));
+                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatchId("FGBUSMRC"), GetDocNumber(pData.referenceNumber));
                                                         if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
                                                         else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
                                                         reducingAmt = reducingAmt - pData.remainder;
@@ -1195,12 +1242,12 @@ namespace middleware_service
                                                 {
                                                     CreateReceiptBatchEx("FGBUSMRC", "Middleware Generated Batch for FGBUSMRC");
                                                     Integration.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "FGBUSMRC");
-                                                    Log.Save("Target Batch: " + Integration.GetRecieptBatch("FGBUSMRC"));
+                                                    Log.Save("Target Batch: " + Integration.GetRecieptBatchId("FGBUSMRC"));
 
                                                     while (reducingAmt > 0)
                                                     {
                                                         pData = Integration.CheckPrepaymentAvail(dt.customerId);
-                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatch("FGBUSMRC"), GetDocNumber(pData.referenceNumber));
+                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatchId("FGBUSMRC"), GetDocNumber(pData.referenceNumber));
                                                         if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
                                                         else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
                                                         reducingAmt = reducingAmt - pData.remainder;
@@ -1237,7 +1284,7 @@ namespace middleware_service
                                                     while (reducingAmt > 0)
                                                     {
                                                         pData = Integration.CheckPrepaymentAvail(dt.customerId);
-                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatch("NCBJMREC"), GetDocNumber(pData.referenceNumber));
+                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatchId("NCBJMREC"), GetDocNumber(pData.referenceNumber));
                                                         if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
                                                         else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
                                                         reducingAmt = reducingAmt - pData.remainder;
@@ -1249,11 +1296,11 @@ namespace middleware_service
                                                 {
                                                     CreateReceiptBatchEx("NCBJMREC", "Middleware Generated Batch for NCBJMREC");
                                                     Integration.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "NCBJMREC");
-                                                    Log.Save("Target Batch: " + Integration.GetRecieptBatch("NCBJMREC"));
+                                                    Log.Save("Target Batch: " + Integration.GetRecieptBatchId("NCBJMREC"));
                                                     while (reducingAmt > 0)
                                                     {
                                                         pData = Integration.CheckPrepaymentAvail(dt.customerId);
-                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatch("NCBJMREC"), GetDocNumber(pData.referenceNumber));
+                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatchId("NCBJMREC"), GetDocNumber(pData.referenceNumber));
                                                         if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
                                                         else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
                                                         reducingAmt = reducingAmt - pData.remainder;
@@ -2105,57 +2152,29 @@ namespace middleware_service
 
         public bool ReceiptBatchAvail(string bankcode)
         {
-            connIntegration = new SqlConnection(Constants.DB_INTEGRATION);
-            connIntegration.Open();
-
-            try
+            var batch = Integration.GetReceiptBatchDetail(bankcode);
+            if (batch != null)
             {
-                SqlCommand cmd = new SqlCommand();
-                SqlDataReader reader;
-                bool truth = false;
-                int receiptBatch = -1;
-                DateTime expiryDate = DateTime.Now;
-
-                cmd.CommandText = "exec sp_rBatchAvail @bankcode";
-                cmd.Parameters.AddWithValue("@bankcode", bankcode);
-                cmd.Connection = connIntegration;
-
-                reader = cmd.ExecuteReader();
-                if (reader.HasRows)
+                if (DateTime.Now < batch.expiryDate)
                 {
-                    reader.Read();
-                    receiptBatch = Convert.ToInt32(reader[0]);
-                    expiryDate = Convert.ToDateTime(reader["ExpiryDate"]);
-                    connIntegration.Close();
-
-                    if (DateTime.Now < expiryDate)
+                    if (!CheckAccpacRBatchPosted(batch.batchId))
                     {
-                        if (!CheckAccpacRBatchPosted(receiptBatch))
-                        {
-                            truth = true;
-                        }
-                        else
-                        {
-                            Integration.CloseReceiptBatch(receiptBatch);
-                        }
+                        return true;
                     }
                     else
                     {
-                        Integration.CloseReceiptBatch(receiptBatch);
+                        Integration.CloseReceiptBatch(batch.batchId);
+                        return false;
                     }
-
-                    return truth;
                 }
                 else
                 {
-                    connIntegration.Close();
-                    return truth;
+                    Integration.CloseReceiptBatch(batch.batchId);
+                    return false;
                 }
             }
-            catch (Exception e)
+            else
             {
-                Log.Save(e.Message + " " + e.StackTrace);
-                connIntegration.Close();
                 return false;
             }
         }
@@ -2275,8 +2294,7 @@ namespace middleware_service
                         }
                     }
 
-                    bool flagInsert = false;
-
+                    bool flagInsert;
                     arRecptBatch = dbLink.OpenView("AR0041");
                     arRecptHeader = dbLink.OpenView("AR0042");
                     arRecptDetail1 = dbLink.OpenView("AR0044");
@@ -2577,12 +2595,8 @@ namespace middleware_service
 
         public bool InvoiceDelete(int invoiceId)
         {
-            int entryNumber = -1;
-            int batchNumber = -1;
-
-            entryNumber = GetEntryNumber(invoiceId);
-            batchNumber = GetIbatchNumber(invoiceId);
-
+            int entryNumber = GetEntryNumber(invoiceId);
+            int batchNumber = GetIbatchNumber(invoiceId);
 
             if (!CheckAccpacIBatchPosted(batchNumber))
             {
@@ -2619,8 +2633,8 @@ namespace middleware_service
 
         void GetViewInfo(View ax, string filename)
         {
-            string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            StreamWriter output = new StreamWriter(mydocpath + @"\" + filename + ".txt");
+            string path = AppDomain.CurrentDomain.BaseDirectory + @"resources";
+            StreamWriter output = new StreamWriter(path + @"\" + filename + ".txt");
 
             int count = ax.Fields.Count;
             output.WriteLine(count.ToString() + " fields found - " + ax.Description);

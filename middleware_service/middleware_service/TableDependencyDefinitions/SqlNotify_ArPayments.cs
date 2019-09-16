@@ -1,5 +1,7 @@
-﻿using System;
+﻿using middleware_service.Other_Classes;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -11,72 +13,71 @@ namespace middleware_service.TableDependencyDefinitions
     {
         public void TransferToGeneric(string databaseName)
         {
-            CustomerID = fixNulls(CustomerID);
-            Source = fixNulls(Source);
-            Check = fixNulls(Check);
-            Ref = fixNulls(Ref);
-            BankName = fixNulls(BankName);
-            CheckNumber = fixNulls(CheckNumber);
-            Status = fixNulls(Status);
-            CreatedBy = fixNulls(CreatedBy);
-            canceledBy = fixNulls(canceledBy);
-            CanceledReason = fixNulls(CanceledReason);
-            Remarks = fixNulls(Remarks);
-            PaymentTranType = fixNulls(PaymentTranType);
-            MiscCode = fixNulls(MiscCode);
-            TaxGroup = fixNulls(TaxGroup);
-            Proj = fixNulls(Proj);
-
             using (SqlConnection connection = new SqlConnection(databaseName))
             {
-                string query = "";
+                string query = "INSERT INTO dbo.tblARPayments " +
+                                "(Date1,InvoiceID,Batch#,PaymentType,Source,Check#,Ref#,GLID,Debit,Credit,GLUpdateDate " +
+		                                ",CustomerID,Quarter,year,FeeTaxesId,BankName,CheckNumber,Status,ReceiptNumber,isVoided "+
+                                ",CreatedBy,canceledDate,canceledBy,CanceledReason,Remarks,PostingDate,PaymentTranType,MiscCode " +
+                                ",TaxGroup,LogId,CurrencyId,DebitInternationalAmount,CreditInternationalAmount,ExchangeRate,exported " +
+                                ",exportdate,Proj,relatedDocType) " +
+                                "VALUES " +
+                                "(@Date1,@InvoiceID, @Batch#,@PaymentType,@Source,@Check# " +
+                                ",@Ref#,@GLID,@Debit,@Credit,@GLUpdateDate,@CustomerID,@Quarter " +
+                                ",@year,@FeeTaxesId,@BankName,@CheckNumber,@Status,@ReceiptNumber " +
+                                ",@isVoided,@CreatedBy,@canceledDate,@canceledBy,@CanceledReason " +
+                                ",@Remarks,@PostingDate,@PaymentTranType,@MiscCode,@TaxGroup " +
+                                ",@LogId,@CurrencyId,@DebitInternationalAmount,@CreditInternationalAmount " +
+                                ",@ExchangeRate,@exported,@exportdate,@Proj,@relatedDocType)";
+
+
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@GLID", GLID);
-                    command.Parameters.AddWithValue("@CustomerID", CustomerID);
+                    command.Parameters.AddWithValue("@CustomerID", FixNulls(CustomerID));
                     command.Parameters.AddWithValue("@Debit", Debit);
                     command.Parameters.AddWithValue("@InvoiceID", InvoiceID);
-                    command.Parameters.AddWithValue("@GLTransactionID", GLTransactionID);
                     command.Parameters.AddWithValue("@ReceiptNumber", ReceiptNumber);
-                    command.Parameters.AddWithValue("@Date1", Date1);
-                    command.Parameters.AddWithValue("@Batch", Batch);
+                    command.Parameters.AddWithValue("@Date1", FixDate(Date1));
+                    command.Parameters.AddWithValue("@Batch#", Batch);
                     command.Parameters.AddWithValue("@PaymentType", PaymentType);
-                    command.Parameters.AddWithValue("@Source", Source);
-                    command.Parameters.AddWithValue("@Check", Check);
-                    command.Parameters.AddWithValue("@Ref", Ref);
+                    command.Parameters.AddWithValue("@Source", FixNulls(Source));
+                    command.Parameters.AddWithValue("@Check#", FixNulls(Check));
+                    command.Parameters.AddWithValue("@Ref#", FixNulls(Ref));
                     command.Parameters.AddWithValue("@Credit", Credit);
-                    command.Parameters.AddWithValue("@GLUpdateDate", GLUpdateDate);
+                    command.Parameters.AddWithValue("@GLUpdateDate", FixDate(GLUpdateDate));
                     command.Parameters.AddWithValue("@Quarter", Quarter);
                     command.Parameters.AddWithValue("@year", year);
                     command.Parameters.AddWithValue("@FeeTaxesId", FeeTaxesId);
-                    command.Parameters.AddWithValue("@BankName", BankName);
-                    command.Parameters.AddWithValue("@CheckNumber", CheckNumber);
-                    command.Parameters.AddWithValue("@Status", Status);
+                    command.Parameters.AddWithValue("@BankName", FixNulls(BankName));
+                    command.Parameters.AddWithValue("@CheckNumber", FixNulls(CheckNumber));
+                    command.Parameters.AddWithValue("@Status", FixNulls(Status));
                     command.Parameters.AddWithValue("@isVoided", isVoided);
-                    command.Parameters.AddWithValue("@CreatedBy", CreatedBy);
-                    command.Parameters.AddWithValue("@canceledDate", canceledDate);
-                    command.Parameters.AddWithValue("@canceledBy", canceledBy);
-                    command.Parameters.AddWithValue("@CanceledReason", CanceledReason);
-                    command.Parameters.AddWithValue("@Remarks", Remarks);
-                    command.Parameters.AddWithValue("@PostingDate", PostingDate);
-                    command.Parameters.AddWithValue("@PaymentTranType", PaymentTranType);
-                    command.Parameters.AddWithValue("@MiscCode", MiscCode);
-                    command.Parameters.AddWithValue("@TaxGroup", TaxGroup);
+                    command.Parameters.AddWithValue("@CreatedBy", FixNulls(CreatedBy));
+                    command.Parameters.AddWithValue("@canceledDate", FixDate(canceledDate));
+                    command.Parameters.AddWithValue("@canceledBy", FixNulls(canceledBy));
+                    command.Parameters.AddWithValue("@CanceledReason", FixNulls(CanceledReason));
+                    command.Parameters.AddWithValue("@Remarks", FixNulls(Remarks));
+                    command.Parameters.AddWithValue("@PostingDate", FixDate(PostingDate));
+                    command.Parameters.AddWithValue("@PaymentTranType", FixNulls(PaymentTranType));
+                    command.Parameters.AddWithValue("@MiscCode", FixNulls(MiscCode));
+                    command.Parameters.AddWithValue("@TaxGroup", FixNulls(TaxGroup));
                     command.Parameters.AddWithValue("@LogId", LogId);
                     command.Parameters.AddWithValue("@CurrencyId", CurrencyId);
                     command.Parameters.AddWithValue("@DebitInternationalAmount", DebitInternationalAmount);
                     command.Parameters.AddWithValue("@CreditInternationalAmount", CreditInternationalAmount);
                     command.Parameters.AddWithValue("@ExchangeRate", ExchangeRate);
                     command.Parameters.AddWithValue("@exported", exported);
-                    command.Parameters.AddWithValue("@exportdate", exportdate);
-                    command.Parameters.AddWithValue("@Proj", Proj);
+                    command.Parameters.AddWithValue("@exportdate", FixDate(exportdate));
+                    command.Parameters.AddWithValue("@Proj", FixNulls(Proj));
                     command.Parameters.AddWithValue("@relatedDocType", relatedDocType);
                     command.ExecuteNonQuery();
+                    Log.Save("Parallel transfer completed");
                 }
             }
         }
-        private string fixNulls(string input)
+        private string FixNulls(string input)
         {
             if (input == null)
             {
@@ -87,6 +88,19 @@ namespace middleware_service.TableDependencyDefinitions
                 return input;
             }
         }
+
+        private object FixDate(DateTime date)
+        {
+            if (date == null || date == DateTime.MinValue)
+            {
+                return DBNull.Value;
+            }
+            else
+            {
+                return date;
+            }
+        }
+
         public int GLID { get; set; }
         public string CustomerID { get; set; }
         public float Debit { get; set; }

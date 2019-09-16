@@ -10,27 +10,19 @@ namespace middleware_service.TableDependencyDefinitions
 {
     class SqlNotify_GlDocuments
     {
-        public void TransferToGeneric(string database)
+        public void TransferToTestGeneric(string database)
         {
-
-            DocumentDisplayNumber = fixNulls(DocumentDisplayNumber);
-            CreatedBy = fixNulls(CreatedBy);
-            ModifiedBy = fixNulls(ModifiedBy);
-            Remarks = fixNulls(Remarks);
-            Proj = fixNulls(Proj);
-
-            using (SqlConnection connection = new SqlConnection(Constants.DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(database))
             {
                 string query = "INSERT INTO dbo.tblGLDocuments(IsSystemVoided,IsVoided,IsValid,DocumentType,DocumentDisplayNumber,FinancialDateTime " +
-                           ",CreatedByDocumentID,OriginalDocumentID,CreatedBy,CreatedDateTime,ModifiedBy,ModifiedDateTime,UpdateFromEntityID " +
-                           ",Balance,CurrencyID,ExchangeRate,BalanceCompanyCurrency,TotalAmount,TotalAmountCompanyCurrency,TotalAmountBeforeTax " +
-                           ",TotalAmountBeforeTaxCompanyCurrency,PaymentMethod,clientId,Remarks,PostingStatus,Proj) " +
-
-                      "VALUES " +
-                          "(@IsSystemVoided,@IsVoided,@IsValid,@DocumentType,@DocumentDisplayNumber,@FinancialDateTime,@CreatedByDocumentID,@OriginalDocumentID " +
-                           ",@CreatedBy,@CreatedDateTime,@ModifiedBy,@ModifiedDateTime,@UpdateFromEntityID,@Balance,@CurrencyID,@ExchangeRate " +
-                           ",@BalanceCompanyCurrency,@TotalAmount,@TotalAmountCompanyCurrency,@TotalAmountBeforeTax,@TotalAmountBeforeTaxCompanyCurrency, " +
-                           "@PaymentMethod,@clientId,@Remarks,@PostingStatus,@Proj)";
+                               ",CreatedByDocumentID,OriginalDocumentID,CreatedBy,CreatedDateTime,ModifiedBy,ModifiedDateTime,UpdateFromEntityID " +
+                               ",Balance,CurrencyID,ExchangeRate,BalanceCompanyCurrency,TotalAmount,TotalAmountCompanyCurrency,TotalAmountBeforeTax " +
+                               ",TotalAmountBeforeTaxCompanyCurrency,PaymentMethod,clientId,Remarks,PostingStatus,Proj) " +
+                        "VALUES " +
+                               "(@IsSystemVoided,@IsVoided,@IsValid,@DocumentType,@DocumentDisplayNumber,@FinancialDateTime,@CreatedByDocumentID,@OriginalDocumentID " +
+                               ",@CreatedBy,@CreatedDateTime,@ModifiedBy,@ModifiedDateTime,@UpdateFromEntityID,@Balance,@CurrencyID,@ExchangeRate " +
+                               ",@BalanceCompanyCurrency,@TotalAmount,@TotalAmountCompanyCurrency,@TotalAmountBeforeTax,@TotalAmountBeforeTaxCompanyCurrency, " +
+                               "@PaymentMethod,@clientId,@Remarks,@PostingStatus,@Proj)";
 
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(query, connection))
@@ -39,13 +31,13 @@ namespace middleware_service.TableDependencyDefinitions
                     command.Parameters.AddWithValue("@IsVoided", IsVoided);
                     command.Parameters.AddWithValue("@IsValid", IsValid);
                     command.Parameters.AddWithValue("@DocumentType", DocumentType);
-                    command.Parameters.AddWithValue("@DocumentDisplayNumber", DocumentDisplayNumber);
+                    command.Parameters.AddWithValue("@DocumentDisplayNumber", FixNulls(DocumentDisplayNumber));
                     command.Parameters.AddWithValue("@FinancialDateTime", FinancialDateTime);
                     command.Parameters.AddWithValue("@CreatedByDocumentID", CreatedByDocumentID);
                     command.Parameters.AddWithValue("@OriginalDocumentID", OriginalDocumentID);
-                    command.Parameters.AddWithValue("@CreatedBy", CreatedBy);
+                    command.Parameters.AddWithValue("@CreatedBy", FixNulls(CreatedBy));
                     command.Parameters.AddWithValue("@CreatedDateTime", CreatedDateTime);
-                    command.Parameters.AddWithValue("@ModifiedBy", ModifiedBy);
+                    command.Parameters.AddWithValue("@ModifiedBy", FixNulls(ModifiedBy));
                     command.Parameters.AddWithValue("@ModifiedDateTime", ModifiedDateTime);
                     command.Parameters.AddWithValue("@UpdateFromEntityID", UpdateFromEntityID);
                     command.Parameters.AddWithValue("@Balance", Balance);
@@ -58,14 +50,15 @@ namespace middleware_service.TableDependencyDefinitions
                     command.Parameters.AddWithValue("@TotalAmountBeforeTaxCompanyCurrency", TotalAmountBeforeTaxCompanyCurrency);
                     command.Parameters.AddWithValue("@PaymentMethod", PaymentMethod);
                     command.Parameters.AddWithValue("@clientId", clientId);
-                    command.Parameters.AddWithValue("@Remarks", Remarks);
+                    command.Parameters.AddWithValue("@Remarks", FixNulls(Remarks));
                     command.Parameters.AddWithValue("@PostingStatus", PostingStatus);
-                    command.Parameters.AddWithValue("@Proj", Proj);
+                    command.Parameters.AddWithValue("@Proj", FixNulls(Proj));
                     command.ExecuteNonQuery();
+                    Log.Save("Parallel transfer completed");
                 }
             }
         }
-        private string fixNulls(string input)
+        private string FixNulls(string input)
         {
             if (input == null)
             {

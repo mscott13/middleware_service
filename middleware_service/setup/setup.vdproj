@@ -3075,7 +3075,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SMA Middleware"
         "ProductCode" = "8:{F7E8F567-CEDD-41A2-B5CE-9EEAA45FABE3}"
-        "PackageCode" = "8:{03CBE0C7-0E24-4205-BD08-DCBB150ECF09}"
+        "PackageCode" = "8:{2AE5FEE6-3415-456A-8DEF-A710F47F6594}"
         "UpgradeCode" = "8:{4B6D55D9-06F8-4B0F-BCD0-E422CA152694}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

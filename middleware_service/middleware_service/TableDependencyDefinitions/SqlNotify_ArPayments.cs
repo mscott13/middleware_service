@@ -11,9 +11,9 @@ namespace middleware_service.TableDependencyDefinitions
 {
     class SqlNotify_ArPayments
     {
-        public void TransferToGeneric(string databaseName)
+        public void ArPaymentsToGeneric()
         {
-            using (SqlConnection connection = new SqlConnection(databaseName))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "INSERT INTO dbo.tblARPayments " +
                                 "(Date1,InvoiceID,Batch#,PaymentType,Source,Check#,Ref#,GLID,Debit,Credit,GLUpdateDate " +
@@ -36,7 +36,7 @@ namespace middleware_service.TableDependencyDefinitions
                 {
                     command.Parameters.AddWithValue("@GLID", GLID);
                     command.Parameters.AddWithValue("@CustomerID", FixNulls(CustomerID));
-                    command.Parameters.AddWithValue("@Debit", Debit);
+                    command.Parameters.AddWithValue("@Debit", Math.Round(Debit, 2));
                     command.Parameters.AddWithValue("@InvoiceID", InvoiceID);
                     command.Parameters.AddWithValue("@ReceiptNumber", ReceiptNumber);
                     command.Parameters.AddWithValue("@Date1", FixDate(Date1));
@@ -45,7 +45,7 @@ namespace middleware_service.TableDependencyDefinitions
                     command.Parameters.AddWithValue("@Source", FixNulls(Source));
                     command.Parameters.AddWithValue("@Check#", FixNulls(Check));
                     command.Parameters.AddWithValue("@Ref#", FixNulls(Ref));
-                    command.Parameters.AddWithValue("@Credit", Credit);
+                    command.Parameters.AddWithValue("@Credit", Math.Round(Credit, 2));
                     command.Parameters.AddWithValue("@GLUpdateDate", FixDate(GLUpdateDate));
                     command.Parameters.AddWithValue("@Quarter", Quarter);
                     command.Parameters.AddWithValue("@year", year);
@@ -73,15 +73,15 @@ namespace middleware_service.TableDependencyDefinitions
                     command.Parameters.AddWithValue("@Proj", FixNulls(Proj));
                     command.Parameters.AddWithValue("@relatedDocType", relatedDocType);
                     command.ExecuteNonQuery();
-                    Log.Save("Parallel transfer completed");
+                    Log.Save("Parallel transfer completed for ARPayments");
                 }
             }
         }
-        private string FixNulls(string input)
+        private object FixNulls(string input)
         {
             if (input == null)
             {
-                return "";
+                return DBNull.Value;
             }
             else
             {

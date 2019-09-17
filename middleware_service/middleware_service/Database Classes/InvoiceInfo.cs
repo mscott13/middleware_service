@@ -8,13 +8,14 @@ namespace middleware_service.Database_Classes
 {
     public class InvoiceInfo
     {
-        public int CustomerId { get; set; }
-        public string FeeType { get; set; }
+        public int customerId { get; set; }
+        public string feeType { get; set; }
         public string notes { get; set; }
         public decimal amount { get; set; }
-        public int isvoided { get; set; }
-        public int Glid { get; set; }
-        public string FreqUsage { get; set; }
-        public string Author { get; set; }
+        public decimal arBalance { get; set; }
+        public int isVoided { get; set; }
+        public int glid { get; set; }
+        public string freqUsage { get; set; }
+        public string author { get; set; }
     }
 }

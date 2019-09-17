@@ -10,9 +10,9 @@ namespace middleware_service.TableDependencyDefinitions
 {
     public class SqlNotify_ArInvoiceDetail
     {
-        public  void TransferToGeneric(string database)
+        public  void ARInvoiceDetailToGenric()
         {
-            using (SqlConnection connection = new SqlConnection(database))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "INSERT INTO tblARInvoiceDetail (ARInvoiceID,CreditGLID,UnitPrice,Quantity,SplitAmount,Description,InternationalID,InternationalAmount,CountryID " +
                                ",CountryAmount,StateID,StateAmount,CountyID,CountyAmount,CityID,CityAmount,OtherID,OtherAmount,Type,Disc,Discount " +
@@ -78,16 +78,16 @@ namespace middleware_service.TableDependencyDefinitions
                     command.Parameters.AddWithValue("@ServiceTypeCode", FixNulls(ServiceTypeCode));
                     command.Parameters.AddWithValue("@Proj", FixNulls(Proj));
                     command.ExecuteNonQuery();
-                    Log.Save("Parallel transfer completed");
+                    Log.Save("Parallel transfer completed for ArInvoiceDetail");
                 }
             }
         }
 
-        private string FixNulls(string input)
+        private object FixNulls(string input)
         {
             if (input == null)
             {
-                return "";
+                return DBNull.Value;
             }
             else
             {

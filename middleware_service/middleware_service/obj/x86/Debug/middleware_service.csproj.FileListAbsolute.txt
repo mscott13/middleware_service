@@ -122,4 +122,3 @@ C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\m
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\obj\x86\Debug\middleware_service.csproj.CopyComplete
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\obj\x86\Debug\middleware_service.exe
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\obj\x86\Debug\middleware_service.pdb
-C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\obj\x86\Debug\middleware_service.csprojAssemblyReference.cache

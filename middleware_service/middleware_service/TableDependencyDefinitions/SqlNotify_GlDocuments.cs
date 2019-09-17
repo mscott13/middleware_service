@@ -10,9 +10,9 @@ namespace middleware_service.TableDependencyDefinitions
 {
     class SqlNotify_GlDocuments
     {
-        public void TransferToTestGeneric(string database)
+        public void GlDocumentsToGenric()
         {
-            using (SqlConnection connection = new SqlConnection(database))
+            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
             {
                 string query = "INSERT INTO dbo.tblGLDocuments(IsSystemVoided,IsVoided,IsValid,DocumentType,DocumentDisplayNumber,FinancialDateTime " +
                                ",CreatedByDocumentID,OriginalDocumentID,CreatedBy,CreatedDateTime,ModifiedBy,ModifiedDateTime,UpdateFromEntityID " +
@@ -54,15 +54,15 @@ namespace middleware_service.TableDependencyDefinitions
                     command.Parameters.AddWithValue("@PostingStatus", PostingStatus);
                     command.Parameters.AddWithValue("@Proj", FixNulls(Proj));
                     command.ExecuteNonQuery();
-                    Log.Save("Parallel transfer completed");
+                    Log.Save("Parallel transfer completed for GLDocuments");
                 }
             }
         }
-        private string FixNulls(string input)
+        private object FixNulls(string input)
         {
             if (input == null)
             {
-                return "";
+                return DBNull.Value;
             }
             else
             {

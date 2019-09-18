@@ -152,6 +152,7 @@ namespace middleware_service
             {
                 Log.Open("Log.txt");
                 accpacSession = new Session();
+                
                 if (!Integration.IsBrokerEnabled(Constants.DB_GENERIC_NAME))
                 {
                     Log.Save("Enabling broker on database: " + Constants.DB_GENERIC_NAME);
@@ -266,6 +267,7 @@ namespace middleware_service
                 Log.Save("middleware_service stopped.");
                 Log.WriteEnd();
                 Log.Close();
+                accpacSession.Dispose();
 
                 if (selfHost != null)
                 {
@@ -357,7 +359,7 @@ namespace middleware_service
         {
             try
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
                 if (!Constants.IGNORE_EVENTS)
                 {
                     if (IsAccpacSessionOpen())
@@ -1500,14 +1502,6 @@ namespace middleware_service
 
         InsertionReturn InvBatchInsert(string idCust, string docNum, string desc, string feeCode, string amt, string batchId)
         {
-            Log.Save("Transfering Invoice " + docNum + " to batch: " + batchId);
-            InsertionReturn success = new InsertionReturn();
-            DateTime postDate = Integration.GetValidity(Convert.ToInt32(docNum));
-
-            if (postDate < DateTime.Now)
-                postDate = DateTime.Now;
-
-            bool gotOne;
             b1_arInvoiceBatch = dbLink.OpenView("AR0031");
             b1_arInvoiceHeader = dbLink.OpenView("AR0032");
             b1_arInvoiceDetail = dbLink.OpenView("AR0033");
@@ -1515,75 +1509,103 @@ namespace middleware_service
             b1_arInvoiceHeaderOptFields = dbLink.OpenView("AR0402");
             b1_arInvoiceDetailOptFields = dbLink.OpenView("AR0401");
 
-            b1_arInvoiceBatch.Compose(new View[] { b1_arInvoiceHeader });
-            b1_arInvoiceHeader.Compose(new View[] { b1_arInvoiceBatch, b1_arInvoiceDetail, b1_arInvoicePaymentSchedules, b1_arInvoiceHeaderOptFields });
-            b1_arInvoiceDetail.Compose(new View[] { b1_arInvoiceHeader, b1_arInvoiceBatch, b1_arInvoiceDetailOptFields });
-            b1_arInvoicePaymentSchedules.Compose(new View[] { b1_arInvoiceHeader });
-            b1_arInvoiceHeaderOptFields.Compose(new View[] { b1_arInvoiceHeader });
-            b1_arInvoiceDetailOptFields.Compose(new View[] { b1_arInvoiceDetail });
-
-            gotOne = CustomerExists(idCust);
-
-            if (gotOne)
+            try
             {
-                b1_arInvoiceBatch.Fields.FieldByName("CNTBTCH").SetValue(batchId, false);
-                b1_arInvoiceBatch.Read(false);
-                b1_arInvoiceHeader.RecordCreate(ViewRecordCreate.DelayKey);
-                b1_arInvoiceDetail.Cancel();
-                b1_arInvoiceHeader.Fields.FieldByName("DATEBUS").SetValue(postDate.ToString(), false);
-                b1_arInvoiceHeader.Fields.FieldByName("IDCUST").SetValue(idCust, false);
+                Log.Save("Transfering Invoice " + docNum + " to batch: " + batchId);
+                InsertionReturn success = new InsertionReturn();
+                DateTime postDate = Integration.GetValidity(Convert.ToInt32(docNum));
 
-                b1_arInvoiceHeader.Fields.FieldByName("IDINVC").SetValue(docNum, false);
+                if (postDate < DateTime.Now)
+                    postDate = DateTime.Now;
 
-                var temp = b1_arInvoiceDetail.Exists;
-                b1_arInvoiceDetail.RecordClear();
-                temp = b1_arInvoiceDetail.Exists;
-                b1_arInvoiceDetail.RecordCreate(ViewRecordCreate.NoInsert);
+                bool gotOne;
+                b1_arInvoiceBatch.Compose(new View[] { b1_arInvoiceHeader });
+                b1_arInvoiceHeader.Compose(new View[] { b1_arInvoiceBatch, b1_arInvoiceDetail, b1_arInvoicePaymentSchedules, b1_arInvoiceHeaderOptFields });
+                b1_arInvoiceDetail.Compose(new View[] { b1_arInvoiceHeader, b1_arInvoiceBatch, b1_arInvoiceDetailOptFields });
+                b1_arInvoicePaymentSchedules.Compose(new View[] { b1_arInvoiceHeader });
+                b1_arInvoiceHeaderOptFields.Compose(new View[] { b1_arInvoiceHeader });
+                b1_arInvoiceDetailOptFields.Compose(new View[] { b1_arInvoiceDetail });
 
-                b1_arInvoiceDetail.Fields.FieldByName("TEXTDESC").SetValue(desc, false);
-                b1_arInvoiceDetail.Fields.FieldByName("IDACCTREV").SetValue(feeCode, false);
-                b1_arInvoiceDetail.Fields.FieldByName("AMTEXTN").SetValue(amt, false);
-                b1_arInvoiceDetail.Insert();
+                gotOne = CustomerExists(idCust);
 
-                b1_arInvoiceDetail.Read(false);
-                b1_arInvoiceHeader.Insert();
-                b1_arInvoiceDetail.Read(false);
-                b1_arInvoiceDetail.Read(false);
-                b1_arInvoiceBatch.Read(false);
-                b1_arInvoiceHeader.RecordCreate(ViewRecordCreate.DelayKey);
-                b1_arInvoiceDetail.Cancel();
+                if (gotOne)
+                {
+                    b1_arInvoiceBatch.Fields.FieldByName("CNTBTCH").SetValue(batchId, false);
+                    b1_arInvoiceBatch.Read(false);
+                    b1_arInvoiceHeader.RecordCreate(ViewRecordCreate.DelayKey);
+                    b1_arInvoiceDetail.Cancel();
+                    b1_arInvoiceHeader.Fields.FieldByName("DATEBUS").SetValue(postDate.ToString(), false);
+                    b1_arInvoiceHeader.Fields.FieldByName("IDCUST").SetValue(idCust, false);
+
+                    b1_arInvoiceHeader.Fields.FieldByName("IDINVC").SetValue(docNum, false);
+
+                    var temp = b1_arInvoiceDetail.Exists;
+                    b1_arInvoiceDetail.RecordClear();
+                    temp = b1_arInvoiceDetail.Exists;
+                    b1_arInvoiceDetail.RecordCreate(ViewRecordCreate.NoInsert);
+
+                    b1_arInvoiceDetail.Fields.FieldByName("TEXTDESC").SetValue(desc, false);
+                    b1_arInvoiceDetail.Fields.FieldByName("IDACCTREV").SetValue(feeCode, false);
+                    b1_arInvoiceDetail.Fields.FieldByName("AMTEXTN").SetValue(amt, false);
+                    b1_arInvoiceDetail.Insert();
+
+                    b1_arInvoiceDetail.Read(false);
+                    b1_arInvoiceHeader.Insert();
+                    b1_arInvoiceDetail.Read(false);
+                    b1_arInvoiceDetail.Read(false);
+                    b1_arInvoiceBatch.Read(false);
+                    b1_arInvoiceHeader.RecordCreate(ViewRecordCreate.DelayKey);
+                    b1_arInvoiceDetail.Cancel();
+                }
+                else
+                {
+                    success.status = "Not Exist";
+                    Log.Save("Customer does not exist.");
+                }
+
+                b1_arInvoiceBatch.Dispose();
+                b1_arInvoiceDetail.Dispose();
+                b1_arInvoiceDetailOptFields.Dispose();
+                b1_arInvoiceHeader.Dispose();
+                b1_arInvoiceHeaderOptFields.Dispose();
+                b1_arInvoicePaymentSchedules.Dispose();
+                Log.Save("Invoice Id: " + docNum + " Transferred");
+                return success;
             }
-
-            else
+            catch (Exception e)
             {
-                success.status = "Not Exist";
-                Log.Save("Customer does not exist.");
+                b1_arInvoiceBatch.Dispose();
+                b1_arInvoiceDetail.Dispose();
+                b1_arInvoiceDetailOptFields.Dispose();
+                b1_arInvoiceHeader.Dispose();
+                b1_arInvoiceHeaderOptFields.Dispose();
+                b1_arInvoicePaymentSchedules.Dispose();
+                throw (e);
             }
-
-            b1_arInvoiceBatch.Dispose();
-            b1_arInvoiceDetail.Dispose();
-            b1_arInvoiceDetailOptFields.Dispose();
-            b1_arInvoiceHeader.Dispose();
-            b1_arInvoiceHeaderOptFields.Dispose();
-            b1_arInvoicePaymentSchedules.Dispose();
-            Log.Save("Invoice Id: " + docNum + " Transferred");
-            return success;
         }
 
         bool CustomerExists(string idCust)
         {
-            bool exist = false;
             View cssql = dbLink.OpenView("CS0120");
-
-            cssql.Browse("SELECT IDCUST FROM ARCUS WHERE IDCUST = '" + idCust + "'", true);
-            cssql.InternalSet(256);
-
-            if (cssql.GoNext())
+            try
             {
-                exist = true;
+                bool exist = false;
+                cssql.Browse("SELECT IDCUST FROM ARCUS WHERE IDCUST = '" + idCust + "'", true);
+                cssql.InternalSet(256);
+
+                if (cssql.GoNext())
+                {
+                    exist = true;
+                }
+
+                cssql.Dispose();
+                return exist;
             }
-            cssql.Dispose();
-            return exist;
+            catch (Exception e)
+            {
+                cssql.Dispose();
+                throw (e);
+            }
         }
 
         Data Translate(string cNum, string feeType, string companyName, string debit, string notes, string _fcode, string FreqUsage)
@@ -1772,45 +1794,57 @@ namespace middleware_service
 
         void CreateCustomer(string idCust, string nameCust)
         {
-            Log.Save("Creating customer: " + nameCust + ", ID: " + idCust);
-            string groupCode = "";
-            View ARCUSTOMER1header = dbLink.OpenView("AR0024"); ;
-            View ARCUSTOMER1detail = dbLink.OpenView("AR0400"); ;
-            View ARCUSTSTAT2 = dbLink.OpenView("AR0022"); ;
-            View ARCUSTCMT3 = dbLink.OpenView("AR0021"); ;
+            View ARCUSTOMER1header = dbLink.OpenView("AR0024");
+            View ARCUSTOMER1detail = dbLink.OpenView("AR0400");
+            View ARCUSTSTAT2 = dbLink.OpenView("AR0022");
+            View ARCUSTCMT3 = dbLink.OpenView("AR0021");
 
-            ARCUSTOMER1header.Compose(new View[] { ARCUSTOMER1detail });
-            ARCUSTOMER1detail.Compose(new View[] { ARCUSTOMER1header });
-
-            if (idCust[5].ToString() + idCust[6].ToString() == "-L")
+            try
             {
-                groupCode = "LICCOM";
+                Log.Save("Creating customer: " + nameCust + ", ID: " + idCust);
+                string groupCode = "";
+
+                ARCUSTOMER1header.Compose(new View[] { ARCUSTOMER1detail });
+                ARCUSTOMER1detail.Compose(new View[] { ARCUSTOMER1header });
+
+                if (idCust[5].ToString() + idCust[6].ToString() == "-L")
+                {
+                    groupCode = "LICCOM";
+                }
+                else if (idCust[5].ToString() + idCust[6].ToString() == "-R")
+                {
+                    groupCode = "REGCOM";
+                }
+
+                else if (idCust[5].ToString() + idCust[6].ToString() == "-T")
+                {
+                    groupCode = "TYPEUS";
+                }
+
+                ARCUSTOMER1header.Fields.FieldByName("IDCUST").SetValue(idCust, false);
+                ARCUSTOMER1header.Process();
+                ARCUSTOMER1header.Fields.FieldByName("NAMECUST").SetValue(nameCust, false);
+                ARCUSTOMER1header.Fields.FieldByName("IDGRP").SetValue(groupCode, false);
+                ARCUSTOMER1header.Process();
+                ARCUSTOMER1header.Fields.FieldByName("CODETAXGRP").SetValue("JATAX", false);
+                ARCUSTOMER1header.Insert();
+                Integration.UpdateCustomerCount();
+                Integration.StoreCustomer(idCust, nameCust);
+                Log.Save("Customer created.");
+
+                ARCUSTOMER1header.Dispose();
+                ARCUSTOMER1detail.Dispose();
+                ARCUSTSTAT2.Dispose();
+                ARCUSTCMT3.Dispose();
             }
-            else if (idCust[5].ToString() + idCust[6].ToString() == "-R")
+            catch (Exception e)
             {
-                groupCode = "REGCOM";
+                ARCUSTOMER1header.Dispose();
+                ARCUSTOMER1detail.Dispose();
+                ARCUSTSTAT2.Dispose();
+                ARCUSTCMT3.Dispose();
+                throw (e);
             }
-
-            else if (idCust[5].ToString() + idCust[6].ToString() == "-T")
-            {
-                groupCode = "TYPEUS";
-            }
-
-            ARCUSTOMER1header.Fields.FieldByName("IDCUST").SetValue(idCust, false);
-            ARCUSTOMER1header.Process();
-            ARCUSTOMER1header.Fields.FieldByName("NAMECUST").SetValue(nameCust, false);
-            ARCUSTOMER1header.Fields.FieldByName("IDGRP").SetValue(groupCode, false);
-            ARCUSTOMER1header.Process();
-            ARCUSTOMER1header.Fields.FieldByName("CODETAXGRP").SetValue("JATAX", false);
-            ARCUSTOMER1header.Insert();
-            Integration.UpdateCustomerCount();
-            Integration.StoreCustomer(idCust, nameCust);
-            Log.Save("Customer created.");
-
-            ARCUSTOMER1header.Dispose();
-            ARCUSTOMER1detail.Dispose();
-            ARCUSTSTAT2.Dispose();
-            ARCUSTCMT3.Dispose();
         }
 
         public string CreateBatchDesc(string batchType)
@@ -1852,24 +1886,20 @@ namespace middleware_service
                     else
                     {
                         Integration.CloseInvoiceBatch();
-
                         int newbatch = GetLastInvoiceBatch() + 1;
 
                         if (batchType == renreg)
                         {
                             Integration.CreateInvoiceBatch(GenerateDaysExpire(batchType), newbatch, batchType, "Regulatory");
                         }
-
                         else if (batchType == renspec)
                         {
                             Integration.CreateInvoiceBatch(GenerateDaysExpire(batchType), newbatch, batchType, "Spectrum");
                         }
-
                         else
                         {
                             Integration.CreateInvoiceBatch(GenerateDaysExpire(batchType), newbatch, batchType, "");
                         }
-
 
                         if (batchType == renreg || batchType == renspec)
                         {
@@ -1970,35 +2000,51 @@ namespace middleware_service
         public bool CheckAccpacIBatchPosted(int batchNumber)
         {
             View cssql = dbLink.OpenView("CS0120");
-            cssql.Browse("SELECT BTCHSTTS FROM ARIBC WHERE CNTBTCH = '" + batchNumber.ToString() + "'", true);
-            cssql.InternalSet(256);
-
-            if (cssql.GoNext())
+            try
             {
-                string val = Convert.ToString(cssql.Fields.FieldByName("BTCHSTTS").Value);
+                cssql.Browse("SELECT BTCHSTTS FROM ARIBC WHERE CNTBTCH = '" + batchNumber.ToString() + "'", true);
+                cssql.InternalSet(256);
 
-                if (val == "1")
+                if (cssql.GoNext())
                 {
-                    return false;
+                    string val = Convert.ToString(cssql.Fields.FieldByName("BTCHSTTS").Value);
+                    if (val == "1")
+                    {
+                        cssql.Dispose();
+                        return false;
+                    }
+                    else
+                    {
+                        cssql.Dispose();
+                        return true;
+                    }
                 }
-                else
-                {
-                    return true;
-                }
+                cssql.Dispose();
+                return true;
             }
-            cssql.Dispose();
-            return true;
+            catch (Exception e)
+            {
+                cssql.Dispose();
+                throw (e);
+            }
         }
 
         int GetLastInvoiceBatch()
         {
-            int BatchId = 0;
             b1_arInvoiceBatch = dbLink.OpenView("AR0031");
-            b1_arInvoiceBatch.GoBottom();
-            BatchId = Convert.ToInt32(b1_arInvoiceBatch.Fields.FieldByName("CNTBTCH").Value);
-
-            b1_arInvoiceBatch.Dispose();
-            return BatchId;
+            try
+            {
+                int BatchId;
+                b1_arInvoiceBatch.GoBottom();
+                BatchId = Convert.ToInt32(b1_arInvoiceBatch.Fields.FieldByName("CNTBTCH").Value);
+                b1_arInvoiceBatch.Dispose();
+                return BatchId;
+            }
+            catch (Exception e)
+            {
+                b1_arInvoiceBatch.Dispose();
+                throw (e);
+            }
         }
 
         void CreateInvoiceBatch(string description)
@@ -2010,28 +2056,41 @@ namespace middleware_service
             b1_arInvoiceHeaderOptFields = dbLink.OpenView("AR0402");
             b1_arInvoiceDetailOptFields = dbLink.OpenView("AR0401");
 
-            b1_arInvoiceBatch.Compose(new View[] { b1_arInvoiceHeader });
-            b1_arInvoiceHeader.Compose(new View[] { b1_arInvoiceBatch, b1_arInvoiceDetail, b1_arInvoicePaymentSchedules, b1_arInvoiceHeaderOptFields });
-            b1_arInvoiceDetail.Compose(new View[] { b1_arInvoiceHeader, b1_arInvoiceBatch, b1_arInvoiceDetailOptFields });
-            b1_arInvoicePaymentSchedules.Compose(new View[] { b1_arInvoiceHeader });
-            b1_arInvoiceHeaderOptFields.Compose(new View[] { b1_arInvoiceHeader });
-            b1_arInvoiceDetailOptFields.Compose(new View[] { b1_arInvoiceDetail });
+            try
+            {
+                b1_arInvoiceBatch.Compose(new View[] { b1_arInvoiceHeader });
+                b1_arInvoiceHeader.Compose(new View[] { b1_arInvoiceBatch, b1_arInvoiceDetail, b1_arInvoicePaymentSchedules, b1_arInvoiceHeaderOptFields });
+                b1_arInvoiceDetail.Compose(new View[] { b1_arInvoiceHeader, b1_arInvoiceBatch, b1_arInvoiceDetailOptFields });
+                b1_arInvoicePaymentSchedules.Compose(new View[] { b1_arInvoiceHeader });
+                b1_arInvoiceHeaderOptFields.Compose(new View[] { b1_arInvoiceHeader });
+                b1_arInvoiceDetailOptFields.Compose(new View[] { b1_arInvoiceDetail });
 
-            b1_arInvoiceBatch.RecordCreate(ViewRecordCreate.Insert);
-            b1_arInvoiceBatch.Read(false);
+                b1_arInvoiceBatch.RecordCreate(ViewRecordCreate.Insert);
+                b1_arInvoiceBatch.Read(false);
 
-            b1_arInvoiceHeader.RecordCreate(ViewRecordCreate.DelayKey);
-            b1_arInvoiceDetail.Cancel();
-            b1_arInvoiceBatch.Fields.FieldByName("BTCHDESC").SetValue(description, false);
-            b1_arInvoiceBatch.Fields.FieldByName("DATEBTCH").SetValue(DateTime.Now.Date.ToString(), false);
-            b1_arInvoiceBatch.Update();
+                b1_arInvoiceHeader.RecordCreate(ViewRecordCreate.DelayKey);
+                b1_arInvoiceDetail.Cancel();
+                b1_arInvoiceBatch.Fields.FieldByName("BTCHDESC").SetValue(description, false);
+                b1_arInvoiceBatch.Fields.FieldByName("DATEBTCH").SetValue(DateTime.Now.Date.ToString(), false);
+                b1_arInvoiceBatch.Update();
 
-            b1_arInvoiceBatch.Dispose();
-            b1_arInvoiceDetail.Dispose();
-            b1_arInvoiceDetailOptFields.Dispose();
-            b1_arInvoiceHeader.Dispose();
-            b1_arInvoiceHeaderOptFields.Dispose();
-            b1_arInvoicePaymentSchedules.Dispose();
+                b1_arInvoiceBatch.Dispose();
+                b1_arInvoiceDetail.Dispose();
+                b1_arInvoiceDetailOptFields.Dispose();
+                b1_arInvoiceHeader.Dispose();
+                b1_arInvoiceHeaderOptFields.Dispose();
+                b1_arInvoicePaymentSchedules.Dispose();
+            }
+            catch (Exception e)
+            {
+                b1_arInvoiceBatch.Dispose();
+                b1_arInvoiceDetail.Dispose();
+                b1_arInvoiceDetailOptFields.Dispose();
+                b1_arInvoiceHeader.Dispose();
+                b1_arInvoiceHeaderOptFields.Dispose();
+                b1_arInvoicePaymentSchedules.Dispose();
+                throw (e);
+            }
         }
 
         public int GenerateDaysExpire(string batchType)
@@ -2048,25 +2107,32 @@ namespace middleware_service
 
         public bool IsPeriodCreated(int finyear)
         {
-            string fiscYear = "";
             View cssql = dbLink.OpenView("CS0120");
-
-            cssql.Browse("SELECT FSCYEAR FROM CSFSC WHERE FSCYEAR = '" + finyear.ToString() + "'", true);
-            cssql.InternalSet(256);
-
-            if (cssql.GoNext())
+            try
             {
-                fiscYear = Convert.ToString(cssql.Fields.FieldByName("FSCYEAR").Value);
+                string fiscYear = "";
+                cssql.Browse("SELECT FSCYEAR FROM CSFSC WHERE FSCYEAR = '" + finyear.ToString() + "'", true);
+                cssql.InternalSet(256);
+
+                if (cssql.GoNext())
+                {
+                    fiscYear = Convert.ToString(cssql.Fields.FieldByName("FSCYEAR").Value);
+                }
+                cssql.Dispose();
+
+                if (fiscYear != "")
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            cssql.Dispose();
-
-            if (fiscYear != "")
+            catch (Exception e)
             {
-                return true;
-            }
-            else
-            {
-                return false;
+                cssql.Dispose();
+                throw (e);
             }
         }
 
@@ -2086,18 +2152,26 @@ namespace middleware_service
 
         public int GetIbatchNumber(int docNumber)
         {
+            View cssql = dbLink.OpenView("CS0120");
             int batchNum = -1;
-            View cssql = dbLink.OpenView("CS0120"); ;
 
-            cssql.Browse("SELECT CNTBTCH FROM ARIBH WHERE IDINVC = '" + docNumber.ToString() + "'", true);
-            cssql.InternalSet(256);
-
-            if (cssql.GoNext())
+            try
             {
-                batchNum = Convert.ToInt32(cssql.Fields.FieldByName("CNTBTCH").Value);
+                cssql.Browse("SELECT CNTBTCH FROM ARIBH WHERE IDINVC = '" + docNumber.ToString() + "'", true);
+                cssql.InternalSet(256);
+
+                if (cssql.GoNext())
+                {
+                    batchNum = Convert.ToInt32(cssql.Fields.FieldByName("CNTBTCH").Value);
+                }
+                cssql.Dispose();
+                return batchNum;
             }
-            cssql.Dispose();
-            return batchNum;
+            catch (Exception e)
+            {
+                cssql.Dispose();
+                throw (e);
+            }
         }
 
         void UpdateInvoice(string accountNumber, string amt, string BatchId, string entryNumber)
@@ -2109,67 +2183,89 @@ namespace middleware_service
             b1_arInvoiceHeaderOptFields = dbLink.OpenView("AR0402");
             b1_arInvoiceDetailOptFields = dbLink.OpenView("AR0401");
 
-            b1_arInvoiceBatch.Compose(new View[] { b1_arInvoiceHeader });
-            b1_arInvoiceHeader.Compose(new View[] { b1_arInvoiceBatch, b1_arInvoiceDetail, b1_arInvoicePaymentSchedules, b1_arInvoiceHeaderOptFields });
-            b1_arInvoiceDetail.Compose(new View[] { b1_arInvoiceHeader, b1_arInvoiceBatch, b1_arInvoiceDetailOptFields });
-            b1_arInvoicePaymentSchedules.Compose(new View[] { b1_arInvoiceHeader });
-            b1_arInvoiceHeaderOptFields.Compose(new View[] { b1_arInvoiceHeader });
-            b1_arInvoiceDetailOptFields.Compose(new View[] { b1_arInvoiceDetail });
+            try
+            {
+                b1_arInvoiceBatch.Compose(new View[] { b1_arInvoiceHeader });
+                b1_arInvoiceHeader.Compose(new View[] { b1_arInvoiceBatch, b1_arInvoiceDetail, b1_arInvoicePaymentSchedules, b1_arInvoiceHeaderOptFields });
+                b1_arInvoiceDetail.Compose(new View[] { b1_arInvoiceHeader, b1_arInvoiceBatch, b1_arInvoiceDetailOptFields });
+                b1_arInvoicePaymentSchedules.Compose(new View[] { b1_arInvoiceHeader });
+                b1_arInvoiceHeaderOptFields.Compose(new View[] { b1_arInvoiceHeader });
+                b1_arInvoiceDetailOptFields.Compose(new View[] { b1_arInvoiceDetail });
 
-            b1_arInvoiceBatch.Fields.FieldByName("CNTBTCH").SetValue(BatchId, false);
-            b1_arInvoiceBatch.Browse("((BTCHSTTS = 1) OR (BTCHSTTS = 7))", false);
-            b1_arInvoiceBatch.Fetch(false);
+                b1_arInvoiceBatch.Fields.FieldByName("CNTBTCH").SetValue(BatchId, false);
+                b1_arInvoiceBatch.Browse("((BTCHSTTS = 1) OR (BTCHSTTS = 7))", false);
+                b1_arInvoiceBatch.Fetch(false);
 
-            b1_arInvoiceBatch.Process();
-            b1_arInvoiceHeader.Fields.FieldByName("CNTITEM").SetValue(entryNumber, false);
-            b1_arInvoiceHeader.Browse("", true);
+                b1_arInvoiceBatch.Process();
+                b1_arInvoiceHeader.Fields.FieldByName("CNTITEM").SetValue(entryNumber, false);
+                b1_arInvoiceHeader.Browse("", true);
 
-            b1_arInvoiceHeader.Fetch(false);
-            b1_arInvoiceDetail.Read(false);
-            b1_arInvoiceDetail.Read(false);
-            b1_arInvoiceDetail.Fields.FieldByName("CNTLINE").SetValue("20", false);
+                b1_arInvoiceHeader.Fetch(false);
+                b1_arInvoiceDetail.Read(false);
+                b1_arInvoiceDetail.Read(false);
+                b1_arInvoiceDetail.Fields.FieldByName("CNTLINE").SetValue("20", false);
 
-            b1_arInvoiceDetail.Read(false);
-            b1_arInvoiceDetail.Fields.FieldByName("IDACCTREV").SetValue(accountNumber, false);
-            b1_arInvoiceDetail.Fields.FieldByName("AMTEXTN").SetValue(amt, false);
-            b1_arInvoiceDetail.Update();
-            b1_arInvoiceDetail.Fields.FieldByName("CNTLINE").SetValue("20", false);
+                b1_arInvoiceDetail.Read(false);
+                b1_arInvoiceDetail.Fields.FieldByName("IDACCTREV").SetValue(accountNumber, false);
+                b1_arInvoiceDetail.Fields.FieldByName("AMTEXTN").SetValue(amt, false);
+                b1_arInvoiceDetail.Update();
+                b1_arInvoiceDetail.Fields.FieldByName("CNTLINE").SetValue("20", false);
 
-            b1_arInvoiceDetail.Read(false);
-            b1_arInvoiceHeader.Update();
-            b1_arInvoiceDetail.Read(false);
-            b1_arInvoiceDetail.Read(false);
+                b1_arInvoiceDetail.Read(false);
+                b1_arInvoiceHeader.Update();
+                b1_arInvoiceDetail.Read(false);
+                b1_arInvoiceDetail.Read(false);
 
-            b1_arInvoiceBatch.Dispose();
-            b1_arInvoiceHeader.Dispose();
-            b1_arInvoiceDetail.Dispose();
-            b1_arInvoicePaymentSchedules.Dispose();
-            b1_arInvoiceHeaderOptFields.Dispose();
-            b1_arInvoiceDetailOptFields.Dispose();
+                b1_arInvoiceBatch.Dispose();
+                b1_arInvoiceHeader.Dispose();
+                b1_arInvoiceDetail.Dispose();
+                b1_arInvoicePaymentSchedules.Dispose();
+                b1_arInvoiceHeaderOptFields.Dispose();
+                b1_arInvoiceDetailOptFields.Dispose();
+            }
+            catch (Exception e)
+            {
+                b1_arInvoiceBatch.Dispose();
+                b1_arInvoiceHeader.Dispose();
+                b1_arInvoiceDetail.Dispose();
+                b1_arInvoicePaymentSchedules.Dispose();
+                b1_arInvoiceHeaderOptFields.Dispose();
+                b1_arInvoiceDetailOptFields.Dispose();
+                throw (e);
+            }
         }
 
         public int GetEntryNumber(int docNumber)
         {
-            int entry = -1;
-            string docNum = docNumber.ToString();
             b1_arInvoiceHeader = dbLink.OpenView("AR0032");
 
-            string searchFilter = "IDINVC = " + docNum + "";
-            b1_arInvoiceHeader.Browse(searchFilter, true);
-
-            bool gotIt = b1_arInvoiceHeader.GoBottom();
-
-            if (gotIt)
+            try
             {
-                entry = Convert.ToInt32(b1_arInvoiceHeader.Fields.FieldByName("CNTITEM").Value);
-            }
-            else
-            {
-                Log.Save("Invoice number was not found: " + docNum + ", while getting entry number");
-            }
+                int entry = -1;
+                string docNum = docNumber.ToString();
 
-            b1_arInvoiceHeader.Dispose();
-            return entry;
+                string searchFilter = "IDINVC = " + docNum + "";
+                b1_arInvoiceHeader.Browse(searchFilter, true);
+
+                bool gotIt = b1_arInvoiceHeader.GoBottom();
+
+                if (gotIt)
+                {
+                    entry = Convert.ToInt32(b1_arInvoiceHeader.Fields.FieldByName("CNTITEM").Value);
+                }
+                else
+                {
+                    Log.Save("Invoice number was not found: " + docNum + ", while getting entry number");
+                }
+
+                b1_arInvoiceHeader.Dispose();
+                return entry;
+            }
+            catch (Exception e)
+            {
+                b1_arInvoiceHeader.Dispose();
+                throw (e);
+            }
         }
 
         bool IsEmpty(DataSet dataSet)
@@ -2212,24 +2308,33 @@ namespace middleware_service
         public bool CheckAccpacRBatchPosted(int batchNumber)
         {
             View cssql = dbLink.OpenView("CS0120"); ;
-            cssql.Browse("SELECT CNTBTCH, BATCHSTAT FROM ARBTA WHERE CNTBTCH = '" + batchNumber.ToString() + "'", true);
-            cssql.InternalSet(256);
-
-            if (cssql.GoNext())
+            try
             {
-                string val = Convert.ToString(cssql.Fields.FieldByName("BATCHSTAT").Value);
-                cssql.Dispose();
+                cssql.Browse("SELECT CNTBTCH, BATCHSTAT FROM ARBTA WHERE CNTBTCH = '" + batchNumber.ToString() + "'", true);
+                cssql.InternalSet(256);
 
-                if (val == "1")
+                if (cssql.GoNext())
                 {
-                    return false;
+                    string val = Convert.ToString(cssql.Fields.FieldByName("BATCHSTAT").Value);
+                    if (val == "1")
+                    {
+                        cssql.Dispose();
+                        return false;
+                    }
+                    else
+                    {
+                        cssql.Dispose();
+                        return true;
+                    }
                 }
-                else
-                {
-                    return true;
-                }
+                cssql.Dispose();
+                return true;
             }
-            return true;
+            catch (Exception e)
+            {
+                cssql.Dispose();
+                throw (e);
+            }
         }
 
         public bool ReceiptTransfer(string batchNumber, string customerId, string amount, string receiptDescription, string referenceNumber, string invnum, DateTime paymentDate, string findesc, string cid, DateTime valstart, DateTime valend)
@@ -2623,7 +2728,6 @@ namespace middleware_service
             try
             {
                 int batchNum = -1;
-
                 cssql.Browse("SELECT CNTBTCH FROM ARTCR WHERE IDRMIT = '" + referenceNumber + "'", true);
                 cssql.InternalSet(256);
 

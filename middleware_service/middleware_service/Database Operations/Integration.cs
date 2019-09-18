@@ -511,7 +511,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static Maj GetMajDetail(int referenceNumber, string databaseConnection = Constants.TEST_DB_GENERIC)
+        public static Maj GetMajDetail(int referenceNumber, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             Maj maj = new Maj();
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -556,7 +556,7 @@ namespace middleware_service.Database_Operations
             return ds;
         }
 
-        public static int GetInvoiceReference(int invoiceId, string databaseConnection = Constants.TEST_DB_GENERIC)
+        public static int GetInvoiceReference(int invoiceId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             int refNumber = -1;
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -691,7 +691,7 @@ namespace middleware_service.Database_Operations
 
         public static void OpenNewReceiptBatch(double DaysTillExpired, int LastBatchId, string bankcode, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
-            using (SqlConnection connection = new SqlConnection(CURRENT_INTEGRATION_CONNECTION))
+            using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
                 string query = "if(@bankcode='FGBJMREC') " +
                                 "begin " +
@@ -805,10 +805,10 @@ namespace middleware_service.Database_Operations
             return bankcodeid;
         }
 
-        public static DateTime GetDocDate(int docNumber, string databaseConnection = Constants.TEST_DB_GENERIC)
+        public static DateTime GetDocDate(int docNumber, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             DateTime date = DateTime.Now;
-            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
                 string query = "select top 1 StartPeriod from tblArInvoiceDetail where arinvoiceid=@docNumber ";
                 connection.Open();
@@ -873,7 +873,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static decimal GetRate(string databaseConnection = Constants.TEST_DB_GENERIC)
+        public static decimal GetRate(string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             decimal result = 0;
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1174,7 +1174,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static string GetAccountNumber(int GLID, string databaseConnection = Constants.TEST_DB_GENERIC)
+        public static string GetAccountNumber(int GLID, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             string accountNumber = "";
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1252,7 +1252,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static int GetCreditGl(string invoiceiD, string databaseConnection = Constants.TEST_DB_GENERIC)
+        public static int GetCreditGl(string invoiceiD, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             int i = 0;
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1275,10 +1275,10 @@ namespace middleware_service.Database_Operations
             return i;
         }
 
-        public static int GetCreditGlID(string GLTransactionID, string databaseConnection = Constants.TEST_DB_GENERIC)
+        public static int GetCreditGlID(string GLTransactionID, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             int i = 0;
-            using (SqlConnection connection = new SqlConnection(Constants.TEST_DB_GENERIC))
+            using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
                 string query = "SELECT GLID FROM tblARPayments WHERE GLTransactionID = @GLTransactionID ";
                 connection.Open();
@@ -1298,7 +1298,7 @@ namespace middleware_service.Database_Operations
             return i;
         }
 
-        public static string IsAnnualFee(int invoiceid, string databaseConnection = Constants.TEST_DB_GENERIC)
+        public static string IsAnnualFee(int invoiceid, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             string notes = " ";
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1373,7 +1373,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static List<string> GetPaymentInfo(int gl_id, string databaseConnection = Constants.TEST_DB_GENERIC)
+        public static List<string> GetPaymentInfo(int gl_id, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             List<string> data = new List<string>(4);
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1404,7 +1404,7 @@ namespace middleware_service.Database_Operations
             return data;
         }
 
-        public static List<string> GetClientInfoInv(string id, string databaseConnection = Constants.TEST_DB_GENERIC)
+        public static List<string> GetClientInfoInv(string id, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             List<string> data = new List<string>(4);
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1435,7 +1435,7 @@ namespace middleware_service.Database_Operations
             return data;
         }
 
-        public static List<string> GetFeeInfo(int invoiceId, string databaseConnection = Constants.TEST_DB_GENERIC)
+        public static List<string> GetFeeInfo(int invoiceId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             List<string> data = new List<string>(2);
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1516,7 +1516,7 @@ namespace middleware_service.Database_Operations
             MiddlewareService.BroadcastEvent(new EventObjects.Customer(clientName, clientId));
         }
 
-        public static void UpdateReceiptNumber(int transactionId, string referenceNumber, string databaseConnection = Constants.TEST_DB_GENERIC)
+        public static void UpdateReceiptNumber(int transactionId, string referenceNumber, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -1531,7 +1531,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static DateTime GetValidity(int invoiceId, string databaseConnection = Constants.TEST_DB_GENERIC)
+        public static DateTime GetValidity(int invoiceId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             var datetime = DateTime.Now;
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1561,7 +1561,7 @@ namespace middleware_service.Database_Operations
             return datetime;
         }
 
-        public static DateTime GetValidityEnd(int invoiceId, string databaseConnection = Constants.TEST_DB_GENERIC)
+        public static DateTime GetValidityEnd(int invoiceId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             var datetime = DateTime.Now;
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1604,7 +1604,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static string GetFreqUsage(int invoiceId, string databaseConnection = Constants.TEST_DB_GENERIC)
+        public static string GetFreqUsage(int invoiceId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             string result = "";
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1651,7 +1651,7 @@ namespace middleware_service.Database_Operations
             return num;
         }
 
-        public static void UpdateAsmsCreditMemoNumber(int docId, int newCredNum, string databaseConnection = Constants.TEST_DB_GENERIC)
+        public static void UpdateAsmsCreditMemoNumber(int docId, int newCredNum, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -1666,7 +1666,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static InvoiceInfo GetInvoiceInfo(int invoiceId, string databaseConnection = Constants.TEST_DB_GENERIC)
+        public static InvoiceInfo GetInvoiceInfo(int invoiceId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             InvoiceInfo inv = new InvoiceInfo();
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1702,7 +1702,7 @@ namespace middleware_service.Database_Operations
             return inv;
         }
 
-        public static PaymentInfo GetReceiptInfo(int originalDocNum, string databaseConnection = Constants.TEST_DB_GENERIC)
+        public static PaymentInfo GetReceiptInfo(int originalDocNum, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             PaymentInfo rct = new PaymentInfo();
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1731,7 +1731,7 @@ namespace middleware_service.Database_Operations
             return rct;
         }
 
-        public static CreditNoteInfo GetCreditNoteInfo(int creditMemoNum, int documentId, string databaseConnection = Constants.TEST_DB_GENERIC)
+        public static CreditNoteInfo GetCreditNoteInfo(int creditMemoNum, int documentId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             CreditNoteInfo creditNote = new CreditNoteInfo();
             using (SqlConnection connection = new SqlConnection(databaseConnection))

@@ -165,16 +165,10 @@ namespace middleware_service
                 mapperArInvoices.AddMapping(inv => inv.PO, "PO#");
                 mapperArInvoices.AddMapping(inv => inv.Job, "Job#");
 
-                using (tableDependencyArInvoices = new SqlTableDependency<SqlNotify_ArInvoices>(Constants.DB_GENERIC, "tblARInvoices", mapper:mapperArInvoices))
+                using (tableDependencyArInvoices = new SqlTableDependency<SqlNotify_ArInvoices>(Constants.DB_GENERIC, "tblARInvoices", mapper: mapperArInvoices))
                 {
                     tableDependencyArInvoices.OnChanged += TableDependencyArInvoices_OnChanged;
                     tableDependencyArInvoices.OnError += TableDependencyArInvoices_OnError;
-                }
-
-                using (tableDependencyArInvoiceDetail = new SqlTableDependency<SqlNotify_ArInvoiceDetail>(Constants.DB_GENERIC, "tblARInvoiceDetail"))
-                {
-                    tableDependencyArInvoiceDetail.OnChanged += TableDependencyArInvoiceDetail_OnChanged;
-                    tableDependencyArInvoiceDetail.OnError += TableDependencyArInvoiceDetail_OnError;
                 }
 
                 using (tableDependencyGlDocuments = new SqlTableDependency<SqlNotify_GlDocuments>(Constants.DB_GENERIC, "tblGLDocuments"))
@@ -183,17 +177,36 @@ namespace middleware_service
                     tableDependencyGlDocuments.OnError += TableDependencyGlDocuments_OnError;
                 }
 
-                var mapperArPayments = new ModelToTableMapper<SqlNotify_ArPayments>();
-                mapperArPayments.AddMapping(pay => pay.Batch, "Batch#");
-                mapperArPayments.AddMapping(pay => pay.Check, "Check#");
-                mapperArPayments.AddMapping(pay => pay.Ref, "Ref#");
 
-                using (tableDependencyArPayments = new SqlTableDependency<SqlNotify_ArPayments>(Constants.DB_GENERIC, "tblARPayments", mapper:mapperArPayments))
+                if (Constants.PARALLEL_RUN)
                 {
-                    tableDependencyArPayments.OnChanged += TableDependencyArPayments_OnChanged;
-                    tableDependencyArPayments.OnError += TableDependencyArPayments_OnError;
-                }
+                    using (tableDependencyArInvoiceDetail = new SqlTableDependency<SqlNotify_ArInvoiceDetail>(Constants.DB_GENERIC, "tblARInvoiceDetail"))
+                    {
+                        tableDependencyArInvoiceDetail.OnChanged += TableDependencyArInvoiceDetail_OnChanged;
+                        tableDependencyArInvoiceDetail.OnError += TableDependencyArInvoiceDetail_OnError;
+                    }
 
+                    var mapperArPayments = new ModelToTableMapper<SqlNotify_ArPayments>();
+                    mapperArPayments.AddMapping(pay => pay.Batch, "Batch#");
+                    mapperArPayments.AddMapping(pay => pay.Check, "Check#");
+                    mapperArPayments.AddMapping(pay => pay.Ref, "Ref#");
+
+                    using (tableDependencyArPayments = new SqlTableDependency<SqlNotify_ArPayments>(Constants.DB_GENERIC, "tblARPayments", mapper: mapperArPayments))
+                    {
+                        tableDependencyArPayments.OnChanged += TableDependencyArPayments_OnChanged;
+                        tableDependencyArPayments.OnError += TableDependencyArPayments_OnError;
+                    }
+
+                    tableDependencyArInvoiceDetail.Start();
+                    tableDependencyArPayments.Start();
+                    tableDependencyArInvoices.Start();
+                    tableDependencyGlDocuments.Start();
+                }
+                else
+                {
+                    tableDependencyArInvoices.Start();
+                    tableDependencyGlDocuments.Start();
+                }
 
                 deferredTimer.Elapsed += DeferredTimer_Elapsed;
                 deferredTimer.Enabled = true;
@@ -209,14 +222,6 @@ namespace middleware_service
                 Log.Save("Company: " + accpacSession.CompanyName);
                 Log.Save("Session Status: " + accpacSession.IsOpened);
 
-                tableDependencyArInvoices.Start();
-                tableDependencyGlDocuments.Start();
-
-                if (Constants.PARALLEL_RUN)
-                {
-                    tableDependencyArInvoiceDetail.Start();
-                    tableDependencyArPayments.Start();
-                }
 
                 deferredTimer.Start();
                 Log.Save("middleware_service started.");
@@ -350,14 +355,15 @@ namespace middleware_service
 
         private void TableDependencyGlDocuments_OnChanged(object sender, RecordChangedEventArgs<SqlNotify_GlDocuments> e)
         {
-            Thread.Sleep(1000);
-            if (!Constants.IGNORE_EVENTS)
+            try
             {
-                if (IsAccpacSessionOpen())
+                Thread.Sleep(1000);
+                if (!Constants.IGNORE_EVENTS)
                 {
-                    Log.Save("Database change detected, operation: " + e.ChangeType);
-                    try
+                    if (IsAccpacSessionOpen())
                     {
+                        Log.Save("Database change detected, operation: " + e.ChangeType);
+
                         var docInfo = e.Entity;
                         if (e.ChangeType == ChangeType.Insert)
                         {
@@ -1183,7 +1189,7 @@ namespace middleware_service
                                                     while (reducingAmt > 0)
                                                     {
                                                         pData = Integration.CheckPrepaymentAvail(dt.customerId);
-                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatchId("FGBJMREC"), GetDocNumber(pData.referenceNumber));
+                                                        PayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatchId("FGBJMREC"), GetDocNumber(pData.referenceNumber));
                                                         if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
                                                         else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
                                                         reducingAmt = reducingAmt - pData.remainder;
@@ -1199,7 +1205,7 @@ namespace middleware_service
                                                     while (reducingAmt > 0)
                                                     {
                                                         pData = Integration.CheckPrepaymentAvail(dt.customerId);
-                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatchId("FGBJMREC"), GetDocNumber(pData.referenceNumber));
+                                                        PayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatchId("FGBJMREC"), GetDocNumber(pData.referenceNumber));
                                                         if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
                                                         else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
                                                         reducingAmt = reducingAmt - pData.remainder;
@@ -1229,7 +1235,7 @@ namespace middleware_service
                                                     while (reducingAmt > 0)
                                                     {
                                                         pData = Integration.CheckPrepaymentAvail(dt.customerId);
-                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatchId("FGBUSMRC"), GetDocNumber(pData.referenceNumber));
+                                                        PayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatchId("FGBUSMRC"), GetDocNumber(pData.referenceNumber));
                                                         if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
                                                         else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
                                                         reducingAmt = reducingAmt - pData.remainder;
@@ -1247,7 +1253,7 @@ namespace middleware_service
                                                     while (reducingAmt > 0)
                                                     {
                                                         pData = Integration.CheckPrepaymentAvail(dt.customerId);
-                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatchId("FGBUSMRC"), GetDocNumber(pData.referenceNumber));
+                                                        PayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatchId("FGBUSMRC"), GetDocNumber(pData.referenceNumber));
                                                         if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
                                                         else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
                                                         reducingAmt = reducingAmt - pData.remainder;
@@ -1284,7 +1290,7 @@ namespace middleware_service
                                                     while (reducingAmt > 0)
                                                     {
                                                         pData = Integration.CheckPrepaymentAvail(dt.customerId);
-                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatchId("NCBJMREC"), GetDocNumber(pData.referenceNumber));
+                                                        PayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatchId("NCBJMREC"), GetDocNumber(pData.referenceNumber));
                                                         if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
                                                         else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
                                                         reducingAmt = reducingAmt - pData.remainder;
@@ -1300,7 +1306,7 @@ namespace middleware_service
                                                     while (reducingAmt > 0)
                                                     {
                                                         pData = Integration.CheckPrepaymentAvail(dt.customerId);
-                                                        ComApiPayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatchId("NCBJMREC"), GetDocNumber(pData.referenceNumber));
+                                                        PayByCredit(dt.customerId, pinfo.InvoiceID.ToString(), Integration.GetRecieptBatchId("NCBJMREC"), GetDocNumber(pData.referenceNumber));
                                                         if (reducingAmt > pData.remainder) Integration.AdjustPrepaymentRemainder(pData.remainder, pData.sequenceNumber);
                                                         else Integration.AdjustPrepaymentRemainder(reducingAmt, pData.sequenceNumber);
                                                         reducingAmt = reducingAmt - pData.remainder;
@@ -1333,30 +1339,32 @@ namespace middleware_service
                         }
                         Log.WriteEnd();
                     }
-                    catch (Exception ex)
-                    {
-                        if (accpacSession.Errors.Count > 0)
-                        {
-                            Log.Save(ex.Message + " " + ex.StackTrace);
-                            for (int i = 0; i < accpacSession.Errors.Count; i++)
-                            {
-                                Log.Save(accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
-                            }
-                            accpacSession.Errors.Clear();
-                            Log.WriteEnd();
-                        }
-                        else
-                        {
-                            Log.Save(ex.Message + " " + ex.StackTrace);
-                            Log.WriteEnd();
-                        }
-                    }
+
                 }
                 else
                 {
                     Log.Save("Accpac Version: " + accpacSession.AppVersion);
                     Log.Save("Company: " + accpacSession.CompanyName);
                     Log.Save("Session Status: " + accpacSession.IsOpened);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                if (accpacSession.Errors.Count > 0)
+                {
+                    Log.Save(ex.Message + " " + ex.StackTrace);
+                    for (int i = 0; i < accpacSession.Errors.Count; i++)
+                    {
+                        Log.Save(accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
+                    }
+                    accpacSession.Errors.Clear();
+                    Log.WriteEnd();
+                }
+                else
+                {
+                    Log.Save(ex.Message + " " + ex.StackTrace);
+                    Log.WriteEnd();
                 }
             }
         }
@@ -1516,7 +1524,6 @@ namespace middleware_service
 
             gotOne = CustomerExists(idCust);
 
-
             if (gotOne)
             {
                 b1_arInvoiceBatch.Fields.FieldByName("CNTBTCH").SetValue(batchId, false);
@@ -1545,14 +1552,6 @@ namespace middleware_service
                 b1_arInvoiceBatch.Read(false);
                 b1_arInvoiceHeader.RecordCreate(ViewRecordCreate.DelayKey);
                 b1_arInvoiceDetail.Cancel();
-
-                b1_arInvoiceBatch.Dispose();
-                b1_arInvoiceDetail.Dispose();
-                b1_arInvoiceDetailOptFields.Dispose();
-                b1_arInvoiceHeader.Dispose();
-                b1_arInvoiceHeaderOptFields.Dispose();
-                b1_arInvoicePaymentSchedules.Dispose();
-                Log.Save("Invoice Id: " + docNum + " Transferred");
             }
 
             else
@@ -1560,6 +1559,14 @@ namespace middleware_service
                 success.status = "Not Exist";
                 Log.Save("Customer does not exist.");
             }
+
+            b1_arInvoiceBatch.Dispose();
+            b1_arInvoiceDetail.Dispose();
+            b1_arInvoiceDetailOptFields.Dispose();
+            b1_arInvoiceHeader.Dispose();
+            b1_arInvoiceHeaderOptFields.Dispose();
+            b1_arInvoicePaymentSchedules.Dispose();
+            Log.Save("Invoice Id: " + docNum + " Transferred");
             return success;
         }
 
@@ -1575,14 +1582,14 @@ namespace middleware_service
             {
                 exist = true;
             }
-
+            cssql.Dispose();
             return exist;
         }
 
         Data Translate(string cNum, string feeType, string companyName, string debit, string notes, string _fcode, string FreqUsage)
         {
             string temp = "";
-            string iv_customerId = "";
+            string iv_customerId;
             Data dt = new Data();
 
             if (_fcode == "PREPAYMENT" && Integration.GetClientIdZRecord(false).Contains("-T"))
@@ -1799,6 +1806,11 @@ namespace middleware_service
             Integration.UpdateCustomerCount();
             Integration.StoreCustomer(idCust, nameCust);
             Log.Save("Customer created.");
+
+            ARCUSTOMER1header.Dispose();
+            ARCUSTOMER1detail.Dispose();
+            ARCUSTSTAT2.Dispose();
+            ARCUSTCMT3.Dispose();
         }
 
         public string CreateBatchDesc(string batchType)
@@ -1958,8 +1970,6 @@ namespace middleware_service
         public bool CheckAccpacIBatchPosted(int batchNumber)
         {
             View cssql = dbLink.OpenView("CS0120");
-
-
             cssql.Browse("SELECT BTCHSTTS FROM ARIBC WHERE CNTBTCH = '" + batchNumber.ToString() + "'", true);
             cssql.InternalSet(256);
 
@@ -1976,6 +1986,7 @@ namespace middleware_service
                     return true;
                 }
             }
+            cssql.Dispose();
             return true;
         }
 
@@ -2047,6 +2058,7 @@ namespace middleware_service
             {
                 fiscYear = Convert.ToString(cssql.Fields.FieldByName("FSCYEAR").Value);
             }
+            cssql.Dispose();
 
             if (fiscYear != "")
             {
@@ -2084,6 +2096,7 @@ namespace middleware_service
             {
                 batchNum = Convert.ToInt32(cssql.Fields.FieldByName("CNTBTCH").Value);
             }
+            cssql.Dispose();
             return batchNum;
         }
 
@@ -2126,6 +2139,13 @@ namespace middleware_service
             b1_arInvoiceHeader.Update();
             b1_arInvoiceDetail.Read(false);
             b1_arInvoiceDetail.Read(false);
+
+            b1_arInvoiceBatch.Dispose();
+            b1_arInvoiceHeader.Dispose();
+            b1_arInvoiceDetail.Dispose();
+            b1_arInvoicePaymentSchedules.Dispose();
+            b1_arInvoiceHeaderOptFields.Dispose();
+            b1_arInvoiceDetailOptFields.Dispose();
         }
 
         public int GetEntryNumber(int docNumber)
@@ -2147,6 +2167,8 @@ namespace middleware_service
             {
                 Log.Save("Invoice number was not found: " + docNum + ", while getting entry number");
             }
+
+            b1_arInvoiceHeader.Dispose();
             return entry;
         }
 
@@ -2190,13 +2212,13 @@ namespace middleware_service
         public bool CheckAccpacRBatchPosted(int batchNumber)
         {
             View cssql = dbLink.OpenView("CS0120"); ;
-
             cssql.Browse("SELECT CNTBTCH, BATCHSTAT FROM ARBTA WHERE CNTBTCH = '" + batchNumber.ToString() + "'", true);
             cssql.InternalSet(256);
 
             if (cssql.GoNext())
             {
                 string val = Convert.ToString(cssql.Fields.FieldByName("BATCHSTAT").Value);
+                cssql.Dispose();
 
                 if (val == "1")
                 {
@@ -2213,205 +2235,245 @@ namespace middleware_service
         public bool ReceiptTransfer(string batchNumber, string customerId, string amount, string receiptDescription, string referenceNumber, string invnum, DateTime paymentDate, string findesc, string cid, DateTime valstart, DateTime valend)
         {
             string notes = Integration.IsAnnualFee(Convert.ToInt32(invnum));
-            string receiptDescriptionEx = "";
+            string receiptDescriptionEx;
 
-            if (notes == "Annual Fee")
-            {
-                receiptDescriptionEx = findesc + " for Licence " + cid;
-            }
-            else if (findesc == "Processing Fee" && customerId[6].ToString() == "T")
-            {
-                receiptDescriptionEx = findesc + " for Type Approval Certification";
-            }
-            else if (invnum == "0")
-            {
-                receiptDescriptionEx = findesc + " for Lic# " + cid + " for Period " + valstart.Date.ToString("dd/MM/yy") + " to " + valend.Date.ToString("dd/MM/yy");
-            }
-            else
-            {
-                receiptDescriptionEx = findesc + " for Lic# " + cid + " for Period " + valstart.Date.ToString("dd/MM/yy") + " to " + valend.Date.ToString("dd/MM/yy");
-            }
+            CBBTCH1batch = dbLink.OpenView("AR0041");
+            CBBTCH1header = dbLink.OpenView("AR0042");
+            CBBTCH1detail1 = dbLink.OpenView("AR0044");
+            CBBTCH1detail2 = dbLink.OpenView("AR0045");
+            CBBTCH1detail3 = dbLink.OpenView("AR0043");
+            CBBTCH1detail4 = dbLink.OpenView("AR0061");
+            CBBTCH1detail5 = dbLink.OpenView("AR0406");
+            CBBTCH1detail6 = dbLink.OpenView("AR0170");
 
-            if (!CustomerExists(customerId))
+            arRecptBatch = dbLink.OpenView("AR0041");
+            arRecptHeader = dbLink.OpenView("AR0042");
+            arRecptDetail1 = dbLink.OpenView("AR0044");
+            arRecptDetail2 = dbLink.OpenView("AR0045");
+            arRecptDetail3 = dbLink.OpenView("AR0043");
+            arRecptDetail4 = dbLink.OpenView("AR0061");
+            arRecptDetail5 = dbLink.OpenView("AR0406");
+            arRecptDetail6 = dbLink.OpenView("AR0170");
+
+            try
             {
-                return false;
-            }
-            else
-            {
-                if (invnum == "0")
+                if (notes == "Annual Fee")
                 {
-                    CBBTCH1batch = dbLink.OpenView("AR0041");
-                    CBBTCH1header = dbLink.OpenView("AR0042");
-                    CBBTCH1detail1 = dbLink.OpenView("AR0044");
-                    CBBTCH1detail2 = dbLink.OpenView("AR0045");
-                    CBBTCH1detail3 = dbLink.OpenView("AR0043");
-                    CBBTCH1detail4 = dbLink.OpenView("AR0061");
-                    CBBTCH1detail5 = dbLink.OpenView("AR0406");
-                    CBBTCH1detail6 = dbLink.OpenView("AR0170");
-
-                    CBBTCH1batch.Compose(new View[] { CBBTCH1header });
-                    CBBTCH1header.Compose(new View[] { CBBTCH1batch, CBBTCH1detail3, CBBTCH1detail1, CBBTCH1detail5, CBBTCH1detail6 });
-                    CBBTCH1detail1.Compose(new View[] { CBBTCH1header, CBBTCH1detail2, CBBTCH1detail4 });
-                    CBBTCH1detail2.Compose(new View[] { CBBTCH1detail1 });
-                    CBBTCH1detail3.Compose(new View[] { CBBTCH1header });
-                    CBBTCH1detail4.Compose(new View[] { CBBTCH1batch, CBBTCH1header, CBBTCH1header, CBBTCH1detail3, CBBTCH1detail1, CBBTCH1detail2 });
-                    CBBTCH1detail5.Compose(new View[] { CBBTCH1header });
-                    CBBTCH1detail6.Compose(new View[] { CBBTCH1header });
-
-                    CBBTCH1batch.RecordClear();
-                    CBBTCH1batch.Fields.FieldByName("CODEPYMTYP").SetValue("CA", false);
-                    CBBTCH1header.Fields.FieldByName("CODEPYMTYP").SetValue("CA", false);
-                    CBBTCH1detail3.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
-                    CBBTCH1detail1.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
-                    CBBTCH1detail2.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
-                    CBBTCH1detail4.Fields.FieldByName("PAYMTYPE").SetValue("CA", false);
-                    CBBTCH1batch.Fields.FieldByName("CNTBTCH").SetValue(batchNumber, false);
-                    CBBTCH1batch.Read(false);
-
-                    CBBTCH1header.RecordCreate(ViewRecordCreate.DelayKey);
-                    CBBTCH1header.Fields.FieldByName("RMITTYPE").SetValue("2", false);
-                    CBBTCH1detail1.RecordCreate(ViewRecordCreate.NoInsert);
-                    CBBTCH1header.Fields.FieldByName("IDCUST").SetValue(customerId, false);
-
-                    CBBTCH1detail1.RecordCreate(ViewRecordCreate.NoInsert);
-                    CBBTCH1header.Fields.FieldByName("TEXTRMIT").SetValue(receiptDescription, false);
-                    CBBTCH1header.Fields.FieldByName("CODEPAYM").SetValue("CASH", false);
-                    CBBTCH1header.Fields.FieldByName("IDRMIT").SetValue(referenceNumber, false);
-                    CBBTCH1header.Fields.FieldByName("AMTRMIT").SetValue(amount, false);
-                    CBBTCH1header.Fields.FieldByName("DATERMIT").SetValue(paymentDate, false);
-                    CBBTCH1detail1.Fields.FieldByName("AMTPAYM").SetValue(amount, false);
-
-                    CBBTCH1detail1.Insert();
-                    CBBTCH1header.Insert();
-                    CBBTCH1header.RecordCreate(ViewRecordCreate.DelayKey);
-
-                    Log.Save("Prepayment Transferred");
-                    return true;
+                    receiptDescriptionEx = findesc + " for Licence " + cid;
+                }
+                else if (findesc == "Processing Fee" && customerId[6].ToString() == "T")
+                {
+                    receiptDescriptionEx = findesc + " for Type Approval Certification";
+                }
+                else if (invnum == "0")
+                {
+                    receiptDescriptionEx = findesc + " for Lic# " + cid + " for Period " + valstart.Date.ToString("dd/MM/yy") + " to " + valend.Date.ToString("dd/MM/yy");
                 }
                 else
                 {
-                    receiptDescription = receiptDescriptionEx;
-                    int batchNum = GetIbatchNumber(Convert.ToInt32(invnum));
-                    bool shouldAllocate = false;
+                    receiptDescriptionEx = findesc + " for Lic# " + cid + " for Period " + valstart.Date.ToString("dd/MM/yy") + " to " + valend.Date.ToString("dd/MM/yy");
+                }
 
-                    if (CheckAccpacInvoiceAvail(Convert.ToInt32(invnum)))
+                if (!CustomerExists(customerId))
+                {
+                    return false;
+                }
+                else
+                {
+                    if (invnum == "0")
                     {
-                        if (CheckAccpacIBatchPosted(batchNum))
-                        {
-                            shouldAllocate = true;
-                        }
-                    }
+                        CBBTCH1batch.Compose(new View[] { CBBTCH1header });
+                        CBBTCH1header.Compose(new View[] { CBBTCH1batch, CBBTCH1detail3, CBBTCH1detail1, CBBTCH1detail5, CBBTCH1detail6 });
+                        CBBTCH1detail1.Compose(new View[] { CBBTCH1header, CBBTCH1detail2, CBBTCH1detail4 });
+                        CBBTCH1detail2.Compose(new View[] { CBBTCH1detail1 });
+                        CBBTCH1detail3.Compose(new View[] { CBBTCH1header });
+                        CBBTCH1detail4.Compose(new View[] { CBBTCH1batch, CBBTCH1header, CBBTCH1header, CBBTCH1detail3, CBBTCH1detail1, CBBTCH1detail2 });
+                        CBBTCH1detail5.Compose(new View[] { CBBTCH1header });
+                        CBBTCH1detail6.Compose(new View[] { CBBTCH1header });
 
-                    bool flagInsert;
-                    arRecptBatch = dbLink.OpenView("AR0041");
-                    arRecptHeader = dbLink.OpenView("AR0042");
-                    arRecptDetail1 = dbLink.OpenView("AR0044");
-                    arRecptDetail2 = dbLink.OpenView("AR0045");
-                    arRecptDetail3 = dbLink.OpenView("AR0043");
-                    arRecptDetail4 = dbLink.OpenView("AR0061");
-                    arRecptDetail5 = dbLink.OpenView("AR0406");
-                    arRecptDetail6 = dbLink.OpenView("AR0170");
+                        CBBTCH1batch.RecordClear();
+                        CBBTCH1batch.Fields.FieldByName("CODEPYMTYP").SetValue("CA", false);
+                        CBBTCH1header.Fields.FieldByName("CODEPYMTYP").SetValue("CA", false);
+                        CBBTCH1detail3.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
+                        CBBTCH1detail1.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
+                        CBBTCH1detail2.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
+                        CBBTCH1detail4.Fields.FieldByName("PAYMTYPE").SetValue("CA", false);
+                        CBBTCH1batch.Fields.FieldByName("CNTBTCH").SetValue(batchNumber, false);
+                        CBBTCH1batch.Read(false);
 
-                    arRecptBatch.Compose(new View[] { arRecptHeader });
-                    arRecptHeader.Compose(new View[] { arRecptBatch, arRecptDetail3, arRecptDetail1, arRecptDetail5, arRecptDetail6 });
-                    arRecptDetail1.Compose(new View[] { arRecptHeader, arRecptDetail2, arRecptDetail4 });
-                    arRecptDetail2.Compose(new View[] { arRecptDetail1 });
-                    arRecptDetail3.Compose(new View[] { arRecptHeader });
-                    arRecptDetail4.Compose(new View[] { arRecptBatch, arRecptHeader, arRecptDetail3, arRecptDetail1, arRecptDetail2 });
-                    arRecptDetail5.Compose(new View[] { arRecptHeader });
-                    arRecptDetail6.Compose(new View[] { arRecptHeader });
+                        CBBTCH1header.RecordCreate(ViewRecordCreate.DelayKey);
+                        CBBTCH1header.Fields.FieldByName("RMITTYPE").SetValue("2", false);
+                        CBBTCH1detail1.RecordCreate(ViewRecordCreate.NoInsert);
+                        CBBTCH1header.Fields.FieldByName("IDCUST").SetValue(customerId, false);
 
-                    arRecptBatch.RecordClear();
+                        CBBTCH1detail1.RecordCreate(ViewRecordCreate.NoInsert);
+                        CBBTCH1header.Fields.FieldByName("TEXTRMIT").SetValue(receiptDescription, false);
+                        CBBTCH1header.Fields.FieldByName("CODEPAYM").SetValue("CASH", false);
+                        CBBTCH1header.Fields.FieldByName("IDRMIT").SetValue(referenceNumber, false);
+                        CBBTCH1header.Fields.FieldByName("AMTRMIT").SetValue(amount, false);
+                        CBBTCH1header.Fields.FieldByName("DATERMIT").SetValue(paymentDate, false);
+                        CBBTCH1detail1.Fields.FieldByName("AMTPAYM").SetValue(amount, false);
 
-                    arRecptBatch.Fields.FieldByName("CODEPYMTYP").SetValue("CA", false);
-                    arRecptHeader.Fields.FieldByName("CODEPYMTYP").SetValue("CA", false);
-                    arRecptDetail3.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
-                    arRecptDetail1.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
-                    arRecptDetail2.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
-                    arRecptDetail4.Fields.FieldByName("PAYMTYPE").SetValue("CA", false);
-                    arRecptBatch.Fields.FieldByName("CNTBTCH").SetValue(batchNumber, false);
-                    arRecptBatch.Read(false);
+                        CBBTCH1detail1.Insert();
+                        CBBTCH1header.Insert();
+                        CBBTCH1header.RecordCreate(ViewRecordCreate.DelayKey);
 
-                    arRecptDetail4.Fields.FieldByName("PAYMTYPE").SetValue("CA", false);
-                    arRecptDetail4.Fields.FieldByName("CNTBTCH").SetValue(batchNumber, false);
-                    arRecptDetail4.Fields.FieldByName("CNTITEM").SetValue("1", false);
-                    arRecptDetail4.Fields.FieldByName("IDCUST").SetValue(customerId, false);
-                    arRecptDetail4.Fields.FieldByName("AMTRMIT").SetValue(amount, false);
-                    arRecptDetail4.Fields.FieldByName("STDOCDTE").SetValue(paymentDate.ToString(), false);
-
-                    arRecptHeader.RecordCreate(ViewRecordCreate.DelayKey);
-
-                    arRecptHeader.Fields.FieldByName("TEXTRMIT").SetValue(receiptDescription, false);
-                    arRecptHeader.Fields.FieldByName("IDCUST").SetValue(customerId, false);
-                    arRecptHeader.Fields.FieldByName("CODEPAYM").SetValue("CASH", false);
-                    arRecptHeader.Fields.FieldByName("DATEBUS").SetValue(paymentDate.ToString(), false);
-                    arRecptHeader.Fields.FieldByName("IDRMIT").SetValue(referenceNumber, false);
-                    arRecptHeader.Fields.FieldByName("AMTRMIT").SetValue(amount, false);
-
-                    if (shouldAllocate)
-                    {
-                        Log.Save("Applying receipt to invoice: " + invnum);
-                        arRecptDetail4.Fields.FieldByName("SHOWTYPE").SetValue("2", false);
-                        arRecptDetail4.Fields.FieldByName("STDOCSTR").SetValue(invnum, false);
-
-                        arRecptDetail4.Process();
-                        arRecptDetail4.Fields.FieldByName("CNTKEY").SetValue("-1", false);
-                        arRecptDetail4.Read(false);
-
-                        var netAmount = Convert.ToInt32(arRecptDetail4.Fields.FieldByName("AMTNET").Value);
-
-                        if (netAmount == 0)
-                        {
-                            flagInsert = true;
-                            Log.Save("The net balance is zero for this invoice. Cannot apply an additional amount");
-                        }
-                        else
-                        {
-                            flagInsert = true;
-                            arRecptDetail4.Fields.FieldByName("APPLY").SetValue("Y", false);
-                            arRecptDetail4.Update();
-                        }
+                        Log.Save("Prepayment Transferred");
+                        return true;
                     }
                     else
                     {
-                        Log.Save("Cannot apply to invoice: " + invnum + ". Check if invoice exist and the batch is posted.");
-                        flagInsert = true;
-                    }
+                        receiptDescription = receiptDescriptionEx;
+                        int batchNum = GetIbatchNumber(Convert.ToInt32(invnum));
+                        bool shouldAllocate = false;
 
-                    if (flagInsert)
-                    {
-                        arRecptHeader.Insert();
+                        if (CheckAccpacInvoiceAvail(Convert.ToInt32(invnum)))
+                        {
+                            if (CheckAccpacIBatchPosted(batchNum))
+                            {
+                                shouldAllocate = true;
+                            }
+                        }
+
+                        bool flagInsert;
+                        arRecptBatch.Compose(new View[] { arRecptHeader });
+                        arRecptHeader.Compose(new View[] { arRecptBatch, arRecptDetail3, arRecptDetail1, arRecptDetail5, arRecptDetail6 });
+                        arRecptDetail1.Compose(new View[] { arRecptHeader, arRecptDetail2, arRecptDetail4 });
+                        arRecptDetail2.Compose(new View[] { arRecptDetail1 });
+                        arRecptDetail3.Compose(new View[] { arRecptHeader });
+                        arRecptDetail4.Compose(new View[] { arRecptBatch, arRecptHeader, arRecptDetail3, arRecptDetail1, arRecptDetail2 });
+                        arRecptDetail5.Compose(new View[] { arRecptHeader });
+                        arRecptDetail6.Compose(new View[] { arRecptHeader });
+                        arRecptBatch.RecordClear();
+
+                        arRecptBatch.Fields.FieldByName("CODEPYMTYP").SetValue("CA", false);
+                        arRecptHeader.Fields.FieldByName("CODEPYMTYP").SetValue("CA", false);
+                        arRecptDetail3.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
+                        arRecptDetail1.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
+                        arRecptDetail2.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
+                        arRecptDetail4.Fields.FieldByName("PAYMTYPE").SetValue("CA", false);
+                        arRecptBatch.Fields.FieldByName("CNTBTCH").SetValue(batchNumber, false);
+                        arRecptBatch.Read(false);
+
+                        arRecptDetail4.Fields.FieldByName("PAYMTYPE").SetValue("CA", false);
+                        arRecptDetail4.Fields.FieldByName("CNTBTCH").SetValue(batchNumber, false);
+                        arRecptDetail4.Fields.FieldByName("CNTITEM").SetValue("1", false);
+                        arRecptDetail4.Fields.FieldByName("IDCUST").SetValue(customerId, false);
+                        arRecptDetail4.Fields.FieldByName("AMTRMIT").SetValue(amount, false);
+                        arRecptDetail4.Fields.FieldByName("STDOCDTE").SetValue(paymentDate.ToString(), false);
                         arRecptHeader.RecordCreate(ViewRecordCreate.DelayKey);
-                        Log.Save("Receipt Transferred");
+
+                        arRecptHeader.Fields.FieldByName("TEXTRMIT").SetValue(receiptDescription, false);
+                        arRecptHeader.Fields.FieldByName("IDCUST").SetValue(customerId, false);
+                        arRecptHeader.Fields.FieldByName("CODEPAYM").SetValue("CASH", false);
+                        arRecptHeader.Fields.FieldByName("DATEBUS").SetValue(paymentDate.ToString(), false);
+                        arRecptHeader.Fields.FieldByName("IDRMIT").SetValue(referenceNumber, false);
+                        arRecptHeader.Fields.FieldByName("AMTRMIT").SetValue(amount, false);
+
+                        if (shouldAllocate)
+                        {
+                            Log.Save("Applying receipt to invoice: " + invnum);
+                            arRecptDetail4.Fields.FieldByName("SHOWTYPE").SetValue("2", false);
+                            arRecptDetail4.Fields.FieldByName("STDOCSTR").SetValue(invnum, false);
+
+                            arRecptDetail4.Process();
+                            arRecptDetail4.Fields.FieldByName("CNTKEY").SetValue("-1", false);
+                            arRecptDetail4.Read(false);
+
+                            var netAmount = Convert.ToInt32(arRecptDetail4.Fields.FieldByName("AMTNET").Value);
+
+                            if (netAmount == 0)
+                            {
+                                flagInsert = true;
+                                Log.Save("The net balance is zero for this invoice. Cannot apply an additional amount");
+                            }
+                            else
+                            {
+                                flagInsert = true;
+                                arRecptDetail4.Fields.FieldByName("APPLY").SetValue("Y", false);
+                                arRecptDetail4.Update();
+                            }
+                        }
+                        else
+                        {
+                            Log.Save("Cannot apply to invoice: " + invnum + ". Check if invoice exist and the batch is posted.");
+                            flagInsert = true;
+                        }
+
+                        if (flagInsert)
+                        {
+                            arRecptHeader.Insert();
+                            arRecptHeader.RecordCreate(ViewRecordCreate.DelayKey);
+                            Log.Save("Receipt Transferred");
+                        }
+
+                        arRecptBatch.Dispose();
+                        arRecptHeader.Dispose();
+                        arRecptDetail1.Dispose();
+                        arRecptDetail2.Dispose();
+                        arRecptDetail3.Dispose();
+                        arRecptDetail4.Dispose();
+                        arRecptDetail5.Dispose();
+                        arRecptDetail6.Dispose();
+
+                        CBBTCH1batch.Dispose();
+                        CBBTCH1header.Dispose();
+                        CBBTCH1detail1.Dispose();
+                        CBBTCH1detail2.Dispose();
+                        CBBTCH1detail3.Dispose();
+                        CBBTCH1detail4.Dispose();
+                        CBBTCH1detail5.Dispose();
+                        CBBTCH1detail6.Dispose();
+                        return true;
                     }
-
-                    arRecptBatch.Dispose();
-                    arRecptHeader.Dispose();
-                    arRecptDetail1.Dispose();
-                    arRecptDetail2.Dispose();
-                    arRecptDetail3.Dispose();
-                    arRecptDetail4.Dispose();
-                    arRecptDetail5.Dispose();
-                    arRecptDetail6.Dispose();
-
-                    return true;
                 }
+            }
+            catch (Exception e)
+            {
+                arRecptBatch.Dispose();
+                arRecptHeader.Dispose();
+                arRecptDetail1.Dispose();
+                arRecptDetail2.Dispose();
+                arRecptDetail3.Dispose();
+                arRecptDetail4.Dispose();
+                arRecptDetail5.Dispose();
+                arRecptDetail6.Dispose();
+
+                CBBTCH1batch.Dispose();
+                CBBTCH1header.Dispose();
+                CBBTCH1detail1.Dispose();
+                CBBTCH1detail2.Dispose();
+                CBBTCH1detail3.Dispose();
+                CBBTCH1detail4.Dispose();
+                CBBTCH1detail5.Dispose();
+                CBBTCH1detail6.Dispose();
+                throw (e);
             }
         }
 
         public bool CheckAccpacInvoiceAvail(int invoiceId)
         {
             View cssql = dbLink.OpenView("CS0120");
-            cssql.Browse("SELECT IDINVC FROM ARIBH WHERE IDINVC = '" + invoiceId.ToString() + "'", true);
-            cssql.InternalSet(256);
+            try
+            {
+                cssql.Browse("SELECT IDINVC FROM ARIBH WHERE IDINVC = '" + invoiceId.ToString() + "'", true);
+                cssql.InternalSet(256);
 
-            if (cssql.GoNext())
-            {
-                return true;
+                if (cssql.GoNext())
+                {
+                    cssql.Dispose();
+                    return true;
+                }
+                else
+                {
+                    cssql.Dispose();
+                    return false;
+                }
             }
-            else
+            catch (Exception e)
             {
-                return false;
+                cssql.Dispose();
+                throw (e);
             }
         }
 
@@ -2426,46 +2488,79 @@ namespace middleware_service
             CBBTCH1detail5 = dbLink.OpenView("AR0406");
             CBBTCH1detail6 = dbLink.OpenView("AR0170");
 
-            CBBTCH1batch.Compose(new View[] { CBBTCH1header });
-            CBBTCH1header.Compose(new View[] { CBBTCH1batch, CBBTCH1detail3, CBBTCH1detail1, CBBTCH1detail5, CBBTCH1detail6 });
-            CBBTCH1detail1.Compose(new View[] { CBBTCH1header, CBBTCH1detail2, CBBTCH1detail4 });
-            CBBTCH1detail2.Compose(new View[] { CBBTCH1detail1 });
-            CBBTCH1detail3.Compose(new View[] { CBBTCH1header });
-            CBBTCH1detail4.Compose(new View[] { CBBTCH1batch, CBBTCH1header, CBBTCH1header, CBBTCH1detail3, CBBTCH1detail1, CBBTCH1detail2 });
-            CBBTCH1detail5.Compose(new View[] { CBBTCH1header });
-            CBBTCH1detail6.Compose(new View[] { CBBTCH1header });
+            try
+            {
+                CBBTCH1batch.Compose(new View[] { CBBTCH1header });
+                CBBTCH1header.Compose(new View[] { CBBTCH1batch, CBBTCH1detail3, CBBTCH1detail1, CBBTCH1detail5, CBBTCH1detail6 });
+                CBBTCH1detail1.Compose(new View[] { CBBTCH1header, CBBTCH1detail2, CBBTCH1detail4 });
+                CBBTCH1detail2.Compose(new View[] { CBBTCH1detail1 });
+                CBBTCH1detail3.Compose(new View[] { CBBTCH1header });
+                CBBTCH1detail4.Compose(new View[] { CBBTCH1batch, CBBTCH1header, CBBTCH1header, CBBTCH1detail3, CBBTCH1detail1, CBBTCH1detail2 });
+                CBBTCH1detail5.Compose(new View[] { CBBTCH1header });
+                CBBTCH1detail6.Compose(new View[] { CBBTCH1header });
 
-            CBBTCH1batch.Fields.FieldByName("CODEPYMTYP").SetValue("CA", false);
-            CBBTCH1header.Fields.FieldByName("CODEPYMTYP").SetValue("CA", false);
-            CBBTCH1detail3.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
-            CBBTCH1detail1.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
-            CBBTCH1detail2.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
-            CBBTCH1detail4.Fields.FieldByName("PAYMTYPE").SetValue("CA", false);
-            CBBTCH1batch.Fields.FieldByName("CODEPYMTYP").SetValue("CA", false);
+                CBBTCH1batch.Fields.FieldByName("CODEPYMTYP").SetValue("CA", false);
+                CBBTCH1header.Fields.FieldByName("CODEPYMTYP").SetValue("CA", false);
+                CBBTCH1detail3.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
+                CBBTCH1detail1.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
+                CBBTCH1detail2.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
+                CBBTCH1detail4.Fields.FieldByName("PAYMTYPE").SetValue("CA", false);
+                CBBTCH1batch.Fields.FieldByName("CODEPYMTYP").SetValue("CA", false);
 
-            CBBTCH1batch.RecordClear();
-            CBBTCH1batch.RecordCreate(ViewRecordCreate.Insert);
-            CBBTCH1header.RecordCreate(ViewRecordCreate.DelayKey);
-            CBBTCH1batch.Fields.FieldByName("BATCHDESC").SetValue(batchDesc, false);
-            CBBTCH1batch.Fields.FieldByName("DATEBTCH").SetValue(DateTime.Now.ToString(), false);
-            CBBTCH1batch.Update();
-            CBBTCH1batch.Fields.FieldByName("IDBANK").SetValue(bankcode, false);
-            CBBTCH1batch.Update();
-            CBBTCH1header.RecordCreate(ViewRecordCreate.DelayKey);
+                CBBTCH1batch.RecordClear();
+                CBBTCH1batch.RecordCreate(ViewRecordCreate.Insert);
+                CBBTCH1header.RecordCreate(ViewRecordCreate.DelayKey);
+                CBBTCH1batch.Fields.FieldByName("BATCHDESC").SetValue(batchDesc, false);
+                CBBTCH1batch.Fields.FieldByName("DATEBTCH").SetValue(DateTime.Now.ToString(), false);
+                CBBTCH1batch.Update();
+                CBBTCH1batch.Fields.FieldByName("IDBANK").SetValue(bankcode, false);
+                CBBTCH1batch.Update();
+                CBBTCH1header.RecordCreate(ViewRecordCreate.DelayKey);
+
+                CBBTCH1batch.Dispose();
+                CBBTCH1header.Dispose();
+                CBBTCH1detail1.Dispose();
+                CBBTCH1detail2.Dispose();
+                CBBTCH1detail3.Dispose();
+                CBBTCH1detail4.Dispose();
+                CBBTCH1detail5.Dispose();
+                CBBTCH1detail6.Dispose();
+            }
+            catch (Exception e)
+            {
+                CBBTCH1batch.Dispose();
+                CBBTCH1header.Dispose();
+                CBBTCH1detail1.Dispose();
+                CBBTCH1detail2.Dispose();
+                CBBTCH1detail3.Dispose();
+                CBBTCH1detail4.Dispose();
+                CBBTCH1detail5.Dispose();
+                CBBTCH1detail6.Dispose();
+                throw (e);
+            }
         }
 
         int GetLastPaymentBatch()
         {
-            int BatchId = 0;
-            bool gotIt;
-            CBBTCH1batch = dbLink.OpenView("AR0041");
-            gotIt = CBBTCH1batch.GoBottom();
-
-            if (gotIt)
+           CBBTCH1batch = dbLink.OpenView("AR0041");
+            try
             {
-                BatchId = Convert.ToInt32(CBBTCH1batch.Fields.FieldByName("CNTBTCH").Value);
+                int BatchId = 0;
+                bool gotIt;
+                gotIt = CBBTCH1batch.GoBottom();
+
+                if (gotIt)
+                {
+                    BatchId = Convert.ToInt32(CBBTCH1batch.Fields.FieldByName("CNTBTCH").Value);
+                }
+                CBBTCH1batch.Dispose();
+                return BatchId;
             }
-            return BatchId;
+            catch (Exception e)
+            {
+                CBBTCH1batch.Dispose();
+                throw (e);
+            }
         }
 
         public void CreditNoteInsert(string batchNumber, string customerId, string acctNumber, string amount, string invoiceToApply, string docNumber, string description)
@@ -2477,62 +2572,99 @@ namespace middleware_service
             b1_arInvoiceHeaderOptFields = dbLink.OpenView("AR0402");
             b1_arInvoiceDetailOptFields = dbLink.OpenView("AR0401");
 
-            b1_arInvoiceBatch.Compose(new View[] { b1_arInvoiceHeader });
-            b1_arInvoiceHeader.Compose(new View[] { b1_arInvoiceBatch, b1_arInvoiceDetail, b1_arInvoicePaymentSchedules, b1_arInvoiceHeaderOptFields });
-            b1_arInvoiceDetail.Compose(new View[] { b1_arInvoiceHeader, b1_arInvoiceBatch, b1_arInvoiceDetailOptFields });
-            b1_arInvoicePaymentSchedules.Compose(new View[] { b1_arInvoiceHeader });
-            b1_arInvoiceHeaderOptFields.Compose(new View[] { b1_arInvoiceHeader });
-            b1_arInvoiceDetailOptFields.Compose(new View[] { b1_arInvoiceDetail });
+            try
+            {
+                b1_arInvoiceBatch.Compose(new View[] { b1_arInvoiceHeader });
+                b1_arInvoiceHeader.Compose(new View[] { b1_arInvoiceBatch, b1_arInvoiceDetail, b1_arInvoicePaymentSchedules, b1_arInvoiceHeaderOptFields });
+                b1_arInvoiceDetail.Compose(new View[] { b1_arInvoiceHeader, b1_arInvoiceBatch, b1_arInvoiceDetailOptFields });
+                b1_arInvoicePaymentSchedules.Compose(new View[] { b1_arInvoiceHeader });
+                b1_arInvoiceHeaderOptFields.Compose(new View[] { b1_arInvoiceHeader });
+                b1_arInvoiceDetailOptFields.Compose(new View[] { b1_arInvoiceDetail });
 
-            b1_arInvoiceBatch.Fields.FieldByName("CNTBTCH").SetValue(batchNumber, false);
-            b1_arInvoiceHeader.RecordCreate(ViewRecordCreate.DelayKey);
-            b1_arInvoiceHeader.Fields.FieldByName("IDCUST").SetValue(customerId, false);
-            b1_arInvoiceHeader.Fields.FieldByName("TEXTTRX").SetValue("3", false);
-            b1_arInvoiceDetail.RecordCreate(ViewRecordCreate.NoInsert);
+                b1_arInvoiceBatch.Fields.FieldByName("CNTBTCH").SetValue(batchNumber, false);
+                b1_arInvoiceHeader.RecordCreate(ViewRecordCreate.DelayKey);
+                b1_arInvoiceHeader.Fields.FieldByName("IDCUST").SetValue(customerId, false);
+                b1_arInvoiceHeader.Fields.FieldByName("TEXTTRX").SetValue("3", false);
+                b1_arInvoiceDetail.RecordCreate(ViewRecordCreate.NoInsert);
 
-            b1_arInvoiceDetail.Fields.FieldByName("IDACCTREV").SetValue(acctNumber, false);
-            b1_arInvoiceDetail.Fields.FieldByName("AMTEXTN").SetValue(amount, false);
-            b1_arInvoiceDetail.Fields.FieldByName("TEXTDESC").SetValue(description, false);
-            b1_arInvoiceDetail.Insert();
+                b1_arInvoiceDetail.Fields.FieldByName("IDACCTREV").SetValue(acctNumber, false);
+                b1_arInvoiceDetail.Fields.FieldByName("AMTEXTN").SetValue(amount, false);
+                b1_arInvoiceDetail.Fields.FieldByName("TEXTDESC").SetValue(description, false);
+                b1_arInvoiceDetail.Insert();
 
-            b1_arInvoiceHeader.Fields.FieldByName("INVCAPPLTO").SetValue(invoiceToApply, false);
-            b1_arInvoiceHeader.Fields.FieldByName("IDINVC").SetValue(docNumber, false);
-            b1_arInvoiceHeader.Insert();
-            b1_arInvoiceHeader.RecordCreate(ViewRecordCreate.DelayKey);
-            Log.Save("Credit Memo transferred");
+                b1_arInvoiceHeader.Fields.FieldByName("INVCAPPLTO").SetValue(invoiceToApply, false);
+                b1_arInvoiceHeader.Fields.FieldByName("IDINVC").SetValue(docNumber, false);
+                b1_arInvoiceHeader.Insert();
+                b1_arInvoiceHeader.RecordCreate(ViewRecordCreate.DelayKey);
+                Log.Save("Credit Memo transferred");
+
+                b1_arInvoiceBatch.Dispose();
+                b1_arInvoiceHeader.Dispose();
+                b1_arInvoiceDetail.Dispose();
+                b1_arInvoicePaymentSchedules.Dispose();
+                b1_arInvoiceHeaderOptFields.Dispose();
+                b1_arInvoiceDetailOptFields.Dispose();
+            }
+            catch(Exception e)
+            {
+                b1_arInvoiceBatch.Dispose();
+                b1_arInvoiceHeader.Dispose();
+                b1_arInvoiceDetail.Dispose();
+                b1_arInvoicePaymentSchedules.Dispose();
+                b1_arInvoiceHeaderOptFields.Dispose();
+                b1_arInvoiceDetailOptFields.Dispose();
+                throw (e);
+            }
         }
 
         public int GetRBatchNumber(string referenceNumber)
         {
-            int batchNum = -1;
-            View cssql = dbLink.OpenView("CS0120"); ;
-
-            cssql.Browse("SELECT CNTBTCH FROM ARTCR WHERE IDRMIT = '" + referenceNumber + "'", true);
-            cssql.InternalSet(256);
-
-            if (cssql.GoNext())
+            View cssql = dbLink.OpenView("CS0120");
+            try
             {
-                batchNum = Convert.ToInt32(cssql.Fields.FieldByName("CNTBTCH").Value);
+                int batchNum = -1;
+
+                cssql.Browse("SELECT CNTBTCH FROM ARTCR WHERE IDRMIT = '" + referenceNumber + "'", true);
+                cssql.InternalSet(256);
+
+                if (cssql.GoNext())
+                {
+                    batchNum = Convert.ToInt32(cssql.Fields.FieldByName("CNTBTCH").Value);
+                }
+                cssql.Dispose();
+                return batchNum;
             }
-            return batchNum;
+            catch (Exception e)
+            {
+                cssql.Dispose();
+                throw (e);
+            }
         }
 
         public string GetDocNumber(string referenceNumber)
         {
-            string docNum = "";
-            View cssql = dbLink.OpenView("CS0120"); ;
-
-            cssql.Browse("SELECT DOCNBR FROM ARTCR WHERE IDRMIT = '" + referenceNumber + "'", true);
-            cssql.InternalSet(256);
-
-            if (cssql.GoNext())
+            View cssql = dbLink.OpenView("CS0120");
+            try
             {
-                docNum = Convert.ToString(cssql.Fields.FieldByName("DOCNBR").Value);
+                string docNum = "";
+                cssql.Browse("SELECT DOCNBR FROM ARTCR WHERE IDRMIT = '" + referenceNumber + "'", true);
+                cssql.InternalSet(256);
+
+                if (cssql.GoNext())
+                {
+                    docNum = Convert.ToString(cssql.Fields.FieldByName("DOCNBR").Value);
+                }
+                cssql.Dispose();
+                return docNum;
             }
-            return docNum;
+            catch (Exception e)
+            {
+                cssql.Dispose();
+                throw (e);
+            }
         }
 
-        public void ComApiPayByCredit(string customerId, string invoiceId, string batchNumber, string documentNumber)
+        public void PayByCredit(string customerId, string invoiceId, string batchNumber, string documentNumber)
         {
             arRecptBatch = dbLink.OpenView("AR0041");
             arRecptHeader = dbLink.OpenView("AR0042");
@@ -2543,99 +2675,143 @@ namespace middleware_service
             arRecptDetail5 = dbLink.OpenView("AR0406");
             arRecptDetail6 = dbLink.OpenView("AR0170");
 
-            arRecptBatch.Compose(new View[] { arRecptHeader });
-            arRecptHeader.Compose(new View[] { arRecptBatch, arRecptDetail3, arRecptDetail1, arRecptDetail5, arRecptDetail6 });
-            arRecptDetail1.Compose(new View[] { arRecptHeader, arRecptDetail2, arRecptDetail4 });
-            arRecptDetail2.Compose(new View[] { arRecptDetail1 });
-            arRecptDetail3.Compose(new View[] { arRecptHeader });
-            arRecptDetail4.Compose(new View[] { arRecptBatch, arRecptHeader, arRecptDetail3, arRecptDetail1, arRecptDetail2 });
-            arRecptDetail5.Compose(new View[] { arRecptHeader });
-            arRecptDetail6.Compose(new View[] { arRecptHeader });
+            try
+            {
+                arRecptBatch.Compose(new View[] { arRecptHeader });
+                arRecptHeader.Compose(new View[] { arRecptBatch, arRecptDetail3, arRecptDetail1, arRecptDetail5, arRecptDetail6 });
+                arRecptDetail1.Compose(new View[] { arRecptHeader, arRecptDetail2, arRecptDetail4 });
+                arRecptDetail2.Compose(new View[] { arRecptDetail1 });
+                arRecptDetail3.Compose(new View[] { arRecptHeader });
+                arRecptDetail4.Compose(new View[] { arRecptBatch, arRecptHeader, arRecptDetail3, arRecptDetail1, arRecptDetail2 });
+                arRecptDetail5.Compose(new View[] { arRecptHeader });
+                arRecptDetail6.Compose(new View[] { arRecptHeader });
 
-            arRecptBatch.RecordClear();
-            arRecptBatch.Fields.FieldByName("CODEPYMTYP").SetValue("CA", false);
-            arRecptHeader.Fields.FieldByName("CODEPYMTYP").SetValue("CA", false);
-            arRecptDetail3.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
-            arRecptDetail1.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
-            arRecptDetail2.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
-            arRecptDetail4.Fields.FieldByName("PAYMTYPE").SetValue("CA", false);
-            arRecptBatch.Fields.FieldByName("CNTBTCH").SetValue(batchNumber, false);
-            arRecptBatch.Read(false);
+                arRecptBatch.RecordClear();
+                arRecptBatch.Fields.FieldByName("CODEPYMTYP").SetValue("CA", false);
+                arRecptHeader.Fields.FieldByName("CODEPYMTYP").SetValue("CA", false);
+                arRecptDetail3.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
+                arRecptDetail1.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
+                arRecptDetail2.Fields.FieldByName("CODEPAYM").SetValue("CA", false);
+                arRecptDetail4.Fields.FieldByName("PAYMTYPE").SetValue("CA", false);
+                arRecptBatch.Fields.FieldByName("CNTBTCH").SetValue(batchNumber, false);
+                arRecptBatch.Read(false);
 
-            arRecptDetail4.Cancel();
-            arRecptDetail4.Fields.FieldByName("PAYMTYPE").SetValue("CA", false);
-            arRecptDetail4.Fields.FieldByName("CNTBTCH").SetValue(batchNumber, false);
-            arRecptDetail4.Fields.FieldByName("CNTITEM").SetValue("1", false);
-            arRecptDetail4.Fields.FieldByName("IDCUST").SetValue(customerId, false);
-            arRecptDetail4.Fields.FieldByName("AMTRMIT").SetValue("0.000", false);
-            arRecptDetail4.Fields.FieldByName("STDOCDTE").SetValue(DateTime.Now.ToShortDateString(), false);
+                arRecptDetail4.Cancel();
+                arRecptDetail4.Fields.FieldByName("PAYMTYPE").SetValue("CA", false);
+                arRecptDetail4.Fields.FieldByName("CNTBTCH").SetValue(batchNumber, false);
+                arRecptDetail4.Fields.FieldByName("CNTITEM").SetValue("1", false);
+                arRecptDetail4.Fields.FieldByName("IDCUST").SetValue(customerId, false);
+                arRecptDetail4.Fields.FieldByName("AMTRMIT").SetValue("0.000", false);
+                arRecptDetail4.Fields.FieldByName("STDOCDTE").SetValue(DateTime.Now.ToShortDateString(), false);
 
 
-            arRecptHeader.RecordCreate(ViewRecordCreate.DelayKey);
-            arRecptHeader.Fields.FieldByName("RMITTYPE").SetValue("4", false);
-            arRecptHeader.Fields.FieldByName("IDCUST").SetValue(customerId, false);
+                arRecptHeader.RecordCreate(ViewRecordCreate.DelayKey);
+                arRecptHeader.Fields.FieldByName("RMITTYPE").SetValue("4", false);
+                arRecptHeader.Fields.FieldByName("IDCUST").SetValue(customerId, false);
 
-            arRecptDetail4.Cancel();
-            arRecptHeader.Fields.FieldByName("DOCNBR").SetValue(documentNumber, false);
-            arRecptDetail4.Fields.FieldByName("STDOCSTR").SetValue(invoiceId, false);
+                arRecptDetail4.Cancel();
+                arRecptHeader.Fields.FieldByName("DOCNBR").SetValue(documentNumber, false);
+                arRecptDetail4.Fields.FieldByName("STDOCSTR").SetValue(invoiceId, false);
 
-            arRecptDetail4.Fields.FieldByName("PAYMTYPE").SetValue("CA", false);
-            arRecptDetail4.Fields.FieldByName("CNTBTCH").SetValue(batchNumber, false);
-            arRecptDetail4.Fields.FieldByName("CNTITEM").SetValue("0", false);
-            arRecptDetail4.Fields.FieldByName("IDCUST").SetValue(customerId, false);
-            arRecptDetail4.Fields.FieldByName("AMTRMIT").SetValue("0.000", false);
+                arRecptDetail4.Fields.FieldByName("PAYMTYPE").SetValue("CA", false);
+                arRecptDetail4.Fields.FieldByName("CNTBTCH").SetValue(batchNumber, false);
+                arRecptDetail4.Fields.FieldByName("CNTITEM").SetValue("0", false);
+                arRecptDetail4.Fields.FieldByName("IDCUST").SetValue(customerId, false);
+                arRecptDetail4.Fields.FieldByName("AMTRMIT").SetValue("0.000", false);
 
-            arRecptDetail4.Process();
+                arRecptDetail4.Process();
 
-            arRecptDetail4.Fields.FieldByName("CNTITEM").SetValue("0", false);
-            arRecptDetail4.Fields.FieldByName("CNTKEY").SetValue("-1", false);
-            arRecptDetail4.Read(false);
+                arRecptDetail4.Fields.FieldByName("CNTITEM").SetValue("0", false);
+                arRecptDetail4.Fields.FieldByName("CNTKEY").SetValue("-1", false);
+                arRecptDetail4.Read(false);
 
-            arRecptDetail4.Fields.FieldByName("APPLY").SetValue("Y", false);
-            arRecptDetail4.Update();
+                arRecptDetail4.Fields.FieldByName("APPLY").SetValue("Y", false);
+                arRecptDetail4.Update();
 
-            arRecptDetail4.Read(false);
-            arRecptHeader.Insert();
+                arRecptDetail4.Read(false);
+                arRecptHeader.Insert();
 
-            arRecptBatch.Read(false);
-            arRecptHeader.RecordCreate(ViewRecordCreate.DelayKey);
+                arRecptBatch.Read(false);
+                arRecptHeader.RecordCreate(ViewRecordCreate.DelayKey);
+
+                arRecptBatch.Dispose();
+                arRecptHeader.Dispose();
+                arRecptDetail1.Dispose();
+                arRecptDetail2.Dispose();
+                arRecptDetail3.Dispose();
+                arRecptDetail4.Dispose();
+                arRecptDetail5.Dispose();
+                arRecptDetail6.Dispose();
+            }
+            catch (Exception e)
+            {
+                arRecptBatch.Dispose();
+                arRecptHeader.Dispose();
+                arRecptDetail1.Dispose();
+                arRecptDetail2.Dispose();
+                arRecptDetail3.Dispose();
+                arRecptDetail4.Dispose();
+                arRecptDetail5.Dispose();
+                arRecptDetail6.Dispose();
+                throw (e);
+            }
         }
 
         public bool InvoiceDelete(int invoiceId)
         {
-            int entryNumber = GetEntryNumber(invoiceId);
-            int batchNumber = GetIbatchNumber(invoiceId);
+            b1_arInvoiceBatch = dbLink.OpenView("AR0031");
+            b1_arInvoiceHeader = dbLink.OpenView("AR0032");
+            b1_arInvoiceDetail = dbLink.OpenView("AR0033");
+            b1_arInvoicePaymentSchedules = dbLink.OpenView("AR0034");
+            b1_arInvoiceHeaderOptFields = dbLink.OpenView("AR0402");
+            b1_arInvoiceDetailOptFields = dbLink.OpenView("AR0401");
 
-            if (!CheckAccpacIBatchPosted(batchNumber))
+            try
             {
-                b1_arInvoiceBatch = dbLink.OpenView("AR0031");
-                b1_arInvoiceHeader = dbLink.OpenView("AR0032");
-                b1_arInvoiceDetail = dbLink.OpenView("AR0033");
-                b1_arInvoicePaymentSchedules = dbLink.OpenView("AR0034");
-                b1_arInvoiceHeaderOptFields = dbLink.OpenView("AR0402");
-                b1_arInvoiceDetailOptFields = dbLink.OpenView("AR0401");
+                int entryNumber = GetEntryNumber(invoiceId);
+                int batchNumber = GetIbatchNumber(invoiceId);
 
-                b1_arInvoiceBatch.Compose(new View[] { b1_arInvoiceHeader });
-                b1_arInvoiceHeader.Compose(new View[] { b1_arInvoiceBatch, b1_arInvoiceDetail, b1_arInvoicePaymentSchedules, null });
-                b1_arInvoiceDetail.Compose(new View[] { b1_arInvoiceHeader, b1_arInvoiceBatch, b1_arInvoiceDetailOptFields });
-                b1_arInvoicePaymentSchedules.Compose(new View[] { b1_arInvoiceHeader });
-                b1_arInvoiceHeaderOptFields.Compose(new View[] { b1_arInvoiceHeader });
-                b1_arInvoiceDetailOptFields.Compose(new View[] { b1_arInvoiceDetail });
+                if (!CheckAccpacIBatchPosted(batchNumber))
+                {
+                    b1_arInvoiceBatch.Compose(new View[] { b1_arInvoiceHeader });
+                    b1_arInvoiceHeader.Compose(new View[] { b1_arInvoiceBatch, b1_arInvoiceDetail, b1_arInvoicePaymentSchedules, null });
+                    b1_arInvoiceDetail.Compose(new View[] { b1_arInvoiceHeader, b1_arInvoiceBatch, b1_arInvoiceDetailOptFields });
+                    b1_arInvoicePaymentSchedules.Compose(new View[] { b1_arInvoiceHeader });
+                    b1_arInvoiceHeaderOptFields.Compose(new View[] { b1_arInvoiceHeader });
+                    b1_arInvoiceDetailOptFields.Compose(new View[] { b1_arInvoiceDetail });
 
-                b1_arInvoiceBatch.Fields.FieldByName("CNTBTCH").SetValue(batchNumber.ToString(), false);
-                string searchFilter = "CNTITEM = " + entryNumber;
-                b1_arInvoiceHeader.Browse(searchFilter, true);
+                    b1_arInvoiceBatch.Fields.FieldByName("CNTBTCH").SetValue(batchNumber.ToString(), false);
+                    string searchFilter = "CNTITEM = " + entryNumber;
+                    b1_arInvoiceHeader.Browse(searchFilter, true);
 
-                b1_arInvoiceHeader.Fetch(false);
-                b1_arInvoiceHeader.Delete();
+                    b1_arInvoiceHeader.Fetch(false);
+                    b1_arInvoiceHeader.Delete();
 
-                Log.Save("Invoice: " + invoiceId.ToString() + " was deleted from the batch (" + batchNumber + ")");
-                return true;
+                    Log.Save("Invoice: " + invoiceId.ToString() + " was deleted from the batch (" + batchNumber + ")");
+
+                    b1_arInvoiceBatch.Dispose();
+                    b1_arInvoiceHeader.Dispose();
+                    b1_arInvoiceDetail.Dispose();
+                    b1_arInvoicePaymentSchedules.Dispose();
+                    b1_arInvoiceHeaderOptFields.Dispose();
+                    b1_arInvoiceDetailOptFields.Dispose();
+                    return true;
+                }
+                else
+                {
+                    Log.Save("The batch is already posted, cannot delete invoice");
+                    return false;
+                }
             }
-            else
+            catch (Exception e)
             {
-                Log.Save("The batch is already posted, cannot delete invoice");
-                return false;
+                b1_arInvoiceBatch.Dispose();
+                b1_arInvoiceHeader.Dispose();
+                b1_arInvoiceDetail.Dispose();
+                b1_arInvoicePaymentSchedules.Dispose();
+                b1_arInvoiceHeaderOptFields.Dispose();
+                b1_arInvoiceDetailOptFields.Dispose();
+                throw (e);
             }
         }
 
@@ -2664,7 +2840,6 @@ namespace middleware_service
 
         int CountBatchPaymentEntries(string batchId)
         {
-            int count = 0;
             CBBTCH1batch = dbLink.OpenView("CB0009");
             CBBTCH1header = dbLink.OpenView("CB0010");
             CBBTCH1detail1 = dbLink.OpenView("CB0011");
@@ -2676,31 +2851,60 @@ namespace middleware_service
             CBBTCH1detail7 = dbLink.OpenView("CB0403");
             CBBTCH1detail8 = dbLink.OpenView("CB0404");
 
-            CBBTCH1batch.Compose(new View[] { CBBTCH1header });
-            CBBTCH1header.Compose(new View[] { CBBTCH1batch, CBBTCH1detail1, CBBTCH1detail4, CBBTCH1detail8 });
-            CBBTCH1detail1.Compose(new View[] { CBBTCH1header, CBBTCH1detail2, CBBTCH1detail5, CBBTCH1detail7 });
-            CBBTCH1detail2.Compose(new View[] { CBBTCH1detail1, CBBTCH1detail3, CBBTCH1detail6 });
-            CBBTCH1detail3.Compose(new View[] { CBBTCH1detail2 });
-            CBBTCH1detail4.Compose(new View[] { CBBTCH1header });
-            CBBTCH1detail5.Compose(new View[] { CBBTCH1detail1 });
-            CBBTCH1detail6.Compose(new View[] { CBBTCH1detail2 });
-            CBBTCH1detail7.Compose(new View[] { CBBTCH1detail1 });
-            CBBTCH1detail8.Compose(new View[] { CBBTCH1header });
-
-            CBBTCH1header.Init();
-            CBBTCH1batch.Fields.FieldByName("BATCHID").SetValue(batchId, false);
-            CBBTCH1batch.Read(false);
-            CBBTCH1header.Read(false);
-
-            bool gotIt = CBBTCH1header.GoTop();
-
-            while (gotIt)
+            try
             {
-                CBBTCH1header.Fields.FieldByName("REFERENCE").Value.ToString();
-                gotIt = CBBTCH1header.GoNext();
-                count++;
+                int count = 0;
+                CBBTCH1batch.Compose(new View[] { CBBTCH1header });
+                CBBTCH1header.Compose(new View[] { CBBTCH1batch, CBBTCH1detail1, CBBTCH1detail4, CBBTCH1detail8 });
+                CBBTCH1detail1.Compose(new View[] { CBBTCH1header, CBBTCH1detail2, CBBTCH1detail5, CBBTCH1detail7 });
+                CBBTCH1detail2.Compose(new View[] { CBBTCH1detail1, CBBTCH1detail3, CBBTCH1detail6 });
+                CBBTCH1detail3.Compose(new View[] { CBBTCH1detail2 });
+                CBBTCH1detail4.Compose(new View[] { CBBTCH1header });
+                CBBTCH1detail5.Compose(new View[] { CBBTCH1detail1 });
+                CBBTCH1detail6.Compose(new View[] { CBBTCH1detail2 });
+                CBBTCH1detail7.Compose(new View[] { CBBTCH1detail1 });
+                CBBTCH1detail8.Compose(new View[] { CBBTCH1header });
+
+                CBBTCH1header.Init();
+                CBBTCH1batch.Fields.FieldByName("BATCHID").SetValue(batchId, false);
+                CBBTCH1batch.Read(false);
+                CBBTCH1header.Read(false);
+
+                bool gotIt = CBBTCH1header.GoTop();
+
+                while (gotIt)
+                {
+                    CBBTCH1header.Fields.FieldByName("REFERENCE").Value.ToString();
+                    gotIt = CBBTCH1header.GoNext();
+                    count++;
+                }
+
+                CBBTCH1batch.Dispose();
+                CBBTCH1header.Dispose();
+                CBBTCH1detail1.Dispose();
+                CBBTCH1detail2.Dispose();
+                CBBTCH1detail3.Dispose();
+                CBBTCH1detail4.Dispose();
+                CBBTCH1detail5.Dispose();
+                CBBTCH1detail6.Dispose();
+                CBBTCH1detail7.Dispose();
+                CBBTCH1detail8.Dispose();
+                return count;
             }
-            return count;
+            catch (Exception e)
+            {
+                CBBTCH1batch.Dispose();
+                CBBTCH1header.Dispose();
+                CBBTCH1detail1.Dispose();
+                CBBTCH1detail2.Dispose();
+                CBBTCH1detail3.Dispose();
+                CBBTCH1detail4.Dispose();
+                CBBTCH1detail5.Dispose();
+                CBBTCH1detail6.Dispose();
+                CBBTCH1detail7.Dispose();
+                CBBTCH1detail8.Dispose();
+                throw (e);
+            }
         }
 
         public void OnDebug()
@@ -2712,24 +2916,37 @@ namespace middleware_service
         {
             csRateHeader = dbLink.OpenView("CS0005");
             csRateDetail = dbLink.OpenView("CS0006");
-            csRateHeader.Compose(new View[] { csRateDetail });
-            csRateDetail.Compose(new View[] { csRateHeader });
 
-            csRateHeader.Fields.FieldByName("PRGTNOW").SetValue("1", false);
-            csRateHeader.Fields.FieldByName("HOMECUR").SetValue("JAD", false);
-            csRateHeader.Fields.FieldByName("RATETYPE").SetValue("BB", false);
-            csRateHeader.Read(false);
+            try
+            {
+                csRateHeader.Compose(new View[] { csRateDetail });
+                csRateDetail.Compose(new View[] { csRateHeader });
 
-            csRateDetail.Read(false);
-            csRateDetail.RecordCreate(ViewRecordCreate.NoInsert);
-            csRateDetail.Fields.FieldByName("SOURCECUR").SetValue("USD", false);
-            csRateDetail.Fields.FieldByName("RATEDATE").SetValue(DateTime.Now.ToString(), false);
-            csRateDetail.Fields.FieldByName("RATE").SetValue(amt, false);
+                csRateHeader.Fields.FieldByName("PRGTNOW").SetValue("1", false);
+                csRateHeader.Fields.FieldByName("HOMECUR").SetValue("JAD", false);
+                csRateHeader.Fields.FieldByName("RATETYPE").SetValue("BB", false);
+                csRateHeader.Read(false);
 
-            csRateDetail.Insert();
-            csRateDetail.Fields.FieldByName("SOURCECUR").SetValue("USD", false);
-            csRateDetail.Read(false);
-            csRateHeader.Update();
+                csRateDetail.Read(false);
+                csRateDetail.RecordCreate(ViewRecordCreate.NoInsert);
+                csRateDetail.Fields.FieldByName("SOURCECUR").SetValue("USD", false);
+                csRateDetail.Fields.FieldByName("RATEDATE").SetValue(DateTime.Now.ToString(), false);
+                csRateDetail.Fields.FieldByName("RATE").SetValue(amt, false);
+
+                csRateDetail.Insert();
+                csRateDetail.Fields.FieldByName("SOURCECUR").SetValue("USD", false);
+                csRateDetail.Read(false);
+                csRateHeader.Update();
+
+                csRateHeader.Dispose();
+                csRateDetail.Dispose();
+            }
+            catch (Exception e)
+            {
+                csRateHeader.Dispose();
+                csRateDetail.Dispose();
+                throw(e);
+            }
         }
     }
 }

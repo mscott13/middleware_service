@@ -17,7 +17,7 @@ using TableDependency.Enums;
 using TableDependency.EventArgs;
 using TableDependency.SqlClient;
 using Newtonsoft.Json;
-
+using System.Web.Script.Serialization;
 
 namespace middleware_service
 {
@@ -93,6 +93,45 @@ namespace middleware_service
             event_logger.Log = "Application";
         }
 
+        void GenRptRequest(string ReportType)
+        {
+            try
+            {
+                int m = 0;
+                int y = 0;
+
+                if (ReportType == "Monthly")
+                {
+                    m = DateTime.Now.Month - 1;
+                    y = DateTime.Now.Year;
+
+                    if (m == 0)
+                    {
+                        m = 12;
+                        y = y - 1;
+                    }
+                }
+
+                if (ReportType == "Annual")
+                {
+                    m = 4;
+                    y = DateTime.Now.Year - 1;
+                }
+
+                JavaScriptSerializer serialize = new JavaScriptSerializer();
+                var param = new { ReportType = ReportType, month = m, year = y };
+                var json = serialize.Serialize(param);
+                var client = new WebClient();
+                client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                string id = client.UploadString("http://server-erp2.sma.gov.jm:8080/IntegrationService.asmx/Generate_SaveDeferredRpt", "POST", json);
+                Log.Save("Generate report request sent");
+            }
+            catch (Exception ex)
+            {
+                Log.Save(ex.InnerException.Message);
+            }
+        }
+
         private void DeferredTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             DateTime MonthlyRptDate = intLink.GetNextGenDate("Monthly");
@@ -112,20 +151,7 @@ namespace middleware_service
                     }
 
                     Log.Save("Generating Monthly Deferred Income Report... | Month: "+m+", Year: "+y);
-                    Database_Operations.Report rpt = new Database_Operations.Report(intLink);
-                    var result = rpt.gen_rpt("Monthly", 0, m, y);
-
-                    if (result != null)
-                    {
-                        //here we set the next Report Generation Date
-                        int es = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month) - DateTime.Now.Day;
-                        es++;
-                        DateTime nextMonth = DateTime.Now.AddDays(es);
-                        DateTime nextGenDate = new DateTime(nextMonth.Year, nextMonth.Month, 2);
-                        nextGenDate = nextGenDate.AddHours(2);
-                        intLink.SetNextGenDate("Monthly", nextGenDate);
-                        Log.Save("Monthly Deferred Report Generated.");
-                    }
+                    GenRptRequest("Monthly");
                 }
             }
 
@@ -137,17 +163,7 @@ namespace middleware_service
                     int y = DateTime.Now.Year - 1;
 
                     Log.Save("Generating Annual Deferred Income Report...");
-                    Database_Operations.Report rpt = new Database_Operations.Report(intLink);
-                    var result = rpt.gen_rpt("Monthly", 0, m, y);
-
-                    if (result != null)
-                    {
-                        //here we set the next Report Generation Date
-                        DateTime nextGenDate = new DateTime(DateTime.Now.Year + 1, 4, 2);
-                        nextGenDate = nextGenDate.AddHours(3);
-                        intLink.SetNextGenDate("Annual", nextGenDate);
-                        Log.Save("Annual Deferred Report Generated.");
-                    }
+                    GenRptRequest("Annual");
                 }
             }
         }

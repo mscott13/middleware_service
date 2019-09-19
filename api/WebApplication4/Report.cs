@@ -575,7 +575,7 @@ namespace WebApplication4
 
             doc.Open();
 
-            var imagePath = @"C:\inetpub\wwwroot\Gui\spec.jpg";
+            var imagePath = @"C:\Program Files (x86)\M.S\SMA Middleware\resources\spec.jpg";
             iTextSharp.text.Image PNG = iTextSharp.text.Image.GetInstance(imagePath);
             PNG.ScaleToFit(100f, 100f);
             PNG.Alignment = 1;
@@ -696,7 +696,7 @@ namespace WebApplication4
             doc.Add(newLine);
             doc.Add(newLine);
 
-            var imagePath = @"C:\inetpub\wwwroot\Gui\spec.jpg";
+            var imagePath = @"C:\Program Files (x86)\M.S\SMA Middleware\resources\spec.jpg";
             iTextSharp.text.Image PNG = iTextSharp.text.Image.GetInstance(imagePath);
             PNG.ScaleToFit(100f, 100f);
             PNG.Alignment = 1;

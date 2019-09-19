@@ -119,6 +119,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AnnualDeferredIncome.html" />
     <Content Include="App_Code\Deffered Working.txt" />
     <Content Include="ChangePassword.aspx" />
     <Content Include="Console.aspx" />

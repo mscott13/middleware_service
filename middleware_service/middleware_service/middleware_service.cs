@@ -196,11 +196,13 @@ namespace middleware_service
         private void TableDependCancellation_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
         {
             Log.Save("Table Dependency error: " + e.Error.Message);
+            Stop();
         }
 
         private void TableDependInfo_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
         {
             Log.Save("Table Dependency error: " + e.Error.Message);
+            Stop();
         }
 
         private void TableDependInfo_OnChanged(object sender, RecordChangedEventArgs<SqlNotify_DocumentInfo> e)
@@ -238,9 +240,6 @@ namespace middleware_service
                             {
                                 companyName = fname + " " + lname;
                             }
-
-                           
-
 
                             Log.Save("Client name: " + companyName);
                             Data dt = Translate(cNum, invoiceInfo.FeeType, companyName, "", invoiceInfo.notes, intLink.GetAccountNumber(invoiceInfo.Glid), invoiceInfo.FreqUsage); // application stops here...

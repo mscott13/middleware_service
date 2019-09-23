@@ -6,12 +6,12 @@ using middleware_service.Database_Classes;
 
 namespace middleware_service.Database_Operations
 {
-    public static class Integration
+    public class Integration
     {
         private const string CURRENT_GENERIC_CONNECTION = Constants.DB_GENERIC;
         private const string CURRENT_INTEGRATION_CONNECTION = Constants.DB_INTEGRATION;
       
-        public static bool IsBrokerEnabled(string databaseName, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public bool IsBrokerEnabled(string databaseName, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             bool result;
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -45,7 +45,7 @@ namespace middleware_service.Database_Operations
             return result;
         }
 
-        public static void SetBrokerEnabled(string databaseName, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public void SetBrokerEnabled(string databaseName, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
 
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -59,7 +59,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static List<ReportRawData> GetDIRInformation(string ReportType, DateTime searchStartDate, DateTime searchEndDate, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public List<ReportRawData> GetDIRInformation(string ReportType, DateTime searchStartDate, DateTime searchEndDate, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             List<ReportRawData> reportInfo = new List<ReportRawData>();
             ReportRawData record = new ReportRawData();
@@ -494,7 +494,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static void CloseInvoiceBatch(string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void CloseInvoiceBatch(string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -511,7 +511,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static Maj GetMajDetail(int referenceNumber, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public Maj GetMajDetail(int referenceNumber, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             Maj maj = new Maj();
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -537,7 +537,7 @@ namespace middleware_service.Database_Operations
             return maj;
         }
 
-        public static DataSet GetRenewalInvoiceValidity(int invoiceid, string databaseConnection = CURRENT_INTEGRATION_CONNECTION) // could not find stored procedure sp_getValidityRenewalInvoice
+        public DataSet GetRenewalInvoiceValidity(int invoiceid, string databaseConnection = CURRENT_INTEGRATION_CONNECTION) // could not find stored procedure sp_getValidityRenewalInvoice
         {
             DataSet ds = new DataSet();
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -556,7 +556,7 @@ namespace middleware_service.Database_Operations
             return ds;
         }
 
-        public static int GetInvoiceReference(int invoiceId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public int GetInvoiceReference(int invoiceId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             int refNumber = -1;
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -582,7 +582,7 @@ namespace middleware_service.Database_Operations
             return refNumber;
         }
 
-        public static void CreateInvoiceBatch(double daysExpire, int batchId, string batchType, string renstat, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void CreateInvoiceBatch(double daysExpire, int batchId, string batchType, string renstat, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -601,7 +601,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static bool BatchAvail(string batchType, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public bool BatchAvail(string batchType, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             bool result = false;
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -629,7 +629,7 @@ namespace middleware_service.Database_Operations
             return result;
         }
 
-        public static bool IsBatchExpired(int batchId, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public bool IsBatchExpired(int batchId, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             bool result = false;
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -666,7 +666,7 @@ namespace middleware_service.Database_Operations
             return result;
         }
 
-        public static int GetAvailBatch(string batchType, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public int GetAvailBatch(string batchType, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             int result = -1;
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -689,7 +689,7 @@ namespace middleware_service.Database_Operations
             return result;
         }
 
-        public static void OpenNewReceiptBatch(double DaysTillExpired, int LastBatchId, string bankcode, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void OpenNewReceiptBatch(double DaysTillExpired, int LastBatchId, string bankcode, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -724,7 +724,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static void CloseReceiptBatch(int batchId, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void CloseReceiptBatch(int batchId, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -738,7 +738,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static void UpdateBatchAmount(string batchType, decimal amount, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void UpdateBatchAmount(string batchType, decimal amount, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -770,7 +770,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static string GetBankCodeId(string bankcode, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public string GetBankCodeId(string bankcode, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             string bankcodeid = "";
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -805,7 +805,7 @@ namespace middleware_service.Database_Operations
             return bankcodeid;
         }
 
-        public static DateTime GetDocDate(int docNumber, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public DateTime GetDocDate(int docNumber, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             DateTime date = DateTime.Now;
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -828,7 +828,7 @@ namespace middleware_service.Database_Operations
             return date;
         }
 
-        public static void UpdateBatchCount(string BatchType, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void UpdateBatchCount(string BatchType, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -846,7 +846,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static void IncrementReferenceNumber(string BankCode, decimal amount, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void IncrementReferenceNumber(string BankCode, decimal amount, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -873,7 +873,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static decimal GetRate(string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public decimal GetRate(string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             decimal result = 0;
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -895,7 +895,7 @@ namespace middleware_service.Database_Operations
             return result;
         }
 
-        public static void UpdateBatchCountPayment(string BatchId, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void UpdateBatchCountPayment(string BatchId, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -913,7 +913,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static decimal GetUsRateByInvoice(int invoiceid, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public decimal GetUsRateByInvoice(int invoiceid, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             decimal rate = 1;
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -936,7 +936,7 @@ namespace middleware_service.Database_Operations
             return rate;
         }
 
-        public static string GetCurrentRef(string bankCode, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public string GetCurrentRef(string bankCode, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             string refNumber = "";
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -960,7 +960,7 @@ namespace middleware_service.Database_Operations
             return refNumber;
         }
 
-        public static string GetRecieptBatchId(string bankcode, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public string GetRecieptBatchId(string bankcode, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             string batch = "";
             switch (bankcode)
@@ -996,7 +996,7 @@ namespace middleware_service.Database_Operations
             return batch;
         }
 
-        public static ReceiptBatch GetReceiptBatchDetail(string bankcode, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public ReceiptBatch GetReceiptBatchDetail(string bankcode, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             ReceiptBatch batch = new ReceiptBatch();
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1040,7 +1040,7 @@ namespace middleware_service.Database_Operations
             return batch;
         }
 
-        public static List<string> CheckInvoiceAvail(string invoiceId, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public List<string> CheckInvoiceAvail(string invoiceId, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             List<string> data = new List<string>(3);
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1069,7 +1069,7 @@ namespace middleware_service.Database_Operations
             return data;
         }
 
-        public static void StoreInvoice(int invoiceId, int batchTarget, int CreditGL, string clientName, string clientId, DateTime date, string author, decimal amount, string state, decimal usrate, decimal usamount, int isvoid, int isCreditMemo, int creditMemoNumber, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void StoreInvoice(int invoiceId, int batchTarget, int CreditGL, string clientName, string clientId, DateTime date, string author, decimal amount, string state, decimal usrate, decimal usamount, int isvoid, int isCreditMemo, int creditMemoNumber, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -1118,7 +1118,7 @@ namespace middleware_service.Database_Operations
             MiddlewareService.BroadcastEvent(new EventObjects.Invoice(invoiceId.ToString(), clientName, clientId, batchTarget.ToString(), amount.ToString(), DateTime.Now, author, state));
         }
 
-        public static void StorePayment(string clientId, string clientName, DateTime createdDate, string invoiceId, decimal amount, decimal usamount, string prepstat, int referenceNumber, int destinationBank, string isPayByCredit, decimal prepaymentUsRate, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void StorePayment(string clientId, string clientName, DateTime createdDate, string invoiceId, decimal amount, decimal usamount, string prepstat, int referenceNumber, int destinationBank, string isPayByCredit, decimal prepaymentUsRate, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -1174,7 +1174,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static string GetAccountNumber(int GLID, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public string GetAccountNumber(int GLID, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             string accountNumber = "";
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1197,7 +1197,7 @@ namespace middleware_service.Database_Operations
             return accountNumber;
         }
 
-        public static List<string> GetInvoiceDetails(int invoiceId, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public List<string> GetInvoiceDetails(int invoiceId, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             List<string> data = new List<string>(3);
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1227,7 +1227,7 @@ namespace middleware_service.Database_Operations
             return data;
         }
 
-        public static void MarkTransferred(int invoiceId, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void MarkTransferred(int invoiceId, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -1252,7 +1252,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static int GetCreditGl(string invoiceiD, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public int GetCreditGl(string invoiceiD, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             int i = 0;
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1275,7 +1275,7 @@ namespace middleware_service.Database_Operations
             return i;
         }
 
-        public static int GetCreditGlID(string GLTransactionID, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public int GetCreditGlID(string GLTransactionID, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             int i = 0;
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1298,7 +1298,7 @@ namespace middleware_service.Database_Operations
             return i;
         }
 
-        public static string IsAnnualFee(int invoiceid, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public string IsAnnualFee(int invoiceid, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             string notes = " ";
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1321,7 +1321,7 @@ namespace middleware_service.Database_Operations
             return notes;
         }
 
-        public static void UpdateCreditGl(int invoiceId, int newCreditGl, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void UpdateCreditGl(int invoiceId, int newCreditGl, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -1336,7 +1336,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static void ModifyInvoiceList(int invoiceId, decimal rate, string customerId, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void ModifyInvoiceList(int invoiceId, decimal rate, string customerId, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -1354,7 +1354,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static void UpdateEntryNumber(int invoiceId, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void UpdateEntryNumber(int invoiceId, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -1373,7 +1373,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static List<string> GetPaymentInfo(int gl_id, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public List<string> GetPaymentInfo(int gl_id, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             List<string> data = new List<string>(4);
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1404,7 +1404,7 @@ namespace middleware_service.Database_Operations
             return data;
         }
 
-        public static List<string> GetClientInfoInv(string id, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public List<string> GetClientInfoInv(string id, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             List<string> data = new List<string>(4);
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1435,7 +1435,7 @@ namespace middleware_service.Database_Operations
             return data;
         }
 
-        public static List<string> GetFeeInfo(int invoiceId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public List<string> GetFeeInfo(int invoiceId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             List<string> data = new List<string>(2);
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1462,7 +1462,7 @@ namespace middleware_service.Database_Operations
             return data;
         }
 
-        public static void UpdateCustomerCount(string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void UpdateCustomerCount(string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -1489,7 +1489,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static void StoreCustomer(string clientId, string clientName, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void StoreCustomer(string clientId, string clientName, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -1516,7 +1516,7 @@ namespace middleware_service.Database_Operations
             MiddlewareService.BroadcastEvent(new EventObjects.Customer(clientName, clientId));
         }
 
-        public static void UpdateReceiptNumber(int transactionId, string referenceNumber, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public void UpdateReceiptNumber(int transactionId, string referenceNumber, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -1531,7 +1531,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static DateTime GetValidity(int invoiceId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public DateTime GetValidity(int invoiceId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             var datetime = DateTime.Now;
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1561,7 +1561,7 @@ namespace middleware_service.Database_Operations
             return datetime;
         }
 
-        public static DateTime GetValidityEnd(int invoiceId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public DateTime GetValidityEnd(int invoiceId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             var datetime = DateTime.Now;
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1591,7 +1591,7 @@ namespace middleware_service.Database_Operations
             return datetime;
         }
 
-        public static void ResetInvoiceTotal(string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void ResetInvoiceTotal(string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -1604,7 +1604,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static string GetFreqUsage(int invoiceId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public string GetFreqUsage(int invoiceId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             string result = "";
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1627,7 +1627,7 @@ namespace middleware_service.Database_Operations
             return result;
         }
 
-        public static int GetCreditMemoNumber(string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public int GetCreditMemoNumber(string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             int num = -1;
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1651,7 +1651,7 @@ namespace middleware_service.Database_Operations
             return num;
         }
 
-        public static void UpdateAsmsCreditMemoNumber(int docId, int newCredNum, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public void UpdateAsmsCreditMemoNumber(int docId, int newCredNum, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -1666,7 +1666,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static InvoiceInfo GetInvoiceInfo(int invoiceId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public InvoiceInfo GetInvoiceInfo(int invoiceId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             InvoiceInfo inv = new InvoiceInfo();
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1702,7 +1702,7 @@ namespace middleware_service.Database_Operations
             return inv;
         }
 
-        public static PaymentInfo GetReceiptInfo(int originalDocNum, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public PaymentInfo GetReceiptInfo(int originalDocNum, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             PaymentInfo rct = new PaymentInfo();
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1731,7 +1731,7 @@ namespace middleware_service.Database_Operations
             return rct;
         }
 
-        public static CreditNoteInfo GetCreditNoteInfo(int creditMemoNum, int documentId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
+        public CreditNoteInfo GetCreditNoteInfo(int creditMemoNum, int documentId, string databaseConnection = CURRENT_GENERIC_CONNECTION)
         {
             CreditNoteInfo creditNote = new CreditNoteInfo();
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1771,7 +1771,7 @@ namespace middleware_service.Database_Operations
             return creditNote;
         }
 
-        public static string GetClientIdZRecord(bool stripExtention, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public string GetClientIdZRecord(bool stripExtention, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             string result = "";
             string temp = "";
@@ -1810,7 +1810,7 @@ namespace middleware_service.Database_Operations
             return result;
         }
 
-        public static PrepaymentData CheckPrepaymentAvail(string customerId, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public PrepaymentData CheckPrepaymentAvail(string customerId, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             PrepaymentData data = new PrepaymentData();
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1857,7 +1857,7 @@ namespace middleware_service.Database_Operations
             return data;
         }
 
-        public static void AdjustPrepaymentRemainder(decimal amount, int sequenceNumber, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void AdjustPrepaymentRemainder(decimal amount, int sequenceNumber, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -1872,7 +1872,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static string GenerateReportId(string ReportType, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public string GenerateReportId(string ReportType, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             string result = "";
             using (SqlConnection connection = new SqlConnection(databaseConnection))
@@ -1913,7 +1913,7 @@ namespace middleware_service.Database_Operations
             return result;
         }
 
-        public static void DataRouter(string ReportType, DataWrapper data, string recordID, int destination, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void DataRouter(string ReportType, DataWrapper data, string recordID, int destination, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             for (int i = 0; i < data.records.Count; i++)
             {
@@ -1966,7 +1966,7 @@ namespace middleware_service.Database_Operations
             InsertSubtotals(ReportType, recordID, data, destination);
         }
 
-        public static string SaveReport(string ReportType, List<DataWrapper> categories, Totals total)
+        public string SaveReport(string ReportType, List<DataWrapper> categories, Totals total)
         {
             string id = GenerateReportId(ReportType);
 
@@ -1979,7 +1979,7 @@ namespace middleware_service.Database_Operations
             return id;
         }
 
-        public static void InsertSubtotals(string ReportType, string reportID, DataWrapper data, int destination, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void InsertSubtotals(string ReportType, string reportID, DataWrapper data, int destination, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -2009,7 +2009,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static void InsertTotals(string ReportType, string reportID, Totals total, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void InsertTotals(string ReportType, string reportID, Totals total, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -2039,7 +2039,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static void SetNextGenDate(string ReportType, DateTime date, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public void SetNextGenDate(string ReportType, DateTime date, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
@@ -2077,7 +2077,7 @@ namespace middleware_service.Database_Operations
             }
         }
 
-        public static DateTime GetNextGenDate(string ReportType, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
+        public DateTime GetNextGenDate(string ReportType, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             DateTime date = DateTime.Now;
             using (SqlConnection connection = new SqlConnection(databaseConnection))

@@ -34,7 +34,7 @@ namespace middleware_service.TableDependencyDefinitions
 
                 if (Amount == 0)
                 {
-                    var info = Integration.GetInvoiceInfo(ARInvoiceID, Constants.DB_GENERIC);
+                    var info = new Integration().GetInvoiceInfo(ARInvoiceID, Constants.DB_GENERIC);
                     Amount = info.amount;
                     ARBalance = info.arBalance;
                 }

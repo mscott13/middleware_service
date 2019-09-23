@@ -20,12 +20,13 @@ namespace middleware_service.Database_Operations
 
         public DeferredData gen_rpt(string ReportType, int action, int month, int year)
         {
+            Integration intLink = new Integration();
             DateTime startDate = new DateTime(year, month, 1);
             DateTime endDate = new DateTime();
             if (ReportType == "Monthly") endDate = new DateTime(year, month, DateTime.DaysInMonth(year, month));
             if (ReportType == "Annual") endDate = new DateTime(year + 1, month - 1, DateTime.DaysInMonth(year + 1, month - 1));
 
-            List<ReportRawData> ReportInfo = Integration.GetDIRInformation(ReportType, startDate, endDate);
+            List<ReportRawData> ReportInfo = intLink.GetDIRInformation(ReportType, startDate, endDate);
             List<DataWrapper> ReportCategories = new List<DataWrapper>();
 
             DataWrapper cell_category = new DataWrapper();
@@ -438,7 +439,7 @@ namespace middleware_service.Database_Operations
 
             if (action == 0)
             {
-                Report.report_id = Integration.SaveReport(ReportType, ReportCategories, ReportTotal);
+                Report.report_id = intLink.SaveReport(ReportType, ReportCategories, ReportTotal);
             }
 
             createPdfReport(ReportType, Report, startDate);

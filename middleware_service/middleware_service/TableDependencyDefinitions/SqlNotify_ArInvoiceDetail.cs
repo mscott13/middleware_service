@@ -78,7 +78,7 @@ namespace middleware_service.TableDependencyDefinitions
                     command.Parameters.AddWithValue("@ServiceTypeCode", FixNulls(ServiceTypeCode));
                     command.Parameters.AddWithValue("@Proj", FixNulls(Proj));
                     command.ExecuteNonQuery();
-                    Log.Save("Parallel transfer completed for ArInvoiceDetail");
+                    new Log().Save("Parallel transfer completed for ArInvoiceDetail");
                 }
             }
         }

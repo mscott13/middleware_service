@@ -1,8 +1,11 @@
-﻿using System;
+﻿using middleware_service.Other_Classes;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration.Install;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
@@ -35,7 +38,6 @@ namespace middleware_service
 
         private void ProjectInstaller_AfterUninstall(object sender, InstallEventArgs e)
         {
-            //remove left over files
         }
 
         private void middleware_service_AfterInstall(object sender, InstallEventArgs e)
@@ -48,7 +50,6 @@ namespace middleware_service
 
         private void installer_AfterInstall(object sender, InstallEventArgs e)
         {
-
         }
     }
 }

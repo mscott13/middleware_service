@@ -54,7 +54,7 @@ namespace middleware_service.TableDependencyDefinitions
                     command.Parameters.AddWithValue("@PostingStatus", PostingStatus);
                     command.Parameters.AddWithValue("@Proj", FixNulls(Proj));
                     command.ExecuteNonQuery();
-                    Log.Save("Parallel transfer completed for GLDocuments");
+                    new Log().Save("Parallel transfer completed for GLDocuments");
                 }
             }
         }

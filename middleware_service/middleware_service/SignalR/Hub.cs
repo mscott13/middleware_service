@@ -13,21 +13,21 @@ namespace middleware_service
         {
             var username = Context.QueryString["username"];
             string connectionId = Context.ConnectionId;
-            Log.Save("User connected: " + username + ", clientId: " + connectionId);
+            new Log().Save("User connected: " + username + ", clientId: " + connectionId);
             return base.OnConnected();
         }
 
         public override Task OnDisconnected(bool stopCalled)
         {
             string connectionId = Context.ConnectionId;
-            Log.Save("User disconnected: "+ connectionId);
+            new Log().Save("User disconnected: "+ connectionId);
             return base.OnDisconnected(stopCalled);
         }
 
         public override Task OnReconnected()
         {
             string connectionId = Context.ConnectionId;
-            Log.Save("User reconnected: " + connectionId);
+            new Log().Save("User reconnected: " + connectionId);
             return base.OnReconnected();
         }
  

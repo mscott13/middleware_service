@@ -62,8 +62,6 @@ namespace middleware_service.Database_Operations
         public List<ReportRawData> GetDIRInformation(string ReportType, DateTime searchStartDate, DateTime searchEndDate, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
         {
             List<ReportRawData> reportInfo = new List<ReportRawData>();
-            ReportRawData record = new ReportRawData();
-
             using (SqlConnection connection = new SqlConnection(databaseConnection))
             {
                 #region lengthQuery
@@ -463,28 +461,30 @@ namespace middleware_service.Database_Operations
                         {
                             while (reader.Read())
                             {
-                                record = new ReportRawData();
-                                record.clientID = reader.GetInt32(0);
-                                record.ccNum = reader["ccNum"].ToString();
-                                record.clientCompany = reader["clientCompany"].ToString();
-                                record.clientFname = reader["clientFname"].ToString();
-                                record.clientLname = reader["clientLname"].ToString();
-                                record.Budget = Convert.ToDecimal(reader["budget"]);
-                                record.InvAmount = Convert.ToDecimal(reader["InvAmount"]);
-                                record.ExistedBefore = Convert.ToInt32(reader["ExistedBefore"]);
-                                record.LastRptsClosingBal = reader["LastRptsClosingBal"].ToString();
-                                record.LastRptsStartValPeriod = reader["LastRptsStartValPeriod"].ToString();
-                                record.LastRptsEndValPeriod = reader["LastRptsEndValPeriod"].ToString();
-                                record.CurrentStartValPeriod = reader.GetDateTime(11);
-                                record.CurrentEndValPeriod = reader.GetDateTime(12);
-                                record.CreditGLID = reader.GetInt32(13);
-                                record.notes = reader["notes"].ToString();
-                                record.ARInvoiceID = reader["ARInvoiceID"].ToString();
-                                record.InvoiceCreationDate = reader.GetDateTime(16);
-                                record.isCancelled = Convert.ToInt32(reader["isCancelled"]);
-                                record.isCreditMemo = Convert.ToInt32(reader["isCreditMemo"]);
-                                record.CreditMemoNum = reader["CreditMemoNum"].ToString();
-                                record.CreditMemoAmt = Convert.ToDecimal(reader["CreditMemoAmt"]);
+                                ReportRawData record = new ReportRawData
+                                {
+                                    clientID = reader.GetInt32(0),
+                                    ccNum = reader["ccNum"].ToString(),
+                                    clientCompany = reader["clientCompany"].ToString(),
+                                    clientFname = reader["clientFname"].ToString(),
+                                    clientLname = reader["clientLname"].ToString(),
+                                    Budget = Convert.ToDecimal(reader["budget"]),
+                                    InvAmount = Convert.ToDecimal(reader["InvAmount"]),
+                                    ExistedBefore = Convert.ToInt32(reader["ExistedBefore"]),
+                                    LastRptsClosingBal = reader["LastRptsClosingBal"].ToString(),
+                                    LastRptsStartValPeriod = reader["LastRptsStartValPeriod"].ToString(),
+                                    LastRptsEndValPeriod = reader["LastRptsEndValPeriod"].ToString(),
+                                    CurrentStartValPeriod = reader.GetDateTime(11),
+                                    CurrentEndValPeriod = reader.GetDateTime(12),
+                                    CreditGLID = reader.GetInt32(13),
+                                    notes = reader["notes"].ToString(),
+                                    ARInvoiceID = reader["ARInvoiceID"].ToString(),
+                                    InvoiceCreationDate = reader.GetDateTime(16),
+                                    isCancelled = Convert.ToInt32(reader["isCancelled"]),
+                                    isCreditMemo = Convert.ToInt32(reader["isCreditMemo"]),
+                                    CreditMemoNum = reader["CreditMemoNum"].ToString(),
+                                    CreditMemoAmt = Convert.ToDecimal(reader["CreditMemoAmt"])
+                                };
                                 reportInfo.Add(record);
                             }
                         }
@@ -1115,7 +1115,6 @@ namespace middleware_service.Database_Operations
                     command.ExecuteNonQuery();
                 }
             }
-            MiddlewareService.BroadcastEvent(new EventObjects.Invoice(invoiceId.ToString(), clientName, clientId, batchTarget.ToString(), amount.ToString(), DateTime.Now, author, state));
         }
 
         public void StorePayment(string clientId, string clientName, DateTime createdDate, string invoiceId, decimal amount, decimal usamount, string prepstat, int referenceNumber, int destinationBank, string isPayByCredit, decimal prepaymentUsRate, string databaseConnection = CURRENT_INTEGRATION_CONNECTION)
@@ -1169,7 +1168,6 @@ namespace middleware_service.Database_Operations
                     command.Parameters.AddWithValue("@isPayByCredit", isPayByCredit);
                     command.Parameters.AddWithValue("@prepaymentUsRate", prepaymentUsRate);
                     command.ExecuteNonQuery();
-                    MiddlewareService.BroadcastEvent(new EventObjects.Receipt(createdDate,clientName, clientId, invoiceId, amount, usamount, referenceNumber, prepstat, destinationBank, isPayByCredit));
                 }
             }
         }
@@ -1513,7 +1511,6 @@ namespace middleware_service.Database_Operations
                     command.ExecuteNonQuery();
                 }
             }
-            MiddlewareService.BroadcastEvent(new EventObjects.Customer(clientName, clientId));
         }
 
         public void UpdateReceiptNumber(int transactionId, string referenceNumber, string databaseConnection = CURRENT_GENERIC_CONNECTION)

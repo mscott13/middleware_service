@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.IO;
 using System.ServiceProcess;
 using System.Threading;
@@ -22,7 +21,6 @@ namespace middleware_service
 {
     public partial class MiddlewareService : ServiceBase
     {
-        #region Definitions
         SqlTableDependency<SqlNotify_ArInvoices> tableDependencyArInvoices;
         SqlTableDependency<SqlNotify_ArInvoiceDetail> tableDependencyArInvoiceDetail;
         SqlTableDependency<SqlNotify_GlDocuments> tableDependencyGlDocuments;
@@ -31,6 +29,7 @@ namespace middleware_service
         Session accpacSession;
         DBLink dbLink;
         Integration intLink;
+        Log log;
 
         public const string TYPE_APPROVAL = "Type Approval";
         public const string RENEWAL_REG = "Renewals - Reg Fees - For ";
@@ -45,7 +44,6 @@ namespace middleware_service
       
         System.Timers.Timer deferredTimer = new System.Timers.Timer();
         public IDisposable selfHost;
-        #endregion
 
         public MiddlewareService()
         {
@@ -70,9 +68,9 @@ namespace middleware_service
                         y -= 1;
                     }
 
-                    Log.Save("Generating Monthly Deferred Income Report... | Month: " + m + ", Year: " + y);
+                    log.Save("Generating Monthly Deferred Income Report... | Month: " + m + ", Year: " + y);
                     Database_Operations.Report rpt = new Database_Operations.Report();
-                    var result = rpt.gen_rpt("Monthly", 0, m, y);
+                    var result = rpt.Gen_rpt("Monthly", 0, m, y);
 
                     if (result != null)
                     {
@@ -82,7 +80,7 @@ namespace middleware_service
                         DateTime nextGenDate = new DateTime(nextMonth.Year, nextMonth.Month, 2);
                         nextGenDate = nextGenDate.AddHours(2);
                         intLink.SetNextGenDate("Monthly", nextGenDate);
-                        Log.Save("Monthly Deferred Report Generated.");
+                        log.Save("Monthly Deferred Report Generated.");
                     }
                 }
             }
@@ -94,16 +92,16 @@ namespace middleware_service
                     int m = 4;
                     int y = DateTime.Now.Year - 1;
 
-                    Log.Save("Generating Annual Deferred Income Report...");
+                    log.Save("Generating Annual Deferred Income Report...");
                     Database_Operations.Report rpt = new Database_Operations.Report();
-                    var result = rpt.gen_rpt("Monthly", 0, m, y);
+                    var result = rpt.Gen_rpt("Monthly", 0, m, y);
 
                     if (result != null)
                     {
                         DateTime nextGenDate = new DateTime(DateTime.Now.Year + 1, 4, 2);
                         nextGenDate = nextGenDate.AddHours(3);
                         intLink.SetNextGenDate("Annual", nextGenDate);
-                        Log.Save("Annual Deferred Report Generated.");
+                        log.Save("Annual Deferred Report Generated.");
                     }
                 }
             }
@@ -114,12 +112,12 @@ namespace middleware_service
             try
             {
                 intLink = new Integration();
-                Log.Open("Log.txt");
+                log = new  Log();
                 accpacSession = new Session();
                 
                 if (!intLink.IsBrokerEnabled(Constants.DB_GENERIC_NAME))
                 {
-                    Log.Save("Enabling broker on database: " + Constants.DB_GENERIC_NAME);
+                    log.Save("Enabling broker on database: " + Constants.DB_GENERIC_NAME);
                     intLink.SetBrokerEnabled(Constants.DB_GENERIC_NAME);
                 }
 
@@ -178,33 +176,33 @@ namespace middleware_service
                 deferredTimer.Interval = 3600000;
 
                 //////////////////////////////////////////////////////////////////// STARTING SESSION ///////////////////////////////////////////////////////////////////////
-                Log.Save("Starting accpac session...");
+                log.Save("Starting accpac session...");
                 accpacSession.Init("", "XY", "XY1000", "65A");
                 accpacSession.Open(Constants.ACCPAC_USER, Constants.ACCPAC_CRED, Constants.ACCPAC_COMPANY, DateTime.Today, 0);
                 dbLink = accpacSession.OpenDBLink(DBLinkType.Company, DBLinkFlags.ReadWrite);
 
-                Log.Save("Accpac Version: " + accpacSession.AppVersion);
-                Log.Save("Company: " + accpacSession.CompanyName);
-                Log.Save("Session Status: " + accpacSession.IsOpened);
+                log.Save("Accpac Version: " + accpacSession.AppVersion);
+                log.Save("Company: " + accpacSession.CompanyName);
+                log.Save("Session Status: " + accpacSession.IsOpened);
 
 
                 deferredTimer.Start();
-                Log.Save("middleware_service started.");
-                Log.WriteEnd();
+                log.Save("middleware_service started.");
+                log.WriteEnd();
                 DeferredTimer_Elapsed(null, null);
                 InitSignalR();
             }
             catch (Exception e)
             {
-                Log.Save(e.Message + " " + e.StackTrace);
-                Log.WriteEnd();
+                log.Save(e.Message + " " + e.StackTrace);
+                log.WriteEnd();
                 Stop();
             }
         }
 
         protected override void OnShutdown()
         {
-            Log.Save("Machine shutdown event detected");
+            log.Save("Machine shutdown event detected");
             base.OnShutdown();
         }
 
@@ -227,9 +225,8 @@ namespace middleware_service
                 tableDependencyGlDocuments.Dispose();
                 deferredTimer.Stop();
 
-                Log.Save("middleware_service stopped.");
-                Log.WriteEnd();
-                Log.Close();
+                log.Save("middleware_service stopped.");
+                log.WriteEnd();
                 accpacSession.Dispose();
 
                 if (selfHost != null)
@@ -239,24 +236,23 @@ namespace middleware_service
             }
             catch (Exception e)
             {
-                Log.Save(e.Message + " " + e.StackTrace);
-                Log.WriteEnd();
-                Log.Close();
+                log.Save(e.Message + " " + e.StackTrace);
+                log.WriteEnd();
             }
         }
 
         public void SignalEventHandler(object source, SignalR.EventObjects.SignalArgs args)
         {
-            Log.Save("Command: " + args.message + " received from: " + args.username);
+            log.Save("Command: " + args.message + " received from: " + args.username);
         }
 
         private void InitSignalR()
         {
-            Log.Save("Starting server host...");
+            log.Save("Starting server host...");
             EventBridge.SignalReceived += SignalEventHandler;
             string url = Constants.BASE_ADDRESS + Constants.PORT;
             selfHost = WebApp.Start<Startup>(url);
-            Log.Save("Server running on port: " + Constants.PORT);
+            log.Save("Server running on port: " + Constants.PORT);
         }
 
         public static void BroadcastEvent(object e)
@@ -267,25 +263,25 @@ namespace middleware_service
 
         private void TableDependencyArInvoices_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
         {
-            Log.Save("Table Dependency error: " + e.Error.Message);
+            log.Save("Table Dependency error: " + e.Error.Message);
             Stop();
         }
 
         private void TableDependencyGlDocuments_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
         {
-            Log.Save("Table Dependency error: " + e.Error.Message);
+            log.Save("Table Dependency error: " + e.Error.Message);
             Stop();
         }
 
         private void TableDependencyArInvoiceDetail_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
         {
-            Log.Save("Table Dependency error: " + e.Error.Message);
+            log.Save("Table Dependency error: " + e.Error.Message);
             Stop();
         }
 
         private void TableDependencyArPayments_OnError(object sender, TableDependency.EventArgs.ErrorEventArgs e)
         {
-            Log.Save("Table Dependency error: " + e.Error.Message);
+            log.Save("Table Dependency error: " + e.Error.Message);
             Stop();
         }
 
@@ -300,7 +296,7 @@ namespace middleware_service
             }
             catch (Exception ex)
             {
-                Log.Save(ex.Message + " " + ex.StackTrace);
+                log.Save(ex.Message + " " + ex.StackTrace);
                 Stop();
             }
         }
@@ -313,7 +309,7 @@ namespace middleware_service
             }
             catch (Exception ex)
             {
-                Log.Save(ex.Message + " " + ex.StackTrace);
+                log.Save(ex.Message + " " + ex.StackTrace);
                 Stop();
             }
         }
@@ -327,7 +323,7 @@ namespace middleware_service
                 {
                     if (IsAccpacSessionOpen())
                     {
-                        Log.Save("Database change detected, operation: " + e.ChangeType);
+                        log.Save("Database change detected, operation: " + e.ChangeType);
 
                         var docInfo = e.Entity;
                         if (e.ChangeType == ChangeType.Insert)
@@ -339,15 +335,15 @@ namespace middleware_service
                                     e.Entity.GlDocumentsToGenric();
                                 }
 
-                                Log.Save("Incoming invoice...");
+                                log.Save("Incoming invoice...");
                                 InvoiceInfo invoiceInfo = new InvoiceInfo();
 
                                 while (invoiceInfo.amount == 0)
                                 {
-                                    Log.Save("Waiting for invoice amount to update, current value: " + invoiceInfo.amount.ToString());
+                                    log.Save("Waiting for invoice amount to update, current value: " + invoiceInfo.amount.ToString());
                                     invoiceInfo = intLink.GetInvoiceInfo(docInfo.OriginalDocumentID);
                                 }
-                                Log.Save("Invoice amount: " + invoiceInfo.amount);
+                                log.Save("Invoice amount: " + invoiceInfo.amount);
 
                                 List<string> clientInfo = intLink.GetClientInfoInv(invoiceInfo.customerId.ToString());
                                 string companyName = clientInfo[0].ToString();
@@ -362,10 +358,10 @@ namespace middleware_service
                                     companyName = fname + " " + lname;
                                 }
 
-                                Log.Save("Client name: " + companyName);
+                                log.Save("Client name: " + companyName);
                                 Data dt = Translate(cNum, invoiceInfo.feeType, companyName, "", invoiceInfo.notes, intLink.GetAccountNumber(invoiceInfo.glid), invoiceInfo.freqUsage);
                                 DateTime invoiceValidity = intLink.GetValidity(docInfo.OriginalDocumentID);
-                                Log.Save("Invoice Validity: " + invoiceValidity);
+                                log.Save("Invoice Validity: " + invoiceValidity);
 
                                 int financialyear = 0;
                                 if (invoiceValidity.Month > 3)
@@ -377,23 +373,23 @@ namespace middleware_service
                                     financialyear = invoiceValidity.Year;
                                 }
 
-                                Log.Save("Financial Year: " + financialyear);
+                                log.Save("Financial Year: " + financialyear);
                                 List<string> data = intLink.CheckInvoiceAvail(docInfo.OriginalDocumentID.ToString());
                                 int r = intLink.GetInvoiceReference(docInfo.OriginalDocumentID);
-                                Log.Save("Invoice Reference number: " + r);
+                                log.Save("Invoice Reference number: " + r);
 
                                 if (r != -1)
                                 {
-                                    Log.Save("Getting Maj Details...");
+                                    log.Save("Getting Maj Details...");
                                     m = intLink.GetMajDetail(r);
-                                    Log.Save(m.ToString());
+                                    log.Save(m.ToString());
                                 }
 
                                 if (IsPeriodCreated(financialyear))
                                 {
                                     if (invoiceInfo.glid < 5000 || data != null)
                                     {
-                                        Log.Save("CreditGL: " + invoiceInfo.glid);
+                                        log.Save("CreditGL: " + invoiceInfo.glid);
                                         if (data != null)
                                         {
                                             if (data[1].ToString() == "NT")
@@ -544,16 +540,16 @@ namespace middleware_service
                                                             intLink.StoreInvoice(docInfo.OriginalDocumentID, batchNumber, invoiceInfo.glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.author, invoiceInfo.amount, "updated", 1, 0, invoiceInfo.isVoided, 0, 0);
                                                         }
                                                         intLink.UpdateCreditGl(docInfo.OriginalDocumentID, invoiceInfo.glid);
-                                                        Log.Save("Updated Invoice: " + docInfo.OriginalDocumentID.ToString());
+                                                        log.Save("Updated Invoice: " + docInfo.OriginalDocumentID.ToString());
                                                     }
                                                     else
                                                     {
-                                                        Log.Save("Update is not needed." + docInfo.OriginalDocumentID.ToString());
+                                                        log.Save("Update is not needed." + docInfo.OriginalDocumentID.ToString());
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    Log.Save("Batch number already posted");
+                                                    log.Save("Batch number already posted");
                                                 }
                                             }
                                         }
@@ -562,7 +558,7 @@ namespace middleware_service
                                             if (dt.feeType == "SLF" && invoiceInfo.notes == "Renewal")
                                             {
                                                 intLink.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_SPEC + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isVoided, 0, 0);
-                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
+                                                log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                             }
                                             else if (dt.feeType == "RF" && invoiceInfo.notes == "Renewal")
                                             {
@@ -577,23 +573,23 @@ namespace middleware_service
                                                 }
 
                                                 intLink.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(RENEWAL_REG + invoiceValidity.ToString("MMMM") + " " + invoiceValidity.Year.ToString(), docInfo.OriginalDocumentID.ToString()), invoiceInfo.glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isVoided, 0, 0);
-                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
+                                                log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                             }
 
                                             else if ((invoiceInfo.notes == "Annual Fee" && m.stationType == "SSL" && m.certificateType == 0 && m.proj == "JMC") || (invoiceInfo.freqUsage == "PRS55"))
                                             {
                                                 intLink.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isVoided, 0, 0);
-                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
+                                                log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                             }
                                             else if (invoiceInfo.notes == "Type Approval" || invoiceInfo.freqUsage == "TA-ProAmend")
                                             {
                                                 intLink.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(TYPE_APPROVAL, docInfo.OriginalDocumentID.ToString()), invoiceInfo.glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.author, invoiceInfo.amount, "no modification", intLink.GetRate(), ChangeToUS(invoiceInfo.amount), invoiceInfo.isVoided, 0, 0);
-                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
+                                                log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                             }
                                             else if (invoiceInfo.notes == "Annual Fee" || invoiceInfo.notes == "Modification" || invoiceInfo.notes == "Radio Operator")
                                             {
                                                 intLink.StoreInvoice(docInfo.OriginalDocumentID, GetBatch(NON_MAJ, docInfo.OriginalDocumentID.ToString()), invoiceInfo.glid, companyName, dt.customerId, DateTime.Now, invoiceInfo.author, invoiceInfo.amount, "no modification", 1, 0, invoiceInfo.isVoided, 0, 0);
-                                                Log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
+                                                log.Save("Invoice Id: " + docInfo.OriginalDocumentID.ToString() + " Transferred");
                                             }
                                         }
                                     }
@@ -734,12 +730,12 @@ namespace middleware_service
                                 }
                                 else
                                 {
-                                    Log.Save("Invoice not Transferred as fiscal year " + financialyear + " not yet Created in Sage. ");
+                                    log.Save("Invoice not Transferred as fiscal year " + financialyear + " not yet Created in Sage. ");
                                 }
                             }
                             else if (docInfo.DocumentType == RECEIPT && docInfo.PaymentMethod != 99)
                             {
-                                Log.Save("Incoming Receipt");
+                                log.Save("Incoming Receipt");
                                 if (Constants.PARALLEL_RUN)
                                 {
                                     e.Entity.GlDocumentsToGenric();
@@ -791,10 +787,10 @@ namespace middleware_service
                                     ftype = feeData[0].ToString();
                                     notes = feeData[1].ToString();
 
-                                    Log.Save("Invoice Id: " + invoiceId.ToString());
-                                    Log.Save("Customer Id: " + customerId);
-                                    Log.Save("Client Name: " + companyName);
-                                    Log.Save("Receipt Amount: " + pinfo.Debit);
+                                    log.Save("Invoice Id: " + invoiceId.ToString());
+                                    log.Save("Customer Id: " + customerId);
+                                    log.Save("Client Name: " + companyName);
+                                    log.Save("Receipt Amount: " + pinfo.Debit);
 
                                     prepstat = "No";
                                     valstart = intLink.GetValidity(Convert.ToInt32(invoiceId));
@@ -803,8 +799,8 @@ namespace middleware_service
                                 else
                                 {
                                     prepstat = "Yes";
-                                    Log.Save("Prepayment");
-                                    Log.Save("Customer Id: " + customerId);
+                                    log.Save("Prepayment");
+                                    log.Save("Customer Id: " + customerId);
 
                                     var gl = intLink.GetCreditGlID((transid + 1).ToString());
 
@@ -842,14 +838,14 @@ namespace middleware_service
                                 {
                                     if (glid == "5146")
                                     {
-                                        Log.Save("Bank: FGB JA$ CURRENT A/C");
+                                        log.Save("Bank: FGB JA$ CURRENT A/C");
                                         if (dt.success)
                                         {
                                             if (ReceiptBatchAvail("FGBJMREC"))
                                             {
                                                 string reference = intLink.GetCurrentRef("FGBJMREC");
-                                                Log.Save("Target Batch: " + intLink.GetRecieptBatchId("FGBJMREC"));
-                                                Log.Save("Transferring Receipt");
+                                                log.Save("Target Batch: " + intLink.GetRecieptBatchId("FGBJMREC"));
+                                                log.Save("Transferring Receipt");
 
                                                 ReceiptTransfer(intLink.GetRecieptBatchId("FGBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
                                                 intLink.UpdateBatchCountPayment(intLink.GetRecieptBatchId("FGBJMREC"));
@@ -863,8 +859,8 @@ namespace middleware_service
                                                 CreateReceiptBatchEx("FGBJMREC", "Middleware Generated Batch for FGBJMREC");
                                                 intLink.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "FGBJMREC");
 
-                                                Log.Save("Target Batch: " + intLink.GetRecieptBatchId("FGBJMREC"));
-                                                Log.Save("Transferring Receipt");
+                                                log.Save("Target Batch: " + intLink.GetRecieptBatchId("FGBJMREC"));
+                                                log.Save("Transferring Receipt");
 
                                                 ReceiptTransfer(intLink.GetRecieptBatchId("FGBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
                                                 intLink.UpdateBatchCountPayment(intLink.GetRecieptBatchId("FGBJMREC"));
@@ -876,7 +872,7 @@ namespace middleware_service
                                     }
                                     else if (glid == "5147")
                                     {
-                                        Log.Save("Bank: FGB US$ SAVINGS A/C");
+                                        log.Save("Bank: FGB US$ SAVINGS A/C");
                                         decimal usamount = 0;
                                         decimal transferedAmt = Convert.ToDecimal(dt.debit) / intLink.GetUsRateByInvoice(Convert.ToInt32(invoiceId));
                                         string clientIdPrefix = "";
@@ -912,8 +908,8 @@ namespace middleware_service
                                             if (ReceiptBatchAvail("FGBUSMRC"))
                                             {
                                                 string reference = intLink.GetCurrentRef("FGBUSMRC");
-                                                Log.Save("Target Batch: " + intLink.GetRecieptBatchId("FGBUSMRC"));
-                                                Log.Save("Transferring Receipt");
+                                                log.Save("Target Batch: " + intLink.GetRecieptBatchId("FGBUSMRC"));
+                                                log.Save("Transferring Receipt");
 
                                                 ReceiptTransfer(intLink.GetRecieptBatchId("FGBUSMRC"), dt.customerId, Math.Round(transferedAmt, 2).ToString(), dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
                                                 intLink.UpdateBatchCountPayment(intLink.GetRecieptBatchId("FGBUSMRC"));
@@ -927,8 +923,8 @@ namespace middleware_service
                                                 CreateReceiptBatchEx("FGBUSMRC", "Middleware Generated Batch for FGBUSMRC");
                                                 intLink.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "FGBUSMRC");
 
-                                                Log.Save("Target Batch: " + intLink.GetRecieptBatchId("FGBUSMRC"));
-                                                Log.Save("Transferring Receipt");
+                                                log.Save("Target Batch: " + intLink.GetRecieptBatchId("FGBUSMRC"));
+                                                log.Save("Transferring Receipt");
 
                                                 ReceiptTransfer(intLink.GetRecieptBatchId("FGBUSMRC"), dt.customerId, Math.Round(transferedAmt, 2).ToString(), dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
                                                 intLink.UpdateBatchCountPayment(intLink.GetRecieptBatchId("FGBUSMRC"));
@@ -940,14 +936,14 @@ namespace middleware_service
                                     }
                                     else if (glid == "5148")
                                     {
-                                        Log.Save("NCB JA$ SAVINGS A/C");
+                                        log.Save("NCB JA$ SAVINGS A/C");
                                         if (dt.success)
                                         {
                                             if (ReceiptBatchAvail("NCBJMREC"))
                                             {
                                                 string reference = intLink.GetCurrentRef("NCBJMREC");
-                                                Log.Save("Target Batch: " + intLink.GetRecieptBatchId("NCBJMREC"));
-                                                Log.Save("Transferring Receipt");
+                                                log.Save("Target Batch: " + intLink.GetRecieptBatchId("NCBJMREC"));
+                                                log.Save("Transferring Receipt");
 
                                                 ReceiptTransfer(intLink.GetRecieptBatchId("NCBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
                                                 intLink.UpdateBatchCountPayment(intLink.GetRecieptBatchId("NCBJMREC"));
@@ -961,8 +957,8 @@ namespace middleware_service
                                                 CreateReceiptBatchEx("NCBJMREC", "Middleware Generated Batch for NCBJMREC");
                                                 intLink.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "NCBJMREC");
 
-                                                Log.Save("Target Batch: " + intLink.GetRecieptBatchId("NCBJMREC"));
-                                                Log.Save("Transferring Receipt");
+                                                log.Save("Target Batch: " + intLink.GetRecieptBatchId("NCBJMREC"));
+                                                log.Save("Transferring Receipt");
 
                                                 ReceiptTransfer(intLink.GetRecieptBatchId("NCBJMREC"), dt.customerId, dt.debit, dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
                                                 intLink.UpdateBatchCountPayment(intLink.GetRecieptBatchId("NCBJMREC"));
@@ -975,12 +971,12 @@ namespace middleware_service
                                 }
                                 else
                                 {
-                                    Log.Save("Customer not found in accpac");
+                                    log.Save("Customer not found in accpac");
                                 }
                             }
                             else if (docInfo.DocumentType == CREDIT_MEMO)
                             {
-                                Log.Save("New Credit Memo...");
+                                log.Save("New Credit Memo...");
                                 CreditNoteInfo creditNote = new CreditNoteInfo();
 
                                 while (creditNote.amount == 0)
@@ -1016,7 +1012,7 @@ namespace middleware_service
                                 if (CheckAccpacInvoiceAvail(creditNote.ARInvoiceID))
                                 {
                                     cred_docNum = intLink.GetCreditMemoNumber();
-                                    Log.Save("Creating credit memo");
+                                    log.Save("Creating credit memo");
                                     int batchNumber = GetBatch(CREDIT_NOTE, creditNote.ARInvoiceID.ToString());
 
                                     intLink.StoreInvoice(creditNote.ARInvoiceID, batchNumber, creditNote.CreditGL, companyName, dt.customerId, DateTime.Now, "", creditNote.amount, "no modification", 1, 0, 0, 1, cred_docNum);
@@ -1025,15 +1021,15 @@ namespace middleware_service
                                 }
                                 else
                                 {
-                                    Log.Save("The Credit Memo was not created. The Invoice does not exist.");
+                                    log.Save("The Credit Memo was not created. The Invoice does not exist.");
                                     cred_docNum = intLink.GetCreditMemoNumber();
                                     intLink.UpdateAsmsCreditMemoNumber(docInfo.DocumentID, cred_docNum);
-                                    Log.Save("The Credit Memo number in ASMS updated.");
+                                    log.Save("The Credit Memo number in ASMS updated.");
                                 }
                             }
                             else if (docInfo.DocumentType == RECEIPT && docInfo.PaymentMethod == 99)
                             {
-                                Log.Save("Payment By Credit");
+                                log.Save("Payment By Credit");
                                 PaymentInfo pinfo = intLink.GetReceiptInfo(docInfo.OriginalDocumentID);
                                 List<string> clientData = intLink.GetClientInfoInv(pinfo.CustomerID.ToString());
                                 List<string> feeData = new List<string>(3);
@@ -1065,10 +1061,10 @@ namespace middleware_service
 
                                         if (glid == "5146")
                                         {
-                                            Log.Save("Bank: FGB JA$ CURRENT A/C");
+                                            log.Save("Bank: FGB JA$ CURRENT A/C");
                                             if (pData.totalPrepaymentRemainder >= pinfo.Debit)
                                             {
-                                                Log.Save("Carrying out Payment By Credit Transaction");
+                                                log.Save("Carrying out Payment By Credit Transaction");
                                                 decimal reducingAmt = pinfo.Debit;
 
                                                 if (ReceiptBatchAvail("FGBJMREC"))
@@ -1082,13 +1078,13 @@ namespace middleware_service
                                                         reducingAmt = reducingAmt - pData.remainder;
                                                     }
                                                     intLink.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, 0, "No", 0, Convert.ToInt32(glid), "Yes", 1);
-                                                    Log.Save("Payment by credit transaction complete");
+                                                    log.Save("Payment by credit transaction complete");
                                                 }
                                                 else
                                                 {
                                                     CreateReceiptBatchEx("FGBJMREC", "Middleware Generated Batch for FGBJMREC");
                                                     intLink.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "FGBJMREC");
-                                                    Log.Save("Target Batch: " + intLink.GetRecieptBatchId("FGBJMREC"));
+                                                    log.Save("Target Batch: " + intLink.GetRecieptBatchId("FGBJMREC"));
                                                     while (reducingAmt > 0)
                                                     {
                                                         pData = intLink.CheckPrepaymentAvail(dt.customerId);
@@ -1098,23 +1094,23 @@ namespace middleware_service
                                                         reducingAmt = reducingAmt - pData.remainder;
                                                     }
                                                     intLink.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, 0, "No", 0, Convert.ToInt32(glid), "Yes", 1);
-                                                    Log.Save("Payment by credit transaction complete");
+                                                    log.Save("Payment by credit transaction complete");
                                                 }
                                             }
                                             else
                                             {
-                                                Log.Save("Prepayment balance not enough to carry out Transaction");
+                                                log.Save("Prepayment balance not enough to carry out Transaction");
                                             }
                                         }
 
                                         if (glid == "5147")
                                         {
-                                            Log.Save("Bank: FGB US$ SAVINGS A/C");
+                                            log.Save("Bank: FGB US$ SAVINGS A/C");
                                             decimal usRate = intLink.GetUsRateByInvoice(pinfo.InvoiceID);
                                             decimal usAmount = Convert.ToDecimal(dt.debit) / usRate;
                                             if (pData.totalPrepaymentRemainder >= usAmount)
                                             {
-                                                Log.Save("Carrying out Payment By Credit Transaction");
+                                                log.Save("Carrying out Payment By Credit Transaction");
                                                 decimal reducingAmt = usAmount;
 
                                                 if (ReceiptBatchAvail("FGBUSMRC"))
@@ -1129,13 +1125,13 @@ namespace middleware_service
                                                     }
                                                     if (usRate == 1) intLink.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, 0, "No", 0, Convert.ToInt32(glid), "Yes", 1);
                                                     else intLink.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, usAmount, "No", 0, Convert.ToInt32(glid), "Yes", 1);
-                                                    Log.Save("Payment by credit transaction complete");
+                                                    log.Save("Payment by credit transaction complete");
                                                 }
                                                 else
                                                 {
                                                     CreateReceiptBatchEx("FGBUSMRC", "Middleware Generated Batch for FGBUSMRC");
                                                     intLink.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "FGBUSMRC");
-                                                    Log.Save("Target Batch: " + intLink.GetRecieptBatchId("FGBUSMRC"));
+                                                    log.Save("Target Batch: " + intLink.GetRecieptBatchId("FGBUSMRC"));
 
                                                     while (reducingAmt > 0)
                                                     {
@@ -1155,21 +1151,21 @@ namespace middleware_service
                                                         intLink.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, usAmount, "No", 0, Convert.ToInt32(glid), "Yes", 1);
 
                                                     }
-                                                    Log.Save("Payment by credit transaction complete");
+                                                    log.Save("Payment by credit transaction complete");
                                                 }
                                             }
                                             else
                                             {
-                                                Log.Save("Prepayment balance not enough to carry out Transaction");
+                                                log.Save("Prepayment balance not enough to carry out Transaction");
                                             }
                                         }
 
                                         if (glid == "5148")
                                         {
-                                            Log.Save("Bank: NCB JA$ SAVINGS A/C");
+                                            log.Save("Bank: NCB JA$ SAVINGS A/C");
                                             if (pData.totalPrepaymentRemainder >= pinfo.Debit)
                                             {
-                                                Log.Save("Carrying out Payment By Credit Transaction");
+                                                log.Save("Carrying out Payment By Credit Transaction");
                                                 decimal reducingAmt = pinfo.Debit;
 
                                                 if (ReceiptBatchAvail("NCBJMREC"))
@@ -1183,13 +1179,13 @@ namespace middleware_service
                                                         reducingAmt = reducingAmt - pData.remainder;
                                                     }
                                                     intLink.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, 0, "No", 0, Convert.ToInt32(glid), "Yes", 1);
-                                                    Log.Save("Payment by credit transaction complete");
+                                                    log.Save("Payment by credit transaction complete");
                                                 }
                                                 else
                                                 {
                                                     CreateReceiptBatchEx("NCBJMREC", "Middleware Generated Batch for NCBJMREC");
                                                     intLink.OpenNewReceiptBatch(1, GetLastPaymentBatch(), "NCBJMREC");
-                                                    Log.Save("Target Batch: " + intLink.GetRecieptBatchId("NCBJMREC"));
+                                                    log.Save("Target Batch: " + intLink.GetRecieptBatchId("NCBJMREC"));
                                                     while (reducingAmt > 0)
                                                     {
                                                         pData = intLink.CheckPrepaymentAvail(dt.customerId);
@@ -1199,40 +1195,40 @@ namespace middleware_service
                                                         reducingAmt = reducingAmt - pData.remainder;
                                                     }
                                                     intLink.StorePayment(dt.customerId, companyName, DateTime.Now, pinfo.InvoiceID.ToString(), pinfo.Debit, 0, "No", 0, Convert.ToInt32(glid), "Yes", 1);
-                                                    Log.Save("Payment by credit transaction complete");
+                                                    log.Save("Payment by credit transaction complete");
                                                 }
                                             }
                                             else
                                             {
-                                                Log.Save("Prepayment balance not enough to carry out Transaction");
+                                                log.Save("Prepayment balance not enough to carry out Transaction");
                                             }
                                         }
 
                                         if (glid != "5146" && glid != "5147" && glid != "5148")
                                         {
-                                            Log.Save("Bank Selected Not found, Cannot complete Transaction");
+                                            log.Save("Bank Selected Not found, Cannot complete Transaction");
                                         }
                                     }
                                     else
                                     {
-                                        Log.Save("Both invoice and receipt must be posted before attempting this transaction");
+                                        log.Save("Both invoice and receipt must be posted before attempting this transaction");
                                     }
                                 }
                                 else
                                 {
-                                    Log.Save("No prepayment record found for customer: " + dt.customerId);
+                                    log.Save("No prepayment record found for customer: " + dt.customerId);
                                 }
                             }
                         }
-                        Log.WriteEnd();
+                        log.WriteEnd();
                     }
 
                 }
                 else
                 {
-                    Log.Save("Accpac Version: " + accpacSession.AppVersion);
-                    Log.Save("Company: " + accpacSession.CompanyName);
-                    Log.Save("Session Status: " + accpacSession.IsOpened);
+                    log.Save("Accpac Version: " + accpacSession.AppVersion);
+                    log.Save("Company: " + accpacSession.CompanyName);
+                    log.Save("Session Status: " + accpacSession.IsOpened);
                 }
             }
 
@@ -1240,18 +1236,18 @@ namespace middleware_service
             {
                 if (accpacSession.Errors.Count > 0)
                 {
-                    Log.Save(ex.Message + " " + ex.StackTrace);
+                    log.Save(ex.Message + " " + ex.StackTrace);
                     for (int i = 0; i < accpacSession.Errors.Count; i++)
                     {
-                        Log.Save(accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
+                        log.Save(accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
                     }
                     accpacSession.Errors.Clear();
-                    Log.WriteEnd();
+                    log.WriteEnd();
                 }
                 else
                 {
-                    Log.Save(ex.Message + " " + ex.StackTrace);
-                    Log.WriteEnd();
+                    log.Save(ex.Message + " " + ex.StackTrace);
+                    log.WriteEnd();
                 }
             }
         }
@@ -1306,13 +1302,13 @@ namespace middleware_service
 
                             if (values.isVoided == 1 && e.ChangeType == ChangeType.Update)
                             {
-                                Log.Save("Cancellation request for invoice: " + invoiceId);
+                                log.Save("Cancellation request for invoice: " + invoiceId);
                                 if (CheckAccpacInvoiceAvail(invoiceId))
                                 {
                                     int postedBatch = GetIbatchNumber(invoiceId);
                                     if (!InvoiceDelete(invoiceId))
                                     {
-                                        Log.Save("Creating a credit memo");
+                                        log.Save("Creating a credit memo");
                                         int cred_docNum = intLink.GetCreditMemoNumber();
                                         int batchNumber = GetBatch(CREDIT_NOTE, invoiceId.ToString());
                                         intLink.StoreInvoice(invoiceId, batchNumber, creditGl, companyName, dt.customerId, DateTime.Now, cancelledBy, amount, "no modification", 1, 0, 0, 1, cred_docNum);
@@ -1352,7 +1348,7 @@ namespace middleware_service
                                 }
                                 else
                                 {
-                                    Log.Save("Invoice: " + invoiceId.ToString() + " was not found in Sage. Cannot delete.");
+                                    log.Save("Invoice: " + invoiceId.ToString() + " was not found in Sage. Cannot delete.");
                                 }
                             }
                         }
@@ -1361,26 +1357,26 @@ namespace middleware_service
                     {
                         if (accpacSession.Errors.Count > 0)
                         {
-                            Log.Save(ex.Message + " " + ex.StackTrace);
+                            log.Save(ex.Message + " " + ex.StackTrace);
                             for (int i = 0; i < accpacSession.Errors.Count; i++)
                             {
-                                Log.Save(accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
+                                log.Save(accpacSession.Errors[i].Message + ", Severity: " + accpacSession.Errors[i].Priority);
                             }
                             accpacSession.Errors.Clear();
-                            Log.WriteEnd();
+                            log.WriteEnd();
                         }
                         else
                         {
-                            Log.Save(ex.Message + " " + ex.StackTrace);
-                            Log.WriteEnd();
+                            log.Save(ex.Message + " " + ex.StackTrace);
+                            log.WriteEnd();
                         }
                     }
                 }
                 else
                 {
-                    Log.Save("Accpac Version: " + accpacSession.AppVersion);
-                    Log.Save("Company: " + accpacSession.CompanyName);
-                    Log.Save("Session Status: " + accpacSession.IsOpened);
+                    log.Save("Accpac Version: " + accpacSession.AppVersion);
+                    log.Save("Company: " + accpacSession.CompanyName);
+                    log.Save("Session Status: " + accpacSession.IsOpened);
                 }
             }
         }
@@ -1396,7 +1392,7 @@ namespace middleware_service
 
             try
             {
-                Log.Save("Transfering Invoice " + docNum + " to batch: " + batchId);
+                log.Save("Transfering Invoice " + docNum + " to batch: " + batchId);
                 InsertionReturn success = new InsertionReturn();
                 DateTime postDate = intLink.GetValidity(Convert.ToInt32(docNum));
 
@@ -1445,7 +1441,7 @@ namespace middleware_service
                 else
                 {
                     success.status = "Not Exist";
-                    Log.Save("Customer does not exist.");
+                    log.Save("Customer does not exist.");
                 }
 
                 b1_arInvoiceBatch.Dispose();
@@ -1454,7 +1450,7 @@ namespace middleware_service
                 b1_arInvoiceHeader.Dispose();
                 b1_arInvoiceHeaderOptFields.Dispose();
                 b1_arInvoicePaymentSchedules.Dispose();
-                Log.Save("Invoice Id: " + docNum + " Transferred");
+                log.Save("Invoice Id: " + docNum + " Transferred");
                 return success;
             }
             catch (Exception e)
@@ -1686,7 +1682,7 @@ namespace middleware_service
 
             try
             {
-                Log.Save("Creating customer: " + nameCust + ", ID: " + idCust);
+                log.Save("Creating customer: " + nameCust + ", ID: " + idCust);
                 string groupCode = "";
 
                 ARCUSTOMER1header.Compose(new View[] { ARCUSTOMER1detail });
@@ -1715,7 +1711,7 @@ namespace middleware_service
                 ARCUSTOMER1header.Insert();
                 intLink.UpdateCustomerCount();
                 intLink.StoreCustomer(idCust, nameCust);
-                Log.Save("Customer created.");
+                log.Save("Customer created.");
 
                 ARCUSTOMER1header.Dispose();
                 ARCUSTOMER1detail.Dispose();
@@ -1871,13 +1867,13 @@ namespace middleware_service
                 }
                 else
                 {
-                    Log.Save("Accpac session is not opened");
+                    log.Save("Accpac session is not opened");
                     return false;
                 }
             }
             else
             {
-                Log.Save("Accpac session is not initialized");
+                log.Save("Accpac session is not initialized");
                 return false;
             }
         }
@@ -2140,7 +2136,7 @@ namespace middleware_service
                 }
                 else
                 {
-                    Log.Save("Invoice number was not found: " + docNum + ", while getting entry number");
+                    log.Save("Invoice number was not found: " + docNum + ", while getting entry number");
                 }
 
                 b1_arInvoiceHeader.Dispose();
@@ -2266,6 +2262,23 @@ namespace middleware_service
 
                 if (!CustomerExists(customerId))
                 {
+                    arRecptBatch.Dispose();
+                    arRecptHeader.Dispose();
+                    arRecptDetail1.Dispose();
+                    arRecptDetail2.Dispose();
+                    arRecptDetail3.Dispose();
+                    arRecptDetail4.Dispose();
+                    arRecptDetail5.Dispose();
+                    arRecptDetail6.Dispose();
+
+                    CBBTCH1batch.Dispose();
+                    CBBTCH1header.Dispose();
+                    CBBTCH1detail1.Dispose();
+                    CBBTCH1detail2.Dispose();
+                    CBBTCH1detail3.Dispose();
+                    CBBTCH1detail4.Dispose();
+                    CBBTCH1detail5.Dispose();
+                    CBBTCH1detail6.Dispose();
                     return false;
                 }
                 else
@@ -2308,7 +2321,7 @@ namespace middleware_service
                         CBBTCH1header.Insert();
                         CBBTCH1header.RecordCreate(ViewRecordCreate.DelayKey);
 
-                        Log.Save("Prepayment Transferred");
+                        log.Save("Prepayment Transferred");
                         arRecptBatch.Dispose();
                         arRecptHeader.Dispose();
                         arRecptDetail1.Dispose();
@@ -2379,7 +2392,7 @@ namespace middleware_service
 
                         if (shouldAllocate)
                         {
-                            Log.Save("Applying receipt to invoice: " + invnum);
+                            log.Save("Applying receipt to invoice: " + invnum);
                             arRecptDetail4.Fields.FieldByName("SHOWTYPE").SetValue("2", false);
                             arRecptDetail4.Fields.FieldByName("STDOCSTR").SetValue(invnum, false);
 
@@ -2392,7 +2405,7 @@ namespace middleware_service
                             if (netAmount == 0)
                             {
                                 flagInsert = true;
-                                Log.Save("The net balance is zero for this invoice. Cannot apply an additional amount");
+                                log.Save("The net balance is zero for this invoice. Cannot apply an additional amount");
                             }
                             else
                             {
@@ -2403,7 +2416,7 @@ namespace middleware_service
                         }
                         else
                         {
-                            Log.Save("Cannot apply to invoice: " + invnum + ". Check if invoice exist and the batch is posted.");
+                            log.Save("Cannot apply to invoice: " + invnum + ". Check if invoice exist and the batch is posted.");
                             flagInsert = true;
                         }
 
@@ -2411,7 +2424,7 @@ namespace middleware_service
                         {
                             arRecptHeader.Insert();
                             arRecptHeader.RecordCreate(ViewRecordCreate.DelayKey);
-                            Log.Save("Receipt Transferred");
+                            log.Save("Receipt Transferred");
                         }
 
                         arRecptBatch.Dispose();
@@ -2603,7 +2616,7 @@ namespace middleware_service
                 b1_arInvoiceHeader.Fields.FieldByName("IDINVC").SetValue(docNumber, false);
                 b1_arInvoiceHeader.Insert();
                 b1_arInvoiceHeader.RecordCreate(ViewRecordCreate.DelayKey);
-                Log.Save("Credit Memo transferred");
+                log.Save("Credit Memo transferred");
 
                 b1_arInvoiceBatch.Dispose();
                 b1_arInvoiceHeader.Dispose();
@@ -2793,7 +2806,7 @@ namespace middleware_service
                     b1_arInvoiceHeader.Fetch(false);
                     b1_arInvoiceHeader.Delete();
 
-                    Log.Save("Invoice: " + invoiceId.ToString() + " was deleted from the batch (" + batchNumber + ")");
+                    log.Save("Invoice: " + invoiceId.ToString() + " was deleted from the batch (" + batchNumber + ")");
 
                     b1_arInvoiceBatch.Dispose();
                     b1_arInvoiceHeader.Dispose();
@@ -2805,7 +2818,7 @@ namespace middleware_service
                 }
                 else
                 {
-                    Log.Save("The batch is already posted, cannot delete invoice");
+                    log.Save("The batch is already posted, cannot delete invoice");
                     b1_arInvoiceBatch.Dispose();
                     b1_arInvoiceHeader.Dispose();
                     b1_arInvoiceDetail.Dispose();

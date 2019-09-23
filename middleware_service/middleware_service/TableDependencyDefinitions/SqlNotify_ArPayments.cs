@@ -73,7 +73,7 @@ namespace middleware_service.TableDependencyDefinitions
                     command.Parameters.AddWithValue("@Proj", FixNulls(Proj));
                     command.Parameters.AddWithValue("@relatedDocType", relatedDocType);
                     command.ExecuteNonQuery();
-                    Log.Save("Parallel transfer completed for ARPayments");
+                    new Log().Save("Parallel transfer completed for ARPayments");
                 }
             }
         }

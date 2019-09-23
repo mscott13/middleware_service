@@ -104,7 +104,7 @@ namespace middleware_service.TableDependencyDefinitions
                     command.Parameters.AddWithValue("@BalanceForward", BalanceForward);
                     command.Parameters.AddWithValue("@IDINVC", FixNulls(IDINVC));
                     command.ExecuteNonQuery();
-                    Log.Save("Parallel transfer completed for ARInvoices");
+                    new Log().Save("Parallel transfer completed for ARInvoices");
                 }
             }
         }

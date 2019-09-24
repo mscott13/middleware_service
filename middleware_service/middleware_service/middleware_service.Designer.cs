@@ -28,18 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.event_logger = new System.Diagnostics.EventLog();
-            ((System.ComponentModel.ISupportInitialize)(this.event_logger)).BeginInit();
             // 
             // middleware_service
             // 
             this.ServiceName = "middleware_service";
-            ((System.ComponentModel.ISupportInitialize)(this.event_logger)).EndInit();
 
         }
 
         #endregion
-
-        private System.Diagnostics.EventLog event_logger;
     }
 }

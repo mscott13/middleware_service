@@ -435,12 +435,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_81ED6D227D6647AE91A5D36DCD823A77"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_8310F2FD0715A60F6C6DEDC42A0049C6"
         "OwnerKey" = "8:_4E23759BDAAAF744A15BA7250B0D8F93"
         "MsmSig" = "8:_UNDEFINED"
@@ -521,6 +515,12 @@
         {
         "MsmKey" = "8:_83B61C81B3F1FA33833E525517E32498"
         "OwnerKey" = "8:_219AD62B4C0D4F9CAB81AC2B55550CEB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8AD6915F2C714A8D8B86E95F0071A468"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -911,12 +911,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_8310F2FD0715A60F6C6DEDC42A0049C6"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_81ED6D227D6647AE91A5D36DCD823A77"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -2116,37 +2110,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_81ED6D227D6647AE91A5D36DCD823A77"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:middleware_log_client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_81ED6D227D6647AE91A5D36DCD823A77"
-                    {
-                    "Name" = "8:middleware_log_client.exe"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\..\\middleware_log_client\\middleware_log_client\\bin\\Release\\middleware_log_client.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_58AF3830F72F43EE847D1AFFD9FAE383"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8310F2FD0715A60F6C6DEDC42A0049C6"
             {
             "AssemblyRegister" = "3:1"
@@ -2238,6 +2201,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8AD6915F2C714A8D8B86E95F0071A468"
+            {
+            "SourcePath" = "8:..\\middleware_service\\resources\\folder_my_documents_15435.ico"
+            "TargetName" = "8:folder_my_documents_15435.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_58AF3830F72F43EE847D1AFFD9FAE383"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9035062D6BEBDADA7D99E100497EA25F"
@@ -2886,7 +2869,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SMA Middleware"
         "ProductCode" = "8:{213F6684-3F3D-428D-894D-DE895058E8F0}"
-        "PackageCode" = "8:{EC9765F9-B540-4AF3-A96B-0635DDF3D016}"
+        "PackageCode" = "8:{9C24FBA9-78C7-43D0-BCA5-36D2B87D7481}"
         "UpgradeCode" = "8:{4B6D55D9-06F8-4B0F-BCD0-E422CA152694}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -3006,18 +2989,18 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_B490367108E64C0A863062581C476285"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_2543B6B575994DBD9883D0D733F1E53B"
             {
-            "Name" = "8:middleware_log_client"
+            "Name" = "8:Middleware resources"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_81ED6D227D6647AE91A5D36DCD823A77"
+            "Target" = "8:_F39E9080517F4ADDAF9BEE244BC775B9"
             "Folder" = "8:_3AA92EC0C5C344C096D0AA7C83E05B12"
             "WorkingFolder" = "8:_58AF3830F72F43EE847D1AFFD9FAE383"
-            "Icon" = "8:_567981AE970447CEA0C225A3747FB2E7"
+            "Icon" = "8:_8AD6915F2C714A8D8B86E95F0071A468"
             "Feature" = "8:"
             }
         }

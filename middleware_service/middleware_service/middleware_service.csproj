@@ -185,6 +185,7 @@
     <Compile Include="Database Classes\DeferredData.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="resources\folder_my_documents_15435.ico" />
     <Content Include="resources\icon.ico" />
     <Content Include="resources\spec.jpg" />
     <Content Include="Scripts\jquery-1.6.4-vsdoc.js" />

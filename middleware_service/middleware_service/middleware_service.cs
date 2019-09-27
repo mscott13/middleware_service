@@ -1206,7 +1206,7 @@ namespace middleware_service
                                     }
                                     else if (notes == "Type Approval" || freqUsage == "TA-ProAmend")
                                     {
-                                        intLink.storeInvoice(Convert.ToInt32(invoiceId), postedBatch, creditGl, companyName, dt.customerId, DateTime.Now, cancelledBy, Convert.ToDecimal(amount), "no modification", intLink.GetRate(), changetous(Convert.ToDecimal(amount)), 1, 0, 0);
+                                        intLink.storeInvoice(Convert.ToInt32(invoiceId), postedBatch, creditGl, companyName, dt.customerId, DateTime.Now, cancelledBy, Convert.ToDecimal(amount), "no modification", intLink.GetUsRateByInvoice(invoiceId), changetousupdated(Convert.ToDecimal(amount), invoiceId), 1, 0, 0);
                                     }
                                     else if (notes == "Annual Fee" || notes == "Modification" || notes == "Radio Operator")
                                     {

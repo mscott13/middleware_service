@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>C:\Users\mscott\Desktop\Middleware API</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="ApplicationInsights.config">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/ApplicationInsights.config">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/DocumentFormat.OpenXml.dll">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/itextsharp.dll">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/itextsharp.pdfa.dll">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/itextsharp.xtra.dll">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/Microsoft.AI.Agent.Intercept.dll">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/Microsoft.AI.DependencyCollector.dll">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/Microsoft.AI.PerfCounterCollector.dll">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/Microsoft.AI.ServerTelemetryChannel.dll">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/Microsoft.AI.Web.dll">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/Microsoft.AI.WindowsServer.dll">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/Microsoft.ApplicationInsights.dll">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/roslyn/csc.exe">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.Build.Tasks.CodeAnalysis.dll">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.CSharp.dll">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.dll">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.VisualBasic.dll">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CSharp.Core.targets">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.VisualBasic.Core.targets">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Collections.Immutable.dll">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Reflection.Metadata.dll">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/roslyn/vbc.exe">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/roslyn/VBCSCompiler.exe">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/roslyn/VBCSCompiler.exe.config">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="bin/WebApplication4.dll">
+      <publishTime>09/26/2019 18:48:04</publishTime>
+    </File>
+    <File Include="bin/WebApplication4.pdb">
+      <publishTime>09/26/2019 18:48:04</publishTime>
+    </File>
+    <File Include="IntegrationService.asmx">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="scripts/ai.0.22.9-build00167.js">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="scripts/ai.0.22.9-build00167.min.js">
+      <publishTime>09/03/2019 11:26:05</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>09/25/2019 15:25:17</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

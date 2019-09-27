@@ -54,7 +54,7 @@ namespace Interface
             }catch(Exception ex)
             {
                 lblError.ForeColor = System.Drawing.ColorTranslator.FromHtml("#FA7B7B");
-                lblError.Text = ex.Message+" "+ex.InnerException+" "+ex.StackTrace+" "+ex.Source;
+                lblError.Text = ex.Message;
                 ClientScript.RegisterStartupScript(this.GetType(), "err", error, true);
             }
         }

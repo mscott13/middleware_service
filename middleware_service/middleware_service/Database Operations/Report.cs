@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using middleware_service.Database_Classes;
@@ -17,12 +14,13 @@ namespace middleware_service.Database_Operations
     {
         private string pdfImgPath = AppDomain.CurrentDomain.BaseDirectory + @"resources\spec.jpg";
         private string pdfFilePath = AppDomain.CurrentDomain.BaseDirectory + @"resources\reports\";
-
         private Integration intlink;
+        private Log log;
 
         public Report(Integration intlink)
         {
             this.intlink = intlink;
+            log = new Log();
         }
 
         public DeferredData gen_rpt(string ReportType, int action, int month, int year)
@@ -552,6 +550,7 @@ namespace middleware_service.Database_Operations
 
         public void createPdfReport(string ReportType, DeferredData Report, DateTime startDate)
         {
+            
             if (!Directory.Exists(pdfFilePath))
             {
                 Directory.CreateDirectory(pdfFilePath);
@@ -559,7 +558,7 @@ namespace middleware_service.Database_Operations
 
             string path_local = pdfFilePath + ReportType + "DefferedIncomeReport" + startDate.Year.ToString() + startDate.Month.ToString("00") + "01.pdf";
             Document doc = new Document(iTextSharp.text.PageSize.LEDGER);
-            Log.Save("(Main Report) Writing to path: " + path_local);
+            log.Save("(Main Report) Writing to path: " + path_local);
 
             try
             {
@@ -568,7 +567,7 @@ namespace middleware_service.Database_Operations
 
             catch (Exception ex)
             {
-                Log.Save(ex.Message + " " + ex.StackTrace);
+                log.Save(ex.Message + " " + ex.StackTrace);
             }
 
             Paragraph paragraph = new Paragraph();
@@ -680,7 +679,7 @@ namespace middleware_service.Database_Operations
                 Directory.CreateDirectory(pdfFilePath);
             }
 
-            Log.Save("(Totals Report) Writing to path: " + path_local);
+            log.Save("(Totals Report) Writing to path: " + path_local);
 
             Document doc = new Document(iTextSharp.text.PageSize.LETTER, 0, 0, 20, 0);
             try
@@ -690,7 +689,7 @@ namespace middleware_service.Database_Operations
 
             catch (Exception ex)
             {
-                Log.Save(ex.Message + " " + ex.StackTrace);
+                log.Save(ex.Message + " " + ex.StackTrace);
             }
 
             Paragraph paragraph = new Paragraph();

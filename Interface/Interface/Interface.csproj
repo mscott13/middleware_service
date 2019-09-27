@@ -24,6 +24,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -118,6 +119,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AnnualDeferredIncome.html" />
     <Content Include="App_Code\Deffered Working.txt" />
     <Content Include="ChangePassword.aspx" />
     <Content Include="Console.aspx" />
@@ -137,6 +139,7 @@
     <Content Include="GridImages\team.png" />
     <Content Include="GridImages\user.png" />
     <Content Include="GridImages\wrench.png" />
+    <Content Include="Images\0.svg" />
     <Content Include="Images\496.gif" />
     <Content Include="Images\add-512.png" />
     <Content Include="Images\approve-invoice.png" />
@@ -156,7 +159,10 @@
     <Content Include="Images\expire-calendar.png" />
     <Content Include="Images\fabric_of_squares_gray.png" />
     <Content Include="Images\geometry.png" />
+    <Content Include="Images\Infinity.svg" />
     <Content Include="Images\money-bag-2.png" />
+    <Content Include="Images\Rolling.svg" />
+    <Content Include="Images\safe-transaction.png" />
     <Content Include="Images\service-not-started.png" />
     <Content Include="Images\invoice-transfer.png" />
     <Content Include="Images\linedpaper.png" />
@@ -174,6 +180,7 @@
     <Content Include="Images\receipt.png" />
     <Content Include="Images\settings.png" />
     <Content Include="Images\newcustomer.png" />
+    <Content Include="Images\Spinner.svg" />
     <Content Include="Images\test2.png" />
     <Content Include="Images\transfer-icon.png" />
     <Content Include="Images\transferred.png" />
@@ -183,6 +190,7 @@
     <Content Include="Login.aspx" />
     <Content Include="MenuGrid.aspx" />
     <Content Include="MonthlyCustomers.aspx" />
+    <Content Include="MonthlyDeferredIncome.html" />
     <Content Include="MonthlyInvoices.aspx" />
     <Content Include="MonthlyPayments.aspx" />
     <Content Include="Notifications.aspx" />
@@ -293,6 +301,7 @@
     <Content Include="scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="scripts\jquery.mCustomScrollbar.concat.min.js" />
     <Content Include="SignUp.aspx" />
+    <Content Include="spec.jpg" />
     <Content Include="style.css" />
     <Content Include="UpdateBudget.aspx" />
     <Content Include="Web.config">

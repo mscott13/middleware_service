@@ -246,7 +246,7 @@ ul {
 .messages {
     width: 100%;
     background-color: #F9F9F9;
-    height: 60vh;
+    height: calc(100vh - 36.4vh);
     float: left;
 }
 
@@ -645,6 +645,7 @@ ul {
     height: 100%;
     width: 72%;
     position: relative;
+    background-color:#fff;
 }
 
 .bank1 {

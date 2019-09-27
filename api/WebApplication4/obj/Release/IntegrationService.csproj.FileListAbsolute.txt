@@ -1,0 +1,435 @@
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\ApplicationInsights.config
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\roslyn\csc.exe
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\roslyn\vbc.exe
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\roslyn\VBCSCompiler.exe
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\WebApplication4.dll.config
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\WebApplication4.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\WebApplication4.pdb
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\Microsoft.AI.Web.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\Microsoft.ApplicationInsights.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\Microsoft.AI.Web.xml
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\Microsoft.ApplicationInsights.xml
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\obj\Release\WebApplication4.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\obj\Release\WebApplication4.pdb
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\WebApplication4\WebApplication4\obj\Release\IntegrationService.csprojResolveAssemblyReference.cache
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\obj\Release\IntegrationService.csprojResolveAssemblyReference.cache
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\obj\Release\WebApplication4.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\obj\Release\WebApplication4.pdb
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\ApplicationInsights.config
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\roslyn\csc.exe
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\roslyn\vbc.exe
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\roslyn\VBCSCompiler.exe
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\WebApplication4.dll.config
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\WebApplication4.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\WebApplication4.pdb
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\Microsoft.AI.Web.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\Microsoft.ApplicationInsights.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\Microsoft.AI.Web.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\Microsoft.ApplicationInsights.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\WebApplication4\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\ApplicationInsights.config
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\roslyn\csc.exe
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\roslyn\vbc.exe
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\roslyn\VBCSCompiler.exe
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\WebApplication4.dll.config
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\WebApplication4.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\WebApplication4.pdb
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\Microsoft.AI.Web.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\Microsoft.ApplicationInsights.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\Microsoft.AI.Web.xml
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\Microsoft.ApplicationInsights.xml
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\obj\Release\IntegrationService.csprojResolveAssemblyReference.cache
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\obj\Release\WebApplication4.dll
+C:\Users\asms-accpac-1\Documents\Visual Studio 2015\Projects\api\WebApplication4\obj\Release\WebApplication4.pdb
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\ApplicationInsights.config
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\roslyn\csc.exe
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\roslyn\vbc.exe
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\roslyn\VBCSCompiler.exe
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\WebApplication4.dll.config
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\WebApplication4.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\WebApplication4.pdb
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\Microsoft.AI.Web.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\Microsoft.ApplicationInsights.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\Microsoft.AI.Web.xml
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\Microsoft.ApplicationInsights.xml
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\obj\Release\IntegrationService.csprojResolveAssemblyReference.cache
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\obj\Release\WebApplication4.dll
+C:\Users\ASMS-ACCPAC-1\Documents\Test\api\WebApplication4\obj\Release\WebApplication4.pdb
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\ApplicationInsights.config
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\roslyn\csc.exe
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\roslyn\vbc.exe
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\roslyn\VBCSCompiler.exe
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\WebApplication4.dll.config
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\WebApplication4.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\WebApplication4.pdb
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\Microsoft.AI.Web.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\Microsoft.ApplicationInsights.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\Microsoft.AI.Web.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\Microsoft.ApplicationInsights.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\obj\Release\IntegrationService.csprojResolveAssemblyReference.cache
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\obj\Release\WebApplication4.dll
+C:\Users\ASMS-ACCPAC-1\Desktop\SAIM_ver1.2_TestEnv\api\WebApplication4\obj\Release\WebApplication4.pdb
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\ApplicationInsights.config
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\roslyn\csc.exe
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\roslyn\vbc.exe
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\roslyn\VBCSCompiler.exe
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\WebApplication4.dll.config
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\WebApplication4.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\WebApplication4.pdb
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\Microsoft.AI.Web.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\Microsoft.ApplicationInsights.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\Microsoft.AI.Web.xml
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\Microsoft.ApplicationInsights.xml
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\obj\Release\IntegrationService.csprojResolveAssemblyReference.cache
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\obj\Release\WebApplication4.dll
+C:\Users\asms-accpac-2\Desktop\TEMP\SAIMver1.3.2_Test\api\WebApplication4\obj\Release\WebApplication4.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\ApplicationInsights.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\roslyn\csc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\roslyn\vbc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\roslyn\VBCSCompiler.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\WebApplication4.dll.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\WebApplication4.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\WebApplication4.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\Microsoft.AI.Web.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\Microsoft.ApplicationInsights.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\Microsoft.AI.Web.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\Microsoft.ApplicationInsights.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\obj\Release\IntegrationService.csprojResolveAssemblyReference.cache
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\obj\Release\WebApplication4.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.3_Production\api\WebApplication4\obj\Release\WebApplication4.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\ApplicationInsights.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\roslyn\csc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\roslyn\vbc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\roslyn\VBCSCompiler.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\WebApplication4.dll.config
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\WebApplication4.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\WebApplication4.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\Microsoft.AI.Web.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\Microsoft.ApplicationInsights.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\Microsoft.AI.Web.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\Microsoft.ApplicationInsights.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\obj\Release\IntegrationService.csprojResolveAssemblyReference.cache
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\obj\Release\WebApplication4.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver1.3.6_Test\api\WebApplication4\obj\Release\WebApplication4.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\ApplicationInsights.config
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\roslyn\csc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\roslyn\vbc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\roslyn\VBCSCompiler.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\WebApplication4.dll.config
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\WebApplication4.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\WebApplication4.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\Microsoft.AI.Web.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\Microsoft.ApplicationInsights.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\Microsoft.AI.Web.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\Microsoft.ApplicationInsights.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\obj\Release\WebApplication4.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Production\api\WebApplication4\obj\Release\WebApplication4.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\ApplicationInsights.config
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\roslyn\csc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\roslyn\vbc.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\roslyn\VBCSCompiler.exe
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\WebApplication4.dll.config
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\WebApplication4.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\WebApplication4.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\Microsoft.AI.Web.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\Microsoft.ApplicationInsights.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\Microsoft.AI.Web.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\Microsoft.ApplicationInsights.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\obj\Release\WebApplication4.dll
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\obj\Release\WebApplication4.pdb
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\obj\Release\IntegrationService.csprojAssemblyReference.cache
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\obj\Release\IntegrationService.csproj.CoreCompileInputs.cache
+C:\Users\asms-accpac-2\Desktop\SAIMver2.1_Test\api\WebApplication4\obj\Release\IntegrationService.csproj.CopyComplete
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\ApplicationInsights.config
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\roslyn\csc.exe
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\roslyn\vbc.exe
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\roslyn\VBCSCompiler.exe
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\WebApplication4.dll.config
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\WebApplication4.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\WebApplication4.pdb
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\Microsoft.AI.Web.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\Microsoft.ApplicationInsights.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\Microsoft.AI.Web.xml
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\Microsoft.ApplicationInsights.xml
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\obj\Release\IntegrationService.csprojAssemblyReference.cache
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\obj\Release\IntegrationService.csproj.CoreCompileInputs.cache
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\obj\Release\IntegrationService.csproj.CopyComplete
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\obj\Release\WebApplication4.dll
+C:\Users\cgriffith.SMAGOVJM\Desktop\SAIMver2.2_Test\api\WebApplication4\obj\Release\WebApplication4.pdb
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\ApplicationInsights.config
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\roslyn\csc.exe
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\roslyn\vbc.exe
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\roslyn\VBCSCompiler.exe
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\WebApplication4.dll.config
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\WebApplication4.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\WebApplication4.pdb
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\Microsoft.AI.Web.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\Microsoft.ApplicationInsights.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\Microsoft.AI.Web.xml
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\Microsoft.ApplicationInsights.xml
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\obj\Release\IntegrationService.csproj.CoreCompileInputs.cache
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\obj\Release\IntegrationService.csproj.CopyComplete
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\obj\Release\WebApplication4.dll
+C:\Users\mscott\Desktop\Git Repositories\sma-middleware\api\WebApplication4\obj\Release\WebApplication4.pdb
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\ApplicationInsights.config
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\roslyn\csc.exe
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\roslyn\vbc.exe
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\roslyn\VBCSCompiler.exe
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\WebApplication4.dll.config
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\WebApplication4.dll
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\WebApplication4.pdb
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.AI.Web.dll
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.ApplicationInsights.dll
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.AI.Web.xml
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.ApplicationInsights.xml
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\obj\Release\IntegrationService.csprojAssemblyReference.cache
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\obj\Release\IntegrationService.csproj.CoreCompileInputs.cache
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\obj\Release\IntegrationService.csproj.CopyComplete
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\obj\Release\WebApplication4.dll
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\obj\Release\WebApplication4.pdb

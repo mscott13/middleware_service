@@ -27,9 +27,15 @@ namespace middleware_service
             serviceInstaller.ServiceName = "middleware_service";
             serviceInstaller.DisplayName = "Middleware Service";
             AfterInstall += middleware_service_AfterInstall;
+            AfterUninstall += ProjectInstaller_AfterUninstall; ;
 
             Installers.Add(serviceInstaller);
             Installers.Add(processInstaller);
+        }
+
+        private void ProjectInstaller_AfterUninstall(object sender, InstallEventArgs e)
+        {
+            //remove left over files
         }
 
         private void middleware_service_AfterInstall(object sender, InstallEventArgs e)
@@ -38,6 +44,11 @@ namespace middleware_service
             {
                 sc.Start();
             }
+        }
+
+        private void installer_AfterInstall(object sender, InstallEventArgs e)
+        {
+
         }
     }
 }

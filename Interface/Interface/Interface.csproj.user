@@ -3,7 +3,14 @@
   <PropertyGroup>
     <UseIISExpress>true</UseIISExpress>
     <NameOfLastUsedPublishProfile>Interface</NameOfLastUsedPublishProfile>
-    <LastActiveSolutionConfig>Release|Any CPU</LastActiveSolutionConfig>
+    <LastActiveSolutionConfig>Debug|Any CPU</LastActiveSolutionConfig>
+    <ProjectView>ProjectFiles</ProjectView>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

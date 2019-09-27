@@ -3,4 +3,8 @@
   <PropertyGroup>
     <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <RemoteDebugEnabled>true</RemoteDebugEnabled>
+    <RemoteDebugMachine>server-erp2:4024</RemoteDebugMachine>
+  </PropertyGroup>
 </Project>

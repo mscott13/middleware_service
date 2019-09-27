@@ -1,101 +1,936 @@
-7/10/2019 3:39:03 PM - Starting accpac session...
-7/10/2019 3:39:08 PM - middleware_service started.
+8/9/2019 11:12:12 AM - Database change detected, operation: Insert
+8/9/2019 11:12:17 AM - Incoming Receipt
+8/9/2019 11:12:17 AM - Invoice Id: 3545
+8/9/2019 11:12:17 AM - Customer Id: 00516-1
+8/9/2019 11:12:17 AM - Bank: FGB JA$ CURRENT A/C
+8/9/2019 11:12:17 AM - Target Batch: 2081
+8/9/2019 11:12:17 AM - Transferring Receipt
+8/9/2019 11:12:18 AM - Cannot apply to invoice: 3545. Check if invoice exist and the batch is posted.
+8/9/2019 11:12:18 AM - Receipt Transferred
 --------end
 
-7/10/2019 3:39:08 PM - Checking deferred report generation time
+8/9/2019 11:12:18 AM - Database change detected, operation: Insert
+8/9/2019 11:12:18 AM - Incoming Receipt
+8/9/2019 11:12:19 AM - Invoice Id: 3546
+8/9/2019 11:12:19 AM - Customer Id: 00516-1
+8/9/2019 11:12:19 AM - Bank: FGB JA$ CURRENT A/C
+8/9/2019 11:12:19 AM - Target Batch: 2081
+8/9/2019 11:12:19 AM - Transferring Receipt
+8/9/2019 11:12:19 AM - Cannot apply to invoice: 3546. Check if invoice exist and the batch is posted.
+8/9/2019 11:12:19 AM - Receipt Transferred
 --------end
 
-7/10/2019 3:39:08 PM - Monthly Rpt Date: Friday, August 2, 2019 2:00:00 AM
-7/10/2019 3:39:08 PM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+8/9/2019 11:12:56 AM - Database change detected, operation: Insert
+8/9/2019 11:12:56 AM - Incoming Receipt
+8/9/2019 11:12:57 AM - Invoice Id: 6381
+8/9/2019 11:12:57 AM - Customer Id: 01046-2
+8/9/2019 11:12:57 AM - Bank: FGB JA$ CURRENT A/C
+8/9/2019 11:12:57 AM - Target Batch: 2081
+8/9/2019 11:12:57 AM - Transferring Receipt
+8/9/2019 11:12:58 AM - Cannot apply to invoice: 6381. Check if invoice exist and the batch is posted.
+8/9/2019 11:12:58 AM - Receipt Transferred
 --------end
 
-8/2/2019 2:00:46 AM - Starting accpac session...
-8/2/2019 2:00:49 AM - middleware_service started.
+8/9/2019 11:12:58 AM - Database change detected, operation: Insert
+8/9/2019 11:12:58 AM - Incoming Receipt
+8/9/2019 11:12:59 AM - Invoice Id: 6382
+8/9/2019 11:12:59 AM - Customer Id: 01046-2
+8/9/2019 11:12:59 AM - Bank: FGB JA$ CURRENT A/C
+8/9/2019 11:12:59 AM - Target Batch: 2081
+8/9/2019 11:12:59 AM - Transferring Receipt
+8/9/2019 11:12:59 AM - Cannot apply to invoice: 6382. Check if invoice exist and the batch is posted.
+8/9/2019 11:12:59 AM - Receipt Transferred
 --------end
 
-8/2/2019 2:00:50 AM - Checking deferred report generation time
+8/9/2019 11:12:59 AM - Database change detected, operation: Insert
+8/9/2019 11:12:59 AM - Incoming Receipt
+8/9/2019 11:13:00 AM - Invoice Id: 6383
+8/9/2019 11:13:00 AM - Customer Id: 01046-2
+8/9/2019 11:13:00 AM - Bank: FGB JA$ CURRENT A/C
+8/9/2019 11:13:00 AM - Target Batch: 2081
+8/9/2019 11:13:00 AM - Transferring Receipt
+8/9/2019 11:13:00 AM - Cannot apply to invoice: 6383. Check if invoice exist and the batch is posted.
+8/9/2019 11:13:00 AM - Receipt Transferred
 --------end
 
-8/2/2019 2:00:50 AM - Monthly Rpt Date: Friday, August 2, 2019 2:00:00 AM
-8/2/2019 2:00:50 AM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+8/9/2019 11:17:39 AM - Database change detected, operation: Insert
+8/9/2019 11:17:39 AM - Incoming invoice...
+8/9/2019 11:17:39 AM - Waiting for invoice amount to update, current value: 0
+8/9/2019 11:17:39 AM - Invoice amount: 50000.0000
+8/9/2019 11:17:39 AM - Client name: 3M Interamerica
+8/9/2019 11:17:39 AM - Invoice Validity: 8/9/2019 11:17:39 AM
+8/9/2019 11:17:39 AM - Financial Year: 2020
+8/9/2019 11:17:39 AM - Invoice Reference number: -1
+8/9/2019 11:17:39 AM - Transfering Invoice 20007 to batch: 1653
+8/9/2019 3:27:51 PM - Starting accpac session...
+8/9/2019 3:27:59 PM - middleware_service started.
 --------end
 
-8/2/2019 2:01:11 AM - Generating Monthly Deferred Income Report... | Month: 7, Year: 2019
-8/2/2019 2:02:48 AM - Deferred report record already exist for the period: Monday, July 1, 2019
-7/10/2019 4:11:53 PM - Starting accpac session...
-7/10/2019 4:12:01 PM - middleware_service started.
+8/9/2019 4:56:33 PM - Database change detected, operation: Insert
+8/9/2019 4:56:36 PM - Incoming invoice...
+8/9/2019 4:56:36 PM - Waiting for invoice amount to update, current value: 0
+8/9/2019 4:56:36 PM - Invoice amount: 45706.3300
+8/9/2019 4:56:36 PM - Client name: Approve IT
+8/9/2019 4:56:36 PM - Invoice Validity: 8/9/2019 4:56:32 PM
+8/9/2019 4:56:36 PM - Financial Year: 2020
+8/9/2019 4:56:36 PM - Invoice Reference number: 5258
+8/9/2019 4:56:36 PM - Getting Maj Details...
+8/9/2019 4:56:36 PM - middleware_service.Database_Classes.Maj
+8/9/2019 4:56:37 PM - CreditGL: 5155
+8/9/2019 4:56:42 PM - Updated Invoice: 20079
 --------end
 
-7/10/2019 4:12:01 PM - Checking deferred report generation time
+8/9/2019 4:57:27 PM - Database change detected, operation: Insert
+8/9/2019 4:57:27 PM - Incoming Receipt
+8/9/2019 4:57:27 PM - Invoice Id: 20079
+8/9/2019 4:57:27 PM - Customer Id: 00822-1
+8/9/2019 4:57:27 PM - Bank: FGB JA$ CURRENT A/C
+8/9/2019 4:57:27 PM - Target Batch: 2081
+8/9/2019 4:57:27 PM - Transferring Receipt
+8/9/2019 4:57:29 PM - Cannot apply to invoice: 20079. Check if invoice exist and the batch is posted.
+8/9/2019 4:57:29 PM - Receipt Transferred
 --------end
 
-7/10/2019 4:12:01 PM - Monthly Rpt Date: Tuesday, July 2, 2019 2:00:00 AM
-7/10/2019 4:12:01 PM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+8/11/2019 10:56:56 AM - middleware_service stopped.
 --------end
 
-7/10/2019 4:14:56 PM - Starting accpac session...
-7/10/2019 4:15:00 PM - middleware_service started.
+8/11/2019 10:57:38 AM - Starting accpac session...
+8/11/2019 10:57:52 AM - middleware_service started.
 --------end
 
-7/10/2019 4:15:01 PM - Checking deferred report generation time
+8/11/2019 10:59:05 AM - middleware_service stopped.
 --------end
 
-7/10/2019 4:15:01 PM - Monthly Rpt Date: Friday, August 2, 2019 2:00:00 AM
-7/10/2019 4:15:01 PM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+8/11/2019 10:59:29 AM - Starting accpac session...
+8/11/2019 10:59:31 AM - middleware_service started.
 --------end
 
-8/2/2019 2:16:11 AM - Starting accpac session...
-8/2/2019 2:16:16 AM - middleware_service started.
+8/11/2019 10:59:37 AM - middleware_service stopped.
 --------end
 
-8/2/2019 2:16:16 AM - Checking deferred report generation time
+8/11/2019 10:59:48 AM - Starting accpac session...
+8/11/2019 10:59:49 AM - middleware_service started.
 --------end
 
-8/2/2019 2:16:16 AM - Monthly Rpt Date: Friday, August 2, 2019 2:00:00 AM
-8/2/2019 2:16:16 AM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+8/11/2019 11:00:21 AM - Database change detected, operation: Insert
+8/11/2019 11:00:24 AM - Incoming invoice...
+8/11/2019 11:00:24 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:00:24 AM - Invoice amount: 22500.0000
+8/11/2019 11:00:24 AM - Client name: 3G Wireless LLC
+8/11/2019 11:00:24 AM - Invoice Validity: 8/11/2019 11:00:24 AM
+8/11/2019 11:00:24 AM - Financial Year: 2020
+8/11/2019 11:00:24 AM - Invoice Reference number: -1
+8/11/2019 11:00:24 AM - CreditGL: 5154
+8/11/2019 11:00:29 AM - Updated Invoice: 20080
 --------end
 
-8/2/2019 2:16:48 AM - Generating Monthly Deferred Income Report... | Month: 7, Year: 2019
-8/2/2019 2:17:28 AM - (Main Report) Writing to path: C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\resources\reports\MonthlyDefferedIncomeReport20190701.pdf
-8/2/2019 2:17:28 AM - Could not find file 'C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\bin\Debug\resources\spec.jpg'.    at System.Net.FileWebRequest.EndGetResponse(IAsyncResult asyncResult)
-   at System.Net.FileWebRequest.GetResponse()
-   at iTextSharp.text.Image.GetInstance(Uri url, Boolean recoverFromImageError)
-   at iTextSharp.text.Image.GetInstance(String filename)
-   at middleware_service.Database_Operations.Report.createPdfReport(String ReportType, DeferredData Report, DateTime startDate) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Database Operations\Report.cs:line 590
-   at middleware_service.Database_Operations.Report.gen_rpt(String ReportType, Int32 action, Int32 month, Int32 year) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Database Operations\Report.cs:line 457
-   at middleware_service.middleware_service.DeferredTimer_Elapsed(Object sender, ElapsedEventArgs e) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 124
-   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 224
+8/11/2019 11:01:23 AM - Database change detected, operation: Insert
+8/11/2019 11:01:24 AM - Incoming invoice...
+8/11/2019 11:01:24 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:01:24 AM - Invoice amount: 3780000.0000
+8/11/2019 11:01:24 AM - Client name: Abreu Construction
+8/11/2019 11:01:24 AM - Invoice Validity: 8/11/2019 11:01:24 AM
+8/11/2019 11:01:24 AM - Financial Year: 2020
+8/11/2019 11:01:24 AM - Invoice Reference number: -1
+8/11/2019 11:01:24 AM - CreditGL: 5157
+8/11/2019 11:01:25 AM - Updated Invoice: 20081
 --------end
 
-8/2/2019 2:19:49 AM - Starting accpac session...
-8/2/2019 2:19:54 AM - middleware_service started.
+8/11/2019 11:02:03 AM - Database change detected, operation: Insert
+8/11/2019 11:02:04 AM - Incoming invoice...
+8/11/2019 11:02:04 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:02:04 AM - Invoice amount: 50000.0000
+8/11/2019 11:02:04 AM - Client name: Zoom Holdings, LLC
+8/11/2019 11:02:04 AM - Invoice Validity: 8/11/2019 11:02:04 AM
+8/11/2019 11:02:04 AM - Financial Year: 2020
+8/11/2019 11:02:04 AM - Invoice Reference number: -1
+8/11/2019 11:02:04 AM - CreditGL: 5158
+8/11/2019 11:02:04 AM - Updated Invoice: 20082
 --------end
 
-8/2/2019 2:19:54 AM - Checking deferred report generation time
+8/11/2019 11:03:02 AM - Database change detected, operation: Insert
+8/11/2019 11:03:04 AM - Incoming Receipt
+8/11/2019 11:03:04 AM - Invoice Id: 20005
+8/11/2019 11:03:04 AM - Customer Id: 00369-1                  
+8/11/2019 11:03:04 AM - Bank: FGB JA$ CURRENT A/C
+8/11/2019 11:03:05 AM - Target Batch: 2082
+8/11/2019 11:03:05 AM - Transferring Receipt
+8/11/2019 11:03:08 AM - Cannot apply to invoice: 20005. Check if invoice exist and the batch is posted.
+8/11/2019 11:03:09 AM - Receipt Transferred
 --------end
 
-8/2/2019 2:19:54 AM - Monthly Rpt Date: Friday, August 2, 2019 2:00:00 AM
-8/2/2019 2:19:54 AM - Annual Rpt Date: Thursday, April 2, 2020 3:00:00 AM
+8/11/2019 11:03:09 AM - Database change detected, operation: Insert
+8/11/2019 11:03:10 AM - Incoming Receipt
+8/11/2019 11:03:11 AM - Invoice Id: 20006
+8/11/2019 11:03:11 AM - Customer Id: 00369-1                  
+8/11/2019 11:03:11 AM - Bank: FGB JA$ CURRENT A/C
+8/11/2019 11:03:11 AM - Target Batch: 2082
+8/11/2019 11:03:11 AM - Transferring Receipt
+8/11/2019 11:03:12 AM - Cannot apply to invoice: 20006. Check if invoice exist and the batch is posted.
+8/11/2019 11:03:12 AM - Receipt Transferred
 --------end
 
-8/2/2019 2:20:00 AM - Generating Monthly Deferred Income Report... | Month: 7, Year: 2019
-8/2/2019 2:20:27 AM - Subquery returned more than 1 value. This is not permitted when the subquery follows =, !=, <, <= , >, >= or when the subquery is used as an expression.    at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
-   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
-   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
-   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
-   at System.Data.SqlClient.SqlDataReader.TrySetMetaData(_SqlMetaDataSet metaData, Boolean moreInfo)
-   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
-   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
-   at System.Data.SqlClient.SqlDataReader.get_MetaData()
-   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
-   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
-   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
-   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
-   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
-   at System.Data.SqlClient.SqlCommand.ExecuteReader()
-   at middleware_service.Database_Operations.Integration.getDIRInformation(String ReportType, DateTime searchStartDate, DateTime searchEndDate) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Database Operations\Integration.cs:line 86
-   at middleware_service.Database_Operations.Report.gen_rpt(String ReportType, Int32 action, Int32 month, Int32 year) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Database Operations\Report.cs:line 38
-   at middleware_service.middleware_service.DeferredTimer_Elapsed(Object sender, ElapsedEventArgs e) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 124
-   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 224
+8/11/2019 11:03:12 AM - Database change detected, operation: Insert
+8/11/2019 11:03:13 AM - Incoming Receipt
+8/11/2019 11:03:13 AM - Invoice Id: 20080
+8/11/2019 11:03:13 AM - Customer Id: 00369-1                  
+8/11/2019 11:03:13 AM - Bank: FGB JA$ CURRENT A/C
+8/11/2019 11:03:13 AM - Target Batch: 2082
+8/11/2019 11:03:13 AM - Transferring Receipt
+8/11/2019 11:03:14 AM - Cannot apply to invoice: 20080. Check if invoice exist and the batch is posted.
+8/11/2019 11:03:14 AM - Receipt Transferred
+--------end
+
+8/11/2019 11:03:51 AM - Database change detected, operation: Insert
+8/11/2019 11:03:52 AM - Incoming Receipt
+8/11/2019 11:03:52 AM - Invoice Id: 1953
+8/11/2019 11:03:52 AM - Customer Id: 00021-7                  
+8/11/2019 11:03:52 AM - Customer not found in accpac
+--------end
+
+8/11/2019 11:03:52 AM - Database change detected, operation: Insert
+8/11/2019 11:03:53 AM - Incoming Receipt
+8/11/2019 11:03:54 AM - Invoice Id: 1954
+8/11/2019 11:03:54 AM - Customer Id: 00021-7                  
+8/11/2019 11:03:54 AM - Customer not found in accpac
+--------end
+
+8/11/2019 11:07:17 AM - Database change detected, operation: Insert
+8/11/2019 11:07:17 AM - Incoming invoice...
+8/11/2019 11:07:17 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:07:17 AM - Invoice amount: 6771.3900
+8/11/2019 11:07:17 AM - Client name: Marine Resources Development Foundation, Inc.
+8/11/2019 11:07:17 AM - Invoice Validity: 8/2/2019 12:00:00 AM
+8/11/2019 11:07:17 AM - Financial Year: 2020
+8/11/2019 11:07:17 AM - Invoice Reference number: 4119
+8/11/2019 11:07:17 AM - Getting Maj Details...
+8/11/2019 11:07:17 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:07:17 AM - CreditGL: 5150
+8/11/2019 11:07:18 AM - Updated Invoice: 20083
+--------end
+
+8/11/2019 11:07:18 AM - Database change detected, operation: Insert
+8/11/2019 11:07:19 AM - Incoming invoice...
+8/11/2019 11:07:19 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:07:19 AM - Invoice amount: 2369.8700
+8/11/2019 11:07:19 AM - Client name: Marine Resources Development Foundation, Inc.
+8/11/2019 11:07:19 AM - Invoice Validity: 8/2/2019 12:00:00 AM
+8/11/2019 11:07:19 AM - Financial Year: 2020
+8/11/2019 11:07:19 AM - Invoice Reference number: 4119
+8/11/2019 11:07:19 AM - Getting Maj Details...
+8/11/2019 11:07:19 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:07:19 AM - CreditGL: 5162
+8/11/2019 11:07:20 AM - Updated Invoice: 20084
+--------end
+
+8/11/2019 11:07:20 AM - Database change detected, operation: Insert
+8/11/2019 11:07:21 AM - Incoming invoice...
+8/11/2019 11:07:21 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:07:21 AM - Invoice amount: 27084.2800
+8/11/2019 11:07:21 AM - Client name: Together Marine Ventures Ltd.
+8/11/2019 11:07:21 AM - Invoice Validity: 8/5/2019 3:09:58 PM
+8/11/2019 11:07:21 AM - Financial Year: 2020
+8/11/2019 11:07:21 AM - Invoice Reference number: 2876
+8/11/2019 11:07:21 AM - Getting Maj Details...
+8/11/2019 11:07:21 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:07:21 AM - CreditGL: 5150
+8/11/2019 11:07:21 AM - Updated Invoice: 20085
+--------end
+
+8/11/2019 11:07:21 AM - Database change detected, operation: Insert
+8/11/2019 11:07:23 AM - Incoming invoice...
+8/11/2019 11:07:23 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:07:24 AM - The operation is not valid for the state of the transaction.    at System.Transactions.TransactionState.EnlistPromotableSinglePhase(InternalTransaction tx, IPromotableSinglePhaseNotification promotableSinglePhaseNotification, Transaction atomicTransaction, Guid promoterType)
+   at System.Transactions.Transaction.EnlistPromotableSinglePhase(IPromotableSinglePhaseNotification promotableSinglePhaseNotification, Guid promoterType)
+   at System.Transactions.Transaction.EnlistPromotableSinglePhase(IPromotableSinglePhaseNotification promotableSinglePhaseNotification)
+   at System.Data.SqlClient.SqlInternalConnection.EnlistNonNull(Transaction tx)
+   at System.Data.SqlClient.SqlInternalConnection.Enlist(Transaction tx)
+   at System.Data.SqlClient.SqlInternalConnectionTds.Activate(Transaction transaction)
+   at System.Data.ProviderBase.DbConnectionInternal.ActivateConnection(Transaction transaction)
+   at System.Data.ProviderBase.DbConnectionPool.PrepareConnection(DbConnection owningObject, DbConnectionInternal obj, Transaction transaction)
+   at System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   at System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   at System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   at System.Data.SqlClient.SqlConnection.Open()
+   at middleware_service.Database_Operations.Integration.openConnection(String target) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Database Operations\Integration.cs:line 25
+   at middleware_service.Database_Operations.Integration.getInvoiceDetails(Int32 invoiceId) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Database Operations\Integration.cs:line 1598
+   at middleware_service.middleware_service.TableDependInfo_OnChanged(Object sender, RecordChangedEventArgs`1 e) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 275
+--------end
+
+8/11/2019 11:07:24 AM - Table Dependency error: The transaction has aborted.
+8/11/2019 11:10:03 AM - middleware_service stopped.
+--------end
+
+8/11/2019 11:10:08 AM - Starting accpac session...
+8/11/2019 11:10:11 AM - middleware_service started.
+--------end
+
+8/11/2019 11:11:44 AM - Database change detected, operation: Insert
+8/11/2019 11:11:46 AM - Incoming invoice...
+8/11/2019 11:11:46 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:11:46 AM - Invoice amount: 27084.2800
+8/11/2019 11:11:46 AM - Client name: Port Authority of Jamaica (The)
+8/11/2019 11:11:47 AM - Invoice Validity: 7/21/2019 2:36:26 PM
+8/11/2019 11:11:47 AM - Financial Year: 2020
+8/11/2019 11:11:47 AM - Invoice Reference number: 2860
+8/11/2019 11:11:47 AM - Getting Maj Details...
+8/11/2019 11:11:47 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:11:47 AM - CreditGL: 5150
+8/11/2019 11:11:49 AM - Updated Invoice: 20097
+--------end
+
+8/11/2019 11:11:49 AM - Database change detected, operation: Insert
+8/11/2019 11:11:49 AM - Incoming invoice...
+8/11/2019 11:11:49 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:11:49 AM - Invoice amount: 9480.8000
+8/11/2019 11:11:49 AM - Client name: Port Authority of Jamaica (The)
+8/11/2019 11:11:49 AM - Invoice Validity: 7/21/2019 2:36:26 PM
+8/11/2019 11:11:49 AM - Financial Year: 2020
+8/11/2019 11:11:49 AM - Invoice Reference number: 2860
+8/11/2019 11:11:49 AM - Getting Maj Details...
+8/11/2019 11:11:49 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:11:49 AM - CreditGL: 5162
+8/11/2019 11:11:50 AM - Updated Invoice: 20098
+--------end
+
+8/11/2019 11:11:50 AM - Database change detected, operation: Insert
+8/11/2019 11:11:51 AM - Incoming invoice...
+8/11/2019 11:11:51 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:11:51 AM - Invoice amount: 27084.2800
+8/11/2019 11:11:51 AM - Client name: Akita Yachting Limited
+8/11/2019 11:11:51 AM - Invoice Validity: 7/27/2019 5:16:23 PM
+8/11/2019 11:11:51 AM - Financial Year: 2020
+8/11/2019 11:11:51 AM - Invoice Reference number: 2857
+8/11/2019 11:11:51 AM - Getting Maj Details...
+8/11/2019 11:11:51 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:11:51 AM - CreditGL: 5150
+8/11/2019 11:11:52 AM - Updated Invoice: 20099
+--------end
+
+8/11/2019 11:11:52 AM - Database change detected, operation: Insert
+8/11/2019 11:11:52 AM - Incoming invoice...
+8/11/2019 11:11:52 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:11:52 AM - Invoice amount: 9480.8000
+8/11/2019 11:11:52 AM - Client name: Akita Yachting Limited
+8/11/2019 11:11:52 AM - Invoice Validity: 7/27/2019 5:16:23 PM
+8/11/2019 11:11:52 AM - Financial Year: 2020
+8/11/2019 11:11:52 AM - Invoice Reference number: 2857
+8/11/2019 11:11:52 AM - Getting Maj Details...
+8/11/2019 11:11:53 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:11:53 AM - CreditGL: 5162
+8/11/2019 11:11:53 AM - Updated Invoice: 20100
+--------end
+
+8/11/2019 11:11:53 AM - Database change detected, operation: Insert
+8/11/2019 11:11:56 AM - Incoming invoice...
+8/11/2019 11:11:56 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:11:56 AM - The operation is not valid for the state of the transaction.    at System.Transactions.TransactionState.EnlistPromotableSinglePhase(InternalTransaction tx, IPromotableSinglePhaseNotification promotableSinglePhaseNotification, Transaction atomicTransaction, Guid promoterType)
+   at System.Transactions.Transaction.EnlistPromotableSinglePhase(IPromotableSinglePhaseNotification promotableSinglePhaseNotification, Guid promoterType)
+   at System.Transactions.Transaction.EnlistPromotableSinglePhase(IPromotableSinglePhaseNotification promotableSinglePhaseNotification)
+   at System.Data.SqlClient.SqlInternalConnection.EnlistNonNull(Transaction tx)
+   at System.Data.SqlClient.SqlInternalConnection.Enlist(Transaction tx)
+   at System.Data.SqlClient.SqlInternalConnectionTds.Activate(Transaction transaction)
+   at System.Data.ProviderBase.DbConnectionInternal.ActivateConnection(Transaction transaction)
+   at System.Data.ProviderBase.DbConnectionPool.PrepareConnection(DbConnection owningObject, DbConnectionInternal obj, Transaction transaction)
+   at System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   at System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   at System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   at System.Data.SqlClient.SqlConnection.Open()
+   at middleware_service.Database_Operations.Integration.openConnection(String target) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Database Operations\Integration.cs:line 25
+   at middleware_service.Database_Operations.Integration.getInvoiceDetails(Int32 invoiceId) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Database Operations\Integration.cs:line 1598
+   at middleware_service.middleware_service.TableDependInfo_OnChanged(Object sender, RecordChangedEventArgs`1 e) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 275
+--------end
+
+8/11/2019 11:11:56 AM - Table Dependency error: The transaction has aborted.
+8/11/2019 11:13:22 AM - middleware_service stopped.
+--------end
+
+8/11/2019 11:13:27 AM - Starting accpac session...
+8/11/2019 11:13:29 AM - middleware_service started.
+--------end
+
+8/11/2019 11:14:14 AM - middleware_service stopped.
+--------end
+
+8/11/2019 11:14:18 AM - Starting accpac session...
+8/11/2019 11:14:21 AM - middleware_service started.
+--------end
+
+8/11/2019 11:15:12 AM - middleware_service stopped.
+--------end
+
+8/11/2019 11:15:20 AM - Starting accpac session...
+8/11/2019 11:15:22 AM - middleware_service started.
+--------end
+
+8/11/2019 11:15:38 AM - Database change detected, operation: Insert
+8/11/2019 11:15:40 AM - Incoming invoice...
+8/11/2019 11:15:40 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:15:40 AM - Invoice amount: 27084.2800
+8/11/2019 11:15:40 AM - Client name: Watercolours (M.I.), Inc.
+8/11/2019 11:15:40 AM - Invoice Validity: 7/17/2019 3:36:11 PM
+8/11/2019 11:15:40 AM - Financial Year: 2020
+8/11/2019 11:15:40 AM - Invoice Reference number: 2858
+8/11/2019 11:15:40 AM - Getting Maj Details...
+8/11/2019 11:15:40 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:15:40 AM - Transfering Invoice 20105 to batch: 1660
+8/11/2019 11:15:41 AM - Invoice Id: 20105 Transferred
+--------end
+
+8/11/2019 11:15:42 AM - Database change detected, operation: Insert
+8/11/2019 11:15:42 AM - Incoming invoice...
+8/11/2019 11:15:42 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:15:42 AM - Invoice amount: 9480.8000
+8/11/2019 11:15:42 AM - Client name: Watercolours (M.I.), Inc.
+8/11/2019 11:15:42 AM - Invoice Validity: 7/17/2019 3:36:11 PM
+8/11/2019 11:15:42 AM - Financial Year: 2020
+8/11/2019 11:15:42 AM - Invoice Reference number: 2858
+8/11/2019 11:15:42 AM - Getting Maj Details...
+8/11/2019 11:15:42 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:15:42 AM - Transfering Invoice 20106 to batch: 1661
+8/11/2019 11:15:42 AM - Invoice Id: 20106 Transferred
+--------end
+
+8/11/2019 11:15:42 AM - Database change detected, operation: Insert
+8/11/2019 11:15:42 AM - Incoming invoice...
+8/11/2019 11:15:42 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:15:42 AM - Invoice amount: 27084.2800
+8/11/2019 11:15:42 AM - Client name: Sealyon Marine Limited
+8/11/2019 11:15:42 AM - Invoice Validity: 7/27/2019 5:33:45 PM
+8/11/2019 11:15:42 AM - Financial Year: 2020
+8/11/2019 11:15:42 AM - Invoice Reference number: 2867
+8/11/2019 11:15:42 AM - Getting Maj Details...
+8/11/2019 11:15:42 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:15:42 AM - Transfering Invoice 20107 to batch: 1660
+8/11/2019 11:15:43 AM - Invoice Id: 20107 Transferred
+--------end
+
+8/11/2019 11:15:43 AM - Database change detected, operation: Insert
+8/11/2019 11:15:43 AM - Incoming invoice...
+8/11/2019 11:15:43 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:15:43 AM - Invoice amount: 9480.8000
+8/11/2019 11:15:43 AM - Client name: Sealyon Marine Limited
+8/11/2019 11:15:43 AM - Invoice Validity: 7/27/2019 5:33:45 PM
+8/11/2019 11:15:43 AM - Financial Year: 2020
+8/11/2019 11:15:43 AM - Invoice Reference number: 2867
+8/11/2019 11:15:43 AM - Getting Maj Details...
+8/11/2019 11:15:43 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:15:43 AM - Transfering Invoice 20108 to batch: 1661
+8/11/2019 11:15:43 AM - Invoice Id: 20108 Transferred
+--------end
+
+8/11/2019 11:15:43 AM - Database change detected, operation: Insert
+8/11/2019 11:15:43 AM - Incoming invoice...
+8/11/2019 11:15:43 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:15:43 AM - Invoice amount: 27084.2800
+8/11/2019 11:15:43 AM - Client name: Xenia 50 Marine, Ltd.
+8/11/2019 11:15:44 AM - Invoice Validity: 7/27/2019 5:39:05 PM
+8/11/2019 11:15:44 AM - Financial Year: 2020
+8/11/2019 11:15:44 AM - Invoice Reference number: 2869
+8/11/2019 11:15:44 AM - Getting Maj Details...
+8/11/2019 11:15:44 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:15:44 AM - Transfering Invoice 20109 to batch: 1660
+8/11/2019 11:15:44 AM - Invoice Id: 20109 Transferred
+--------end
+
+8/11/2019 11:15:44 AM - Database change detected, operation: Insert
+8/11/2019 11:15:44 AM - Incoming invoice...
+8/11/2019 11:15:44 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:15:44 AM - Invoice amount: 9480.8000
+8/11/2019 11:15:44 AM - Client name: Xenia 50 Marine, Ltd.
+8/11/2019 11:15:44 AM - Invoice Validity: 7/27/2019 5:39:05 PM
+8/11/2019 11:15:44 AM - Financial Year: 2020
+8/11/2019 11:15:44 AM - Invoice Reference number: 2869
+8/11/2019 11:15:44 AM - Getting Maj Details...
+8/11/2019 11:15:44 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:15:44 AM - Transfering Invoice 20110 to batch: 1661
+8/11/2019 11:15:45 AM - Invoice Id: 20110 Transferred
+--------end
+
+8/11/2019 11:15:56 AM - Database change detected, operation: Insert
+8/11/2019 11:15:56 AM - Incoming invoice...
+8/11/2019 11:15:56 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:15:56 AM - Invoice amount: 27084.2800
+8/11/2019 11:15:56 AM - Client name: Thundercorp Ltd.
+8/11/2019 11:15:56 AM - Invoice Validity: 6/9/2019 5:36:36 PM
+8/11/2019 11:15:56 AM - Financial Year: 2020
+8/11/2019 11:15:56 AM - Invoice Reference number: 2825
+8/11/2019 11:15:56 AM - Getting Maj Details...
+8/11/2019 11:15:56 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:15:56 AM - Transfering Invoice 20111 to batch: 1662
+8/11/2019 11:15:57 AM - Invoice Id: 20111 Transferred
+--------end
+
+8/11/2019 11:15:57 AM - Database change detected, operation: Insert
+8/11/2019 11:15:57 AM - Incoming invoice...
+8/11/2019 11:15:57 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:15:57 AM - Invoice amount: 9480.8000
+8/11/2019 11:15:57 AM - Client name: Thundercorp Ltd.
+8/11/2019 11:15:57 AM - Invoice Validity: 6/9/2019 5:36:36 PM
+8/11/2019 11:15:57 AM - Financial Year: 2020
+8/11/2019 11:15:57 AM - Invoice Reference number: 2825
+8/11/2019 11:15:57 AM - Getting Maj Details...
+8/11/2019 11:15:57 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:15:58 AM - Transfering Invoice 20112 to batch: 1663
+8/11/2019 11:15:58 AM - Invoice Id: 20112 Transferred
+--------end
+
+8/11/2019 11:15:58 AM - Database change detected, operation: Insert
+8/11/2019 11:15:58 AM - Incoming invoice...
+8/11/2019 11:15:58 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:15:58 AM - Invoice amount: 27084.2800
+8/11/2019 11:15:58 AM - Client name: Themis Holdings, LLC
+8/11/2019 11:15:58 AM - Invoice Validity: 6/10/2019 5:25:50 PM
+8/11/2019 11:15:58 AM - Financial Year: 2020
+8/11/2019 11:15:58 AM - Invoice Reference number: 2832
+8/11/2019 11:15:58 AM - Getting Maj Details...
+8/11/2019 11:15:58 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:15:58 AM - Transfering Invoice 20113 to batch: 1662
+8/11/2019 11:15:59 AM - Invoice Id: 20113 Transferred
+--------end
+
+8/11/2019 11:15:59 AM - Database change detected, operation: Insert
+8/11/2019 11:15:59 AM - Incoming invoice...
+8/11/2019 11:15:59 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:15:59 AM - Invoice amount: 9480.8000
+8/11/2019 11:15:59 AM - Client name: Themis Holdings, LLC
+8/11/2019 11:15:59 AM - Invoice Validity: 6/10/2019 5:25:50 PM
+8/11/2019 11:15:59 AM - Financial Year: 2020
+8/11/2019 11:15:59 AM - Invoice Reference number: 2832
+8/11/2019 11:15:59 AM - Getting Maj Details...
+8/11/2019 11:15:59 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:15:59 AM - Transfering Invoice 20114 to batch: 1663
+8/11/2019 11:15:59 AM - Invoice Id: 20114 Transferred
+--------end
+
+8/11/2019 11:16:29 AM - Database change detected, operation: Insert
+8/11/2019 11:16:29 AM - Incoming invoice...
+8/11/2019 11:16:29 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:29 AM - Invoice amount: 345600.0000
+8/11/2019 11:16:29 AM - Client name: Jamaica Public Service Company Limited
+8/11/2019 11:16:29 AM - Invoice Validity: 5/2/2019 12:00:00 AM
+8/11/2019 11:16:29 AM - Financial Year: 2020
+8/11/2019 11:16:29 AM - Invoice Reference number: 3979
+8/11/2019 11:16:29 AM - Getting Maj Details...
+8/11/2019 11:16:29 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:29 AM - Transfering Invoice 20115 to batch: 1664
+8/11/2019 11:16:31 AM - Invoice Id: 20115 Transferred
+--------end
+
+8/11/2019 11:16:31 AM - Database change detected, operation: Insert
+8/11/2019 11:16:31 AM - Incoming invoice...
+8/11/2019 11:16:31 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:31 AM - Invoice amount: 120960.0000
+8/11/2019 11:16:31 AM - Client name: Jamaica Public Service Company Limited
+8/11/2019 11:16:31 AM - Invoice Validity: 5/2/2019 12:00:00 AM
+8/11/2019 11:16:31 AM - Financial Year: 2020
+8/11/2019 11:16:31 AM - Invoice Reference number: 3979
+8/11/2019 11:16:31 AM - Getting Maj Details...
+8/11/2019 11:16:31 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:31 AM - Transfering Invoice 20116 to batch: 1665
+8/11/2019 11:16:32 AM - Invoice Id: 20116 Transferred
+--------end
+
+8/11/2019 11:16:32 AM - Database change detected, operation: Insert
+8/11/2019 11:16:32 AM - Incoming invoice...
+8/11/2019 11:16:32 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:32 AM - Invoice amount: 27084.2800
+8/11/2019 11:16:32 AM - Client name: Dennis Campbell
+8/11/2019 11:16:32 AM - Invoice Validity: 5/4/2019 2:29:20 PM
+8/11/2019 11:16:32 AM - Financial Year: 2020
+8/11/2019 11:16:32 AM - Invoice Reference number: 1851
+8/11/2019 11:16:32 AM - Getting Maj Details...
+8/11/2019 11:16:32 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:32 AM - Transfering Invoice 20117 to batch: 1664
+8/11/2019 11:16:32 AM - Invoice Id: 20117 Transferred
+--------end
+
+8/11/2019 11:16:32 AM - Database change detected, operation: Insert
+8/11/2019 11:16:32 AM - Incoming invoice...
+8/11/2019 11:16:32 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:32 AM - Invoice amount: 9480.8000
+8/11/2019 11:16:32 AM - Client name: Dennis Campbell
+8/11/2019 11:16:32 AM - Invoice Validity: 5/4/2019 2:29:20 PM
+8/11/2019 11:16:32 AM - Financial Year: 2020
+8/11/2019 11:16:32 AM - Invoice Reference number: 1851
+8/11/2019 11:16:33 AM - Getting Maj Details...
+8/11/2019 11:16:33 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:33 AM - Transfering Invoice 20118 to batch: 1665
+8/11/2019 11:16:33 AM - Invoice Id: 20118 Transferred
+--------end
+
+8/11/2019 11:16:33 AM - Database change detected, operation: Insert
+8/11/2019 11:16:33 AM - Incoming invoice...
+8/11/2019 11:16:33 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:33 AM - Invoice amount: 27084.2800
+8/11/2019 11:16:33 AM - Client name: Sarina, Ltd.
+8/11/2019 11:16:33 AM - Invoice Validity: 5/5/2019 12:00:00 AM
+8/11/2019 11:16:33 AM - Financial Year: 2020
+8/11/2019 11:16:33 AM - Invoice Reference number: 4032
+8/11/2019 11:16:33 AM - Getting Maj Details...
+8/11/2019 11:16:33 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:33 AM - Transfering Invoice 20119 to batch: 1664
+8/11/2019 11:16:34 AM - Invoice Id: 20119 Transferred
+--------end
+
+8/11/2019 11:16:34 AM - Database change detected, operation: Insert
+8/11/2019 11:16:34 AM - Incoming invoice...
+8/11/2019 11:16:34 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:34 AM - Invoice amount: 9480.8000
+8/11/2019 11:16:34 AM - Client name: Sarina, Ltd.
+8/11/2019 11:16:34 AM - Invoice Validity: 5/5/2019 12:00:00 AM
+8/11/2019 11:16:34 AM - Financial Year: 2020
+8/11/2019 11:16:34 AM - Invoice Reference number: 4032
+8/11/2019 11:16:34 AM - Getting Maj Details...
+8/11/2019 11:16:34 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:34 AM - Transfering Invoice 20120 to batch: 1665
+8/11/2019 11:16:34 AM - Invoice Id: 20120 Transferred
+--------end
+
+8/11/2019 11:16:35 AM - Database change detected, operation: Insert
+8/11/2019 11:16:35 AM - Incoming invoice...
+8/11/2019 11:16:35 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:35 AM - Invoice amount: 27084.2800
+8/11/2019 11:16:35 AM - Client name: Six Shilling Cay Inc.
+8/11/2019 11:16:35 AM - Invoice Validity: 5/5/2019 3:58:15 PM
+8/11/2019 11:16:35 AM - Financial Year: 2020
+8/11/2019 11:16:35 AM - Invoice Reference number: 2799
+8/11/2019 11:16:35 AM - Getting Maj Details...
+8/11/2019 11:16:35 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:35 AM - Transfering Invoice 20121 to batch: 1664
+8/11/2019 11:16:36 AM - Invoice Id: 20121 Transferred
+--------end
+
+8/11/2019 11:16:36 AM - Database change detected, operation: Insert
+8/11/2019 11:16:36 AM - Incoming invoice...
+8/11/2019 11:16:36 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:36 AM - Invoice amount: 9480.8000
+8/11/2019 11:16:36 AM - Client name: Six Shilling Cay Inc.
+8/11/2019 11:16:36 AM - Invoice Validity: 5/5/2019 3:58:15 PM
+8/11/2019 11:16:36 AM - Financial Year: 2020
+8/11/2019 11:16:36 AM - Invoice Reference number: 2799
+8/11/2019 11:16:36 AM - Getting Maj Details...
+8/11/2019 11:16:36 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:36 AM - Transfering Invoice 20122 to batch: 1665
+8/11/2019 11:16:36 AM - Invoice Id: 20122 Transferred
+--------end
+
+8/11/2019 11:16:36 AM - Database change detected, operation: Insert
+8/11/2019 11:16:36 AM - Incoming invoice...
+8/11/2019 11:16:36 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:36 AM - Invoice amount: 27084.2800
+8/11/2019 11:16:36 AM - Client name: AA John Ltd.
+8/11/2019 11:16:36 AM - Invoice Validity: 5/5/2019 4:00:18 PM
+8/11/2019 11:16:36 AM - Financial Year: 2020
+8/11/2019 11:16:36 AM - Invoice Reference number: 2802
+8/11/2019 11:16:36 AM - Getting Maj Details...
+8/11/2019 11:16:36 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:36 AM - Transfering Invoice 20123 to batch: 1664
+8/11/2019 11:16:37 AM - Invoice Id: 20123 Transferred
+--------end
+
+8/11/2019 11:16:37 AM - Database change detected, operation: Insert
+8/11/2019 11:16:37 AM - Incoming invoice...
+8/11/2019 11:16:37 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:37 AM - Invoice amount: 9480.8000
+8/11/2019 11:16:37 AM - Client name: AA John Ltd.
+8/11/2019 11:16:37 AM - Invoice Validity: 5/5/2019 4:00:18 PM
+8/11/2019 11:16:37 AM - Financial Year: 2020
+8/11/2019 11:16:37 AM - Invoice Reference number: 2802
+8/11/2019 11:16:37 AM - Getting Maj Details...
+8/11/2019 11:16:37 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:37 AM - Transfering Invoice 20124 to batch: 1665
+8/11/2019 11:16:37 AM - Invoice Id: 20124 Transferred
+--------end
+
+8/11/2019 11:16:37 AM - Database change detected, operation: Insert
+8/11/2019 11:16:37 AM - Incoming invoice...
+8/11/2019 11:16:37 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:37 AM - Invoice amount: 27084.2800
+8/11/2019 11:16:37 AM - Client name: DAV LLC
+8/11/2019 11:16:37 AM - Invoice Validity: 5/5/2019 4:04:15 PM
+8/11/2019 11:16:37 AM - Financial Year: 2020
+8/11/2019 11:16:38 AM - Invoice Reference number: 2800
+8/11/2019 11:16:38 AM - Getting Maj Details...
+8/11/2019 11:16:38 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:38 AM - Transfering Invoice 20125 to batch: 1664
+8/11/2019 11:16:38 AM - Invoice Id: 20125 Transferred
+--------end
+
+8/11/2019 11:16:38 AM - Database change detected, operation: Insert
+8/11/2019 11:16:38 AM - Incoming invoice...
+8/11/2019 11:16:38 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:38 AM - Invoice amount: 9480.8000
+8/11/2019 11:16:38 AM - Client name: DAV LLC
+8/11/2019 11:16:38 AM - Invoice Validity: 5/5/2019 4:04:15 PM
+8/11/2019 11:16:38 AM - Financial Year: 2020
+8/11/2019 11:16:38 AM - Invoice Reference number: 2800
+8/11/2019 11:16:38 AM - Getting Maj Details...
+8/11/2019 11:16:38 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:38 AM - Transfering Invoice 20126 to batch: 1665
+8/11/2019 11:16:39 AM - Invoice Id: 20126 Transferred
+--------end
+
+8/11/2019 11:16:39 AM - Database change detected, operation: Insert
+8/11/2019 11:16:39 AM - Incoming invoice...
+8/11/2019 11:16:39 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:39 AM - Invoice amount: 27084.2800
+8/11/2019 11:16:39 AM - Client name: OCEANIS LTD
+8/11/2019 11:16:39 AM - Invoice Validity: 5/5/2019 4:05:49 PM
+8/11/2019 11:16:39 AM - Financial Year: 2020
+8/11/2019 11:16:39 AM - Invoice Reference number: 2798
+8/11/2019 11:16:39 AM - Getting Maj Details...
+8/11/2019 11:16:39 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:39 AM - Transfering Invoice 20127 to batch: 1664
+8/11/2019 11:16:39 AM - Invoice Id: 20127 Transferred
+--------end
+
+8/11/2019 11:16:39 AM - Database change detected, operation: Insert
+8/11/2019 11:16:39 AM - Incoming invoice...
+8/11/2019 11:16:39 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:39 AM - Invoice amount: 9480.8000
+8/11/2019 11:16:39 AM - Client name: OCEANIS LTD
+8/11/2019 11:16:39 AM - Invoice Validity: 5/5/2019 4:05:49 PM
+8/11/2019 11:16:39 AM - Financial Year: 2020
+8/11/2019 11:16:39 AM - Invoice Reference number: 2798
+8/11/2019 11:16:39 AM - Getting Maj Details...
+8/11/2019 11:16:39 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:39 AM - Transfering Invoice 20128 to batch: 1665
+8/11/2019 11:16:40 AM - Invoice Id: 20128 Transferred
+--------end
+
+8/11/2019 11:16:40 AM - Database change detected, operation: Insert
+8/11/2019 11:16:40 AM - Incoming invoice...
+8/11/2019 11:16:40 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:40 AM - Invoice amount: 27084.2800
+8/11/2019 11:16:40 AM - Client name: Cabana Marine Ventures Ltd.
+8/11/2019 11:16:40 AM - Invoice Validity: 5/12/2019 4:56:01 PM
+8/11/2019 11:16:40 AM - Financial Year: 2020
+8/11/2019 11:16:40 AM - Invoice Reference number: 2809
+8/11/2019 11:16:40 AM - Getting Maj Details...
+8/11/2019 11:16:40 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:40 AM - Transfering Invoice 20129 to batch: 1664
+8/11/2019 11:16:40 AM - Invoice Id: 20129 Transferred
+--------end
+
+8/11/2019 11:16:40 AM - Database change detected, operation: Insert
+8/11/2019 11:16:40 AM - Incoming invoice...
+8/11/2019 11:16:40 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:40 AM - Invoice amount: 9480.8000
+8/11/2019 11:16:41 AM - Client name: Cabana Marine Ventures Ltd.
+8/11/2019 11:16:41 AM - Invoice Validity: 5/12/2019 4:56:01 PM
+8/11/2019 11:16:41 AM - Financial Year: 2020
+8/11/2019 11:16:41 AM - Invoice Reference number: 2809
+8/11/2019 11:16:41 AM - Getting Maj Details...
+8/11/2019 11:16:41 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:41 AM - Transfering Invoice 20130 to batch: 1665
+8/11/2019 11:16:41 AM - Invoice Id: 20130 Transferred
+--------end
+
+8/11/2019 11:16:41 AM - Database change detected, operation: Insert
+8/11/2019 11:16:41 AM - Incoming invoice...
+8/11/2019 11:16:41 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:41 AM - Invoice amount: 27084.2800
+8/11/2019 11:16:41 AM - Client name: Ghost Shipping Company S.A.
+8/11/2019 11:16:41 AM - Invoice Validity: 6/1/2019 3:22:29 PM
+8/11/2019 11:16:41 AM - Financial Year: 2020
+8/11/2019 11:16:41 AM - Invoice Reference number: 2822
+8/11/2019 11:16:41 AM - Getting Maj Details...
+8/11/2019 11:16:41 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:41 AM - Transfering Invoice 20131 to batch: 1662
+8/11/2019 11:16:42 AM - Invoice Id: 20131 Transferred
+--------end
+
+8/11/2019 11:16:42 AM - Database change detected, operation: Insert
+8/11/2019 11:16:42 AM - Incoming invoice...
+8/11/2019 11:16:42 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:42 AM - Invoice amount: 9480.8000
+8/11/2019 11:16:42 AM - Client name: Ghost Shipping Company S.A.
+8/11/2019 11:16:42 AM - Invoice Validity: 6/1/2019 3:22:29 PM
+8/11/2019 11:16:42 AM - Financial Year: 2020
+8/11/2019 11:16:42 AM - Invoice Reference number: 2822
+8/11/2019 11:16:42 AM - Getting Maj Details...
+8/11/2019 11:16:42 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:42 AM - Transfering Invoice 20132 to batch: 1663
+8/11/2019 11:16:42 AM - Invoice Id: 20132 Transferred
+--------end
+
+8/11/2019 11:16:42 AM - Database change detected, operation: Insert
+8/11/2019 11:16:42 AM - Incoming invoice...
+8/11/2019 11:16:42 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:42 AM - Invoice amount: 27084.2800
+8/11/2019 11:16:42 AM - Client name: Elsworth Williams
+8/11/2019 11:16:42 AM - Invoice Validity: 6/1/2019 3:41:12 PM
+8/11/2019 11:16:42 AM - Financial Year: 2020
+8/11/2019 11:16:42 AM - Invoice Reference number: 2827
+8/11/2019 11:16:42 AM - Getting Maj Details...
+8/11/2019 11:16:42 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:42 AM - Transfering Invoice 20133 to batch: 1662
+8/11/2019 11:16:43 AM - Invoice Id: 20133 Transferred
+--------end
+
+8/11/2019 11:16:43 AM - Database change detected, operation: Insert
+8/11/2019 11:16:43 AM - Incoming invoice...
+8/11/2019 11:16:43 AM - Waiting for invoice amount to update, current value: 0
+8/11/2019 11:16:43 AM - Invoice amount: 9480.8000
+8/11/2019 11:16:43 AM - Client name: Elsworth Williams
+8/11/2019 11:16:43 AM - Invoice Validity: 6/1/2019 3:41:12 PM
+8/11/2019 11:16:43 AM - Financial Year: 2020
+8/11/2019 11:16:43 AM - Invoice Reference number: 2827
+8/11/2019 11:16:43 AM - Getting Maj Details...
+8/11/2019 11:16:43 AM - middleware_service.Database_Classes.Maj
+8/11/2019 11:16:43 AM - Transfering Invoice 20134 to batch: 1663
+8/11/2019 11:16:43 AM - Invoice Id: 20134 Transferred
+--------end
+
+8/11/2019 11:17:31 AM - Database change detected, operation: Insert
+8/11/2019 11:17:31 AM - Incoming Receipt
+8/11/2019 11:17:31 AM - Invoice Id: 20133
+8/11/2019 11:17:31 AM - Customer Id: 01517-1
+8/11/2019 11:17:31 AM - Bank: FGB JA$ CURRENT A/C
+8/11/2019 11:17:31 AM - Target Batch: 2082
+8/11/2019 11:17:31 AM - Transferring Receipt
+8/11/2019 11:17:32 AM - Cannot apply to invoice: 20133. Check if invoice exist and the batch is posted.
+8/11/2019 11:17:32 AM - Receipt Transferred
+--------end
+
+8/11/2019 11:17:33 AM - Database change detected, operation: Insert
+8/11/2019 11:17:33 AM - Incoming Receipt
+8/11/2019 11:17:33 AM - Invoice Id: 20134
+8/11/2019 11:17:33 AM - Customer Id: 01517-1
+8/11/2019 11:17:33 AM - Bank: FGB JA$ CURRENT A/C
+8/11/2019 11:17:33 AM - Target Batch: 2082
+8/11/2019 11:17:33 AM - Transferring Receipt
+8/11/2019 11:17:33 AM - Cannot apply to invoice: 20134. Check if invoice exist and the batch is posted.
+8/11/2019 11:17:34 AM - Receipt Transferred
+--------end
+
+8/11/2019 11:18:13 AM - Database change detected, operation: Insert
+8/11/2019 11:18:13 AM - Incoming Receipt
+8/11/2019 11:18:14 AM - Invoice Id: 12466
+8/11/2019 11:18:14 AM - Customer Id: 01500-1
+8/11/2019 11:18:14 AM - Bank: FGB JA$ CURRENT A/C
+8/11/2019 11:18:14 AM - Target Batch: 2082
+8/11/2019 11:18:14 AM - Transferring Receipt
+8/11/2019 11:18:15 AM - Applying receipt to invoice: 12466
+8/11/2019 11:18:15 AM - Receipt Transferred
+--------end
+
+8/11/2019 11:18:15 AM - Database change detected, operation: Insert
+8/11/2019 11:18:15 AM - Incoming Receipt
+8/11/2019 11:18:16 AM - Invoice Id: 12467
+8/11/2019 11:18:16 AM - Customer Id: 01500-1
+8/11/2019 11:18:16 AM - Bank: FGB JA$ CURRENT A/C
+8/11/2019 11:18:16 AM - Target Batch: 2082
+8/11/2019 11:18:16 AM - Transferring Receipt
+8/11/2019 11:18:16 AM - Applying receipt to invoice: 12467
+8/11/2019 11:18:17 AM - Receipt Transferred
+--------end
+
+8/11/2019 11:18:17 AM - Database change detected, operation: Insert
+8/11/2019 11:18:17 AM - Incoming Receipt
+8/11/2019 11:18:17 AM - Invoice Id: 12468
+8/11/2019 11:18:17 AM - Customer Id: 01500-1
+8/11/2019 11:18:17 AM - Bank: FGB JA$ CURRENT A/C
+8/11/2019 11:18:17 AM - Target Batch: 2082
+8/11/2019 11:18:17 AM - Transferring Receipt
+8/11/2019 11:18:18 AM - Applying receipt to invoice: 12468
+8/11/2019 11:18:18 AM - Receipt Transferred
+--------end
+
+8/11/2019 11:18:18 AM - Database change detected, operation: Insert
+8/11/2019 11:18:18 AM - Incoming Receipt
+8/11/2019 11:18:18 AM - Invoice Id: 12539
+8/11/2019 11:18:18 AM - Customer Id: 01500-1
+8/11/2019 11:18:19 AM - Bank: FGB JA$ CURRENT A/C
+8/11/2019 11:18:19 AM - Target Batch: 2082
+8/11/2019 11:18:19 AM - Transferring Receipt
+8/11/2019 11:18:19 AM - Applying receipt to invoice: 12539
+8/11/2019 11:18:19 AM - Receipt Transferred
+--------end
+
+8/11/2019 11:19:00 AM - Database change detected, operation: Insert
+8/11/2019 11:19:00 AM - Incoming Receipt
+8/11/2019 11:19:00 AM - Invoice Id: 19708
+8/11/2019 11:19:00 AM - Customer Id: 00205-18
+8/11/2019 11:19:00 AM - Bank: FGB JA$ CURRENT A/C
+8/11/2019 11:19:00 AM - Target Batch: 2082
+8/11/2019 11:19:00 AM - Transferring Receipt
+8/11/2019 11:19:01 AM - Applying receipt to invoice: 19708
+8/11/2019 11:19:02 AM - Receipt Transferred
+--------end
+
+8/11/2019 11:29:50 AM - middleware_service stopped.
+--------end
+
+8/22/2019 1:15:53 PM - Starting accpac session...
+8/22/2019 1:15:53 PM - The source was not found, but some or all event logs could not be searched.  To create the source, you need permission to read all event logs to make sure that the new source name is unique.  Inaccessible logs: Security.    at System.Diagnostics.EventLog.FindSourceRegistration(String source, String machineName, Boolean readOnly, Boolean wantToCreate)
+   at System.Diagnostics.EventLog.SourceExists(String source, String machineName, Boolean wantToCreate)
+   at System.Diagnostics.EventLogInternal.VerifyAndCreateSource(String sourceName, String currentMachineName)
+   at System.Diagnostics.EventLogInternal.WriteEntry(String message, EventLogEntryType type, Int32 eventID, Int16 category, Byte[] rawData)
+   at System.Diagnostics.EventLog.WriteEntry(String message, EventLogEntryType type)
+   at middleware_service.Other_Classes.Log.Save(String msg) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Other Classes\Log.cs:line 73
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 188
+--------end
+
+--------end
+
+9/6/2019 3:28:25 PM - Starting accpac session...
+9/6/2019 3:28:25 PM - The source was not found, but some or all event logs could not be searched.  To create the source, you need permission to read all event logs to make sure that the new source name is unique.  Inaccessible logs: Security.    at System.Diagnostics.EventLog.FindSourceRegistration(String source, String machineName, Boolean readOnly, Boolean wantToCreate)
+   at System.Diagnostics.EventLog.SourceExists(String source, String machineName, Boolean wantToCreate)
+   at System.Diagnostics.EventLogInternal.VerifyAndCreateSource(String sourceName, String currentMachineName)
+   at System.Diagnostics.EventLogInternal.WriteEntry(String message, EventLogEntryType type, Int32 eventID, Int16 category, Byte[] rawData)
+   at System.Diagnostics.EventLog.WriteEntry(String message, EventLogEntryType type)
+   at middleware_service.Other_Classes.Log.Save(String msg) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Other Classes\Log.cs:line 64
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 189
+9/6/2019 3:29:17 PM - Starting accpac session...
+9/6/2019 3:29:17 PM - The source was not found, but some or all event logs could not be searched.  To create the source, you need permission to read all event logs to make sure that the new source name is unique.  Inaccessible logs: Security.    at System.Diagnostics.EventLog.FindSourceRegistration(String source, String machineName, Boolean readOnly, Boolean wantToCreate)
+   at System.Diagnostics.EventLog.SourceExists(String source, String machineName, Boolean wantToCreate)
+   at System.Diagnostics.EventLogInternal.VerifyAndCreateSource(String sourceName, String currentMachineName)
+   at System.Diagnostics.EventLogInternal.WriteEntry(String message, EventLogEntryType type, Int32 eventID, Int16 category, Byte[] rawData)
+   at System.Diagnostics.EventLog.WriteEntry(String message, EventLogEntryType type)
+   at middleware_service.Other_Classes.Log.Save(String msg) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\Other Classes\Log.cs:line 64
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 189
+9/6/2019 3:29:33 PM - Starting accpac session...
+9/6/2019 3:29:39 PM - Accpac Version: 65A
+9/6/2019 3:29:39 PM - Company: Spectrum Management Authority 2013-14
+9/6/2019 3:29:39 PM - Session Status: True
+9/6/2019 3:29:40 PM - middleware_service started.
+--------end
+
+9/6/2019 3:35:40 PM - Starting accpac session...
+9/6/2019 3:35:45 PM - Accpac Version: 65A
+9/6/2019 3:35:45 PM - Company: Spectrum Management Authority 2013-14
+9/6/2019 3:35:45 PM - Session Status: True
+9/6/2019 3:35:45 PM - middleware_service started.
+--------end
+
+9/6/2019 3:42:42 PM - Starting accpac session...
+9/6/2019 3:42:52 PM - Accpac Version: 65A
+9/6/2019 3:42:52 PM - Company: Spectrum Management Authority 2013-14
+9/6/2019 3:42:52 PM - Session Status: True
+9/6/2019 3:42:52 PM - middleware_service started.
+--------end
+
+9/6/2019 3:45:33 PM - Starting accpac session...
+9/6/2019 3:45:37 PM - Accpac Version: 65A
+9/6/2019 3:45:37 PM - Company: Spectrum Management Authority 2013-14
+9/6/2019 3:45:37 PM - Session Status: True
+9/6/2019 3:45:38 PM - middleware_service started.
+--------end
+
+9/6/2019 4:01:11 PM - Starting accpac session...
+9/6/2019 4:01:20 PM - Accpac Version: 65A
+9/6/2019 4:01:20 PM - Company: Spectrum Management Authority 2013-14
+9/6/2019 4:01:20 PM - Session Status: True
+9/6/2019 4:01:20 PM - middleware_service started.
 --------end
 

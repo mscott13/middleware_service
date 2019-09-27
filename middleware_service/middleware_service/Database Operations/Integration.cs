@@ -9,36 +9,26 @@ namespace middleware_service.Database_Operations
 {
     public class Integration
     {
-
+        public const string CINTEGRATION = "cIntegration";
+        public const string CGENERIC = "cGeneric";
+        public const string CMSGQUEUE = "cMsgQueue";
         public static SqlConnection cGeneric, cIntegration, cMsgQueue;
-        public Integration(SqlConnection connGeneric, SqlConnection connIntegration, SqlConnection connMsgQueue)
-        {
-            cGeneric = connGeneric;
-            cIntegration = connIntegration;
-            cMsgQueue = connMsgQueue;
-        }
 
         public void openConnection(string target)
         {
             switch (target)
             {
                 case "cIntegration":
-                    if (cIntegration.State != ConnectionState.Open)
-                    {
-                        cIntegration.Open();
-                    }
+                    cIntegration = new SqlConnection(Constants.dbIntegration);
+                    cIntegration.Open();
                     break;
                 case "cGeneric":
-                    if (cGeneric.State != ConnectionState.Open)
-                    {
-                        cGeneric.Open();
-                    }
+                    cGeneric = new SqlConnection(Constants.dbGeneric);
+                    cGeneric.Open();
                     break;
-                case "cMsgQueue":
-                    if (cMsgQueue.State != ConnectionState.Open)
-                    {
-                        cMsgQueue.Open();
-                    }
+                case "g":
+                    cMsgQueue = new SqlConnection(Constants.dbIntegration);
+                    cMsgQueue.Open();
                     break;
             }
         }
@@ -70,7 +60,7 @@ namespace middleware_service.Database_Operations
 
         public List<ReportRawData> getDIRInformation(string ReportType, DateTime searchStartDate, DateTime searchEndDate)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
             cmd.Connection = cIntegration;
@@ -115,19 +105,19 @@ namespace middleware_service.Database_Operations
                     reportInfo.Add(record);
                 }
 
-                closeConnection("cIntegration");
+                closeConnection(CINTEGRATION);
                 return reportInfo;
             }
             else
             {
-                reader.Close();
+                closeConnection(CINTEGRATION);
                 return reportInfo;
             }
         }
 
         public List<Batch> GetExpiryBatchDate()
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             List<Batch> lstInvoiceBatchData = new List<Batch>(2);
             List<Batch> lstInvoiceBatchDataRet = new List<Batch>(2);
             Batch batch;
@@ -178,25 +168,25 @@ namespace middleware_service.Database_Operations
             }
 
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return lstInvoiceBatchDataRet;
         }
 
         public void closeInvoiceBatch(int batchId)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             cmd.CommandText = "EXEC closeBatch @batchId";
             cmd.Parameters.AddWithValue("@batchId", batchId);
             cmd.Connection = cIntegration;
 
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
 
         public Maj getMajDetail(int referenceNumber)
         {
-            openConnection("cGeneric");
+            openConnection(CGENERIC);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
 
@@ -215,14 +205,14 @@ namespace middleware_service.Database_Operations
                 mj.proj = reader["Proj"].ToString();
             }
 
-            closeConnection("cGeneric");
+            closeConnection(CGENERIC);
             return mj;
         }
 
 
         public DataSet GetRenewalInvoiceValidity(int invoiceid)
         {
-            openConnection("cGeneric");
+            openConnection(CGENERIC);
 
             SqlCommand cmd = new SqlCommand("EXEC sp_getValidityRenewalInvoice", cGeneric);
             cmd.CommandType = CommandType.StoredProcedure;
@@ -233,14 +223,14 @@ namespace middleware_service.Database_Operations
             DataSet ds = new DataSet();
             da.Fill(ds);
             da.Dispose();
-            closeConnection("cGeneric");
+            closeConnection(CGENERIC);
             return ds;
 
 
         }
         public DataSet GetRenewalInvoiceValidity1(int invoiceid)
         {
-            openConnection("cGeneric");
+            openConnection(CGENERIC);
 
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = cGeneric;
@@ -253,13 +243,13 @@ namespace middleware_service.Database_Operations
             DataSet ds = new DataSet();
             da.Fill(ds);
             da.Dispose();
-            closeConnection("cGeneric");
+            closeConnection(CGENERIC);
             return ds;
 
         }
         public int getInvoiceReference(int invoiceId)
         {
-            openConnection("cGeneric");
+            openConnection(CGENERIC);
 
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
@@ -280,13 +270,13 @@ namespace middleware_service.Database_Operations
                 }
             }
 
-            closeConnection("cGeneric");
+            closeConnection(CGENERIC);
             return refNumber;
         }
 
         public void createInvoiceBatch(double daysTillEx, int batchId, string batchType, string renstat)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
 
             SqlCommand cmd = new SqlCommand();
             var expiryDate = DateTime.Now.AddDays(daysTillEx);
@@ -299,12 +289,12 @@ namespace middleware_service.Database_Operations
             cmd.Parameters.AddWithValue("@renstat", renstat);
 
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
 
         public bool batchAvail(string batchType)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
             int result = -1;
@@ -321,7 +311,7 @@ namespace middleware_service.Database_Operations
                 result = Convert.ToInt32(reader[0]);
             }
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
 
             if (result > 0)
             {
@@ -335,7 +325,7 @@ namespace middleware_service.Database_Operations
 
         public bool isBatchExpired(int batchId)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
             DateTime expiryDate = DateTime.Now;
@@ -354,7 +344,7 @@ namespace middleware_service.Database_Operations
                 renstat = Convert.ToString(reader[1]);
             }
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
 
             if (renstat == "Regulatory" || renstat == "Spectrum")
             {
@@ -372,7 +362,7 @@ namespace middleware_service.Database_Operations
 
         public int getAvailBatch(string batchType)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
 
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
@@ -391,13 +381,13 @@ namespace middleware_service.Database_Operations
             }
 
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return result;
         }
 
         public List<Batch> GetExpiryBatchDate_Payment()
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             List<Batch> lstInvoiceBatchData = new List<Batch>(2);
             Batch batch;
 
@@ -424,13 +414,13 @@ namespace middleware_service.Database_Operations
             }
 
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return lstInvoiceBatchData;
         }
 
         public void OpenNewBatchSet(double DaysTillExpired, int LastBatchId)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             var CreatedDate = DateTime.Now;
@@ -443,14 +433,14 @@ namespace middleware_service.Database_Operations
             cmd.Parameters.AddWithValue("@ExpiryDate", ExpiryDate);
 
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
 
         }
 
         public void openNewReceiptBatch(double DaysTillExpired, int LastBatchId, string bankcode)
         {
 
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             var CreatedDate = DateTime.Now;
@@ -465,13 +455,13 @@ namespace middleware_service.Database_Operations
 
 
             int i = cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
 
         public void closeReceiptBatch(int batchId)
         {
 
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             cmd.Connection = cIntegration;
@@ -479,14 +469,14 @@ namespace middleware_service.Database_Operations
             cmd.Parameters.AddWithValue("@batchId", batchId);
 
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
 
         }
 
         public void updateBatchAmount(string batchType, decimal amount)
         {
 
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             cmd.Connection = cIntegration;
@@ -495,13 +485,13 @@ namespace middleware_service.Database_Operations
             cmd.Parameters.AddWithValue("@amount", amount);
 
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
 
         }
 
         public string getBankCodeId(string bankcode)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
             string bankcodeid = "";
@@ -518,16 +508,14 @@ namespace middleware_service.Database_Operations
                 bankcodeid = reader[0].ToString();
             }
 
-
-
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return bankcodeid;
         }
 
 
         public DateTime getDocDate(int docNumber)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
             DateTime date = DateTime.Now;
@@ -545,13 +533,13 @@ namespace middleware_service.Database_Operations
             }
 
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return date;
         }
 
         public void CloseOldBatchSet()
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             cmd.Connection = cIntegration;
@@ -559,23 +547,23 @@ namespace middleware_service.Database_Operations
 
 
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
 
         public void CloseOldBatchSet_payment()
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             cmd.Connection = cIntegration;
             cmd.CommandText = "Exec sp_CloseBatch_Payment";
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
 
         public int getLastBatchId()
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             int BatchId = -1;
 
             SqlCommand cmd = new SqlCommand();
@@ -593,13 +581,13 @@ namespace middleware_service.Database_Operations
             }
 
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return BatchId;
         }
 
         public int getLastBatchId_payment()
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             int BatchId = -1;
 
             SqlCommand cmd = new SqlCommand();
@@ -618,14 +606,14 @@ namespace middleware_service.Database_Operations
             }
 
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return BatchId;
         }
 
         public void Init(int LastBatchId, double DaysTillExpired)
         {
 
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
 
@@ -641,15 +629,12 @@ namespace middleware_service.Database_Operations
 
 
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
-
-
-
+            closeConnection(CINTEGRATION);
         }
 
         public void UpdateReference(string Bank, string reference)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             cmd.Connection = cIntegration;
@@ -659,14 +644,12 @@ namespace middleware_service.Database_Operations
 
 
             cmd.ExecuteNonQuery();
-
-            closeConnection("cIntegration");
-
+            closeConnection(CINTEGRATION);
         }
 
         public int GetReferenceCount(string bank)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             string bankcode = "";
             int count = 0;
 
@@ -701,15 +684,13 @@ namespace middleware_service.Database_Operations
                 count = Convert.ToInt32(reader[0].ToString());
             }
 
-            closeConnection("cIntegration");
-
-
+            closeConnection(CINTEGRATION);
             return count;
         }
 
         public void Init_Payment(int LastBatchId, double DaysTillExpired)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             var CreatedDate = DateTime.Now;
@@ -724,14 +705,12 @@ namespace middleware_service.Database_Operations
 
 
             cmd.ExecuteNonQuery();
-
-            closeConnection("cIntegration");
-
+            closeConnection(CINTEGRATION);
         }
 
         public bool isInitialized()
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             bool truth = false;
 
             SqlCommand cmd = new SqlCommand();
@@ -754,15 +733,13 @@ namespace middleware_service.Database_Operations
                 truth = true;
             }
 
-            closeConnection("cIntegration");
-
-
+            closeConnection(CINTEGRATION);
             return truth;
         }
 
         public bool isInitialized_payment()
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             bool truth = false;
 
             SqlCommand cmd = new SqlCommand();
@@ -785,15 +762,13 @@ namespace middleware_service.Database_Operations
                 truth = true;
             }
 
-            closeConnection("cIntegration");
-
-
+            closeConnection(CINTEGRATION);
             return truth;
         }
 
         public void UpdateBatchCount(string BatchType)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             cmd.Connection = cIntegration;
@@ -802,14 +777,12 @@ namespace middleware_service.Database_Operations
 
 
             cmd.ExecuteNonQuery();
-
-            closeConnection("cIntegration");
-
+            closeConnection(CINTEGRATION);
         }
 
         public void IncrementReferenceNumber(string BankCode, decimal amount)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             cmd.Connection = cIntegration;
@@ -818,13 +791,12 @@ namespace middleware_service.Database_Operations
             cmd.Parameters.AddWithValue("@amount", amount);
 
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
-
+            closeConnection(CINTEGRATION);
         }
 
         public decimal GetRate()
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
             decimal result = 0;
@@ -839,14 +811,14 @@ namespace middleware_service.Database_Operations
                 result = Convert.ToDecimal(reader[0].ToString());
             }
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return result;
         }
 
 
         public void UpdateBatchCountPayment(string BatchId)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             cmd.Connection = cIntegration;
@@ -855,14 +827,12 @@ namespace middleware_service.Database_Operations
 
 
             cmd.ExecuteNonQuery();
-
-            closeConnection("cIntegration");
-
+            closeConnection(CINTEGRATION);
         }
 
         public string GetInitialRef(string BankCodeId)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
             string refNumber = "";
@@ -879,13 +849,13 @@ namespace middleware_service.Database_Operations
                 refNumber = reader[0].ToString();
             }
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return refNumber;
         }
 
         public decimal GetUsRateByInvoice(int invoiceid)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
             decimal rate = 1;
@@ -903,13 +873,13 @@ namespace middleware_service.Database_Operations
             }
 
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return rate;
         }
 
         public string GetCurrentRef(string BankCode)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
             string refNumber = "";
@@ -928,13 +898,13 @@ namespace middleware_service.Database_Operations
                 refNumber = i.ToString();
             }
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return refNumber;
         }
 
         public string getRecieptBatch(string bankcode)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
             string batch = "";
@@ -950,13 +920,13 @@ namespace middleware_service.Database_Operations
                 batch = reader[0].ToString();
             }
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return batch;
         }
 
         public List<string> checkInvoiceAvail(string invoiceId)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand("exec sp_GetInvoice @id", cIntegration);
             SqlDataReader reader;
             cmd.Parameters.AddWithValue("@id", invoiceId);
@@ -975,13 +945,13 @@ namespace middleware_service.Database_Operations
                 data = null;
             }
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return data;
         }
 
         public void storeInvoice(int invoiceId, int batchTarget, int CreditGL, string clientName, string clientId, DateTime date, string author, decimal amount, string state, decimal usrate, decimal usamount, int isvoid, int isCreditMemo, int creditMemoNumber)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand("exec sp_StoreInvoice @id, @target, @CreditGL, @clientName, @clientId, @dateCreated, @author, @amount, @state, @usrate, @usamount, @isvoid, @isCreditMemo, @credMemoNum", cIntegration);
 
             cmd.Parameters.AddWithValue("@id", invoiceId);
@@ -1000,12 +970,12 @@ namespace middleware_service.Database_Operations
             cmd.Parameters.AddWithValue("@credMemoNum", creditMemoNumber);
 
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
 
         public void storePayment(string clientId, string clientName, DateTime createdDate, string invoiceId, decimal amount, decimal usamount, string prepstat, int referenceNumber, int destinationBank, string isPayByCredit, decimal prepaymentUsRate)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand("exec sp_StorePayment @clientId, @clientName, @createdDate, @invoiceId, @amount, @usamount, @prepstat, @referenceNumber, @destinationBank, @isPayByCredit, @prepaymentUsRate", cIntegration);
 
             cmd.Parameters.AddWithValue("@clientId", clientId);
@@ -1020,18 +990,17 @@ namespace middleware_service.Database_Operations
             cmd.Parameters.AddWithValue("@isPayByCredit", isPayByCredit);
             cmd.Parameters.AddWithValue("@prepaymentUsRate", prepaymentUsRate);
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
 
         public string GetAccountNumber(int GLID)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand("exec sp_GetGLAcctNumber @GLID", cIntegration);
             SqlDataReader reader;
 
             string accountNumber = "";
             cmd.Parameters.AddWithValue("@GLID", GLID);
-
 
             reader = cmd.ExecuteReader();
 
@@ -1042,13 +1011,13 @@ namespace middleware_service.Database_Operations
             }
 
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return accountNumber;
         }
 
         public int GetIsInvoiceCancelled(int invoiceid)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand("exec sp_GetIsInvoiceCancelled @invoiceid", cIntegration);
             SqlDataReader reader;
             int isvoided = 0;
@@ -1064,13 +1033,13 @@ namespace middleware_service.Database_Operations
             }
 
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return isvoided;
         }
 
         public List<string> GetInvoiceDetails(int invoiceId)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand("exec sp_GetInvoiceDetail @invoiceId", cIntegration);
             SqlDataReader reader;
             List<string> data = new List<string>(3);
@@ -1093,29 +1062,26 @@ namespace middleware_service.Database_Operations
                 data = null;
             }
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return data;
         }
 
         public void MarkAsTransferred(int invoiceId)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand("exec sp_UpdateInvoiceToTransferred @invoiceId", cIntegration);
 
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
-
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
 
         public int GetInvDetailOccurence(string invoiceId)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand("exec sp_InvoiceDetailOccurenceCount @invoiceId", cIntegration);
             SqlDataReader reader;
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
-
-
 
             reader = cmd.ExecuteReader();
             int i = 0;
@@ -1126,18 +1092,16 @@ namespace middleware_service.Database_Operations
                 i = Convert.ToInt32(reader[0].ToString());
             }
 
-
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return i;
         }
 
         public int GetInvoicePosted(int invoiceId)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand("exec sp_GetInvoicePosted @invoiceId", cIntegration);
             SqlDataReader reader;
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
-
 
             reader = cmd.ExecuteReader();
             int batchid = 0;
@@ -1148,7 +1112,7 @@ namespace middleware_service.Database_Operations
             }
 
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return batchid;
         }
 
@@ -1156,7 +1120,7 @@ namespace middleware_service.Database_Operations
         public int GetCreditGl(string invoiceiD)
         {
 
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand("exec sp_GetCreditGL @invoiceId", cIntegration);
             SqlDataReader reader;
             cmd.Parameters.AddWithValue("@invoiceId", invoiceiD);
@@ -1170,13 +1134,13 @@ namespace middleware_service.Database_Operations
                 i = Convert.ToInt32(reader[0].ToString());
             }
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return i;
         }
 
         public int GetCreditGlID(string GLTransactionID)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand("exec sp_GetPrepaymentGlID @GLTransactionID", cIntegration);
             SqlDataReader reader;
             cmd.Parameters.AddWithValue("@GLTransactionID", GLTransactionID);
@@ -1191,20 +1155,17 @@ namespace middleware_service.Database_Operations
                 i = Convert.ToInt32(reader[0].ToString());
             }
 
-
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return i;
         }
 
         public string isAnnualFee(int invoiceid)
         {
 
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand("exec sp_isAnnualFee @invoiceid", cIntegration);
             SqlDataReader reader;
             cmd.Parameters.AddWithValue("@invoiceid", invoiceid);
-
-
 
             reader = cmd.ExecuteReader();
             string notes = " ";
@@ -1215,50 +1176,46 @@ namespace middleware_service.Database_Operations
                 notes = reader[0].ToString();
             }
 
-
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return notes;
         }
 
 
         public void UpdateCreditGl(int invoiceId, int newCreditGl)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand("exec sp_UpdateCreditGl @invoiceId, @newCreditGl", cIntegration);
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
             cmd.Parameters.AddWithValue("@newCreditGl", newCreditGl);
 
-
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
 
         public void modifyInvoiceList(int invoiceId, decimal rate, string customerId)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand("exec sp_UpdateInvoice @invoiceid, @usrate, @customerId", cIntegration);
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
             cmd.Parameters.AddWithValue("@usrate", rate);
             cmd.Parameters.AddWithValue("@customerId", customerId);
 
-
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
         public void UpdateEntryNumber(int invoiceId)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand("exec sp_UpdateEntry @invoiceId", cIntegration);
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
 
-
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
 
         public List<string> GetPaymentInfo(int gl_id)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd_pay = new SqlCommand();
             SqlDataReader reader_pay;
 
@@ -1283,13 +1240,13 @@ namespace middleware_service.Database_Operations
                 data.Add(paymentDate);
             }
             reader_pay.Close();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return data;
         }
 
         public List<string> getClientInfo_inv(string id)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
             List<string> data = new List<string>(4);
@@ -1314,13 +1271,13 @@ namespace middleware_service.Database_Operations
             }
 
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return data;
         }
 
         public List<string> GetClientInfo_Pay(string id)
         {
-            openConnection("cGeneric");
+            openConnection(CGENERIC);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
             List<string> data = new List<string>(4);
@@ -1345,14 +1302,13 @@ namespace middleware_service.Database_Operations
                 data.Add(clientLname);
             }
 
-
-            closeConnection("cGeneric");
+            closeConnection(CGENERIC);
             return data;
         }
 
         public List<string> GetInvoiceInfo(string pInvoice)
         {
-            openConnection("cGeneric");
+            openConnection(CGENERIC);
             SqlCommand cmdAmt = new SqlCommand();
             SqlDataReader readerAmt;
             List<string> data = new List<string>(2);
@@ -1370,13 +1326,13 @@ namespace middleware_service.Database_Operations
                 data.Add(readerAmt[1].ToString());
             }
 
-            closeConnection("cGeneric");
+            closeConnection(CGENERIC);
             return data;
         }
 
         public List<string> GetFeeInfo(int invoiceId)
         {
-            openConnection("cGeneric");
+            openConnection(CGENERIC);
             SqlCommand cmd_inv = new SqlCommand();
             SqlDataReader reader_inv;
             List<string> data = new List<string>(2);
@@ -1384,7 +1340,6 @@ namespace middleware_service.Database_Operations
             cmd_inv.Connection = cGeneric;
             cmd_inv.CommandText = "Select FeeType, notes from tblARInvoices where ARInvoiceID=@id_inv";
             cmd_inv.Parameters.AddWithValue("@id_inv", invoiceId);
-
 
             reader_inv = cmd_inv.ExecuteReader();
 
@@ -1398,13 +1353,13 @@ namespace middleware_service.Database_Operations
                 data.Add(notes);
             }
 
-            closeConnection("cGeneric");
+            closeConnection(CGENERIC);
             return data;
         }
 
         public bool GetInvoiceExists(int invoiceId)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd_inv = new SqlCommand();
             SqlDataReader reader_inv;
 
@@ -1425,25 +1380,25 @@ namespace middleware_service.Database_Operations
             }
 
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return ans;
         }
 
         public void UpdateCustomerCount()
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd_inv = new SqlCommand();
 
             cmd_inv.CommandText = "exec sp_UpdateCustomerCount";
             cmd_inv.Connection = cIntegration;
 
             cmd_inv.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
 
         public void StoreCustomer(string clientId, string clientName)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             cmd.CommandText = "exec sp_StoreCreatedCustomer @clientId, @clientName";
@@ -1453,12 +1408,12 @@ namespace middleware_service.Database_Operations
 
 
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
 
         public List<Queue> ReadMessageQueue()
         {
-            openConnection("cMsgQueue");
+            openConnection(CMSGQUEUE);
             SqlCommand cmd_inv = new SqlCommand();
             SqlDataReader reader_inv;
             List<Queue> data = new List<Queue>();
@@ -1480,13 +1435,13 @@ namespace middleware_service.Database_Operations
                 data.Add(q);
             }
 
-            closeConnection("cMsgQueue");
+            closeConnection(CMSGQUEUE);
             return data;
         }
 
         public void UpdateReceiptNumber(int transactionId, string referenceNumber)
         {
-            openConnection("cGeneric");
+            openConnection(CGENERIC);
             SqlCommand cmd = new SqlCommand();
 
             cmd.CommandText = "exec sp_UpdateReceipt @receiptNum, @reference";
@@ -1494,39 +1449,35 @@ namespace middleware_service.Database_Operations
             cmd.Parameters.AddWithValue("@reference", referenceNumber);
             cmd.Connection = cGeneric;
 
-
             cmd.ExecuteNonQuery();
-            closeConnection("cGeneric");
+            closeConnection(CGENERIC);
         }
 
         public void Log(string msg)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd_inv = new SqlCommand();
 
             cmd_inv.CommandText = "exec sp_Log @msg";
             cmd_inv.Parameters.AddWithValue("@msg", msg);
             cmd_inv.Connection = cIntegration;
             cmd_inv.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
 
         }
 
         public DateTime GetValidity(int invoiceId)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
 
             var datetime = DateTime.Now;
             DateTime startdate = DateTime.Now;
 
-
             cmd.CommandText = "exec sp_GetValidity @invoiceId";
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
             cmd.Connection = cIntegration;
-
-
             reader = cmd.ExecuteReader();
 
             if (reader.HasRows)
@@ -1536,14 +1487,13 @@ namespace middleware_service.Database_Operations
             }
 
 
-            closeConnection("cIntegration");
-
+            closeConnection(CINTEGRATION);
             return datetime;
         }
 
         public DateTime GetValidityEnd(int invoiceId)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
 
@@ -1562,33 +1512,29 @@ namespace middleware_service.Database_Operations
                 datetime = Convert.ToDateTime(reader[7]);
             }
 
-            closeConnection("cIntegration");
-
-
+            closeConnection(CINTEGRATION);
             return datetime;
         }
 
         public void resetInvoiceTotal()
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd_inv = new SqlCommand();
 
             cmd_inv.CommandText = "exec resetInvoiceTotal";
             cmd_inv.Connection = cIntegration;
 
             cmd_inv.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
 
         public string getFreqUsage(int invoiceId)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
 
             string result = "";
-
-
             cmd.CommandText = "exec sp_freqUsage @invoiceId";
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
             cmd.Connection = cIntegration;
@@ -1602,19 +1548,16 @@ namespace middleware_service.Database_Operations
                 result = reader[0].ToString();
             }
 
-            closeConnection("cIntegration");
-
-
+            closeConnection(CINTEGRATION);
             return result;
         }
 
         public int getCreditMemoNumber()
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
             int num = -1;
-
 
             cmd.CommandText = "exec sp_getCMemoSeq";
             cmd.Connection = cIntegration;
@@ -1628,15 +1571,13 @@ namespace middleware_service.Database_Operations
                 num = Convert.ToInt32(reader[0]);
             }
 
-
-            closeConnection("cIntegration");
-
+            closeConnection(CINTEGRATION);
             return num;
         }
 
         public void updateAsmsCreditMemoNumber(int docId, int newCredNum)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             cmd.CommandText = "exec sp_UpdateCreditMemoNum @documentId, @newCredNum";
@@ -1646,13 +1587,13 @@ namespace middleware_service.Database_Operations
 
 
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
 
         }
 
         public InvoiceInfo getInvoiceDetails(int invoiceId)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
 
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
@@ -1661,8 +1602,6 @@ namespace middleware_service.Database_Operations
             cmd.CommandText = "exec sp_getInvoiceInfo @invoiceId";
             cmd.Parameters.AddWithValue("@invoiceId", invoiceId);
             cmd.Connection = cIntegration;
-
-
             reader = cmd.ExecuteReader();
 
             if (reader.HasRows)
@@ -1678,24 +1617,21 @@ namespace middleware_service.Database_Operations
                 inv.Author = reader["Author"].ToString();
 
             }
-            closeConnection("cIntegration");
 
-
+            closeConnection(CINTEGRATION);
             return inv;
         }
 
         public PaymentInfo getPaymentInfo(int originalDocNum)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
             PaymentInfo rct = new PaymentInfo();
 
-
             cmd.CommandText = "exec sp_getReceiptInfo @originalDocNum";
             cmd.Parameters.AddWithValue("@originalDocNum", originalDocNum);
             cmd.Connection = cIntegration;
-
 
             reader = cmd.ExecuteReader();
 
@@ -1711,15 +1647,13 @@ namespace middleware_service.Database_Operations
                 rct.GLID = Convert.ToInt32(reader["GLID"]);
 
             }
-            closeConnection("cIntegration");
-
-
+            closeConnection(CINTEGRATION);
             return rct;
         }
 
         public CreditNoteInfo getCreditNoteInfo(int creditMemoNum, int documentId)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
             CreditNoteInfo creditNote = new CreditNoteInfo();
@@ -1740,15 +1674,15 @@ namespace middleware_service.Database_Operations
                 creditNote.FeeType = reader["FeeType"].ToString();
                 creditNote.notes = reader["notes"].ToString();
                 creditNote.remarks = reader["Remarks"].ToString();
-
             }
-            closeConnection("cIntegration");
+
+            closeConnection(CINTEGRATION);
             return creditNote;
         }
 
         public void updateAsmsCreditMNum(int currentNum, int newNum)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             cmd.CommandText = "exec sp_UpdateCreditMemoNum @currentNum, @newNum";
@@ -1757,17 +1691,16 @@ namespace middleware_service.Database_Operations
             cmd.Connection = cIntegration;
 
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
 
-        public string getClientIdZRecord()
+        public string getClientIdZRecord(bool stripExtention)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
             string result = "";
             string temp = "";
-
 
             cmd.CommandText = "exec sp_getZeroRecord";
             cmd.Connection = cIntegration;
@@ -1778,28 +1711,35 @@ namespace middleware_service.Database_Operations
                 reader.Read();
                 result = reader["clientId"].ToString();
 
-                for (int i = 0; i < result.Length; i++)
+                if (stripExtention)
                 {
-                    if (result[i] != '-')
+                    for (int i = 0; i < result.Length; i++)
                     {
-                        temp += result[i];
+                        if (result[i] != '-')
+                        {
+                            temp += result[i];
+                        }
+                        else
+                        {
+                            i = result.Length;
+                        }
                     }
-                    else
-                    {
-                        i = result.Length;
-                    }
+                    result = temp;
                 }
-                result = temp;
+                else
+                {
+                    return result;
+                }
             }
 
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return result;
         }
 
         public void checkResetCounters(int mExpiry, int dExpiry)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
 
@@ -1818,7 +1758,7 @@ namespace middleware_service.Database_Operations
                 dailyExpiry = Convert.ToDateTime(reader["dailyReset"]);
             }
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
 
             if (monthlyExpiry.Day == DateTime.Now.Day && monthlyExpiry.Month == DateTime.Now.Month && monthlyExpiry.Year == DateTime.Now.Year)
             {
@@ -1834,7 +1774,7 @@ namespace middleware_service.Database_Operations
         public void resetMonthlyCounters(int daysToNExpiry)
         {
 
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             cmd.CommandText = "exec resetMonthlyCounters @nextExpiry";
@@ -1842,12 +1782,12 @@ namespace middleware_service.Database_Operations
             cmd.Connection = cIntegration;
 
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
 
         public void resetDailyCounters(int daysToNExpiry)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
 
@@ -1856,13 +1796,12 @@ namespace middleware_service.Database_Operations
             cmd.Connection = cIntegration;
 
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
-
+            closeConnection(CINTEGRATION);
         }
 
         public PrepaymentData checkPrepaymentAvail(string customerId)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
             PrepaymentData data = new PrepaymentData();
@@ -1888,13 +1827,13 @@ namespace middleware_service.Database_Operations
                 data.dataAvail = false;
             }
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return data;
         }
 
         public void adjustPrepaymentRemainder(decimal amount, int sequenceNumber)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
 
             cmd.CommandText = "exec sp_adjustPrepaymentRemainder @amount, @sequenceNumber";
@@ -1903,27 +1842,26 @@ namespace middleware_service.Database_Operations
             cmd.Connection = cIntegration;
 
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
 
         public decimal getTotalPrepaymentRemainder(string customerId)
         {
             decimal result = 0;
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             cmd.CommandText = "exec sp_getTotalPrepaymentRemainder @customerId";
             cmd.Parameters.AddWithValue("@customerId", customerId);
             cmd.Connection = cIntegration;
 
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
-
+            closeConnection(CINTEGRATION);
             return result;
         }
 
         public decimal getPrepaymentURate(int sequence)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
             decimal urate = 0;
@@ -1940,22 +1878,20 @@ namespace middleware_service.Database_Operations
                 urate = Convert.ToDecimal(reader["usrate"]);
             }
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return urate;
-
         }
 
 
         public string generateReportId(string ReportType)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader = null;
             cmd.CommandText = "exec sp_DIRnewReportID @ReportType";
             cmd.Parameters.AddWithValue("@ReportType", ReportType);
             cmd.Connection = cIntegration;
             string result = "";
-
 
             reader = cmd.ExecuteReader();
             if (reader.HasRows)
@@ -1964,13 +1900,13 @@ namespace middleware_service.Database_Operations
                 result = reader[0].ToString();
             }
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return result;
         }
 
         private void dataRouter(string ReportType, DataWrapper data, string recordID, int destination)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             for (int i = 0; i < data.records.Count; i++)
             {
                 SqlCommand cmd = new SqlCommand();
@@ -1995,11 +1931,10 @@ namespace middleware_service.Database_Operations
                 cmd.Parameters.AddWithValue("@valPStart", data.records[i].valPStart);
                 cmd.Parameters.AddWithValue("@valPEnd", data.records[i].valPEnd);
                 cmd.Parameters.AddWithValue("@destination", destination);
-
                 cmd.ExecuteNonQuery();
             }
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             insertSubtotals(ReportType, recordID, data, destination);
         }
 
@@ -2018,7 +1953,7 @@ namespace middleware_service.Database_Operations
 
         public void insertSubtotals(string ReportType, string reportID, DataWrapper data, int destination)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             cmd.CommandText = "exec sp_insertSubtotals @ReportType, @reportId, @category, @invoiceTotal, @balanceBFwd, @toRev, @closingBal, @fromRev, @budget";
             cmd.Connection = cIntegration;
@@ -2032,16 +1967,15 @@ namespace middleware_service.Database_Operations
             cmd.Parameters.AddWithValue("@closingBal", data.subT_closingBal);
             cmd.Parameters.AddWithValue("@fromRev", data.subT_fromRev);
             cmd.Parameters.AddWithValue("@budget", data.subT_budget);
-
             
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
 
 
         public void insertTotals(string ReportType, string reportID, Totals total)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             cmd.CommandText = "exec sp_insertTotals @ReportType, @recordID, @invoiceTotal, @balanceBFwd, @toRev, @closingBal, @fromRev, @budget";
             cmd.Connection = cIntegration;
@@ -2056,7 +1990,7 @@ namespace middleware_service.Database_Operations
             cmd.Parameters.AddWithValue("@budget", total.tot_budget);
 
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
 
         public DeferredData getDeferredRpt(string ReportType, string report_id)
@@ -2127,7 +2061,7 @@ namespace middleware_service.Database_Operations
 
         private List<UIData> getDeferredPartial(string ReportType, int index, string report_id)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
 
@@ -2162,19 +2096,19 @@ namespace middleware_service.Database_Operations
                     udt.Add(record);
                 }
 
-                closeConnection("cIntegration");
+                closeConnection(CINTEGRATION);
                 return udt;
             }
             else
             {
-                closeConnection("cIntegration");
+                closeConnection(CINTEGRATION);
                 return udt;
             }
         }
 
         private SubTotals getDeferredPartialSubs(string ReportType, int index, string report_id)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
 
@@ -2197,13 +2131,12 @@ namespace middleware_service.Database_Operations
                 subs.fromRev = reader["fromRev"].ToString();
                 subs.budget = reader["budget"].ToString();
 
-                closeConnection("cIntegration");
+                closeConnection(CINTEGRATION);
                 return subs;
             }
             else
             {
-                reader.Close();
-                closeConnection("cIntegration");
+                closeConnection(CINTEGRATION);
                 return subs;
             }
         }
@@ -2211,7 +2144,7 @@ namespace middleware_service.Database_Operations
 
         public Totals getDeferredTotal(string ReportType, string recordID)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
             Totals totals = new Totals();
@@ -2220,7 +2153,6 @@ namespace middleware_service.Database_Operations
             cmd.Parameters.AddWithValue("@ReportType", ReportType);
             cmd.Parameters.AddWithValue("@record_id", recordID);
             cmd.Connection = cIntegration;
-
             reader = cmd.ExecuteReader();
 
             if (reader.HasRows)
@@ -2233,19 +2165,19 @@ namespace middleware_service.Database_Operations
                 totals.tot_fromRev = reader["fromRev"].ToString();
                 totals.tot_budget = reader["budget"].ToString();
 
-                closeConnection("cIntegration");
+                closeConnection(CINTEGRATION);
                 return totals;
             }
             else
             {
-                closeConnection("cIntegration");
+                closeConnection(CINTEGRATION);
                 return totals;
             }
         }
 
         public void SetNextGenDate(string ReportType, DateTime date)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             cmd.CommandText = "exec sp_setNewRptDate @ReportType, @date";
             cmd.Connection = cIntegration;
@@ -2253,12 +2185,12 @@ namespace middleware_service.Database_Operations
             cmd.Parameters.AddWithValue("@ReportType", ReportType);
             cmd.Parameters.AddWithValue("@date", date);
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
         }
 
         public DateTime GetNextGenDate(string ReportType)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
             DateTime date = DateTime.Now;
@@ -2272,25 +2204,26 @@ namespace middleware_service.Database_Operations
             reader.Read();
             date = Convert.ToDateTime(reader["date"]);
 
-            closeConnection("cIntegration");
+            closeConnection(CINTEGRATION);
             return date;
         }
 
         public void SetIntegrationStat(int stat)
         {
-            openConnection("cIntegration");
+            System.Threading.Thread.Sleep(1000);
+            openConnection(CMSGQUEUE);
             SqlCommand cmd = new SqlCommand();
 
-            cmd.Connection = cIntegration;
+            cmd.Connection = cMsgQueue;
             cmd.CommandText = "sp_UpdateStat @stat";
             cmd.Parameters.AddWithValue("@stat", stat);
             cmd.ExecuteNonQuery();
-            closeConnection("cIntegration");
+            closeConnection(CMSGQUEUE);
         }
 
         public bool checkReportExist(DateTime date)
         {
-            openConnection("cIntegration");
+            openConnection(CINTEGRATION);
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
 
@@ -2302,12 +2235,12 @@ namespace middleware_service.Database_Operations
 
             if (reader.HasRows)
             {
-                closeConnection("cIntegration");
+                closeConnection(CINTEGRATION);
                 return true;
             }
             else
             {
-                closeConnection("cIntegration");
+                closeConnection(CINTEGRATION);
                 return false;
             }
         }

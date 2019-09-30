@@ -183,13 +183,14 @@ namespace WebApplication4
                     RecordsEndValPeriod = LastRptsEndValPeriod;
                 }
 
-                if (((ReportInfo[i].isCreditMemo == 1 || ReportInfo[i].isCancelled == 1) && ReportInfo[i].ExistedBefore == 0) || 
-                    (ReportInfo[i].ExistedBefore == 1 && Convert.ToDecimal(ReportInfo[i].LastRptsClosingBal) == 0 && 
+                if (((ReportInfo[i].isCreditMemo == 1 || ReportInfo[i].isCancelled == 1) && ReportInfo[i].ExistedBefore == 0) ||
+                    (ReportInfo[i].ExistedBefore == 1 && Convert.ToDecimal(ReportInfo[i].LastRptsClosingBal) == 0 &&
                     LastRptsStartValPeriod == ReportInfo[i].CurrentStartValPeriod.Date && LastRptsEndValPeriod == ReportInfo[i].CurrentEndValPeriod.Date) ||
-                    (ReportInfo[i].CurrentEndValPeriod.Year == year && ReportInfo[i].CurrentEndValPeriod.Month == month && ReportInfo[i].CurrentEndValPeriod.Day < 15))
+                    (ReportInfo[i].CurrentEndValPeriod.Year == year && ReportInfo[i].CurrentEndValPeriod.Month == month && ReportInfo[i].CurrentEndValPeriod.Day < 15
+                    && ReportInfo[i].CurrentEndValPeriod.Date > ReportInfo[i].InvoiceCreationDate.Date))
                     continue;
 
-                if(ReportInfo[i].ExistedBefore == 0)
+                if (ReportInfo[i].ExistedBefore == 0)
                 {
                     ThisPeriodsInv = "Yes";
                     fromRevAmt = ReportInfo[i].InvAmount;

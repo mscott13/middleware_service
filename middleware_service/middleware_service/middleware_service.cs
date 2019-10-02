@@ -82,10 +82,12 @@ namespace middleware_service
                 client.Headers[HttpRequestHeader.ContentType] = "application/json";
                 string id = client.UploadString("http://erp-srvr.sma.gov.jm:1786/IntegrationService.asmx/Generate_SaveDeferredRpt", "POST", json);
                 log.Save("Generate report request sent");
+                log.WriteEnd();
             }
             catch (Exception ex)
             {
                 log.Save(ex.InnerException.Message);
+                log.WriteEnd();
             }
         }
 
@@ -99,7 +101,6 @@ namespace middleware_service
                 if (DateTime.Now.Hour == MonthlyRptDate.Hour)
                 {
                     GenRptRequest("Monthly");
-                    intLink.SetNextGenDate
                 }
             }
 
@@ -1221,6 +1222,7 @@ namespace middleware_service
                             }
                         }
                     }
+                    log.WriteEnd();
                 }
                 catch (Exception ex)
                 {

@@ -1463,5 +1463,21 @@ namespace WebApplication4
                 return nextRptDate;
             }
         }
+
+        public void SetNextGenDate(string ReportType, DateTime date)
+        {
+            SqlConnection conn = new SqlConnection(dbsrvIntegration);
+            SqlCommand cmd = new SqlCommand();
+
+            cmd.CommandText = "exec sp_setNewRptDate @ReportType, @date";
+            cmd.Connection = conn;
+
+            cmd.Parameters.AddWithValue("@ReportType", ReportType);
+            cmd.Parameters.AddWithValue("@date", date);
+            conn.Open();
+
+            cmd.ExecuteNonQuery();
+            conn.Close();
+        }
     }
 }

@@ -99,6 +99,7 @@ namespace middleware_service
                 if (DateTime.Now.Hour == MonthlyRptDate.Hour)
                 {
                     GenRptRequest("Monthly");
+                    intLink.SetNextGenDate
                 }
             }
 

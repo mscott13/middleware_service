@@ -1160,8 +1160,6 @@ namespace middleware_service
                         string fname = clientInfo[2].ToString();
                         string lname = clientInfo[3].ToString();
 
-                       
-
                         if (companyName == "" || companyName == " " || companyName == null)
                         {
                             companyName = fname + " " + lname;
@@ -1221,8 +1219,8 @@ namespace middleware_service
                                 log.Save("Invoice: " + invoiceId.ToString() + " was not found in Sage. Cannot delete.");
                             }
                         }
-                    }
-                    log.WriteEnd();
+                        log.WriteEnd();
+                    }          
                 }
                 catch (Exception ex)
                 {

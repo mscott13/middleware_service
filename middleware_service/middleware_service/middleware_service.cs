@@ -624,6 +624,7 @@ namespace middleware_service
                         else if (docInfo.DocumentType == RECEIPT && docInfo.PaymentMethod != 99)
                         {
                             log.Save("Incoming Receipt");
+                            Thread.Sleep(1500);
                             Data dt = new Data();
                             PaymentInfo pinfo = new PaymentInfo();
 

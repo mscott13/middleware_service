@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.ServiceProcess;
@@ -83,10 +82,12 @@ namespace middleware_service
                 client.Headers[HttpRequestHeader.ContentType] = "application/json";
                 string id = client.UploadString("http://server-erp2.sma.gov.jm:8080/IntegrationService.asmx/Generate_SaveDeferredRpt", "POST", json);
                 log.Save("Generate report request sent");
+                log.WriteEnd();
             }
             catch (Exception ex)
             {
                 log.Save(ex.InnerException.Message);
+                log.WriteEnd();
             }
         }
 
@@ -140,7 +141,7 @@ namespace middleware_service
                 //////////////////////////////////////////////////////////////////// STARTING SESSION ///////////////////////////////////////////////////////////////////////
                 log.Save("Starting accpac session...");
                 accpacSession.Init("", "XY", "XY1000", "65A");
-                accpacSession.Open("ADMIN", "SPECTRUM9", "SMALTD", DateTime.Today, 0);
+                accpacSession.Open("ADMIN", "SPECTRUM9", "SMJLTD", DateTime.Today, 0);
                 dbLink = accpacSession.OpenDBLink(DBLinkType.Company, DBLinkFlags.ReadWrite);
 
                 log.Save("Accpac Version: " + accpacSession.AppVersion);
@@ -623,6 +624,7 @@ namespace middleware_service
                         else if (docInfo.DocumentType == RECEIPT && docInfo.PaymentMethod != 99)
                         {
                             log.Save("Incoming Receipt");
+                            Thread.Sleep(1500);
                             Data dt = new Data();
                             PaymentInfo pinfo = new PaymentInfo();
 
@@ -1159,8 +1161,6 @@ namespace middleware_service
                         string fname = clientInfo[2].ToString();
                         string lname = clientInfo[3].ToString();
 
-                       
-
                         if (companyName == "" || companyName == " " || companyName == null)
                         {
                             companyName = fname + " " + lname;
@@ -1207,7 +1207,7 @@ namespace middleware_service
                                     }
                                     else if (notes == "Type Approval" || freqUsage == "TA-ProAmend")
                                     {
-                                        intLink.storeInvoice(Convert.ToInt32(invoiceId), postedBatch, creditGl, companyName, dt.customerId, DateTime.Now, cancelledBy, Convert.ToDecimal(amount), "no modification", intLink.GetRate(), changetous(Convert.ToDecimal(amount)), 1, 0, 0);
+                                        intLink.storeInvoice(Convert.ToInt32(invoiceId), postedBatch, creditGl, companyName, dt.customerId, DateTime.Now, cancelledBy, Convert.ToDecimal(amount), "no modification", intLink.GetUsRateByInvoice(invoiceId), changetousupdated(Convert.ToDecimal(amount), invoiceId), 1, 0, 0);
                                     }
                                     else if (notes == "Annual Fee" || notes == "Modification" || notes == "Radio Operator")
                                     {
@@ -1220,7 +1220,8 @@ namespace middleware_service
                                 log.Save("Invoice: " + invoiceId.ToString() + " was not found in Sage. Cannot delete.");
                             }
                         }
-                    }
+                        log.WriteEnd();
+                    }          
                 }
                 catch (Exception ex)
                 {
@@ -2136,24 +2137,6 @@ namespace middleware_service
         public bool ReceiptTransfer(string batchNumber, string customerId, string amount, string receiptDescription, string referenceNumber, string invnum, DateTime paymentDate, string findesc, string cid, DateTime valstart, DateTime valend)
         {
             log = new Log();
-            var CBBTCH1batch = dbLink.OpenView("AR0041");
-            var CBBTCH1header = dbLink.OpenView("AR0042");
-            var CBBTCH1detail1 = dbLink.OpenView("AR0044");
-            var CBBTCH1detail2 = dbLink.OpenView("AR0045");
-            var CBBTCH1detail3 = dbLink.OpenView("AR0043");
-            var CBBTCH1detail4 = dbLink.OpenView("AR0061");
-            var CBBTCH1detail5 = dbLink.OpenView("AR0406");
-            var CBBTCH1detail6 = dbLink.OpenView("AR0170");
-
-            var arRecptBatch = dbLink.OpenView("AR0041");
-            var arRecptHeader = dbLink.OpenView("AR0042");
-            var arRecptDetail1 = dbLink.OpenView("AR0044");
-            var arRecptDetail2 = dbLink.OpenView("AR0045");
-            var arRecptDetail3 = dbLink.OpenView("AR0043");
-            var arRecptDetail4 = dbLink.OpenView("AR0061");
-            var arRecptDetail5 = dbLink.OpenView("AR0406");
-            var arRecptDetail6 = dbLink.OpenView("AR0170");
-
             try
             {
                 string notes = intLink.isAnnualFee(Convert.ToInt32(invnum));
@@ -2178,29 +2161,21 @@ namespace middleware_service
 
                 if (!CustomerExists(customerId))
                 {
-                    CBBTCH1batch.Dispose();
-                    CBBTCH1header.Dispose();
-                    CBBTCH1detail1.Dispose();
-                    CBBTCH1detail2.Dispose();
-                    CBBTCH1detail3.Dispose();
-                    CBBTCH1detail4.Dispose();
-                    CBBTCH1detail5.Dispose();
-                    CBBTCH1detail6.Dispose();
-
-                    arRecptBatch.Dispose();
-                    arRecptHeader.Dispose();
-                    arRecptDetail1.Dispose();
-                    arRecptDetail2.Dispose();
-                    arRecptDetail3.Dispose();
-                    arRecptDetail4.Dispose();
-                    arRecptDetail5.Dispose();
-                    arRecptDetail6.Dispose();
                     return false;
                 }
                 else
                 {
                     if (invnum == "0")
                     {
+                        var CBBTCH1batch = dbLink.OpenView("AR0041");
+                        var CBBTCH1header = dbLink.OpenView("AR0042");
+                        var CBBTCH1detail1 = dbLink.OpenView("AR0044");
+                        var CBBTCH1detail2 = dbLink.OpenView("AR0045");
+                        var CBBTCH1detail3 = dbLink.OpenView("AR0043");
+                        var CBBTCH1detail4 = dbLink.OpenView("AR0061");
+                        var CBBTCH1detail5 = dbLink.OpenView("AR0406");
+                        var CBBTCH1detail6 = dbLink.OpenView("AR0170");
+
                         CBBTCH1batch.Compose(new View[] { CBBTCH1header });
                         CBBTCH1header.Compose(new View[] { CBBTCH1batch, CBBTCH1detail3, CBBTCH1detail1, CBBTCH1detail5, CBBTCH1detail6 });
                         CBBTCH1detail1.Compose(new View[] { CBBTCH1header, CBBTCH1detail2, CBBTCH1detail4 });
@@ -2236,24 +2211,7 @@ namespace middleware_service
                         CBBTCH1detail1.Insert();
                         CBBTCH1header.Insert();
                         CBBTCH1header.RecordCreate(ViewRecordCreate.DelayKey);
-
-                        CBBTCH1batch.Dispose();
-                        CBBTCH1header.Dispose();
-                        CBBTCH1detail1.Dispose();
-                        CBBTCH1detail2.Dispose();
-                        CBBTCH1detail3.Dispose();
-                        CBBTCH1detail4.Dispose();
-                        CBBTCH1detail5.Dispose();
-                        CBBTCH1detail6.Dispose();
-
-                        arRecptBatch.Dispose();
-                        arRecptHeader.Dispose();
-                        arRecptDetail1.Dispose();
-                        arRecptDetail2.Dispose();
-                        arRecptDetail3.Dispose();
-                        arRecptDetail4.Dispose();
-                        arRecptDetail5.Dispose();
-                        arRecptDetail6.Dispose();
+                        
                         log.Save("Prepayment Transferred");
                         return true;
                     }
@@ -2272,6 +2230,16 @@ namespace middleware_service
                         }
 
                         bool flagInsert;
+
+                        var arRecptBatch = dbLink.OpenView("AR0041");
+                        var arRecptHeader = dbLink.OpenView("AR0042");
+                        var arRecptDetail1 = dbLink.OpenView("AR0044");
+                        var arRecptDetail2 = dbLink.OpenView("AR0045");
+                        var arRecptDetail3 = dbLink.OpenView("AR0043");
+                        var arRecptDetail4 = dbLink.OpenView("AR0061");
+                        var arRecptDetail5 = dbLink.OpenView("AR0406");
+                        var arRecptDetail6 = dbLink.OpenView("AR0170");
+
                         arRecptBatch.Compose(new View[] { arRecptHeader });
                         arRecptHeader.Compose(new View[] { arRecptBatch, arRecptDetail3, arRecptDetail1, arRecptDetail5, arRecptDetail6 });
                         arRecptDetail1.Compose(new View[] { arRecptHeader, arRecptDetail2, arRecptDetail4 });
@@ -2343,47 +2311,12 @@ namespace middleware_service
                             arRecptHeader.RecordCreate(ViewRecordCreate.DelayKey);
                             log.Save("Receipt Transferred");
                         }
-
-                        CBBTCH1batch.Dispose();
-                        CBBTCH1header.Dispose();
-                        CBBTCH1detail1.Dispose();
-                        CBBTCH1detail2.Dispose();
-                        CBBTCH1detail3.Dispose();
-                        CBBTCH1detail4.Dispose();
-                        CBBTCH1detail5.Dispose();
-                        CBBTCH1detail6.Dispose();
-
-                        arRecptBatch.Dispose();
-                        arRecptHeader.Dispose();
-                        arRecptDetail1.Dispose();
-                        arRecptDetail2.Dispose();
-                        arRecptDetail3.Dispose();
-                        arRecptDetail4.Dispose();
-                        arRecptDetail5.Dispose();
-                        arRecptDetail6.Dispose();
                         return true;
                     }
                 }
             }
             catch (Exception e)
             {
-                CBBTCH1batch.Dispose();
-                CBBTCH1header.Dispose();
-                CBBTCH1detail1.Dispose();
-                CBBTCH1detail2.Dispose();
-                CBBTCH1detail3.Dispose();
-                CBBTCH1detail4.Dispose();
-                CBBTCH1detail5.Dispose();
-                CBBTCH1detail6.Dispose();
-
-                arRecptBatch.Dispose();
-                arRecptHeader.Dispose();
-                arRecptDetail1.Dispose();
-                arRecptDetail2.Dispose();
-                arRecptDetail3.Dispose();
-                arRecptDetail4.Dispose();
-                arRecptDetail5.Dispose();
-                arRecptDetail6.Dispose();
                 throw (e);
             }
         }

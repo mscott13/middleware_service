@@ -225,6 +225,26 @@ namespace WebApplication4
             Report rpt = new Report();
 
             DeferredData data = rpt.gen_rpt(ReportType, intlink, 0, month, year);
+
+            if (ReportType == "Monthly")
+            {
+                //here we set the next Report Generation Date
+                int es = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month) - DateTime.Now.Day;
+                es++;
+                DateTime nextMonth = DateTime.Now.AddDays(es);
+                DateTime nextGenDate = new DateTime(nextMonth.Year, nextMonth.Month, 2);
+                nextGenDate = nextGenDate.AddHours(2);
+                intlink.SetNextGenDate(ReportType, nextGenDate);
+            }
+
+            if(ReportType == "Annual")
+            {
+                //here we set the next Report Generation Date
+                DateTime nextGenDate = new DateTime(DateTime.Now.Year + 1, 4, 2);
+                nextGenDate = nextGenDate.AddHours(3);
+                intlink.SetNextGenDate(ReportType, nextGenDate);
+            }
+
             return data.report_id;
         }
 

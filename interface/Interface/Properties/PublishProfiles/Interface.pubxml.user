@@ -10,7 +10,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   </PropertyGroup>
   <ItemGroup>
     <File Include="AnnualDeferredIncome.html">
-      <publishTime>09/19/2019 10:08:18</publishTime>
+      <publishTime>09/25/2019 15:40:16</publishTime>
     </File>
     <File Include="ApplicationInsights.config">
       <publishTime>09/03/2019 11:26:07</publishTime>
@@ -31,10 +31,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/03/2019 11:26:07</publishTime>
     </File>
     <File Include="bin/Interface.dll">
-      <publishTime>09/19/2019 10:10:54</publishTime>
+      <publishTime>09/25/2019 15:42:44</publishTime>
     </File>
     <File Include="bin/Interface.pdb">
-      <publishTime>09/19/2019 10:10:54</publishTime>
+      <publishTime>09/25/2019 15:42:44</publishTime>
     </File>
     <File Include="bin/itextsharp.dll">
       <publishTime>09/03/2019 11:26:07</publishTime>
@@ -112,7 +112,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/03/2019 11:26:07</publishTime>
     </File>
     <File Include="Console.aspx">
-      <publishTime>09/03/2019 11:26:07</publishTime>
+      <publishTime>09/25/2019 15:39:09</publishTime>
     </File>
     <File Include="Content/bootstrap.css">
       <publishTime>09/03/2019 11:26:07</publishTime>
@@ -553,7 +553,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/03/2019 11:26:07</publishTime>
     </File>
     <File Include="MonthlyDeferredIncome.html">
-      <publishTime>09/05/2019 14:59:08</publishTime>
+      <publishTime>09/25/2019 15:40:45</publishTime>
     </File>
     <File Include="MonthlyInvoices.aspx">
       <publishTime>09/03/2019 11:26:07</publishTime>
@@ -562,7 +562,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/03/2019 11:26:07</publishTime>
     </File>
     <File Include="Notifications.aspx">
-      <publishTime>09/06/2019 11:56:59</publishTime>
+      <publishTime>09/25/2019 15:38:39</publishTime>
     </File>
     <File Include="packages.config">
       <publishTime>09/03/2019 11:26:07</publishTime>
@@ -616,7 +616,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/03/2019 11:26:07</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>09/19/2019 10:10:55</publishTime>
+      <publishTime>09/25/2019 15:42:45</publishTime>
     </File>
   </ItemGroup>
 </Project>

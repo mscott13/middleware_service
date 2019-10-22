@@ -352,7 +352,7 @@
             function initializeInvoiceList()
             {
                     $.ajax({
-                        url: 'http://server-erp2:8080/integrationservice.asmx/GetInvoiceIDs',
+                        url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/GetInvoiceIDs',
                         type: 'POST',
                         contentType: 'application/json',
                         data: {},
@@ -464,7 +464,7 @@
                 $("body").css("overflow-y", "hidden");
 
                 $.ajax({
-                    url: 'http://server-erp2:8080/integrationservice.asmx/ViewMonDeferredRpt',
+                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/ViewMonDeferredRpt',
                     type: 'POST',
                     contentType: 'application/json',
                     data: '{"ReportType":"Monthly", "month":' + month + ', "year":' + year + '}',
@@ -511,7 +511,7 @@
                 $("body").css("overflow-y", "hidden");
 
                 $.ajax({
-                    url: 'http://server-erp2:8080/integrationservice.asmx/ViewMonDeferredRpt',
+                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/ViewMonDeferredRpt',
                     type: 'POST',
                     contentType: 'application/json',
                     data: '{"ReportType":"Monthly", "month":' + month + ', "year":' + year + '}',
@@ -521,11 +521,10 @@
                         if (data.d != null) {
 
                             var filename = "MonthlyDefferedIncomeReport" + year + month + "01.pdf";
-                            window.location = 'http://server-erp2/reports/' + filename;
+                            window.location = 'http://erp-srvr.sma.gov.jm/reports/' + filename;
 
                             $(".overlay-preload").delay(1300).fadeOut(100);
                             $("body").css("overflow-y", "scroll");
-
                         }
                         else {
 
@@ -563,7 +562,7 @@
                 $("body").css("overflow-y", "hidden");
 
                 $.ajax({
-                    url: 'http://server-erp2:8080/integrationservice.asmx/ViewMonDeferredRpt',
+                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/ViewMonDeferredRpt',
                     type: 'POST',
                     contentType: 'application/json',
                     data: '{"ReportType":"Monthly", "month":' + month + ', "year":' + year + '}',
@@ -573,7 +572,7 @@
                         if (data.d != null) {
 
                             var filename = "MonthlyDefferedIncomeSummaryReport" + year + month + "01.pdf";
-                            window.location = 'http://server-erp2/reports/' + filename;
+                            window.location = 'http://erp-srvr.sma.gov.jm/reports/' + filename;
 
                             $(".overlay-preload").delay(1300).fadeOut(100);
                             $("body").css("overflow-y", "scroll");
@@ -611,7 +610,7 @@
                 var budget = $("#txt_budget").val();
 
                 $.ajax({
-                    url: 'http://server-erp2:8080/integrationservice.asmx/UpdateBudget',
+                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/UpdateBudget',
                     type: 'POST',
                     contentType: 'application/json',
                     data: '{"invoiceID":' + invoiceId + ', "budgetAmt":' + budget + '}',

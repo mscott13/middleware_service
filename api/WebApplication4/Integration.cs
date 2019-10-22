@@ -10,8 +10,7 @@ namespace WebApplication4
 {
     public class Integration
     {
-        //string dbsrvIntegration = @"Data Source=SMA-DBSRV\TCIASMS;Initial Catalog = ASMSSAGEINTEGRATION; Integrated Security = True";
-        string dbsrvIntegration = @"Data Source=server-erp2\tciasms;Initial Catalog=ASMSSAGEINTEGRATION;Integrated Security=True";
+        string dbsrvIntegration = @"Data Source=ERP-SRVR\TCIASMS;Initial Catalog=ASMSSAGEINTEGRATION; Integrated Security=True";
 
         public int GetInvoiceCount()
         {
@@ -1463,6 +1462,22 @@ namespace WebApplication4
                 conn.Close();
                 return nextRptDate;
             }
+        }
+
+        public void SetNextGenDate(string ReportType, DateTime date)
+        {
+            SqlConnection conn = new SqlConnection(dbsrvIntegration);
+            SqlCommand cmd = new SqlCommand();
+
+            cmd.CommandText = "exec sp_setNewRptDate @ReportType, @date";
+            cmd.Connection = conn;
+
+            cmd.Parameters.AddWithValue("@ReportType", ReportType);
+            cmd.Parameters.AddWithValue("@date", date);
+            conn.Open();
+
+            cmd.ExecuteNonQuery();
+            conn.Close();
         }
     }
 }

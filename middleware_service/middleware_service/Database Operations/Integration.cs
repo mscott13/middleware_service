@@ -16,8 +16,6 @@ namespace middleware_service.Database_Operations
 
         public void openConnection(string target)
         {
-            
-
             switch (target)
             {
                 case "cIntegration":

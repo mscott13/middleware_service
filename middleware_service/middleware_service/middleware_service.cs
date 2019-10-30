@@ -141,7 +141,7 @@ namespace middleware_service
                 //////////////////////////////////////////////////////////////////// STARTING SESSION ///////////////////////////////////////////////////////////////////////
                 log.Save("Starting accpac session...");
                 accpacSession.Init("", "XY", "XY1000", "65A");
-                accpacSession.Open("ADMIN", "SPECTRUM9", "SMJLTD", DateTime.Today, 0);
+                accpacSession.Open("ADMIN", "SPECTRUM9", "SMALTD", DateTime.Today, 0);
                 dbLink = accpacSession.OpenDBLink(DBLinkType.Company, DBLinkFlags.ReadWrite);
 
                 log.Save("Accpac Version: " + accpacSession.AppVersion);
@@ -704,7 +704,7 @@ namespace middleware_service
                             {
                                 dt = Translate(customerId, ftype, companyName, debit, notes, "", intLink.getFreqUsage(Convert.ToInt32(invoiceId)));
                             }
-                           
+
                             bool cusexists;
                             cusexists = CustomerExists(dt.customerId);
                             if (Convert.ToInt32(invoiceId) == 0)
@@ -721,6 +721,8 @@ namespace middleware_service
                                 if (glid == "5146")
                                 {
                                     log.Save("Bank: FGB JA$ CURRENT A/C");
+                                    intLink.modifyInvoiceList(0, 1, dt.customerId);
+
                                     if (dt.success)
                                     {
                                         if (receiptBatchAvail("FGBJMREC"))
@@ -752,6 +754,7 @@ namespace middleware_service
                                         }
                                     }
                                 }
+
                                 else if (glid == "5147")
                                 {
                                     log.Save("Bank: FGB US$ SAVINGS A/C");
@@ -784,6 +787,7 @@ namespace middleware_service
                                         intLink.modifyInvoiceList(0, intLink.GetUsRateByInvoice(Convert.ToInt32(invoiceId)), dt.customerId);
                                         currentRate = intLink.GetRate();
                                     }
+                                    else intLink.modifyInvoiceList(0, 1, dt.customerId);
 
                                     if (dt.success)
                                     {
@@ -816,9 +820,12 @@ namespace middleware_service
                                         }
                                     }
                                 }
+
                                 else if (glid == "5148")
                                 {
                                     log.Save("NCB JA$ SAVINGS A/C");
+                                    intLink.modifyInvoiceList(0, 1, dt.customerId);
+
                                     if (dt.success)
                                     {
                                         if (receiptBatchAvail("NCBJMREC"))

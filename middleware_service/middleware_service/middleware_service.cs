@@ -721,6 +721,8 @@ namespace middleware_service
                                 if (glid == "5146")
                                 {
                                     log.Save("Bank: FGB JA$ CURRENT A/C");
+                                    intLink.modifyInvoiceList(0, 1, dt.customerId);
+
                                     if (dt.success)
                                     {
                                         if (receiptBatchAvail("FGBJMREC"))
@@ -784,6 +786,7 @@ namespace middleware_service
                                         intLink.modifyInvoiceList(0, intLink.GetUsRateByInvoice(Convert.ToInt32(invoiceId)), dt.customerId);
                                         currentRate = intLink.GetRate();
                                     }
+                                    else intLink.modifyInvoiceList(0, 1, dt.customerId);
 
                                     if (dt.success)
                                     {
@@ -819,6 +822,8 @@ namespace middleware_service
                                 else if (glid == "5148")
                                 {
                                     log.Save("NCB JA$ SAVINGS A/C");
+                                    intLink.modifyInvoiceList(0, 1, dt.customerId);
+
                                     if (dt.success)
                                     {
                                         if (receiptBatchAvail("NCBJMREC"))

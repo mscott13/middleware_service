@@ -1356,12 +1356,10 @@ namespace middleware_service
                     exist = true;
                 }
 
-                cssql.Dispose();
                 return exist;
             }
             catch (Exception e)
             {
-                cssql.Dispose();
                 throw (e);
             }
         }
@@ -1775,7 +1773,6 @@ namespace middleware_service
                 if (cssql.GoNext())
                 {
                     string val = Convert.ToString(cssql.Fields.FieldByName("BTCHSTTS").Value);
-                    cssql.Dispose();
 
                     if (val == "1")
                     {
@@ -1787,12 +1784,10 @@ namespace middleware_service
                     }
                 }
 
-                cssql.Dispose();
                 return true;
             }
             catch (Exception e)
             {
-                cssql.Dispose();
                 throw (e);
             }
         }
@@ -1936,12 +1931,10 @@ namespace middleware_service
                     batchNum = Convert.ToInt32(cssql.Fields.FieldByName("CNTBTCH").Value);
                 }
 
-                cssql.Dispose();
                 return batchNum;
             }
             catch (Exception e)
             {
-                cssql.Dispose();
                 throw (e);
             }
         }
@@ -2337,18 +2330,15 @@ namespace middleware_service
 
                 if (cssql.GoNext())
                 {
-                    cssql.Dispose();
                     return true;
                 }
                 else
                 {
-                    cssql.Dispose();
                     return false;
                 }
             }
             catch (Exception e)
             {
-                cssql.Dispose();
                 throw (e);
             }
         }

@@ -2382,26 +2382,9 @@ namespace middleware_service
                 CBBTCH1batch.Fields.FieldByName("IDBANK").SetValue(bankcode, false);
                 CBBTCH1batch.Update();
                 CBBTCH1header.RecordCreate(ViewRecordCreate.DelayKey);
-
-                CBBTCH1batch.Dispose();
-                CBBTCH1header.Dispose();
-                CBBTCH1detail1.Dispose();
-                CBBTCH1detail2.Dispose();
-                CBBTCH1detail3.Dispose();
-                CBBTCH1detail4.Dispose();
-                CBBTCH1detail5.Dispose();
-                CBBTCH1detail6.Dispose();
             }
             catch (Exception e)
             {
-                CBBTCH1batch.Dispose();
-                CBBTCH1header.Dispose();
-                CBBTCH1detail1.Dispose();
-                CBBTCH1detail2.Dispose();
-                CBBTCH1detail3.Dispose();
-                CBBTCH1detail4.Dispose();
-                CBBTCH1detail5.Dispose();
-                CBBTCH1detail6.Dispose();
                 throw (e);
             }
         }
@@ -2421,13 +2404,11 @@ namespace middleware_service
                     BatchId = Convert.ToInt32(CBBTCH1batch.Fields.FieldByName("CNTBTCH").Value);
                 }
 
-                CBBTCH1batch.Dispose();
                 return BatchId;
             }
             catch (Exception e)
             {
-                CBBTCH1batch.Dispose();
-                throw (e);
+               throw (e);
             }
         }
 
@@ -2757,30 +2738,10 @@ namespace middleware_service
                     count++;
                 }
 
-                CBBTCH1batch.Dispose();
-                CBBTCH1header.Dispose();
-                CBBTCH1detail1.Dispose();
-                CBBTCH1detail2.Dispose();
-                CBBTCH1detail3.Dispose();
-                CBBTCH1detail4.Dispose();
-                CBBTCH1detail5.Dispose();
-                CBBTCH1detail6.Dispose();
-                CBBTCH1detail7.Dispose();
-                CBBTCH1detail8.Dispose();
                 return count;
             }
             catch (Exception e)
             {
-                CBBTCH1batch.Dispose();
-                CBBTCH1header.Dispose();
-                CBBTCH1detail1.Dispose();
-                CBBTCH1detail2.Dispose();
-                CBBTCH1detail3.Dispose();
-                CBBTCH1detail4.Dispose();
-                CBBTCH1detail5.Dispose();
-                CBBTCH1detail6.Dispose();
-                CBBTCH1detail7.Dispose();
-                CBBTCH1detail8.Dispose();
                 throw (e);
             }
         }

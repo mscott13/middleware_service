@@ -1424,12 +1424,10 @@ namespace middleware_service
                     exist = true;
                 }
 
-                cssql.Dispose();
                 return exist;
             }
             catch (Exception e)
             {
-                cssql.Dispose();
                 throw (e);
             }
         }
@@ -1657,18 +1655,9 @@ namespace middleware_service
                 intLink.UpdateCustomerCount();
                 intLink.StoreCustomer(idCust, nameCust);
                 log.Save("Customer created.");
-
-                ARCUSTOMER1header.Dispose();
-                ARCUSTOMER1detail.Dispose();
-                ARCUSTSTAT2.Dispose();
-                ARCUSTCMT3.Dispose();
             }
             catch (Exception e)
             {
-                ARCUSTOMER1header.Dispose();
-                ARCUSTOMER1detail.Dispose();
-                ARCUSTSTAT2.Dispose();
-                ARCUSTCMT3.Dispose();
                 throw (e);
             }
         }

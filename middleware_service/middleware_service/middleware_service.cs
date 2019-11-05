@@ -857,6 +857,72 @@ namespace middleware_service
                                         }
                                     }
                                 }
+
+                                else if (glid == "5322")
+                                {
+                                    log.Save("Bank: NCB US$ SAVINGS A/C");
+                                    decimal usamount = 0;
+                                    decimal transferedAmt = Convert.ToDecimal(dt.debit) / intLink.GetUsRateByInvoice(Convert.ToInt32(invoiceId));
+                                    string clientIdPrefix = "";
+                                    decimal currentRate = 1;
+
+                                    for (int i = 0; i < dt.customerId.Length; i++)
+                                    {
+                                        if (dt.customerId[i] != '-')
+                                        {
+                                            clientIdPrefix += dt.customerId[i];
+                                        }
+                                        else
+                                        {
+                                            i = dt.customerId.Length;
+                                        }
+                                    }
+
+                                    if (prepstat == "Yes" && clientIdPrefix == intLink.getClientIdZRecord(true))
+                                    {
+                                        dt.customerId = clientIdPrefix + "-T";
+                                        currentRate = intLink.GetRate();
+                                    }
+
+                                    if (dt.customerId[6] == 'T')
+                                    {
+                                        usamount = Math.Round(Convert.ToDecimal(dt.debit) / intLink.GetUsRateByInvoice(Convert.ToInt32(invoiceId)), 2);
+                                        intLink.modifyInvoiceList(0, intLink.GetUsRateByInvoice(Convert.ToInt32(invoiceId)), dt.customerId);
+                                        currentRate = intLink.GetRate();
+                                    }
+                                    else intLink.modifyInvoiceList(0, 1, dt.customerId);
+
+                                    if (dt.success)
+                                    {
+                                        if (receiptBatchAvail("NCBUSMR"))
+                                        {
+                                            string reference = intLink.GetCurrentRef("NCBUSMR");
+                                            log.Save("Target Batch: " + intLink.getRecieptBatch("NCBUSMR"));
+                                            log.Save("Transferring Receipt");
+
+                                            ReceiptTransfer(intLink.getRecieptBatch("NCBUSMR"), dt.customerId, Math.Round(transferedAmt, 2).ToString(), dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
+                                            intLink.UpdateBatchCountPayment(intLink.getRecieptBatch("NCBUSMR"));
+                                            intLink.UpdateReceiptNumber(receipt, intLink.GetCurrentRef("NCBUSMR"));
+                                            intLink.IncrementReferenceNumber(intLink.getBankCodeId("NCBUSMR"), Convert.ToDecimal(dt.debit));
+                                            intLink.storePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), usamount, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", currentRate);
+                                        }
+                                        else
+                                        {
+                                            string reference = intLink.GetCurrentRef("NCBUSMR");
+                                            CreateReceiptBatchEx("NCBUSMR", "Middleware Generated Batch for NCBUSMR");
+                                            intLink.openNewReceiptBatch(1, GetLastPaymentBatch(), "NCBUSMR");
+
+                                            log.Save("Target Batch: " + intLink.getRecieptBatch("NCBUSMR"));
+                                            log.Save("Transferring Receipt");
+
+                                            ReceiptTransfer(intLink.getRecieptBatch("NCBUSMR"), dt.customerId, Math.Round(transferedAmt, 2).ToString(), dt.companyName, reference, invoiceId, paymentDate, dt.desc, customerId, valstart, valend);
+                                            intLink.UpdateBatchCountPayment(intLink.getRecieptBatch("NCBUSMR"));
+                                            intLink.UpdateReceiptNumber(receipt, intLink.GetCurrentRef("NCBUSMR"));
+                                            intLink.IncrementReferenceNumber(intLink.getBankCodeId("NCBUSMR"), Convert.ToDecimal(dt.debit));
+                                            intLink.storePayment(dt.customerId, companyName, DateTime.Now, invoiceId, Convert.ToDecimal(dt.debit), usamount, prepstat, Convert.ToInt32(reference), Convert.ToInt32(glid), "No", currentRate);
+                                        }
+                                    }
+                                }
                             }
                             else
                             {

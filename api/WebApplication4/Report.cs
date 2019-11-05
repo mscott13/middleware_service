@@ -206,6 +206,11 @@ namespace WebApplication4
                     TotalMonths = getMonths(ReportInfo[i].InvoiceCreationDate, RecordsEndValPeriod);
                     MonthsUtilized = getMonths(ReportInfo[i].InvoiceCreationDate, endDate);
                     if (ReportInfo[i].InvoiceCreationDate.Day != 1 && RecordsEndValPeriod.Day < 15) MonthsUtilized++;
+                    if (DateTime.DaysInMonth(ReportInfo[i].InvoiceCreationDate.Year, ReportInfo[i].InvoiceCreationDate.Month) - ReportInfo[i].InvoiceCreationDate.Day >= 15)
+                    {
+                        TotalMonths++;
+                        MonthsUtilized++;
+                    }
                 }
 
                 if (MonthsUtilized > TotalMonths) MonthsUtilized = TotalMonths;

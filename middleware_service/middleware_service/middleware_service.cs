@@ -2488,12 +2488,10 @@ namespace middleware_service
                     BatchId = Convert.ToInt32(CBBTCH1batch.Fields.FieldByName("CNTBTCH").Value);
                 }
 
-                CBBTCH1batch.Dispose();
                 return BatchId;
             }
             catch (Exception e)
             {
-                CBBTCH1batch.Dispose();
                 throw (e);
             }
         }

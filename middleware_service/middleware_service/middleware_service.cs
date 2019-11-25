@@ -774,9 +774,11 @@ namespace middleware_service
                                         }
                                     }
 
-                                    if (CustomerExists(dt.customerId = clientIdPrefix + "-T") && prepstat == "Yes") currentRate = intLink.GetRate();
-                                    else dt.customerId = intLink.getClientIdZRecord(false);
-                                    
+                                    if (prepstat == "Yes")
+                                    {
+                                        if (CustomerExists(dt.customerId = clientIdPrefix + "-T")) currentRate = intLink.GetRate();
+                                        else dt.customerId = intLink.getClientIdZRecord(false);
+                                    }
 
                                     if (dt.customerId[6] == 'T')
                                     {

@@ -651,21 +651,29 @@ ul {
 .bank1 {
     width: 100%;
     float: left;
-    height: 33%;
+    height: 25%;
     border-bottom: 1px solid #E6EBE0;
 }
 
 .bank2 {
     width: 100%;
     float: left;
-    height: 34%;
+    height: 25%;
     border-bottom: 1px solid #E6EBE0;
 }
 
 .bank3 {
     width: 100%;
     float: left;
-    height: 33%;
+    height: 25%;
+    border-bottom: 1px solid #E6EBE0;
+}
+
+
+.bank4 {
+    width: 100%;
+    float: left;
+    height: 25%;
 }
 
 .icon-bank-left {

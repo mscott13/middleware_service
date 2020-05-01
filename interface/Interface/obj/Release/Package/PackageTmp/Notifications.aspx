@@ -190,6 +190,17 @@
                                         <h3></h3>
                                     </div>
                                 </div>
+                                 <div class="bank4">
+                                    <div class="bank-name">
+                                        <h3>NCBUSMR</h3>
+                                    </div>
+                                    <div class="batch">
+                                        <h3></h3>
+                                    </div>
+                                    <div class="count">
+                                        <h3></h3>
+                                    </div>
+                                </div>
                             </div>
                             <div class="pay-expiry">
                                 <h3><span>
@@ -1085,7 +1096,7 @@
             function GetRate() {
 
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/GetRate',
+                    url: 'http://server-erp2.sma.gov.jm:8080/integrationservice.asmx/GetRate',
                     type: 'POST',
                     contentType: 'application/json',
                     data: {},
@@ -1104,7 +1115,7 @@
 
             function GetTransferredInvoiceMessages() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/InvoiceTransferredMessages',
+                    url: 'http://server-erp2.sma.gov.jm:8080/integrationservice.asmx/InvoiceTransferredMessages',
                     type: 'post',
                     contentType: 'application/json',
                     data: {},
@@ -1123,7 +1134,7 @@
 
             function GetTransferredPaymentMessages() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/PaymentTransferredMessages',
+                    url: 'http://server-erp2.sma.gov.jm:8080/integrationservice.asmx/PaymentTransferredMessages',
                     type: 'post',
                     contentType: 'application/json',
                     data: {},
@@ -1145,7 +1156,7 @@
 
             function GetCreatedCustomerMessages() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/CustomerCreatedMessages',
+                    url: 'http://server-erp2.sma.gov.jm:8080/integrationservice.asmx/CustomerCreatedMessages',
                     type: 'post',
                     contentType: 'application/json',
                     data: {},
@@ -1164,7 +1175,7 @@
 
             function GetPendingInvoiceMessages() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/PendingInvoiceMessages',
+                    url: 'http://server-erp2.sma.gov.jm:8080/integrationservice.asmx/PendingInvoiceMessages',
                     type: 'post',
                     contentType: 'application/json',
                     data: {},
@@ -1185,7 +1196,7 @@
             function svc_local_GetRate() {
 
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/GetRate',
+                    url: 'http://server-erp2.sma.gov.jm:8080/integrationservice.asmx/GetRate',
                     type: 'POST',
                     contentType: 'application/json',
                     data: {},
@@ -1203,7 +1214,7 @@
 
             function InvoiceCount() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/GetInvoiceCount',
+                    url: 'http://server-erp2.sma.gov.jm:8080/integrationservice.asmx/GetInvoiceCount',
                     type: 'POST',
                     contentType: 'application/json',
                     data: {},
@@ -1220,7 +1231,7 @@
 
             function isOnline() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/IntegrationService.asmx/GetMonStat',
+                    url: 'http://server-erp2.sma.gov.jm:8080/IntegrationService.asmx/GetMonStat',
                     type: 'POST',
                     contentType: 'application/json',
                     data: {},
@@ -1247,7 +1258,7 @@
 
             function PaymentCount() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/GetPaymentCount',
+                    url: 'http://server-erp2.sma.gov.jm:8080/integrationservice.asmx/GetPaymentCount',
                     type: 'POST',
                     contentType: 'application/json',
                     data: {},
@@ -1263,7 +1274,7 @@
 
             function CustomerCount() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/GetCustomerCount',
+                    url: 'http://server-erp2.sma.gov.jm:8080/integrationservice.asmx/GetCustomerCount',
                     type: 'POST',
                     contentType: 'application/json',
                     data: {},
@@ -1281,7 +1292,7 @@
 
             function PendingInvCount() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/GetPendingCount',
+                    url: 'http://server-erp2.sma.gov.jm:8080/integrationservice.asmx/GetPendingCount',
                     type: 'POST',
                     contentType: 'application/json',
                     data: {},
@@ -1297,7 +1308,7 @@
 
             function InvoiceDetails() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/GetInvoiceDetail',
+                    url: 'http://server-erp2.sma.gov.jm:8080/integrationservice.asmx/GetInvoiceDetail',
                     type: 'POST',
                     contentType: 'application/json',
                     data: {},
@@ -1341,7 +1352,7 @@
 
             function CancellationAndMemos() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/GetCancellationsAndMemos',
+                    url: 'http://server-erp2.sma.gov.jm:8080/integrationservice.asmx/GetCancellationsAndMemos',
                     type: 'POST',
                     contentType: 'application/json',
                     data: {},
@@ -1360,7 +1371,7 @@
 
             function ReceiptDetails() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/GetReceiptDetail',
+                    url: 'http://server-erp2.sma.gov.jm:8080/integrationservice.asmx/GetReceiptDetail',
                     type: 'POST',
                     contentType: 'application/json',
                     data: {},
@@ -1371,11 +1382,13 @@
                         $('.bank1 .batch h3').text(data.d[1]);
                         $('.bank2 .batch h3').text(data.d[2]);
                         $('.bank3 .batch h3').text(data.d[3]);
+                        $('.bank4 .batch h3').text(data.d[4]);
 
-                        $('.bank1 .count h3').text(data.d[4]);
-                        $('.bank2 .count h3').text(data.d[5]);
-                        $('.bank3 .count h3').text(data.d[6]);
-                        $('.pay-expiry h3').text(data.d[7]);
+                        $('.bank1 .count h3').text(data.d[5]);
+                        $('.bank2 .count h3').text(data.d[6]);
+                        $('.bank3 .count h3').text(data.d[7]);
+                        $('.bank4 .count h3').text(data.d[8]);
+                        $('.pay-expiry h3').text(data.d[9]);
                     },
                     error: function () {
                         console.log("error");
@@ -1388,7 +1401,7 @@
 
             function InvoiceBatchTotal() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/GetInvoiceTotalAmount',
+                    url: 'http://server-erp2.sma.gov.jm:8080/integrationservice.asmx/GetInvoiceTotalAmount',
                     type: 'POST',
                     contentType: 'application/json',
                     data: {},

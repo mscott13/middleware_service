@@ -294,18 +294,22 @@ namespace WebApplication4
                 if (reader.HasRows)
                 {
                     reader.Read();
-                    data.Add(formatMoney(reader[0].ToString()));
-                    data.Add(reader[1].ToString());
-                    data.Add(reader[2].ToString());
-                    data.Add(reader[3].ToString());
-                    data.Add(reader[4].ToString());
-                    data.Add(reader[5].ToString());
-                    data.Add(reader[6].ToString());
-                    DateTime date = Convert.ToDateTime(reader[7].ToString());
+                    data.Add(formatMoney(reader["Total"].ToString()));
+                    data.Add(reader["FGBJMREC"].ToString());
+                    data.Add(reader["FGBUSMRC"].ToString());
+                    data.Add(reader["NCBJMREC"].ToString());
+                    data.Add(reader["NCBUSMR"].ToString());
+                    data.Add(reader["Count1"].ToString());
+                    data.Add(reader["Count2"].ToString());
+                    data.Add(reader["Count3"].ToString());
+                    data.Add(reader["Count4"].ToString());
+                    DateTime date = Convert.ToDateTime(reader["Expiry Date"].ToString());
                     data.Add(date.ToString("dd/MM/yyyy"));
                 }
                 else
                 {
+                    data.Add(" ");
+                    data.Add(" ");
                     data.Add(" ");
                     data.Add(" ");
                     data.Add(" ");

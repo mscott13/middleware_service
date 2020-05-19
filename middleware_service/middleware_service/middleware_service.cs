@@ -100,7 +100,7 @@ namespace middleware_service
             {
                 if (DateTime.Now.Hour == MonthlyRptDate.Hour)
                 {
-                    GenRptRequest("Monthly");
+                    //GenRptRequest("Monthly");
                 }
             }
 
@@ -108,8 +108,8 @@ namespace middleware_service
             {
                 if (DateTime.Now.Hour == AnnualRptDate.Hour)
                 {
-                    new Log().Save("Generating Annual Deferred Income Report...");
-                    GenRptRequest("Annual");
+                    //new Log().Save("Generating Annual Deferred Income Report...");
+                    //GenRptRequest("Annual");
                 }
             }
         }

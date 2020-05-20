@@ -163,6 +163,10 @@ namespace middleware_service.Database_Operations
 
             for (int i = 0; i < ReportInfo.Count; i++)
             {
+                if (ReportInfo[i].ARInvoiceID == "21830")
+                {
+                    string test = "";
+                }
 
                 record_info = new UIData();
                 OpeningBal = 0;

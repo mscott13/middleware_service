@@ -1,0 +1,9 @@
+6/23/2020 12:01:44 PM - Service broker not enable.    at TableDependency.SqlClient.SqlTableDependency`1.CheckIfServiceBrokerIsEnabled(String connectionString)
+   at TableDependency.SqlClient.SqlTableDependency`1.PreliminaryChecks(String connectionString, String tableName)
+   at TableDependency.TableDependency`1..ctor(String connectionString, String tableName, ModelToTableMapper`1 mapper, IList`1 updateOf, DmlTriggerType dmlTriggerType, Boolean automaticDatabaseObjectsTeardown, String namingConventionForDatabaseObjects)
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 125
+--------end
+
+6/23/2020 12:01:44 PM - Object reference not set to an instance of an object.    at middleware_service.middleware_service.OnStop() in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 178
+--------end
+

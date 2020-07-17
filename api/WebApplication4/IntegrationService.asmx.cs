@@ -224,7 +224,7 @@ namespace WebApplication4
             Integration intlink = new Integration();
             Report rpt = new Report();
 
-            DeferredData data = rpt.gen_rpt(ReportType, intlink, 0, month, year);
+            DeferredData data = rpt.gen_rpt(ReportType, intlink, 1, month, year);
 
             if (ReportType == "Monthly")
             {

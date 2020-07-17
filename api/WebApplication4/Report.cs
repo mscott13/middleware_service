@@ -169,6 +169,11 @@ namespace WebApplication4
                 invoiceID = ReportInfo[i].ARInvoiceID;
                 if (invoiceID == "0") invoiceID = "";
 
+                if (invoiceID == "21749")
+                {
+                    string test = "test";
+                }
+
                 if (ReportInfo[i].ExistedBefore == 1)
                 {
                     LastRptsStartValPeriod = DateTime.ParseExact(ReportInfo[i].LastRptsStartValPeriod, "dd/MM/yyyy", CultureInfo.InvariantCulture);
@@ -459,8 +464,8 @@ namespace WebApplication4
                 Report.report_id = intlink.saveReport(ReportType, ReportCategories, ReportTotal);
             }
             
-            createPdfReport(ReportType, Report, startDate);
-            createPdfTotalsReport(ReportType, Report, startDate);
+            //createPdfReport(ReportType, Report, startDate);
+            //createPdfTotalsReport(ReportType, Report, startDate);
 
             return Report;
         }

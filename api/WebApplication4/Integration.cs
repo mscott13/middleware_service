@@ -1419,6 +1419,11 @@ namespace WebApplication4
                     record.CreditMemoAmt = Convert.ToDecimal(reader["CreditMemoAmt"]);
 
                     reportInfo.Add(record);
+
+                    if (record.ARInvoiceID == "22205")
+                    {
+                        string test = "";
+                    }
                 }
 
                 reader.Close();

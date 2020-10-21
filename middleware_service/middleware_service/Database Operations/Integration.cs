@@ -26,7 +26,7 @@ namespace middleware_service.Database_Operations
                     cGeneric = new SqlConnection(Constants.dbGeneric);
                     cGeneric.Open();
                     break;
-                case "g":
+                case "cMsgQueue":
                     cMsgQueue = new SqlConnection(Constants.dbIntegration);
                     cMsgQueue.Open();
                     break;
@@ -249,7 +249,7 @@ namespace middleware_service.Database_Operations
         }
         public int getInvoiceReference(int invoiceId)
         {
-            openConnection(CGENERIC);
+            openConnection(CINTEGRATION);
 
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;

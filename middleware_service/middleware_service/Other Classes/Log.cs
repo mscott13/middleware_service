@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using Microsoft.AspNet.SignalR;
+using middleware_service.SignalR.EventObjects;
 
 namespace middleware_service.Other_Classes
 {
@@ -22,6 +24,9 @@ namespace middleware_service.Other_Classes
                 result = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString() + " - " + msg;
                 outputFile.WriteLine(result);
             }
+
+            var hub = GlobalHost.ConnectionManager.GetHubContext<EventHub>();
+            hub.Clients.All.Event(new Logging(msg));
             return result;
         }
 

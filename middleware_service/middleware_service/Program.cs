@@ -11,6 +11,9 @@ namespace middleware_service
             new middleware_service()
             };
             ServiceBase.Run(ServicesToRun);
+
+            //middleware_service service = new middleware_service();
+            //service.OnDebug();
         }
     }
 }

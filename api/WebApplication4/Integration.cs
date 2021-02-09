@@ -25,7 +25,6 @@ namespace WebApplication4
             cmd.CommandText = "sp_GetInvoiceCount";
             try
             {
-
                 conn.Open();
                 reader = cmd.ExecuteReader();
 
@@ -1181,6 +1180,7 @@ namespace WebApplication4
             return d;
         }
 
+
         private List<UIData> getDeferredPartial(string ReportType, int index, string report_id)
         {
             SqlConnection conn = new SqlConnection(dbsrvIntegration);
@@ -1483,6 +1483,36 @@ namespace WebApplication4
 
             cmd.ExecuteNonQuery();
             conn.Close();
+        }
+
+        public List<ReportPeriod> GetReportPeriods()
+        {
+            List<ReportPeriod> reports = new List<ReportPeriod>();
+            using (SqlConnection connection = new SqlConnection(dbsrvIntegration))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand("Select * from MonthlyDIR_ReportMain order by report_date desc", connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                var report = new ReportPeriod
+                                {
+                                    reportId = Convert.ToInt32(reader["report_id"]),
+                                    reportLabel = $"Generated report for: {Convert.ToDateTime(reader["report_date"]).AddMonths(-1).ToString("MMMM, yyyy")}",
+                                    month = Convert.ToDateTime(reader["report_date"]).AddMonths(-1).ToString("MM"),
+                                    year = Convert.ToDateTime(reader["report_date"]).AddMonths(-1).ToString("yyyy")
+                                };
+                                reports.Add(report);
+                            }
+                        }
+                    }
+                }
+            }
+            return reports;
         }
     }
 }

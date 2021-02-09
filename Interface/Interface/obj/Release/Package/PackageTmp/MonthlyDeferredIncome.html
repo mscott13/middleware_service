@@ -32,27 +32,12 @@
                
                 <button type="button" class="MonthlyRptBtn">Monthly Report</button>
                 
-                <select id="month">
-                    <option Value="1">January</option>
-                    <option Value="2">February</option>
-                    <option Value="3">March</option>
-                    <option Value="4">April</option>
-                    <option Value="5">May</option>
-                    <option Value="6">June</option>
-                    <option Value="7">July</option>
-                    <option Value="8">August</option>
-                    <option Value="9">September</option>
-                    <option Value="10">October</option>
-                    <option Value="11">November</option>
-                    <option Value="12">December</option>
+                <select disabled id="month">
+                   
                 </select>
 
                 <select id="year">
-                    <option value="2016">2016</option>
-                    <option value="2017">2017</option>
-                    <option value="2018">2018</option>
-                    <option value="2019">2019</option>
-                    <option value="2020">2020</option>
+                   
                 </select>
                 
                 <button type="button" class="MonthlyRptBtnSelect" id="btnViewHtml">View Deferred Income Report (HTML)</button>
@@ -457,17 +442,20 @@
 
 
             $("#btnViewHtml").click(function () {
-                var month = $("#month").find(":selected").val();
-                var year = $("#year").find(":selected").val();
+                var reportId = $("#year").find(":selected").val();
+                if (reportId == null) {
+                    alert("Please select a report period.");
+                    return;
+                }
 
                 $(".overlay-preload").fadeIn(500);
                 $("body").css("overflow-y", "hidden");
 
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/ViewMonDeferredRpt',
+                    url: 'http://erp-srvr.sma.gov.jm:1786/IntegrationService.asmx/ViewMonDeferredRpt',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: '{"ReportType":"Monthly", "month":' + month + ', "year":' + year + '}',
+                    data: '{"ReportType":"Monthly", "reportId":' + reportId + '}',
                     dataType: 'json',
                     success: function (data) {
 
@@ -502,25 +490,23 @@
             });
 
             $("#btnDeferredMainPdf").click(function () {
-                var month = $("#month").find(":selected").val();
-                var year = $("#year").find(":selected").val();
-
-                if (month < 10) month = "0" + month;
-
-                $(".overlay-preload").fadeIn(500);
-                $("body").css("overflow-y", "hidden");
+               var reportId = $("#year").find(":selected").val();
+                if (reportId == null) {
+                    alert("Please select a report period.");
+                    return;
+                }
 
                 $.ajax({
                     url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/ViewMonDeferredRpt',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: '{"ReportType":"Monthly", "month":' + month + ', "year":' + year + '}',
+                     data: '{"ReportType":"Monthly", "reportId":' + reportId + '}',
                     dataType: 'json',
                     success: function (data) {
 
                         if (data.d != null) {
 
-                            var filename = "MonthlyDefferedIncomeReport" + year + month + "01.pdf";
+                            var filename = "MonthlyDefferedIncomeReport" + $("#year").find(":selected").data("year") + $("#year").find(":selected").data("month") + "01.pdf";
                             window.location = 'http://erp-srvr.sma.gov.jm/reports/' + filename;
 
                             $(".overlay-preload").delay(1300).fadeOut(100);
@@ -553,10 +539,11 @@
             });
 
             $("#btnDeferredSubs").click(function () {
-                var month = $("#month").find(":selected").val();
-                var year = $("#year").find(":selected").val();
-
-                if (month < 10) month = "0" + month;
+                 var reportId = $("#year").find(":selected").val();
+                if (reportId == null) {
+                    alert("Please select a report period.");
+                    return;
+                }
 
                 $(".overlay-preload").fadeIn(500);
                 $("body").css("overflow-y", "hidden");
@@ -565,13 +552,13 @@
                     url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/ViewMonDeferredRpt',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: '{"ReportType":"Monthly", "month":' + month + ', "year":' + year + '}',
+                    data: '{"ReportType":"Monthly", "reportId":' + reportId + '}',
                     dataType: 'json',
                     success: function (data) {
 
                         if (data.d != null) {
 
-                            var filename = "MonthlyDefferedIncomeSummaryReport" + year + month + "01.pdf";
+                            var filename = "MonthlyDefferedIncomeSummaryReport" + $("#year").find(":selected").data("year") + $("#year").find(":selected").data("month") + "01.pdf";
                             window.location = 'http://erp-srvr.sma.gov.jm/reports/' + filename;
 
                             $(".overlay-preload").delay(1300).fadeOut(100);
@@ -603,6 +590,27 @@
                 });
 
             });
+
+            $.ajax({
+                url: 'http://erp-srvr.sma.gov.jm:1786/IntegrationService.asmx/GetReportPeriods',
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    console.log(result)
+                    $.each(result.d, function (index, value) {
+                        console.log(value)
+                        var html = '<option value="' + value.reportId + '" data-month="'+value.month+'" data-year="'+value.year+'">' + value.reportLabel + '</option>'
+                        $("#year").append(html)
+                    })
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+
+            
+
 
             $("#btnUpdateBudget").click(function () {
 

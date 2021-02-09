@@ -224,7 +224,7 @@ namespace WebApplication4
             Integration intlink = new Integration();
             Report rpt = new Report();
 
-            DeferredData data = rpt.gen_rpt(ReportType, intlink, 1, month, year);
+            DeferredData data = rpt.gen_rpt(ReportType, intlink, 0, month, year);
 
             if (ReportType == "Monthly")
             {
@@ -249,33 +249,17 @@ namespace WebApplication4
         }
 
         [WebMethod]
-        public DeferredData ViewMonDeferredRpt(string ReportType, int month, int year)
+        public DeferredData ViewMonDeferredRpt(string ReportType, int reportId)
         {
             Integration intlink = new Integration();
+            return intlink.getDeferredRpt(ReportType, reportId.ToString());
+        }
 
-            DateTime nextRptDate = intlink.getNextRptDate(ReportType);
-            int currMonth = nextRptDate.Month - 1;
-            int currYear = nextRptDate.Year;
-            if (currMonth == 0)
-            {
-                currMonth = 12;
-                currYear = currYear - 1;
-            }
-
-            if (year == currYear && month == currMonth)
-            {
-                //Generate temporary report here
-                Report rpt = new Report();
-                return rpt.gen_rpt(ReportType, intlink, 1, month, year);
-            }
-
-            String report_id = intlink.getReportID(ReportType, month, year);
-            if (report_id != "")
-            {
-                return intlink.getDeferredRpt(ReportType, report_id);
-            }
-
-            return null; //This means the report does not exist or cannot be produced at this time
+        [WebMethod]
+        public List<ReportPeriod> GetReportPeriods()
+        {
+            Integration intlink = new Integration();
+            return intlink.GetReportPeriods();
         }
 
         [WebMethod]

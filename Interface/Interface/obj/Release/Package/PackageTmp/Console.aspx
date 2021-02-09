@@ -8,14 +8,75 @@
     <link href="grid.css" rel="stylesheet" />
     <link href="Content/bootstrap.css" rel="stylesheet" />
     <link href="jquery.mCustomScrollbar.css" rel="stylesheet" />
+
+    <style>
+        #events {
+            width: 100%;
+            height: 400px;
+            overflow:scroll;
+        }
+
+        .manual-operations {
+            display: flex !important;
+            flex-direction: row !important;
+            width: 70%;
+            margin: 0 auto;
+        }
+
+        .sub-header {
+            color: #616161;
+            font-style: italic;
+        }
+
+        .section {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding: 5px
+        }
+
+        #events {
+            border: 1px solid black;
+            margin: 5px;
+        }
+
+        .bold-header {
+            background-color: #000 !important;
+            color: #fff !important;
+        }
+    </style>
 </head>
 <body>
     <form id="form1" runat="server">
         <div class="gridTop">
-             <div class="logout">
+            <div class="logout">
                 <asp:Button ID="btnLogout" runat="server" CssClass="logoutBtn" Text="Main" OnClick="btnLogout_Click" />
             </div>
         </div>
+
+        <p style="margin-top:10px;" class="bold-header">Events</p>
+        <div id="events">
+        </div>
+
+        <p class="bold-header">Manual operations</p>
+        <div class="manual-operations">
+            <div class="section">
+                <p class="sub-header">Transfer invoice</p>
+                <input type="text" id="input-new-inv" />
+                <button type="button" id="new-inv">Transfer to Sage</button>
+            </div>
+            <div class="section">
+                <p class="sub-header">Transfer receipt</p>
+                <input type="text" id="input-new-rct" disabled="disabled" />
+                <button type="button" id="new-rct" disabled="disabled">Transfer to Sage</button>
+            </div>
+            <div class="section">
+                <p class="sub-header">Cancel Invoice</p>
+                <input type="text" id="input-cancel-inv" />
+                <button type="button" id="canel-inv">Transfer to Sage</button>
+            </div>
+        </div>
+
         <div class="admin-panel">
             <div class="dash">
                 <div class="top">
@@ -82,9 +143,9 @@
 
                     </div>
                 </div>
-                 <div class="chg-psw">
-              <a href="/RegisterAdmin.aspx">Register Admin</a>
-            </div>
+                <div class="chg-psw">
+                    <a href="/RegisterAdmin.aspx">Register Admin</a>
+                </div>
             </div>
         </div>
     </form>
@@ -92,8 +153,54 @@
     <script src="scripts/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="scripts/bootstrap.min.js"></script>
 
+    <script src="Scripts/jquery-1.6.4.min.js"></script>
+    <script src="Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <script src="http://erp-srvr.sma.gov.jm:8080/signalr/hubs"></script>
+
     <script type="text/javascript">
         var main = function () {
+
+            $.connection.hub.url = "http://erp-srvr.sma.gov.jm:8080/signalr";
+            var username = $("#displayname").val();
+            $.connection.hub.qs = { 'username': username }
+            var signal = $.connection.eventHub;
+
+            signal.client.event = function (e) {
+                var html = "<div class='event-item'>" +
+                    JSON.stringify(e) +
+                    "</div >";
+
+                $("#events").prepend(html);
+            };
+
+            $.connection.hub.error(function (error) {
+                console.log(error)
+            });
+
+            $.connection.hub.disconnected(function () {
+                console.log("Connection disconnected, attempting reconnect...");
+                setTimeout(function () {
+                    $.connection.hub.start();
+                }, 5000);
+            });
+
+            $.connection.hub.start().done(function () {
+                $('#new-inv').click(function () {
+                    signal.server.send("INVOICE_MANUAL_ENTRY", $("#input-new-inv").val());
+                    $("#input-new-inv").val('');
+                });
+
+                $('#new-rct').click(function () {
+                    signal.server.send("RECEIPT_MANUAL_ENTRY", $("#input-new-rct").val());
+                    $("#input-new-rct").val('');
+                });
+
+                $('#canel-inv').click(function () {
+                    signal.server.send("INVOICE_MANUAL_CANCEL", $("#input-cancel-inv").val());
+                    $("#input-cancel-inv").val('');
+                });
+            });
+
 
             $(".users").mCustomScrollbar({
                 theme: "minimal-dark"
@@ -308,10 +415,10 @@
                     for (i = 0; i < data.d.length; i++) {
 
                         var div = '<div class="log">' +
-                                   '<div class="timestamp"> <p>' + data.d[i].formattedDate + '</p></div>' +
-                                    '<div class="log-content"> <p>' + data.d[i].msg + '</p></div>' +
-                                    '<div class="id"> <p>' + data.d[i].id + '</p></div>' +
-                                  '</div>';
+                            '<div class="timestamp"> <p>' + data.d[i].formattedDate + '</p></div>' +
+                            '<div class="log-content"> <p>' + data.d[i].msg + '</p></div>' +
+                            '<div class="id"> <p>' + data.d[i].id + '</p></div>' +
+                            '</div>';
 
                         $(div).appendTo('.t3').hide().slideDown(700, 'swing', function () { });
                     }
@@ -331,10 +438,10 @@
                         console.log("should prepend");
 
                         var send = '<div class="log">' +
-                                       '<div class="timestamp"> <p>' + data.d[x].formattedDate + '</p></div>' +
-                                        '<div class="log-content"> <p>' + data.d[x].msg + '</p></div>' +
-                                        '<div class="id"> <p>' + data.d[x].id + '</p></div>' +
-                                      '</div>';
+                            '<div class="timestamp"> <p>' + data.d[x].formattedDate + '</p></div>' +
+                            '<div class="log-content"> <p>' + data.d[x].msg + '</p></div>' +
+                            '<div class="id"> <p>' + data.d[x].id + '</p></div>' +
+                            '</div>';
 
 
                         var len_ = $('.t3 .log');
@@ -413,7 +520,6 @@
         }
 
         $(document).ready(main);
-
     </script>
 
 </body>

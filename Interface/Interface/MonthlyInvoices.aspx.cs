@@ -33,29 +33,7 @@ namespace _000
         {
             int year = 0, month = 0;
 
-            if (DropDownList1.SelectedValue == "2016")
-            {
-                year = 2016;
-            }
-            else if (DropDownList1.SelectedValue == "2017")
-            {
-                year = 2017;
-            }
-
-            else if (DropDownList1.SelectedValue == "2018")
-            {
-                year = 2018;
-            }
-
-            else if (DropDownList1.SelectedValue == "2019")
-            {
-                year = 2019;
-            }
-
-            else if (DropDownList1.SelectedValue == "2020")
-            {
-                year = 2020;
-            }
+            year = Convert.ToInt32(DropDownList1.SelectedValue);
 
 
             if (ddl1.SelectedValue == "1")

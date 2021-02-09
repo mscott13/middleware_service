@@ -994,3 +994,133 @@
 10/2/2020 10:53:15 AM - Object reference not set to an instance of an object.    at middleware_service.middleware_service.OnStop() in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 178
 --------end
 
+10/23/2020 2:25:36 PM - Invalid connection string.    at TableDependency.SqlClient.SqlTableDependency`1.CheckIfConnectionStringIsValid(String connectionString)
+   at TableDependency.SqlClient.SqlTableDependency`1.PreliminaryChecks(String connectionString, String tableName)
+   at TableDependency.TableDependency`1..ctor(String connectionString, String tableName, ModelToTableMapper`1 mapper, IList`1 updateOf, DmlTriggerType dmlTriggerType, Boolean automaticDatabaseObjectsTeardown, String namingConventionForDatabaseObjects)
+   at TableDependency.SqlClient.SqlTableDependency`1..ctor(String connectionString, String tableName)
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 128
+--------end
+
+10/23/2020 2:25:37 PM - Object reference not set to an instance of an object.    at middleware_service.middleware_service.OnStop() in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 182
+--------end
+
+10/26/2020 9:29:08 AM - Invalid connection string.    at TableDependency.SqlClient.SqlTableDependency`1.CheckIfConnectionStringIsValid(String connectionString)
+   at TableDependency.SqlClient.SqlTableDependency`1.PreliminaryChecks(String connectionString, String tableName)
+   at TableDependency.TableDependency`1..ctor(String connectionString, String tableName, ModelToTableMapper`1 mapper, IList`1 updateOf, DmlTriggerType dmlTriggerType, Boolean automaticDatabaseObjectsTeardown, String namingConventionForDatabaseObjects)
+   at TableDependency.SqlClient.SqlTableDependency`1..ctor(String connectionString, String tableName)
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 128
+--------end
+
+10/26/2020 9:29:10 AM - Object reference not set to an instance of an object.    at middleware_service.middleware_service.OnStop() in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 182
+--------end
+
+10/27/2020 11:53:15 AM - Invalid connection string.    at TableDependency.SqlClient.SqlTableDependency`1.CheckIfConnectionStringIsValid(String connectionString)
+   at TableDependency.SqlClient.SqlTableDependency`1.PreliminaryChecks(String connectionString, String tableName)
+   at TableDependency.TableDependency`1..ctor(String connectionString, String tableName, ModelToTableMapper`1 mapper, IList`1 updateOf, DmlTriggerType dmlTriggerType, Boolean automaticDatabaseObjectsTeardown, String namingConventionForDatabaseObjects)
+   at TableDependency.SqlClient.SqlTableDependency`1..ctor(String connectionString, String tableName)
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 128
+--------end
+
+10/27/2020 11:53:17 AM - Object reference not set to an instance of an object.    at middleware_service.middleware_service.OnStop() in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 182
+--------end
+
+11/2/2020 2:37:58 PM - Invalid connection string.    at TableDependency.SqlClient.SqlTableDependency`1.CheckIfConnectionStringIsValid(String connectionString)
+   at TableDependency.SqlClient.SqlTableDependency`1.PreliminaryChecks(String connectionString, String tableName)
+   at TableDependency.TableDependency`1..ctor(String connectionString, String tableName, ModelToTableMapper`1 mapper, IList`1 updateOf, DmlTriggerType dmlTriggerType, Boolean automaticDatabaseObjectsTeardown, String namingConventionForDatabaseObjects)
+   at TableDependency.SqlClient.SqlTableDependency`1..ctor(String connectionString, String tableName)
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 129
+--------end
+
+11/2/2020 2:38:00 PM - Object reference not set to an instance of an object.    at middleware_service.middleware_service.OnStop() in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 182
+--------end
+
+11/9/2020 4:54:12 PM - Invalid connection string.    at TableDependency.SqlClient.SqlTableDependency`1.CheckIfConnectionStringIsValid(String connectionString)
+   at TableDependency.SqlClient.SqlTableDependency`1.PreliminaryChecks(String connectionString, String tableName)
+   at TableDependency.TableDependency`1..ctor(String connectionString, String tableName, ModelToTableMapper`1 mapper, IList`1 updateOf, DmlTriggerType dmlTriggerType, Boolean automaticDatabaseObjectsTeardown, String namingConventionForDatabaseObjects)
+   at TableDependency.SqlClient.SqlTableDependency`1..ctor(String connectionString, String tableName)
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 129
+--------end
+
+11/9/2020 4:54:13 PM - Object reference not set to an instance of an object.    at middleware_service.middleware_service.OnStop() in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 182
+--------end
+
+12/15/2020 2:55:40 PM - Invalid connection string.    at TableDependency.SqlClient.SqlTableDependency`1.CheckIfConnectionStringIsValid(String connectionString)
+   at TableDependency.SqlClient.SqlTableDependency`1.PreliminaryChecks(String connectionString, String tableName)
+   at TableDependency.TableDependency`1..ctor(String connectionString, String tableName, ModelToTableMapper`1 mapper, IList`1 updateOf, DmlTriggerType dmlTriggerType, Boolean automaticDatabaseObjectsTeardown, String namingConventionForDatabaseObjects)
+   at TableDependency.SqlClient.SqlTableDependency`1..ctor(String connectionString, String tableName)
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 129
+--------end
+
+12/15/2020 2:55:41 PM - Object reference not set to an instance of an object.    at middleware_service.middleware_service.OnStop() in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 182
+--------end
+
+1/13/2021 1:08:52 PM - Starting accpac session...
+1/13/2021 1:09:23 PM -     at ACCPAC.Advantage.Server.Session.Open(String userID, String password, String orgID, DateTime sessionDate, Int32 flags, Boolean checkStatus)
+   at ACCPAC.Advantage.Session.Open(String userID, String password, String companyID, DateTime sessionDate, Int32 flags)
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 148
+--------end
+
+1/13/2021 1:09:23 PM - middleware_service stopped.
+--------end
+
+1/13/2021 1:13:33 PM - Starting accpac session...
+1/13/2021 2:29:51 PM - Invalid connection string.    at TableDependency.SqlClient.SqlTableDependency`1.CheckIfConnectionStringIsValid(String connectionString)
+   at TableDependency.SqlClient.SqlTableDependency`1.PreliminaryChecks(String connectionString, String tableName)
+   at TableDependency.TableDependency`1..ctor(String connectionString, String tableName, ModelToTableMapper`1 mapper, IList`1 updateOf, DmlTriggerType dmlTriggerType, Boolean automaticDatabaseObjectsTeardown, String namingConventionForDatabaseObjects)
+   at TableDependency.SqlClient.SqlTableDependency`1..ctor(String connectionString, String tableName)
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 129
+--------end
+
+1/13/2021 2:29:51 PM - Object reference not set to an instance of an object.    at middleware_service.middleware_service.OnStop() in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 182
+--------end
+
+1/18/2021 1:19:58 PM - Invalid connection string.    at TableDependency.SqlClient.SqlTableDependency`1.CheckIfConnectionStringIsValid(String connectionString)
+   at TableDependency.SqlClient.SqlTableDependency`1.PreliminaryChecks(String connectionString, String tableName)
+   at TableDependency.TableDependency`1..ctor(String connectionString, String tableName, ModelToTableMapper`1 mapper, IList`1 updateOf, DmlTriggerType dmlTriggerType, Boolean automaticDatabaseObjectsTeardown, String namingConventionForDatabaseObjects)
+   at TableDependency.SqlClient.SqlTableDependency`1..ctor(String connectionString, String tableName)
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 129
+--------end
+
+1/18/2021 1:20:01 PM - Object reference not set to an instance of an object.    at middleware_service.middleware_service.OnStop() in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 182
+--------end
+
+2/1/2021 1:59:05 PM - Invalid connection string.    at TableDependency.SqlClient.SqlTableDependency`1.CheckIfConnectionStringIsValid(String connectionString)
+   at TableDependency.SqlClient.SqlTableDependency`1.PreliminaryChecks(String connectionString, String tableName)
+   at TableDependency.TableDependency`1..ctor(String connectionString, String tableName, ModelToTableMapper`1 mapper, IList`1 updateOf, DmlTriggerType dmlTriggerType, Boolean automaticDatabaseObjectsTeardown, String namingConventionForDatabaseObjects)
+   at TableDependency.SqlClient.SqlTableDependency`1..ctor(String connectionString, String tableName)
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 129
+--------end
+
+2/1/2021 1:59:06 PM - Object reference not set to an instance of an object.    at middleware_service.middleware_service.OnStop() in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 182
+--------end
+
+2/2/2021 9:34:21 AM - Invalid connection string.    at TableDependency.SqlClient.SqlTableDependency`1.CheckIfConnectionStringIsValid(String connectionString)
+   at TableDependency.SqlClient.SqlTableDependency`1.PreliminaryChecks(String connectionString, String tableName)
+   at TableDependency.TableDependency`1..ctor(String connectionString, String tableName, ModelToTableMapper`1 mapper, IList`1 updateOf, DmlTriggerType dmlTriggerType, Boolean automaticDatabaseObjectsTeardown, String namingConventionForDatabaseObjects)
+   at TableDependency.SqlClient.SqlTableDependency`1..ctor(String connectionString, String tableName)
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 129
+--------end
+
+2/2/2021 9:34:22 AM - Object reference not set to an instance of an object.    at middleware_service.middleware_service.OnStop() in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 182
+--------end
+
+2/2/2021 4:53:46 PM - Invalid connection string.    at TableDependency.SqlClient.SqlTableDependency`1.CheckIfConnectionStringIsValid(String connectionString)
+   at TableDependency.SqlClient.SqlTableDependency`1.PreliminaryChecks(String connectionString, String tableName)
+   at TableDependency.TableDependency`1..ctor(String connectionString, String tableName, ModelToTableMapper`1 mapper, IList`1 updateOf, DmlTriggerType dmlTriggerType, Boolean automaticDatabaseObjectsTeardown, String namingConventionForDatabaseObjects)
+   at TableDependency.SqlClient.SqlTableDependency`1..ctor(String connectionString, String tableName)
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 129
+--------end
+
+2/2/2021 4:53:48 PM - Object reference not set to an instance of an object.    at middleware_service.middleware_service.OnStop() in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 182
+--------end
+
+2/8/2021 10:07:23 AM - Invalid connection string.    at TableDependency.SqlClient.SqlTableDependency`1.CheckIfConnectionStringIsValid(String connectionString)
+   at TableDependency.SqlClient.SqlTableDependency`1.PreliminaryChecks(String connectionString, String tableName)
+   at TableDependency.TableDependency`1..ctor(String connectionString, String tableName, ModelToTableMapper`1 mapper, IList`1 updateOf, DmlTriggerType dmlTriggerType, Boolean automaticDatabaseObjectsTeardown, String namingConventionForDatabaseObjects)
+   at TableDependency.SqlClient.SqlTableDependency`1..ctor(String connectionString, String tableName)
+   at middleware_service.middleware_service.OnStart(String[] args) in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 129
+--------end
+
+2/8/2021 10:07:25 AM - Object reference not set to an instance of an object.    at middleware_service.middleware_service.OnStop() in C:\Users\mscott\Desktop\Git Repositories\middleware_service\middleware_service\middleware_service\middleware_service.cs:line 182
+--------end
+

@@ -194,6 +194,7 @@
     <Content Include="MonthlyInvoices.aspx" />
     <Content Include="MonthlyPayments.aspx" />
     <Content Include="Notifications.aspx" />
+    <Content Include="operations.html" />
     <Content Include="packages.config" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -283,10 +284,15 @@
     <Content Include="ResetPassword.aspx" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
+    <None Include="scripts\jquery-1.6.4-vsdoc.js" />
+    <Content Include="scripts\jquery-1.6.4.js" />
+    <Content Include="scripts\jquery-1.6.4.min.js" />
     <Content Include="scripts\jquery-2.0.0.js" />
     <Content Include="scripts\jquery-2.0.0.min.js" />
     <Content Include="scripts\jquery-2.0.0.min.map" />
     <Content Include="scripts\jquery-3.2.1.min.js" />
+    <Content Include="scripts\jquery.signalR-2.4.1.js" />
+    <Content Include="scripts\jquery.signalR-2.4.1.min.js" />
     <Content Include="Site.Master" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

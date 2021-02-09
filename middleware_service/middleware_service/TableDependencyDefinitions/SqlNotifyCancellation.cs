@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace middleware_service.TableDependencyDefinitions
 {
-    class SqlNotifyCancellation
+    public class SqlNotifyCancellation
     {
         public int ARInvoiceID { get; set; }
         public decimal Amount { get; set; }

@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\middleware_service",
+    "\\middleware_service\\middleware_service",
+    "\\middleware_service\\setup"
   ],
+  "SelectedNode": "\\middleware_service\\setup",
   "PreviewInSolutionExplorer": false
 }

@@ -5,11 +5,13 @@ using System.Web;
 using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
+using Newtonsoft.Json;
 
 namespace WebApplication4
 {
     public class Integration
     {
+        //ERP-SRVR || SERVER-ERP2 (10.0.0.206)
         string dbsrvIntegration = @"Data Source=ERP-SRVR\TCIASMS;Initial Catalog=ASMSSAGEINTEGRATION; Integrated Security=True";
 
         public int GetInvoiceCount()
@@ -560,7 +562,7 @@ namespace WebApplication4
                         detail.prepstat = reader[7].ToString();
                         detail.payByCred = reader[8].ToString();
 
-                        if (detail.prepstat == "No" && detail.payByCred=="No")
+                        if (detail.prepstat == "No" && detail.payByCred == "No")
                         {
                             detail.invoiceId = reader[3].ToString();
                         }
@@ -580,8 +582,8 @@ namespace WebApplication4
                         {
                             detail.amount = formatMoney(reader[4].ToString());
                             detail.currency = "JM";
-                            detail.amount = "J$ "+detail.amount;
-                        } 
+                            detail.amount = "J$ " + detail.amount;
+                        }
                         else
                         {
                             detail.amount = formatMoney(reader[6].ToString());
@@ -641,14 +643,14 @@ namespace WebApplication4
                             detail.currency = "JM";
                             detail.amount = "J$ " + detail.amount;
                         }
-                            
+
                         else
                         {
                             detail.amount = formatMoney(reader[9].ToString());
                             detail.currency = "US";
                             detail.amount = "US$ " + detail.amount;
                         }
-                        
+
                         detail.sequence = Convert.ToInt32(reader[7]);
                         detail.state = reader[8].ToString();
 
@@ -928,7 +930,7 @@ namespace WebApplication4
             {
                 cmd.Connection = conn;
                 cmd.CommandText = "sp_getCancellationsAndMemos";
-                
+
                 conn.Open();
                 reader = cmd.ExecuteReader();
 
@@ -951,7 +953,7 @@ namespace WebApplication4
                         int isCreditMemo = Convert.ToInt32(reader["isCreditMemo"]);
                         if (isCreditMemo == 1)
                         {
-                            data.Author = "Document Number: "+ reader["credMemoNum"].ToString();
+                            data.Author = "Document Number: " + reader["credMemoNum"].ToString();
                         }
 
                         int isVoid = Convert.ToInt32(reader["isvoid"]);
@@ -1028,7 +1030,7 @@ namespace WebApplication4
                 SqlConnection conn = new SqlConnection(dbsrvIntegration);
                 SqlCommand cmd = new SqlCommand();
                 cmd.CommandText = "exec sp_rptRecInsert @ReportType, @reportId, @licenseNumber, @clientCompany, @invoiceID, @budget, @invoiceTotal, @thisPeriodsInv, @balBFwd, @fromRev, @toRev, @closingBal, @totalMonths, @monthUtil, @monthRemain,  @valPStart, @valPEnd, @destination";
-                cmd.Connection = conn ;
+                cmd.Connection = conn;
 
                 cmd.Parameters.AddWithValue("@ReportType", ReportType);
                 cmd.Parameters.AddWithValue("@reportId", recordID);
@@ -1057,9 +1059,14 @@ namespace WebApplication4
             insertSubtotals(ReportType, recordID, data, destination);
         }
 
-        public string saveReport(string ReportType, List<DataWrapper> categories, Totals total)
+        public string saveReport(string ReportType, List<DataWrapper> categories, Totals total, int reportId = 0)
         {
-            string id = generateReportId(ReportType);
+            string id = reportId.ToString();
+
+            if (reportId == 0)
+            {
+                id = generateReportId(ReportType);
+            }
 
             for (int i = 0; i < categories.Count; i++)
             {
@@ -1118,48 +1125,56 @@ namespace WebApplication4
         {
             List<DataWrapper> tables = new List<DataWrapper>();
             DataWrapper cell_table = new DataWrapper();
-            DataWrapper micro_table = new DataWrapper();
-            DataWrapper bbrand_table = new DataWrapper();
-            DataWrapper vsat_table = new DataWrapper();
-            DataWrapper other_table = new DataWrapper();
-            DataWrapper trunking_table = new DataWrapper();
-            DataWrapper aero_table = new DataWrapper();
-            DataWrapper marine_table = new DataWrapper();
-            DataWrapper dservices_table = new DataWrapper();
+            cell_table.label = Report.RPT_CATEGORY_CELLULAR;
 
-            cell_table.label = "Cellular";
+            DataWrapper micro_table = new DataWrapper();
+            micro_table.label = Report.RPT_CATEGORY_MICROWAVE;
+
+            DataWrapper bbrand_table = new DataWrapper();
+            bbrand_table.label = Report.RPT_CATEGORY_BROADBAND;
+
+            DataWrapper vsat_table = new DataWrapper();
+            vsat_table.label = Report.RPT_CATEGORY_VSAT;
+
+            DataWrapper other_table = new DataWrapper();
+            other_table.label = Report.RPT_CATEGORY_OTHER;
+
+            DataWrapper trunking_table = new DataWrapper();
+            trunking_table.label = Report.RPT_CATEGORY_TRUNKING;
+
+            DataWrapper aero_table = new DataWrapper();
+            aero_table.label = Report.RPT_CATEGORY_AERONAUTICAL;
+
+            DataWrapper marine_table = new DataWrapper();
+            marine_table.label = Report.RPT_CATEGORY_MARINE;
+
+            DataWrapper dservices_table = new DataWrapper();
+            dservices_table.label = Report.RPT_CATEGORY_DSERVICES;
+
             cell_table.records = getDeferredPartial(ReportType, 0, report_id);
             cell_table.setSubTotals(getDeferredPartialSubs(ReportType, 0, report_id));
 
-            bbrand_table.label = "Broadband";
             bbrand_table.records = getDeferredPartial(ReportType, 1, report_id);
             bbrand_table.setSubTotals(getDeferredPartialSubs(ReportType, 1, report_id));
 
-            micro_table.label = "Microwave";
             micro_table.records = getDeferredPartial(ReportType, 2, report_id);
             micro_table.setSubTotals(getDeferredPartialSubs(ReportType, 2, report_id));
 
-            vsat_table.label = "Vsat";
             vsat_table.records = getDeferredPartial(ReportType, 3, report_id);
             vsat_table.setSubTotals(getDeferredPartialSubs(ReportType, 3, report_id));
 
-            marine_table.label = "Marine";
             marine_table.records = getDeferredPartial(ReportType, 4, report_id);
             marine_table.setSubTotals(getDeferredPartialSubs(ReportType, 4, report_id));
 
-            dservices_table.label = "Data & Services";
             dservices_table.records = getDeferredPartial(ReportType, 5, report_id);
             dservices_table.setSubTotals(getDeferredPartialSubs(ReportType, 5, report_id));
 
-            aero_table.label = "Aeronautical";
             aero_table.records = getDeferredPartial(ReportType, 6, report_id);
             aero_table.setSubTotals(getDeferredPartialSubs(ReportType, 6, report_id));
 
-            trunking_table.label = "Trunking";
             trunking_table.records = getDeferredPartial(ReportType, 7, report_id);
             trunking_table.setSubTotals(getDeferredPartialSubs(ReportType, 7, report_id));
 
-            other_table.label = "Other";
             other_table.records = getDeferredPartial(ReportType, 8, report_id);
             other_table.setSubTotals(getDeferredPartialSubs(ReportType, 8, report_id));
 
@@ -1172,7 +1187,7 @@ namespace WebApplication4
             tables.Add(aero_table);
             tables.Add(trunking_table);
             tables.Add(other_table);
-            
+
             DeferredData d = new DeferredData();
             d.Categories = tables;
             d.Total = getDeferredTotal(ReportType, report_id);
@@ -1435,11 +1450,11 @@ namespace WebApplication4
                 reader.Close();
                 conn.Close();
                 return reportInfo;
-            }            
+            }
         }
 
         public DateTime getNextRptDate(String ReportType)
-        { 
+        {
             DateTime nextRptDate = new DateTime();
             SqlConnection conn = new SqlConnection(dbsrvIntegration);
             SqlCommand cmd = new SqlCommand();
@@ -1485,13 +1500,20 @@ namespace WebApplication4
             conn.Close();
         }
 
-        public List<ReportPeriod> GetReportPeriods()
+        public List<ReportPeriod> GetReportPeriods(string reportType)
         {
             List<ReportPeriod> reports = new List<ReportPeriod>();
             using (SqlConnection connection = new SqlConnection(dbsrvIntegration))
             {
                 connection.Open();
-                using (SqlCommand command = new SqlCommand("Select * from MonthlyDIR_ReportMain order by report_date desc", connection))
+
+                var table = "";
+                if (reportType == "Monthly")
+                    table = "MonthlyDIR_ReportMain";
+                else
+                    table = "AnnualDIR_ReportMain";
+
+                using (SqlCommand command = new SqlCommand($"Select * from {table} order by report_date desc", connection))
                 {
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
@@ -1499,14 +1521,28 @@ namespace WebApplication4
                         {
                             while (reader.Read())
                             {
-                                var report = new ReportPeriod
+                                if (reportType == "Monthly")
                                 {
-                                    reportId = Convert.ToInt32(reader["report_id"]),
-                                    reportLabel = $"Generated report for: {Convert.ToDateTime(reader["report_date"]).AddMonths(-1).ToString("MMMM, yyyy")}",
-                                    month = Convert.ToDateTime(reader["report_date"]).AddMonths(-1).ToString("MM"),
-                                    year = Convert.ToDateTime(reader["report_date"]).AddMonths(-1).ToString("yyyy")
-                                };
-                                reports.Add(report);
+                                    var report = new ReportPeriod
+                                    {
+                                        reportId = Convert.ToInt32(reader["report_id"]),
+                                        reportLabel = $"Generated report for: {Convert.ToDateTime(reader["report_date"]).AddMonths(-1).ToString("MMMM, yyyy")}",
+                                        month = Convert.ToDateTime(reader["report_date"]).AddMonths(-1).ToString("MM"),
+                                        year = Convert.ToDateTime(reader["report_date"]).AddMonths(-1).ToString("yyyy")
+                                    };
+                                    reports.Add(report);
+                                }
+                                else
+                                {
+                                    var report = new ReportPeriod
+                                    {
+                                        reportId = Convert.ToInt32(reader["report_id"]),
+                                        reportLabel = $"Annual report for period: {Convert.ToDateTime(reader["report_date"]).AddYears(-1).ToString("yyyy")} - {Convert.ToDateTime(reader["report_date"]).ToString("yyyy")}",
+                                        month = Convert.ToDateTime(reader["report_date"]).AddMonths(-1).ToString("MM"),
+                                        year = Convert.ToDateTime(reader["report_date"]).AddYears(-1).AddMonths(-1).ToString("yyyy")
+                                    };
+                                    reports.Add(report);
+                                }
                             }
                         }
                     }
@@ -1514,5 +1550,622 @@ namespace WebApplication4
             }
             return reports;
         }
+
+        public ReportPeriod GetReportPeriod(int reportId, string reportType)
+        {
+            List<ReportPeriod> reports = new List<ReportPeriod>();
+            using (SqlConnection connection = new SqlConnection(dbsrvIntegration))
+            {
+                var rType = "";
+                if (reportType == "Monthly")
+                    rType = "MonthlyDIR_ReportMain";
+                else
+                    rType = "AnnualDIR_ReportMain";
+
+                connection.Open();
+                using (SqlCommand command = new SqlCommand($"Select * from {rType} where report_id=@reportId", connection))
+                {
+                    command.Parameters.AddWithValue("@reportId", reportId);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            reader.Read();
+                            if (reportType == "Monthly")
+                            {
+                                return new ReportPeriod
+                                {
+                                    reportId = Convert.ToInt32(reader["report_id"]),
+                                    reportLabel = $"Generated report for: {Convert.ToDateTime(reader["report_date"]).AddMonths(-1).ToString("MMMM, yyyy")}",
+                                    month = Convert.ToDateTime(reader["report_date"]).AddMonths(-1).ToString("MM"),
+                                    year = Convert.ToDateTime(reader["report_date"]).AddMonths(-1).ToString("yyyy"),
+                                    date = Convert.ToDateTime(reader["report_date"]).AddMonths(-1)
+                                };
+                            }
+                            else {
+                                return new ReportPeriod
+                                {
+                                    reportId = Convert.ToInt32(reader["report_id"]),
+                                    reportLabel = $"Generated report for: {Convert.ToDateTime(reader["report_date"]).AddMonths(-1).ToString("MMMM, yyyy")}",
+                                    month = Convert.ToDateTime(reader["report_date"]).ToString("MM"),
+                                    year = Convert.ToDateTime(reader["report_date"]).ToString("yyyy"),
+                                    date = Convert.ToDateTime(reader["report_date"])
+                                };
+                            }
+
+                        }
+                        else
+                            return null;
+                    }
+                }
+            }
+        }
+
+        public UIData GetDeferredLineItem(int invoiceId, int reportId)
+        {
+            DeferredData originalData = getDeferredRpt("Monthly", reportId.ToString());
+            foreach (DataWrapper dataset in originalData.Categories)
+            {
+                var record = dataset.records.Find(x => x.invoiceID == invoiceId.ToString());
+                if (record != null)
+                {
+                    if (record.toRev.Contains("(") || record.toRev.Contains(")"))
+                    {
+                        var temp = Convert.ToDecimal(record.toRev.Replace("(", "").Replace(")", ""));
+                        temp = decimal.Negate(temp);
+                        record.toRev = Math.Round(temp, 2).ToString();
+                    }
+                    else
+                        record.toRev = Math.Round(Convert.ToDecimal(record.toRev), 2).ToString();
+
+                    if (record.fromRev.Contains("(") || record.fromRev.Contains(")"))
+                    {
+                        var temp = Convert.ToDecimal(record.fromRev.Replace("(", "").Replace(")", ""));
+                        temp = decimal.Negate(temp);
+                        record.fromRev = Math.Round(temp, 2).ToString();
+                    }
+                    else
+                        record.fromRev = Math.Round(Convert.ToDecimal(record.toRev), 2).ToString();
+
+                    record.balBFwd = Math.Round(Convert.ToDecimal(record.balBFwd), 2).ToString();
+                    record.budget = Math.Round(Convert.ToDecimal(record.budget), 2).ToString();
+                    record.closingBal = Math.Round(Convert.ToDecimal(record.closingBal), 2).ToString();
+                    record.fromRev = Math.Round(Convert.ToDecimal(record.fromRev), 2).ToString();
+                    record.invoiceTotal = Math.Round(Convert.ToDecimal(record.invoiceTotal), 2).ToString();
+
+                    record.group = dataset.label;
+                    return record;
+                }
+            }
+            return null;
+        }
+
+        public UIData GetDeferredLineItemForAnnual(int invoiceId, int reportId)
+        {
+            DeferredData originalData = getDeferredRpt("Annual", reportId.ToString());
+            foreach (DataWrapper dataset in originalData.Categories)
+            {
+                var record = dataset.records.Find(x => x.invoiceID == invoiceId.ToString());
+                if (record != null)
+                {
+                    if (record.toRev.Contains("(") || record.toRev.Contains(")"))
+                    {
+                        var temp = Convert.ToDecimal(record.toRev.Replace("(", "").Replace(")", ""));
+                        temp = decimal.Negate(temp);
+                        record.toRev = Math.Round(temp, 2).ToString();
+                    }
+                    else
+                        record.toRev = Math.Round(Convert.ToDecimal(record.toRev), 2).ToString();
+
+                    if (record.fromRev.Contains("(") || record.fromRev.Contains(")"))
+                    {
+                        var temp = Convert.ToDecimal(record.fromRev.Replace("(", "").Replace(")", ""));
+                        temp = decimal.Negate(temp);
+                        record.fromRev = Math.Round(temp, 2).ToString();
+                    }
+                    else
+                        record.fromRev = Math.Round(Convert.ToDecimal(record.toRev), 2).ToString();
+
+                    record.balBFwd = Math.Round(Convert.ToDecimal(record.balBFwd), 2).ToString();
+                    record.budget = Math.Round(Convert.ToDecimal(record.budget), 2).ToString();
+                    record.closingBal = Math.Round(Convert.ToDecimal(record.closingBal), 2).ToString();
+                    record.fromRev = Math.Round(Convert.ToDecimal(record.fromRev), 2).ToString();
+                    record.invoiceTotal = Math.Round(Convert.ToDecimal(record.invoiceTotal), 2).ToString();
+
+                    record.group = dataset.label;
+                    return record;
+                }
+            }
+            return null;
+        }
+
+        public DeferredModificationResult RemoveFromReport(int invoiceId, int reportId)
+        {
+            DeferredData originalData = getDeferredRpt("Monthly", reportId.ToString());
+            originalData.report_id = reportId.ToString();
+
+            List<string> ReportColumnNames = new List<string>();
+            ReportColumnNames.Add("License Number");
+            ReportColumnNames.Add("Client Company");
+            ReportColumnNames.Add("Invoice ID");
+            ReportColumnNames.Add("Budget");
+            ReportColumnNames.Add("Invoice Total");
+            ReportColumnNames.Add("This Month's Invoice");
+            ReportColumnNames.Add("Balance B/FWD");
+            ReportColumnNames.Add("From Revenue");
+            ReportColumnNames.Add("To Revenue");
+            ReportColumnNames.Add("Closing Balance");
+            ReportColumnNames.Add("Total Months");
+            ReportColumnNames.Add("Months Utilized");
+            ReportColumnNames.Add("Months Remaining");
+            ReportColumnNames.Add("Validity Period Start");
+            ReportColumnNames.Add("Validity Period End");
+            originalData.ColumnNames = ReportColumnNames;
+            var clone = Clone(originalData);
+
+            foreach (DataWrapper data in clone.Categories)
+            {
+                var item = data.records.Find(x => x.invoiceID == invoiceId.ToString());
+                if (item != null)
+                {
+                    data.records.Remove(data.records.Single(s => s.invoiceID == invoiceId.ToString()));
+
+                    var subtotals = GetSubTotals(data.records);
+                    data.setSubTotals(subtotals);
+                    clone.Total = GetTotals(clone.Categories);
+
+                    DeleteMonthlyReportPartially(reportId);
+                    saveReport("Monthly", clone.Categories, clone.Total, reportId);
+
+                    DateTime startDate = GetReportPeriod(reportId, "Monthly").date;
+                    startDate = new DateTime(startDate.Year, startDate.Month, startDate.Day);
+
+                    Report.createPdfReport("Monthly", clone, startDate);
+                    Report.createPdfTotalsReport("Monthly", clone, startDate);
+
+                    return new DeferredModificationResult {
+                        originalData = originalData,
+                        modifiedData = clone
+                    };
+                }
+            }
+
+            return null;
+        }
+
+
+        public DeferredModificationResult RemoveFromAnnualReport(int invoiceId, int reportId)
+        {
+            DeferredData originalData = getDeferredRpt("Annual", reportId.ToString());
+            originalData.report_id = reportId.ToString();
+
+            List<string> ReportColumnNames = new List<string>();
+            ReportColumnNames.Add("License Number");
+            ReportColumnNames.Add("Client Company");
+            ReportColumnNames.Add("Invoice ID");
+            ReportColumnNames.Add("Budget");
+            ReportColumnNames.Add("Invoice Total");
+            ReportColumnNames.Add("This Month's Invoice");
+            ReportColumnNames.Add("Balance B/FWD");
+            ReportColumnNames.Add("From Revenue");
+            ReportColumnNames.Add("To Revenue");
+            ReportColumnNames.Add("Closing Balance");
+            ReportColumnNames.Add("Total Months");
+            ReportColumnNames.Add("Months Utilized");
+            ReportColumnNames.Add("Months Remaining");
+            ReportColumnNames.Add("Validity Period Start");
+            ReportColumnNames.Add("Validity Period End");
+            originalData.ColumnNames = ReportColumnNames;
+            var clone = Clone(originalData);
+
+            foreach (DataWrapper data in clone.Categories)
+            {
+                var item = data.records.Find(x => x.invoiceID == invoiceId.ToString());
+                if (item != null)
+                {
+                    data.records.RemoveAll((s => s.invoiceID == invoiceId.ToString()));
+
+                    var subtotals = GetSubTotals(data.records);
+                    data.setSubTotals(subtotals);
+                    clone.Total = GetTotals(clone.Categories);
+
+                    DeleteAnnualReportPartially(reportId);
+                    saveReport("Annual", clone.Categories, clone.Total, reportId);
+
+                    DateTime startDate = GetReportPeriod(reportId, "Annual").date;
+                    startDate = new DateTime(startDate.Year, startDate.Month, startDate.Day);
+
+                    Report.createPdfReport("Annual", clone, startDate);
+                    Report.createPdfTotalsReport("Annual", clone, startDate);
+
+                    return new DeferredModificationResult
+                    {
+                        originalData = originalData,
+                        modifiedData = clone
+                    };
+                }
+            }
+
+            return null;
+        }
+        public DeferredModificationResult AddToReport(ReportEntry entry, int reportId)
+        {
+            DeferredData originalData = getDeferredRpt("Monthly", reportId.ToString());
+            originalData.report_id = reportId.ToString();
+
+            List<string> ReportColumnNames = new List<string>();
+            ReportColumnNames.Add("License Number");
+            ReportColumnNames.Add("Client Company");
+            ReportColumnNames.Add("Invoice ID");
+            ReportColumnNames.Add("Budget");
+            ReportColumnNames.Add("Invoice Total");
+            ReportColumnNames.Add("This Month's Invoice");
+            ReportColumnNames.Add("Balance B/FWD");
+            ReportColumnNames.Add("From Revenue");
+            ReportColumnNames.Add("To Revenue");
+            ReportColumnNames.Add("Closing Balance");
+            ReportColumnNames.Add("Total Months");
+            ReportColumnNames.Add("Months Utilized");
+            ReportColumnNames.Add("Months Remaining");
+            ReportColumnNames.Add("Validity Period Start");
+            ReportColumnNames.Add("Validity Period End");
+            originalData.ColumnNames = ReportColumnNames;
+
+            var clone = Clone(originalData);
+            var record = new UIData();
+            record = GetUIDataFromEntry(entry, ref record);
+
+            var category = clone.Categories.Find(x => x.label == entry.group);
+            if (category != null)
+            {
+                category.records.Add(record);
+                var subtotals = GetSubTotals(category.records);
+                category.setSubTotals(subtotals);
+                clone.Total = GetTotals(clone.Categories);
+
+                DeleteMonthlyReportPartially(reportId);
+                saveReport("Monthly", clone.Categories, clone.Total, reportId);
+
+                DateTime startDate = GetReportPeriod(reportId, "Monthly").date;
+                startDate = new DateTime(startDate.Year, startDate.Month, startDate.Day);
+
+                Report.createPdfReport("Monthly", clone, startDate);
+                Report.createPdfTotalsReport("Monthly", clone, startDate);
+
+                return new DeferredModificationResult {
+                    modifiedData = clone,
+                    originalData = originalData
+                };
+            }
+            return null;
+        }
+
+        public DeferredModificationResult AddToAnnualReport(ReportEntry entry, int reportId)
+        {
+            DeferredData originalData = getDeferredRpt("Annual", reportId.ToString());
+            originalData.report_id = reportId.ToString();
+
+            List<string> ReportColumnNames = new List<string>();
+            ReportColumnNames.Add("License Number");
+            ReportColumnNames.Add("Client Company");
+            ReportColumnNames.Add("Invoice ID");
+            ReportColumnNames.Add("Budget");
+            ReportColumnNames.Add("Invoice Total");
+            ReportColumnNames.Add("This Month's Invoice");
+            ReportColumnNames.Add("Balance B/FWD");
+            ReportColumnNames.Add("From Revenue");
+            ReportColumnNames.Add("To Revenue");
+            ReportColumnNames.Add("Closing Balance");
+            ReportColumnNames.Add("Total Months");
+            ReportColumnNames.Add("Months Utilized");
+            ReportColumnNames.Add("Months Remaining");
+            ReportColumnNames.Add("Validity Period Start");
+            ReportColumnNames.Add("Validity Period End");
+            originalData.ColumnNames = ReportColumnNames;
+
+            var clone = Clone(originalData);
+            var record = new UIData();
+            record = GetUIDataFromEntry(entry, ref record);
+
+            var category = clone.Categories.Find(x => x.label == entry.group);
+            if (category != null)
+            {
+                category.records.Add(record);
+                var subtotals = GetSubTotals(category.records);
+                category.setSubTotals(subtotals);
+                clone.Total = GetTotals(clone.Categories);
+
+                DeleteAnnualReportPartially(reportId);
+                saveReport("Annual", clone.Categories, clone.Total, reportId);
+
+                DateTime startDate = GetReportPeriod(reportId, "Annual").date;
+                startDate = new DateTime(startDate.Year, startDate.Month, startDate.Day);
+
+                Report.createPdfReport("Annual", clone, startDate);
+                Report.createPdfTotalsReport("Annual", clone, startDate);
+
+                return new DeferredModificationResult
+                {
+                    modifiedData = clone,
+                    originalData = originalData
+                };
+            }
+            return null;
+        }
+
+        private UIData GetUIDataFromEntry(ReportEntry entry, ref UIData record)
+        {
+            record.licenseNumber = entry.licenseNumber;
+            record.clientCompany = entry.clientCompany;
+            record.invoiceID = entry.invoiceId.ToString();
+
+            record.thisPeriodsInv = entry.thisMonthInvoice;
+            record.budget = Report.formatMoney(Math.Round(entry.budget, 2));
+            record.balBFwd = Report.formatMoney(Math.Round(entry.balanceBroughtFoward, 2));
+            record.fromRev = Report.formatMoney(Math.Round(entry.fromRevenue, 2));
+
+            if (Convert.ToDecimal(entry.toRevenue) < 0)
+                record.toRev = "(" + Report.formatMoney(Math.Round(decimal.Negate(entry.toRevenue), 2)) + ")";
+            else
+                record.toRev = Report.formatMoney(Math.Round(entry.toRevenue, 2));
+
+
+            record.closingBal = Report.formatMoney(Math.Round(entry.closingBalance, 2));
+            record.totalMonths = entry.totalMonths;
+            record.monthUtil = entry.monthsUtilized;
+            record.monthRemain = entry.monthsRemaining;
+            record.valPStart = entry.validityStart.ToString("dd/MM/yyyy");
+            record.valPEnd = entry.validityEnd.ToString("dd/MM/yyyy");
+            record.invoiceTotal = Report.formatMoney(Math.Round(entry.invoiceTotal, 2));
+            return record;
+        }
+
+        private SubTotals GetSubTotals(List<UIData> records)
+        {
+            SubTotals subTotals = new SubTotals();
+            decimal invoiceTotal = 0;
+            decimal balanceBFwd = 0;
+            decimal fromRev = 0;
+            decimal toRev = 0;
+            decimal closingBal = 0;
+            decimal budget = 0;
+
+            foreach (UIData data in records)
+            {
+                invoiceTotal += Convert.ToDecimal(data.invoiceTotal);
+                balanceBFwd += Convert.ToDecimal(data.balBFwd);
+                budget += Convert.ToDecimal(data.budget);
+
+                decimal toRevPositiveNegative = 0;
+                if (data.toRev.Contains("(") || data.toRev.Contains(")"))
+                    toRevPositiveNegative = decimal.Negate(Convert.ToDecimal(data.toRev.Replace("(", "").Replace(")", "").Replace(",", "")));
+                else
+                    toRevPositiveNegative = Convert.ToDecimal(data.toRev.Replace("(", "").Replace(")", "").Replace(",", ""));
+
+                decimal fromRevPositiveNegative = 0;
+                if (data.fromRev.Contains("(") || data.fromRev.Contains(")"))
+                    fromRevPositiveNegative = decimal.Negate(Convert.ToDecimal(data.fromRev.Replace("(", "").Replace(")", "").Replace(",", "")));
+                else
+                    fromRevPositiveNegative = Convert.ToDecimal(data.fromRev.Replace("(", "").Replace(")", "").Replace(",", ""));
+
+                toRev += toRevPositiveNegative;
+                fromRev += fromRevPositiveNegative;
+                closingBal += Convert.ToDecimal(data.closingBal);
+            }
+
+            subTotals.invoiceTotal = Report.formatMoney(Math.Round(invoiceTotal, 2));
+            subTotals.balanceBFwd = Report.formatMoney(Math.Round(balanceBFwd, 2));
+            subTotals.fromRev = Report.formatMoney(Math.Round(fromRev, 2));
+            subTotals.toRev = Report.formatMoney(Math.Round(toRev, 2));
+            subTotals.closingBal = Report.formatMoney(Math.Round(closingBal, 2));
+            subTotals.budget = Report.formatMoney(Math.Round(budget, 2));
+            return subTotals;
+        }
+
+        private Totals GetTotals(List<DataWrapper> data)
+        {
+            decimal tot_invoiceTotal = 0;
+            decimal tot_balBFwd = 0;
+            decimal tot_toRev = 0;
+            decimal tot_closingBal = 0;
+            decimal tot_fromRev = 0;
+            decimal tot_budget = 0;
+
+            foreach (DataWrapper item in data)
+            {
+                tot_invoiceTotal += Convert.ToDecimal(item.subT_invoiceTotal);
+                tot_balBFwd += Convert.ToDecimal(item.subT_balBFwd);
+
+                decimal tempToRev = 0;
+                if (item.subT_toRev.Contains("(") || item.subT_toRev.Contains(")"))
+                    tempToRev = decimal.Negate(Convert.ToDecimal(item.subT_toRev.Replace("(", "").Replace(")", "")));
+                else
+                    tempToRev = Convert.ToDecimal(item.subT_toRev.Replace("(", "").Replace(")", "").Replace(",", ""));
+                tot_toRev += tempToRev;
+
+
+                decimal tempFromRev = 0;
+                if (item.subT_fromRev.Contains("(") || item.subT_fromRev.Contains(")"))
+                    tempFromRev = decimal.Negate(Convert.ToDecimal(item.subT_fromRev.Replace("(", "").Replace(")", "").Replace(",", "")));
+                else
+                    tempFromRev = Convert.ToDecimal(item.subT_fromRev.Replace("(", "").Replace(")", "").Replace(",", ""));
+                tot_fromRev += tempFromRev;
+
+                tot_closingBal += Convert.ToDecimal(item.subT_closingBal);
+                tot_budget += Convert.ToDecimal(item.subT_budget);
+            }
+
+            return new Totals
+            {
+                tot_invoiceTotal = Report.formatMoney(Math.Round(tot_invoiceTotal, 2)),
+                tot_balBFwd = Report.formatMoney(Math.Round(tot_balBFwd, 2)),
+                tot_toRev = Report.formatMoney(Math.Round(tot_toRev, 2)),
+                tot_closingBal = Report.formatMoney(Math.Round(tot_closingBal, 2)),
+                tot_fromRev = Report.formatMoney(Math.Round(tot_fromRev, 2)),
+                tot_budget = Report.formatMoney(Math.Round(tot_budget, 2))
+            };
+        }
+
+        public DeferredModificationResult MonthlyDeferredModification(List<ReportEntry> entries, int reportId, bool isForModification)
+        {
+            DeferredData originalData = getDeferredRpt("Monthly", reportId.ToString());
+            originalData.report_id = reportId.ToString();
+
+            List<string> ReportColumnNames = new List<string>();
+            ReportColumnNames.Add("License Number");
+            ReportColumnNames.Add("Client Company");
+            ReportColumnNames.Add("Invoice ID");
+            ReportColumnNames.Add("Budget");
+            ReportColumnNames.Add("Invoice Total");
+            ReportColumnNames.Add("This Month's Invoice");
+            ReportColumnNames.Add("Balance B/FWD");
+            ReportColumnNames.Add("From Revenue");
+            ReportColumnNames.Add("To Revenue");
+            ReportColumnNames.Add("Closing Balance");
+            ReportColumnNames.Add("Total Months");
+            ReportColumnNames.Add("Months Utilized");
+            ReportColumnNames.Add("Months Remaining");
+            ReportColumnNames.Add("Validity Period Start");
+            ReportColumnNames.Add("Validity Period End");
+            originalData.ColumnNames = ReportColumnNames;
+            var clone = Clone(originalData);
+
+            foreach (ReportEntry entry in entries)
+            {
+                UIData record = null;
+                DataWrapper workingDataSet = null;
+
+                foreach (DataWrapper dataset in clone.Categories)
+                {
+                    record = dataset.records.Find(x => x.invoiceID == entry.invoiceId.ToString());
+                    if (record != null)
+                    {
+                        workingDataSet = dataset;
+                        break;
+                    }
+                }
+
+                if (record != null && workingDataSet != null)
+                {
+                    record = GetUIDataFromEntry(entry, ref record);
+                    Totals totals = new Totals();
+
+                    var subtotals = GetSubTotals(workingDataSet.records);
+                    workingDataSet.setSubTotals(subtotals);
+                    clone.Total = GetTotals(clone.Categories);
+                }
+            }
+
+            if (isForModification)
+            {
+                DeleteMonthlyReportPartially(reportId);
+                saveReport("Monthly", clone.Categories, clone.Total, reportId);
+
+                DateTime startDate = GetReportPeriod(reportId, "Monthly").date;
+                startDate = new DateTime(startDate.Year, startDate.Month, startDate.Day);
+
+                Report.createPdfReport("Monthly", clone, startDate);
+                Report.createPdfTotalsReport("Monthly", clone, startDate);
+            }
+            return new DeferredModificationResult { modifiedData = clone, originalData = originalData };
+        }
+
+        public DeferredModificationResult AnnualDeferredModification(List<ReportEntry> entries, int reportId, bool isForModification)
+        {
+            DeferredData originalData = getDeferredRpt("Annual", reportId.ToString());
+            originalData.report_id = reportId.ToString();
+
+            List<string> ReportColumnNames = new List<string>();
+            ReportColumnNames.Add("License Number");
+            ReportColumnNames.Add("Client Company");
+            ReportColumnNames.Add("Invoice ID");
+            ReportColumnNames.Add("Budget");
+            ReportColumnNames.Add("Invoice Total");
+            ReportColumnNames.Add("This Month's Invoice");
+            ReportColumnNames.Add("Balance B/FWD");
+            ReportColumnNames.Add("From Revenue");
+            ReportColumnNames.Add("To Revenue");
+            ReportColumnNames.Add("Closing Balance");
+            ReportColumnNames.Add("Total Months");
+            ReportColumnNames.Add("Months Utilized");
+            ReportColumnNames.Add("Months Remaining");
+            ReportColumnNames.Add("Validity Period Start");
+            ReportColumnNames.Add("Validity Period End");
+            originalData.ColumnNames = ReportColumnNames;
+            var clone = Clone(originalData);
+
+            foreach (ReportEntry entry in entries)
+            {
+                UIData record = null;
+                DataWrapper workingDataSet = null;
+
+                foreach (DataWrapper dataset in clone.Categories)
+                {
+                    record = dataset.records.Find(x => x.invoiceID == entry.invoiceId.ToString());
+                    if (record != null)
+                    {
+                        workingDataSet = dataset;
+                        break;
+                    }
+                }
+
+                if (record != null && workingDataSet != null)
+                {
+                    record = GetUIDataFromEntry(entry, ref record);
+                    Totals totals = new Totals();
+
+                    var subtotals = GetSubTotals(workingDataSet.records);
+                    workingDataSet.setSubTotals(subtotals);
+                    clone.Total = GetTotals(clone.Categories);
+                }
+            }
+
+            if (isForModification)
+            {
+                DeleteAnnualReportPartially(reportId);
+                saveReport("Annual", clone.Categories, clone.Total, reportId);
+
+                DateTime startDate = GetReportPeriod(reportId, "Annual").date.AddYears(-1);
+                startDate = new DateTime(startDate.Year, startDate.Month, startDate.Day);
+
+                Report.createPdfReport("Annual", clone, startDate);
+                Report.createPdfTotalsReport("Annual", clone, startDate);
+            }
+            return new DeferredModificationResult { modifiedData = clone, originalData = originalData };
+        }
+
+        public void DeleteMonthlyReportPartially(int reportId)
+        {
+            using (SqlConnection connection = new SqlConnection(dbsrvIntegration))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand("exec sp_deleteMonDIRreportPartial @reportId", connection))
+                {
+                    command.Parameters.AddWithValue("@reportId", reportId);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void DeleteAnnualReportPartially(int reportId)
+        {
+            using (SqlConnection connection = new SqlConnection(dbsrvIntegration))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand("exec sp_deleteAnnDIRreportPartial @reportId", connection))
+                {
+                    command.Parameters.AddWithValue("@reportId", reportId);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+
+        public T Clone<T>(T source)
+        {
+            var serialized = JsonConvert.SerializeObject(source);
+            return JsonConvert.DeserializeObject<T>(serialized);
+        }
+
     }
 }

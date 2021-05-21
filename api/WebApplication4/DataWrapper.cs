@@ -5,6 +5,7 @@ using System.Web;
 
 namespace WebApplication4
 {
+    [Serializable]
     public class DataWrapper
     {
         public DataWrapper()

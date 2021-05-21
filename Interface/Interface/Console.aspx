@@ -67,8 +67,8 @@
             </div>
             <div class="section">
                 <p class="sub-header">Transfer receipt</p>
-                <input type="text" id="input-new-rct" disabled="disabled" />
-                <button type="button" id="new-rct" disabled="disabled">Transfer to Sage</button>
+                <input type="text" id="input-new-rct"/>
+                <button type="button" id="new-rct">Transfer to Sage</button>
             </div>
             <div class="section">
                 <p class="sub-header">Cancel Invoice</p>
@@ -248,7 +248,7 @@
 
             function sendStopMsg() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/SendMessage',
+                    url: 'http://erp-srvr.sma.gov.jm:1786/IntegrationService.asmx/SendMessage',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({ msg: "0x69" }),
@@ -264,7 +264,7 @@
 
             function sendStartMsg() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/SendMessage',
+                    url: 'http://erp-srvr.sma.gov.jm:1786/IntegrationService.asmx/SendMessage',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({ msg: "0x63" }),
@@ -280,7 +280,7 @@
 
             function sendHideMsg() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/SendMessage',
+                    url: 'http://erp-srvr.sma.gov.jm:1786/IntegrationService.asmx/SendMessage',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({ msg: "0x68" }),
@@ -296,7 +296,7 @@
 
             function sendShowMsg() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/SendMessage',
+                    url: 'http://erp-srvr.sma.gov.jm:1786/IntegrationService.asmx/SendMessage',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({ msg: "0x65" }),
@@ -312,7 +312,7 @@
 
             function getUserCount() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/GetUserCount',
+                    url: 'http://erp-srvr.sma.gov.jm:1786/IntegrationService.asmx/GetUserCount',
                     type: 'POST',
                     contentType: 'application/json',
                     data: {},
@@ -347,7 +347,7 @@
 
             function isOnline() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/GetMonStat',
+                    url: 'http://erp-srvr.sma.gov.jm:1786/IntegrationService.asmx/GetMonStat',
                     type: 'POST',
                     contentType: 'application/json',
                     data: {},

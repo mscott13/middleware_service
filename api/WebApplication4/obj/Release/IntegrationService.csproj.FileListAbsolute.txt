@@ -433,3 +433,5 @@ C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\obj\Release\WebApplication4.dll
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\obj\Release\WebApplication4.pdb
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\obj\Release\IntegrationService.csprojAssemblyReference.cache
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Newtonsoft.Json.dll
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Newtonsoft.Json.xml

@@ -249,6 +249,66 @@ namespace WebApplication4
         }
 
         [WebMethod]
+        public DeferredModificationResult DeferredModification(List<ReportEntry> entries, int reportId, bool isForModification)
+        {
+            Integration intlink = new Integration();
+            return intlink.MonthlyDeferredModification(entries, reportId, isForModification);
+        }
+
+        [WebMethod]
+        public DeferredModificationResult AddToReport(ReportEntry entry, int reportId)
+        {
+            Integration intlink = new Integration();
+            return intlink.AddToReport(entry, reportId);
+        }
+
+        [WebMethod]
+        public DeferredModificationResult RemoveFromReport(int invoiceId, int reportId)
+        {
+            Integration intlink = new Integration();
+            return intlink.RemoveFromReport(invoiceId, reportId);
+        }
+
+
+        [WebMethod]
+        public UIData GetDeferredReportLineItem(int invoiceId, int reportId)
+        {
+            Integration intlink = new Integration();
+            return intlink.GetDeferredLineItem(invoiceId, reportId);
+        }
+
+        // Report Annual Modification
+        [WebMethod]
+        public DeferredModificationResult AnnualDeferredModification(List<ReportEntry> entries, int reportId, bool isForModification)
+        {
+            Integration intlink = new Integration();
+            return intlink.AnnualDeferredModification(entries, reportId, isForModification);
+        }
+
+        [WebMethod]
+        public DeferredModificationResult AddToAnnualReport(ReportEntry entry, int reportId)
+        {
+            Integration intlink = new Integration();
+            return intlink.AddToAnnualReport(entry, reportId);
+        }
+
+        [WebMethod]
+        public DeferredModificationResult RemoveFromAnnualReport(int invoiceId, int reportId)
+        {
+            Integration intlink = new Integration();
+            return intlink.RemoveFromAnnualReport(invoiceId, reportId);
+        }
+
+
+        [WebMethod]
+        public UIData GetDeferredReportLineItemForAnnual(int invoiceId, int reportId)
+        {
+            Integration intlink = new Integration();
+            return intlink.GetDeferredLineItemForAnnual(invoiceId, reportId);
+        }
+        // Report Annual Modification End
+
+        [WebMethod]
         public DeferredData ViewMonDeferredRpt(string ReportType, int reportId)
         {
             Integration intlink = new Integration();
@@ -256,10 +316,10 @@ namespace WebApplication4
         }
 
         [WebMethod]
-        public List<ReportPeriod> GetReportPeriods()
+        public List<ReportPeriod> GetReportPeriods(string reportType)
         {
             Integration intlink = new Integration();
-            return intlink.GetReportPeriods();
+            return intlink.GetReportPeriods(reportType);
         }
 
         [WebMethod]

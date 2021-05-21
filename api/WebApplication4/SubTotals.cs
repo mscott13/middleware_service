@@ -5,6 +5,7 @@ using System.Web;
 
 namespace WebApplication4
 {
+    [Serializable]
     public class SubTotals
     {
         public string invoiceTotal { get; set; }

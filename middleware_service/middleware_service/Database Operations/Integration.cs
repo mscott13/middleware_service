@@ -747,6 +747,58 @@ namespace middleware_service.Database_Operations
             return null;
         }
 
+        public SqlNotify_DocumentInfo GetGLDocumentInfoViaId(int documentId)
+        {
+            using (SqlConnection connection = new SqlConnection(Constants.dbIntegration))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand("Select DocumentType, OriginalDocumentID, DocumentID, PaymentMethod from ASMSGenericMaster.dbo.tblGLDocuments where DocumentId=@documentId", connection))
+                {
+                    command.Parameters.AddWithValue("@documentId", documentId);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            reader.Read();
+                            var data = new SqlNotify_DocumentInfo();
+
+                            if (reader.IsDBNull(0))
+                            {
+                                data.DocumentType = 0;
+                            }
+                            else
+                                data.DocumentType = Convert.ToInt32(reader["DocumentType"]);
+
+                            if (reader.IsDBNull(1))
+                            {
+                                data.OriginalDocumentID = 0;
+                            }
+                            else
+                                data.OriginalDocumentID = Convert.ToInt32(reader["OriginalDocumentID"]);
+
+                            if (reader.IsDBNull(2))
+                            {
+                                data.DocumentID = 0;
+                            }
+                            else
+                                data.DocumentID = Convert.ToInt32(reader["DocumentID"]);
+
+                            if (reader.IsDBNull(3))
+                            {
+                                data.PaymentMethod = 0;
+                            }
+                            else
+                                data.PaymentMethod = Convert.ToInt32(reader["PaymentMethod"]);
+
+                            return data;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
         public string GetAccountNumber(int GLID)
         {
             string accountNumber = "";

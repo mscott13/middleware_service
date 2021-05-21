@@ -11,5 +11,6 @@ namespace WebApplication4
         public int reportId { get; set; }
         public string month { get; set; }
         public string year { get; set; }
+        public DateTime date { get; set; }
     }
 }

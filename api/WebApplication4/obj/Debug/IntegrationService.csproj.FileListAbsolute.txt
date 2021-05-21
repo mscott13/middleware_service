@@ -622,14 +622,16 @@ C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.AI.WindowsServer.dll
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.ApplicationInsights.dll
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Newtonsoft.Json.dll
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.AI.DependencyCollector.xml
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.AI.ServerTelemetryChannel.xml
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.AI.Web.xml
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.AI.WindowsServer.xml
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.ApplicationInsights.xml
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\obj\Debug\IntegrationService.csprojAssemblyReference.cache
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\bin\Newtonsoft.Json.xml
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\obj\Debug\IntegrationService.csproj.CoreCompileInputs.cache
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\obj\Debug\IntegrationService.csproj.CopyComplete
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\obj\Debug\WebApplication4.dll
 C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\obj\Debug\WebApplication4.pdb
+C:\Users\mscott\Desktop\Git Repositories\middleware_service\api\WebApplication4\obj\Debug\IntegrationService.csprojAssemblyReference.cache

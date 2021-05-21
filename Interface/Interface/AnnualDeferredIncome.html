@@ -5,8 +5,9 @@
     <meta charset="utf-8" />
     <title>Annual Report</title>
     <link rel="stylesheet" href="deferred_custom.css" />
+    <link href="Content/semantic.min.css" rel="stylesheet" />
     <!-- Compiled and minified CSS -->
-   
+
 </head>
 <body>
     <div class="overlay-preload">
@@ -17,7 +18,8 @@
     <div class="gridTop">
         <div class="bar-title">
             <div class="left">
-                <h2>Deffered Income Report</h2>
+                <h2>Deferred Income Report</h2>
+                <button id="rpt-modify" type="button"><i class="edit icon"></i> Modify report</button>
             </div>
 
         </div>
@@ -33,11 +35,6 @@
                 <input type="button" class="MonthlyRptLogIn" onclick="location.href='/MonthlyDeferredIncome.html';" value="Monthly Report" />
 
                 <select id="fiscalyr">
-                    <option Value="2016">2016 - 2017</option>
-                    <option Value="2017">2017 - 2018</option>
-                    <option Value="2018">2018 - 2019</option>
-                    <option Value="2019">2019 - 2020</option>
-                    <option Value="2020">2020 - 2021</option>
                 </select>
 
                 <button type="button" class="AnnualRptBtnSelect" id="btnViewHtml">View Deferred Income Report (HTML)</button>
@@ -61,7 +58,7 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="card original">
             <div class="title"><p>Cellular</p></div>
             <table class="deferred_table" id="tbl_cellular">
                 <thead>
@@ -71,24 +68,24 @@
                         <th>Invoice ID</th>
                         <th>Budget</th>
                         <th>Invoice Total</th>
-                        <th>This Year's Invoice</th>
+                        <th>This Month's Invoice</th>
                         <th>Balance B/FWD</th>
                         <th>From Revenue</th>
                         <th>To Revenue</th>
                         <th>Closing Balance</th>
                         <th>Total Months</th>
-                        <th>Months Utilized</th>
+                        <th>Month Utilized</th>
                         <th>Months Remaining</th>
                         <th>Validity Period Start</th>
                         <th>Validity Period End</th>
                     </tr>
                 </thead>
-                <tbody data-index="0" id="cellular"></tbody>
+                <tbody class="original" data-index="0" id="cellular">
+                </tbody>
             </table>
         </div>
 
-
-        <div class="card">
+        <div class="card original">
             <div class="title"><p>Broadband</p></div>
             <table class="deferred_table" id="tbl_broadband">
                 <thead>
@@ -98,23 +95,23 @@
                         <th>Invoice ID</th>
                         <th>Budget</th>
                         <th>Invoice Total</th>
-                        <th>This Year's Invoice</th>
+                        <th>This Month's Invoice</th>
                         <th>Balance B/FWD</th>
                         <th>From Revenue</th>
                         <th>To Revenue</th>
                         <th>Closing Balance</th>
                         <th>Total Months</th>
-                        <th>Months Utilized</th>
+                        <th>Month Utilized</th>
                         <th>Months Remaining</th>
                         <th>Validity Period Start</th>
                         <th>Validity Period End</th>
                     </tr>
                 </thead>
-                <tbody data-index="1"></tbody>
+                <tbody class="original" data-index="1"></tbody>
             </table>
         </div>
 
-        <div class="card">
+        <div class="card original">
             <div class="title"><p>Microwave</p></div>
             <table class="deferred_table" id="tbl_microwave">
                 <thead>
@@ -124,23 +121,23 @@
                         <th>Invoice ID</th>
                         <th>Budget</th>
                         <th>Invoice Total</th>
-                        <th>This Year's Invoice</th>
+                        <th>This Month's Invoice</th>
                         <th>Balance B/FWD</th>
                         <th>From Revenue</th>
                         <th>To Revenue</th>
                         <th>Closing Balance</th>
                         <th>Total Months</th>
-                        <th>Months Utilized</th>
+                        <th>Month Utilized</th>
                         <th>Months Remaining</th>
                         <th>Validity Period Start</th>
                         <th>Validity Period End</th>
                     </tr>
                 </thead>
-                <tbody data-index="2"></tbody>
+                <tbody class="original" data-index="2"></tbody>
             </table>
         </div>
 
-        <div class="card">
+        <div class="card original">
             <div class="title"><p>Vsat</p></div>
             <table class="deferred_table" id="tbl_vsat">
                 <thead>
@@ -150,23 +147,23 @@
                         <th>Invoice ID</th>
                         <th>Budget</th>
                         <th>Invoice Total</th>
-                        <th>This Year's Invoice</th>
+                        <th>This Month's Invoice</th>
                         <th>Balance B/FWD</th>
                         <th>From Revenue</th>
                         <th>To Revenue</th>
                         <th>Closing Balance</th>
                         <th>Total Months</th>
-                        <th>Months Utilized</th>
+                        <th>Month Utilized</th>
                         <th>Months Remaining</th>
                         <th>Validity Period Start</th>
                         <th>Validity Period End</th>
                     </tr>
                 </thead>
-                <tbody data-index="3"></tbody>
+                <tbody class="original" data-index="3"></tbody>
             </table>
         </div>
 
-        <div class="card">
+        <div class="card original">
             <div class="title"><p>Marine</p></div>
             <table class="deferred_table" id="tbl_marine">
                 <thead>
@@ -176,23 +173,23 @@
                         <th>Invoice ID</th>
                         <th>Budget</th>
                         <th>Invoice Total</th>
-                        <th>This Year's Invoice</th>
+                        <th>This Month's Invoice</th>
                         <th>Balance B/FWD</th>
                         <th>From Revenue</th>
                         <th>To Revenue</th>
                         <th>Closing Balance</th>
                         <th>Total Months</th>
-                        <th>Months Utilized</th>
+                        <th>Month Utilized</th>
                         <th>Months Remaining</th>
                         <th>Validity Period Start</th>
                         <th>Validity Period End</th>
                     </tr>
                 </thead>
-                <tbody data-index="4"></tbody>
+                <tbody class="original" data-index="4"></tbody>
             </table>
         </div>
 
-        <div class="card">
+        <div class="card original">
             <div class="title"><p>Data & Services</p></div>
             <table class="deferred_table" id="tbl_dservices">
                 <thead>
@@ -202,23 +199,23 @@
                         <th>Invoice ID</th>
                         <th>Budget</th>
                         <th>Invoice Total</th>
-                        <th>This Year's Invoice</th>
+                        <th>This Month's Invoice</th>
                         <th>Balance B/FWD</th>
                         <th>From Revenue</th>
                         <th>To Revenue</th>
                         <th>Closing Balance</th>
                         <th>Total Months</th>
-                        <th>Months Utilized</th>
+                        <th>Month Utilized</th>
                         <th>Months Remaining</th>
                         <th>Validity Period Start</th>
                         <th>Validity Period End</th>
                     </tr>
                 </thead>
-                <tbody data-index="5"></tbody>
+                <tbody class="original" data-index="5"></tbody>
             </table>
         </div>
 
-        <div class="card">
+        <div class="card original">
             <div class="title"><p>Aeronautical</p></div>
             <table class="deferred_table" id="tbl_aeronautical">
                 <thead>
@@ -228,23 +225,23 @@
                         <th>Invoice ID</th>
                         <th>Budget</th>
                         <th>Invoice Total</th>
-                        <th>This Year's Invoice</th>
+                        <th>This Month's Invoice</th>
                         <th>Balance B/FWD</th>
                         <th>From Revenue</th>
                         <th>To Revenue</th>
                         <th>Closing Balance</th>
                         <th>Total Months</th>
-                        <th>Months Utilized</th>
+                        <th>Month Utilized</th>
                         <th>Months Remaining</th>
                         <th>Validity Period Start</th>
                         <th>Validity Period End</th>
                     </tr>
                 </thead>
-                <tbody data-index="6"></tbody>
+                <tbody class="original" data-index="6"></tbody>
             </table>
         </div>
 
-        <div class="card">
+        <div class="card original">
             <div class="title"><p>Trunking</p></div>
             <table class="deferred_table" id="tbl_trunking">
                 <thead>
@@ -254,23 +251,23 @@
                         <th>Invoice ID</th>
                         <th>Budget</th>
                         <th>Invoice Total</th>
-                        <th>This Year's Invoice</th>
+                        <th>This Month's Invoice</th>
                         <th>Balance B/FWD</th>
                         <th>From Revenue</th>
                         <th>To Revenue</th>
                         <th>Closing Balance</th>
                         <th>Total Months</th>
-                        <th>Months Utilized</th>
+                        <th>Month Utilized</th>
                         <th>Months Remaining</th>
                         <th>Validity Period Start</th>
                         <th>Validity Period End</th>
                     </tr>
                 </thead>
-                <tbody data-index="7"></tbody>
+                <tbody class="original" data-index="7"></tbody>
             </table>
         </div>
 
-        <div class="card">
+        <div class="card original">
             <div class="title"><p>Other</p></div>
             <table class="deferred_table" id="tbl_other">
                 <thead>
@@ -280,23 +277,23 @@
                         <th>Invoice ID</th>
                         <th>Budget</th>
                         <th>Invoice Total</th>
-                        <th>This Year's Invoice</th>
+                        <th>This Month's Invoice</th>
                         <th>Balance B/FWD</th>
                         <th>From Revenue</th>
                         <th>To Revenue</th>
                         <th>Closing Balance</th>
                         <th>Total Months</th>
-                        <th>Months Utilized</th>
+                        <th>Month Utilized</th>
                         <th>Months Remaining</th>
                         <th>Validity Period Start</th>
                         <th>Validity Period End</th>
                     </tr>
                 </thead>
-                <tbody data-index="8"></tbody>
+                <tbody class="original" data-index="8"></tbody>
             </table>
         </div>
 
-        <div class="card">
+        <div class="card original">
             <div class="title"><p>Total</p></div>
             <table class="deferred_table" id="tbl_total">
                 <thead>
@@ -306,34 +303,555 @@
                         <th>Invoice ID</th>
                         <th>Budget</th>
                         <th>Invoice Total</th>
-                        <th>This Year's Invoice</th>
+                        <th>This Month's Invoice</th>
                         <th>Balance B/FWD</th>
                         <th>From Revenue</th>
                         <th>To Revenue</th>
                         <th>Closing Balance</th>
                         <th>Total Months</th>
-                        <th>Months Utilized</th>
+                        <th>Month Utilized</th>
                         <th>Months Remaining</th>
                         <th>Validity Period Start</th>
                         <th>Validity Period End</th>
                     </tr>
                 </thead>
-                <tbody data-index="9"></tbody>
+                <tbody class="original" data-index="9"></tbody>
             </table>
         </div>
 
     </div>
 
+    <div class="ui fullscreen add-remove modal">
+        <div id="add-remove-header" data-reportid="" class="header">Add/Remove</div>
+        <div style="min-height: 400px;" class="scrolling content">
+            <div class="ui warning message">
+                <div class="header">
+                    Please note
+                </div>
+                <p>Changes made here will immediately update both the pdf files and sql data. No preview option available at this time.</p>
+            </div>
+            <h2 class="ui sub header">
+                Add record <span>
+                    <select style="margin-left: 5px;" id="report-category-selector">
+                        <option value="Cellular">Cellular</option>
+                        <option value="Broadband">Broadband</option>
+                        <option value="Microwave">Microwave</option>
+                        <option value="Vsat">Vsat</option>
+                        <option value="Marine">Marine</option>
+                        <option value="Data & Services">Data & Services</option>
+                        <option value="Aeronautical">Aeronautical</option>
+                        <option value="Trunking">Trunking</option>
+                        <option value="OTHER">OTHER</option>
+                    </select>
+                </span>
+            </h2>
+            <span>Inserts record into the currently selected report</span>
+            <div class="ui add-remove form" style="font-size: 11px; margin-top: 10px; margin-bottom: 10px;">
+                <div class="row">
+                    <div class="fields">
+                        <div class="eight wide field">
+                            <div class="row">
+                                <div class="fields">
+                                    <div class="field">
+                                        <label>Invoice ID</label>
+                                        <input id="add-invoiceId" style="border-color: red;" type="text" placeholder="Invoice ID" autofocus>
+                                    </div>
+                                    <div class="field">
+                                        <label>License Number</label>
+                                        <input id="add-licNo" type="text" placeholder="License Number">
+                                    </div>
+                                    <div class="field ">
+                                        <label>Client Company</label>
+                                        <input id="add-clientCompany" type="text" placeholder="Client Company">
+                                    </div>
+                                    <div class="field ">
+                                        <label>Budget</label>
+                                        <input id="add-budget" type="number" placeholder="Budget">
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 10px;" class="row">
+                                <div class="fields">
+                                    <div class="field ">
+                                        <label>Invoice Total</label>
+                                        <input id="add-invTotal" type="number" placeholder="Invoice Total">
+                                    </div>
+                                    <div class="field ">
+                                        <label>BalBFwd</label>
+                                        <input id="add-balBfwd" type="number" placeholder="BalBFwd">
+                                    </div>
+                                    <div class="field ">
+                                        <label>This Month Inv</label>
+                                        <input id="add-thisMInvoice" type="text" placeholder="This Month Inv">
+                                    </div>
+                                    <div class="field ">
+                                        <label>FromRev</label>
+                                        <input id="add-fromRev" type="number" placeholder="FromRev">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="eight wide field">
+                            <div class="row">
+                                <div class="fields">
+                                    <div class="field ">
+                                        <label>ToRev</label>
+                                        <input id="add-toRev" type="number" placeholder="ToRev">
+                                    </div>
+                                    <div class="field ">
+                                        <label>ClosingBal</label>
+                                        <input id="add-closingBal" type="number" placeholder="ClosingBal">
+                                    </div>
+                                    <div class="field ">
+                                        <label>TotalMonths</label>
+                                        <input id="add-totalMonths" type="text" placeholder="TotalMonths">
+                                    </div>
+                                    <div class="field ">
+                                        <label>MonthUtil</label>
+                                        <input id="add-monthUtil" type="text" placeholder="MonthUtil">
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 10px;" class="row">
+                                <div class="fields">
+                                    <div class="field ">
+                                        <label>MonthRemain</label>
+                                        <input id="add-monthRemain" type="text" placeholder="MonthRemain">
+                                    </div>
+                                    <div class="field ">
+                                        <label>ValPStart</label>
+                                        <input id="add-valPstart" type="date" placeholder="ValPStart">
+                                    </div>
+                                    <div class="field ">
+                                        <label>ValPEnd</label>
+                                        <input id="add-valPend" type="date" placeholder="ValPEnd">
+                                    </div>
+                                    <div class="field">
+                                        <label></label>
+                                        <div id="add-report-entry" style="font-size: 11px;padding: 5px; position: absolute; bottom: 0;" class="ui primary small button">Add to report</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <h2 class="ui sub header">
+                Delete entry
+            </h2>
+            <span>Removes a record from the currently selected report</span>
+
+
+            <div style="margin-top: 10px" class="ui form">
+                <div class="fields">
+                    <div class="field">
+                        <input id="remove-invoiceId" type="number" placeholder="Invoice ID">
+                    </div>
+                    <div class="field">
+                        <div id="remove-report-entry" style="font-size: 11px;padding: 5px; position: absolute; bottom: 0;" class="ui red small button">Remove entry</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="actions">
+            <div id="cancel" class="ui cancel button">Close</div>
+        </div>
+    </div>
+
+    <div class="ui fullscreen modify modal">
+        <div class="header">
+            Modify Report
+            <span>
+                <select id="modify-rpt-selector">
+                </select>
+                <button id="validate" class="ui primary button" style="font-size: 12px; margin-left: 10px;">
+                    Validate
+                </button>
+                <button id="add-remove" class="ui button" style="font-size: 12px; margin-left: 3px;">
+                    <i class="edit icon"></i> Add/Remove
+                </button>
+            </span>
+
+            <p class="invoice-group"></p>
+
+            <div style="font-size: 12px;" class="ui message">
+                <div class="header">
+                    Instructions
+                </div>
+                <ul class="list">
+                    <li>Select a report from the dropdown</li>
+                    <li>Enter the invoice ID</li>
+                    <li>Click <b>Validate</b> to retrieve information for the chosen record</li>
+                    <li>Make your modifications from the various inputs</li>
+                    <li>Use the <b>preview</b> or <b>modify</b> buttons below to get the results</li>
+                </ul>
+            </div>
+
+            <div style="font-size: 12px;" class="ui red message">Before making any modifications, it is recommended to make a backup of the database: <b>ASMSSAGEINTEGRATION</b></div>
+
+            <div class="ui modifications form" style="font-size: 11px">
+                <div class="row modifications-row">
+                    <div class="sixteen fields">
+                        <div class="field">
+                            <label>Invoice ID</label>
+                            <input id="edit-invoiceId" style="border-color: red;" type="text" placeholder="Invoice ID" autofocus>
+                        </div>
+
+                        <div style="display: none;" class="disabled field ">
+                            <label>License Number</label>
+                            <input disabled id="edit-licNo" type="text" placeholder="License Number">
+                        </div>
+                        <div style="display: none;" class="disabled field ">
+                            <label>Client Company</label>
+                            <input disabled id="edit-clientCompany" type="text" placeholder="Client Company">
+                        </div>
+
+                        <div class="disabled field">
+                            <label>Budget</label>
+                            <input disabled id="edit-budget" type="number" placeholder="Budget">
+                        </div>
+                        <div class="disabled field">
+                            <label>Invoice Total</label>
+                            <input disabled id="edit-invTotal" type="number" placeholder="Invoice Total">
+                        </div>
+                        <div class="disabled field">
+                            <label>BalBFwd</label>
+                            <input disabled id="edit-balBfwd" type="number" placeholder="BalBFwd">
+                        </div>
+                        <div class="disabled field">
+                            <label>This Month Inv</label>
+                            <input disabled id="edit-thisMInvoice" type="text" placeholder="This Month Inv">
+                        </div>
+                        <div class="disabled field">
+                            <label>FromRev</label>
+                            <input disabled id="edit-fromRev" type="number" placeholder="FromRev">
+                        </div>
+                        <div class="disabled field">
+                            <label>ToRev</label>
+                            <input disabled id="edit-toRev" type="number" placeholder="ToRev">
+                        </div>
+                        <div class="disabled field">
+                            <label>ClosingBal</label>
+                            <input disabled id="edit-closingBal" type="number" placeholder="ClosingBal">
+                        </div>
+                        <div class="disabled field">
+                            <label>TotalMonths</label>
+                            <input disabled id="edit-totalMonths" type="text" placeholder="TotalMonths">
+                        </div>
+                        <div class="disabled field">
+                            <label>MonthUtil</label>
+                            <input disabled id="edit-monthUtil" type="text" placeholder="MonthUtil">
+                        </div>
+                        <div class="disabled field">
+                            <label>MonthRemain</label>
+                            <input disabled id="edit-monthRemain" type="text" placeholder="MonthRemain">
+                        </div>
+                        <div class="disabled field">
+                            <label>ValPStart</label>
+                            <input id="edit-valPstart" type="date" placeholder="ValPStart">
+                        </div>
+                        <div class="disabled field">
+                            <label>ValPEnd</label>
+                            <input disabled id="edit-valPend" type="date" placeholder="ValPEnd">
+                        </div>
+                        <div class="field">
+                            <label></label>
+                            <i class="plus icon new-modification"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="actions">
+            <div id="preview-rpt" class="ui button">Preview</div>
+            <div class="ui approve red button">Modify</div>
+            <div id="cancel" class="ui cancel button">Cancel</div>
+        </div>
+        <div class="scrolling content">
+            <div class="tables">
+                <div class="card prev">
+                    <div class="title"><p>Cellular</p></div>
+                    <table class="deferred_table" id="prev_tbl_cellular">
+                        <thead>
+                            <tr>
+                                <th>License Number</th>
+                                <th>Client Company</th>
+                                <th>Invoice ID</th>
+                                <th>Budget</th>
+                                <th>Invoice Total</th>
+                                <th>This Month's Invoice</th>
+                                <th>Balance B/FWD</th>
+                                <th>From Revenue</th>
+                                <th>To Revenue</th>
+                                <th>Closing Balance</th>
+                                <th>Total Months</th>
+                                <th>Month Utilized</th>
+                                <th>Months Remaining</th>
+                                <th>Validity Period Start</th>
+                                <th>Validity Period End</th>
+                            </tr>
+                        </thead>
+                        <tbody class="prev" data-index="0" id="cellular">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card prev">
+                    <div class="title"><p>Broadband</p></div>
+                    <table class="deferred_table" id="prev_tbl_broadband">
+                        <thead>
+                            <tr>
+                                <th>License Number</th>
+                                <th>Client Company</th>
+                                <th>Invoice ID</th>
+                                <th>Budget</th>
+                                <th>Invoice Total</th>
+                                <th>This Month's Invoice</th>
+                                <th>Balance B/FWD</th>
+                                <th>From Revenue</th>
+                                <th>To Revenue</th>
+                                <th>Closing Balance</th>
+                                <th>Total Months</th>
+                                <th>Month Utilized</th>
+                                <th>Months Remaining</th>
+                                <th>Validity Period Start</th>
+                                <th>Validity Period End</th>
+                            </tr>
+                        </thead>
+                        <tbody class="prev" data-index="1"></tbody>
+                    </table>
+                </div>
+
+                <div class="card prev">
+                    <div class="title"><p>Microwave</p></div>
+                    <table class="deferred_table" id="prev_tbl_microwave">
+                        <thead>
+                            <tr>
+                                <th>License Number</th>
+                                <th>Client Company</th>
+                                <th>Invoice ID</th>
+                                <th>Budget</th>
+                                <th>Invoice Total</th>
+                                <th>This Month's Invoice</th>
+                                <th>Balance B/FWD</th>
+                                <th>From Revenue</th>
+                                <th>To Revenue</th>
+                                <th>Closing Balance</th>
+                                <th>Total Months</th>
+                                <th>Month Utilized</th>
+                                <th>Months Remaining</th>
+                                <th>Validity Period Start</th>
+                                <th>Validity Period End</th>
+                            </tr>
+                        </thead>
+                        <tbody class="prev" data-index="2"></tbody>
+                    </table>
+                </div>
+
+                <div class="card prev">
+                    <div class="title"><p>Vsat</p></div>
+                    <table class="deferred_table" id="prev_tbl_vsat">
+                        <thead>
+                            <tr>
+                                <th>License Number</th>
+                                <th>Client Company</th>
+                                <th>Invoice ID</th>
+                                <th>Budget</th>
+                                <th>Invoice Total</th>
+                                <th>This Month's Invoice</th>
+                                <th>Balance B/FWD</th>
+                                <th>From Revenue</th>
+                                <th>To Revenue</th>
+                                <th>Closing Balance</th>
+                                <th>Total Months</th>
+                                <th>Month Utilized</th>
+                                <th>Months Remaining</th>
+                                <th>Validity Period Start</th>
+                                <th>Validity Period End</th>
+                            </tr>
+                        </thead>
+                        <tbody class="prev" data-index="3"></tbody>
+                    </table>
+                </div>
+
+                <div class="card prev">
+                    <div class="title"><p>Marine</p></div>
+                    <table class="deferred_table" id="prev_tbl_marine">
+                        <thead>
+                            <tr>
+                                <th>License Number</th>
+                                <th>Client Company</th>
+                                <th>Invoice ID</th>
+                                <th>Budget</th>
+                                <th>Invoice Total</th>
+                                <th>This Month's Invoice</th>
+                                <th>Balance B/FWD</th>
+                                <th>From Revenue</th>
+                                <th>To Revenue</th>
+                                <th>Closing Balance</th>
+                                <th>Total Months</th>
+                                <th>Month Utilized</th>
+                                <th>Months Remaining</th>
+                                <th>Validity Period Start</th>
+                                <th>Validity Period End</th>
+                            </tr>
+                        </thead>
+                        <tbody class="prev" data-index="4"></tbody>
+                    </table>
+                </div>
+
+                <div class="card prev">
+                    <div class="title"><p>Data & Services</p></div>
+                    <table class="deferred_table" id="prev_tbl_dservices">
+                        <thead>
+                            <tr>
+                                <th>License Number</th>
+                                <th>Client Company</th>
+                                <th>Invoice ID</th>
+                                <th>Budget</th>
+                                <th>Invoice Total</th>
+                                <th>This Month's Invoice</th>
+                                <th>Balance B/FWD</th>
+                                <th>From Revenue</th>
+                                <th>To Revenue</th>
+                                <th>Closing Balance</th>
+                                <th>Total Months</th>
+                                <th>Month Utilized</th>
+                                <th>Months Remaining</th>
+                                <th>Validity Period Start</th>
+                                <th>Validity Period End</th>
+                            </tr>
+                        </thead>
+                        <tbody class="prev" data-index="5"></tbody>
+                    </table>
+                </div>
+
+                <div class="card prev">
+                    <div class="title"><p>Aeronautical</p></div>
+                    <table class="deferred_table" id="prev_tbl_aeronautical">
+                        <thead>
+                            <tr>
+                                <th>License Number</th>
+                                <th>Client Company</th>
+                                <th>Invoice ID</th>
+                                <th>Budget</th>
+                                <th>Invoice Total</th>
+                                <th>This Month's Invoice</th>
+                                <th>Balance B/FWD</th>
+                                <th>From Revenue</th>
+                                <th>To Revenue</th>
+                                <th>Closing Balance</th>
+                                <th>Total Months</th>
+                                <th>Month Utilized</th>
+                                <th>Months Remaining</th>
+                                <th>Validity Period Start</th>
+                                <th>Validity Period End</th>
+                            </tr>
+                        </thead>
+                        <tbody class="prev" data-index="6"></tbody>
+                    </table>
+                </div>
+
+                <div class="card prev">
+                    <div class="title"><p>Trunking</p></div>
+                    <table class="deferred_table" id="prev_tbl_trunking">
+                        <thead>
+                            <tr>
+                                <th>License Number</th>
+                                <th>Client Company</th>
+                                <th>Invoice ID</th>
+                                <th>Budget</th>
+                                <th>Invoice Total</th>
+                                <th>This Month's Invoice</th>
+                                <th>Balance B/FWD</th>
+                                <th>From Revenue</th>
+                                <th>To Revenue</th>
+                                <th>Closing Balance</th>
+                                <th>Total Months</th>
+                                <th>Month Utilized</th>
+                                <th>Months Remaining</th>
+                                <th>Validity Period Start</th>
+                                <th>Validity Period End</th>
+                            </tr>
+                        </thead>
+                        <tbody class="prev" data-index="7"></tbody>
+                    </table>
+                </div>
+
+                <div class="card prev">
+                    <div class="title"><p>Other</p></div>
+                    <table class="deferred_table" id="prev_tbl_other">
+                        <thead>
+                            <tr>
+                                <th>License Number</th>
+                                <th>Client Company</th>
+                                <th>Invoice ID</th>
+                                <th>Budget</th>
+                                <th>Invoice Total</th>
+                                <th>This Month's Invoice</th>
+                                <th>Balance B/FWD</th>
+                                <th>From Revenue</th>
+                                <th>To Revenue</th>
+                                <th>Closing Balance</th>
+                                <th>Total Months</th>
+                                <th>Month Utilized</th>
+                                <th>Months Remaining</th>
+                                <th>Validity Period Start</th>
+                                <th>Validity Period End</th>
+                            </tr>
+                        </thead>
+                        <tbody class="prev" data-index="8"></tbody>
+                    </table>
+                </div>
+
+                <div class="card prev">
+                    <div class="title"><p>Total</p></div>
+                    <table class="deferred_table" id="prev_tbl_total">
+                        <thead>
+                            <tr>
+                                <th>License Number</th>
+                                <th>Client Company</th>
+                                <th>Invoice ID</th>
+                                <th>Budget</th>
+                                <th>Invoice Total</th>
+                                <th>This Month's Invoice</th>
+                                <th>Balance B/FWD</th>
+                                <th>From Revenue</th>
+                                <th>To Revenue</th>
+                                <th>Closing Balance</th>
+                                <th>Total Months</th>
+                                <th>Month Utilized</th>
+                                <th>Months Remaining</th>
+                                <th>Validity Period Start</th>
+                                <th>Validity Period End</th>
+                            </tr>
+                        </thead>
+                        <tbody class="prev" data-index="9"></tbody>
+                    </table>
+                </div>
+            </div>
+            <p class="preview-msg">Report previews will show up here</p>
+        </div>
+
+    </div>
 
 
     <script src="scripts/jquery-3.2.1.min.js"></script>
+    <script src="scripts/semantic.min.js"></script>
+    <script src="scripts/moment.min.js"></script>
 
     <script>
         var main = function () {
 
+            var isRptPreviewVisible = false;
             function initializeInvoiceList() {
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/GetInvoiceIDs',
+                    url: 'http://erp-srvr.sma.gov.jm:1786/IntegrationService.asmx/GetInvoiceIDs',
                     type: 'POST',
                     contentType: 'application/json',
                     data: {},
@@ -351,53 +869,191 @@
 
             }
 
-            function loadTableData(data, fiscalyr) {
+               function getReportModifications(isForModification) {
+                var params = new Object();
+                params.entries = [];
 
-                $("#tbl_cellular tbody").html("");
-                $("#tbl_broadband tbody").html("");
-                $("#tbl_microwave tbody").html("");
-                $("#tbl_other tbody").html("");
-                $("#tbl_trunking tbody").html("");
-                $("#tbl_aeronautical tbody").html("");
-                $("#tbl_marine tbody").html("");
-                $("#tbl_dservices tbody").html("");
-                $("#tbl_total tbody").html("");
-                $("#tbl_vsat tbody").html("");
+                params.reportId = parseInt($("#modify-rpt-selector").find(":selected").val())
+                params.isForModification = isForModification;
 
-                for (var i = 0; i < data.d.Categories.length; i++) {
-                    for (var j = 0; j < data.d.Categories[i].records.length; j++) {
-                        var row = "<tr>" +
-                            "<td>" + data.d.Categories[i].records[j].licenseNumber + "</td>" +
-                            "<td>" + data.d.Categories[i].records[j].clientCompany + "</td>" +
-                            "<td>" + data.d.Categories[i].records[j].invoiceID + "</td>" +
-                            "<td>" + data.d.Categories[i].records[j].budget + "</td>" +
-                            "<td>" + data.d.Categories[i].records[j].invoiceTotal + "</td>" +
-                            "<td>" + data.d.Categories[i].records[j].thisPeriodsInv + "</td>" +
-                            "<td>" + data.d.Categories[i].records[j].balBFwd + "</td>" +
-                            "<td>" + data.d.Categories[i].records[j].fromRev + "</td>" +
-                            "<td>" + data.d.Categories[i].records[j].toRev + "</td>" +
-                            "<td>" + data.d.Categories[i].records[j].closingBal + "</td>" +
-                            "<td>" + data.d.Categories[i].records[j].totalMonths + "</td>" +
-                            "<td>" + data.d.Categories[i].records[j].monthUtil + "</td>" +
-                            "<td>" + data.d.Categories[i].records[j].monthRemain + "</td>" +
-                            "<td>" + data.d.Categories[i].records[j].valPStart + "</td>" +
-                            "<td>" + data.d.Categories[i].records[j].valPEnd + "</td>";
-                        "</tr>";
 
-                        $('tbody[data-index="' + i + '"]').append(row);
+                $(".modifications-row").each(function (index, element) {
+                    console.log(element)
+                    if (index == 0) {
+                        if ($("#edit-invoiceId").val() != '') {
+                            if ($("#edit-budget").val() != '') {
+                                if ($("#edit-invTotal").val() != '') {
+                                    if ($("#edit-balBfwd").val() != '') {
+                                        if ($("#edit-thisMInvoice").val() != '') {
+                                            if ($("#edit-fromRev").val() != '') {
+                                                if ($("#edit-toRev").val() != '') {
+                                                    if ($("#edit-closingBal").val() != '') {
+                                                        if ($("#edit-totalMonths").val() != '') {
+                                                            if ($("#edit-monthUtil").val() != '') {
+                                                                if ($("#edit-monthRemain").val() != '') {
+                                                                    if ($("#edit-valPstart").val() != '') {
+                                                                        if ($("#edit-valPend").val() != '') {
+                                                                            var data = new Object();
+                                                                            data.licenseNumber = $("#edit-licNo").val();
+                                                                            data.clientCompany = $("#edit-clientCompany").val()
+                                                                            data.invoiceId = parseInt($("#edit-invoiceId").val())
+                                                                            data.budget = parseFloat($("#edit-budget").val())
+                                                                            data.invoiceTotal = parseFloat($("#edit-invTotal").val())
+                                                                            data.thisMonthInvoice = $("#edit-thisMInvoice").val()
+                                                                            data.balanceBroughtFoward = parseFloat($("#edit-balBfwd").val())
+                                                                            data.fromRevenue = parseFloat($("#edit-fromRev").val())
+                                                                            data.toRevenue = parseFloat($("#edit-toRev").val())
+                                                                            data.closingBalance = parseFloat($("#edit-closingBal").val())
+                                                                            data.totalMonths = parseInt($("#edit-totalMonths").val())
+                                                                            data.monthsUtilized = parseInt($("#edit-monthUtil").val());
+                                                                            data.monthsRemaining = parseInt($("#edit-monthRemain").val())
 
-                        if (j == data.d.Categories[i].records.length - 1) {
-                            var rowSub = "<tr>" +
-                                "<td>" + "Sub Total" + "</td>" +
+                                                                            data.validityStart = moment($("#edit-valPstart").val()).format("YYYY-MM-DD HH:mm:ss.SSS")
+                                                                            data.validityEnd = moment($("#edit-valPend").val()).format("YYYY-MM-DD HH:mm:ss.SSS");
+                                                                            params.entries.push(data)
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else {
+
+                        var data = new Object()
+                        data.licenseNumber = $(element).find(".edit-licNo").val();
+                        data.clientCompany = $(element).find(".edit-clientCompany").val();
+                        data.invoiceId = parseInt($(element).find(".edit-invoiceId").val());
+                        data.budget = parseFloat($(element).find(".edit-budget").val())
+                        data.invoiceTotal = parseFloat($(element).find(".edit-invTotal").val())
+                        data.thisMonthInvoice = $(element).find(".edit-thisMInvoice").val()
+                        data.balanceBroughtFoward = parseFloat($(element).find(".edit-balBfwd").val())
+                        data.fromRevenue = parseFloat($(element).find(".edit-fromRev").val())
+                        data.toRevenue = parseFloat($(element).find(".edit-toRev").val())
+                        data.closingBalance = parseFloat($(element).find(".edit-closingBal").val())
+                        data.totalMonths = parseInt($(element).find(".edit-totalMonths").val())
+                        data.monthsUtilized = parseInt($(element).find(".edit-monthUtil").val());
+                        data.monthsRemaining = parseInt($(element).find(".edit-monthRemain").val())
+
+                        data.validityStart = moment($(element).find(".edit-valPstart").val()).format("YYYY-MM-DD HH:mm:ss.SSS")
+                        data.validityEnd = moment($(element).find(".edit-valPend").val()).format("YYYY-MM-DD HH:mm:ss.SSS");
+                        params.entries.push(data)
+                    }
+                })
+
+
+                   var json = JSON.stringify(params);
+                   $("#rpt-modify").prop("disabled", true)
+
+                $.ajax({
+                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/AnnualDeferredModification',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: json,
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        $("#rpt-modify").prop("disabled", false)
+
+                        if (!isForModification) {
+                            if (data.d != null && data.d.modifiedData != null) {
+                                loadTableData(data.d.modifiedData, true);
+                            }
+                        }
+                        else {
+                            alert("Annual Deferred report modified");
+                            window.location.reload();
+                        }
+
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                         $("#rpt-modify").prop("disabled", false)
+                    }
+                });
+            }
+
+
+            function loadTableData(data, isForPreview) {
+
+                if (isForPreview) {
+                    $("#prev_tbl_cellular tbody").html("");
+                    $("#prev_tbl_broadband tbody").html("");
+                    $("#prev_tbl_microwave tbody").html("");
+                    $("#prev_tbl_other tbody").html("");
+                    $("#prev_tbl_trunking tbody").html("");
+                    $("#prev_tbl_aeronautical tbody").html("");
+                    $("#prev_tbl_marine tbody").html("");
+                    $("#prev_tbl_dservices tbody").html("");
+                    $("#prev_tbl_total tbody").html("");
+                    $("#prev_tbl_vsat tbody").html("");
+                    isForPreview = true;
+
+                    for (var i = 0; i < data.Categories.length; i++) {
+                        for (var j = 0; j < data.Categories[i].records.length; j++) {
+                            var row = "<tr>" +
+                                "<td>" + data.Categories[i].records[j].licenseNumber + "</td>" +
+                                "<td>" + data.Categories[i].records[j].clientCompany + "</td>" +
+                                "<td>" + data.Categories[i].records[j].invoiceID + "</td>" +
+                                "<td>" + data.Categories[i].records[j].budget + "</td>" +
+                                "<td>" + data.Categories[i].records[j].invoiceTotal + "</td>" +
+                                "<td>" + data.Categories[i].records[j].thisPeriodsInv + "</td>" +
+                                "<td>" + data.Categories[i].records[j].balBFwd + "</td>" +
+                                "<td>" + data.Categories[i].records[j].fromRev + "</td>" +
+                                "<td>" + data.Categories[i].records[j].toRev + "</td>" +
+                                "<td>" + data.Categories[i].records[j].closingBal + "</td>" +
+                                "<td>" + data.Categories[i].records[j].totalMonths + "</td>" +
+                                "<td>" + data.Categories[i].records[j].monthUtil + "</td>" +
+                                "<td>" + data.Categories[i].records[j].monthRemain + "</td>" +
+                                "<td>" + data.Categories[i].records[j].valPStart + "</td>" +
+                                "<td>" + data.Categories[i].records[j].valPEnd + "</td>";
+                            "</tr>";
+
+                            $('tbody.prev[data-index="' + i + '"]').append(row);
+
+                            if (j == data.Categories[i].records.length - 1) {
+                                var rowSub = "<tr>" +
+                                    "<td>" + "Sub Total" + "</td>" +
+                                    "<td>" + "--" + "</td>" +
+                                    "<td>" + "--" + "</td>" +
+                                    "<td>" + data.Categories[i].subT_budget + "</td>" +
+                                    "<td>" + data.Categories[i].subT_invoiceTotal + "</td>" +
+                                    "<td>" + "--" + "</td>" +
+                                    "<td>" + data.Categories[i].subT_balBFwd + "</td>" +
+                                    "<td>" + data.Categories[i].subT_fromRev + "</td>" +
+                                    "<td>" + data.Categories[i].subT_toRev + "</td>" +
+                                    "<td>" + data.Categories[i].subT_closingBal + "</td>" +
+                                    "<td>" + "0" + "</td>" +
+                                    "<td>" + "0" + "</td>" +
+                                    "<td>" + "0" + "</td>" +
+                                    "<td>" + "--" + "</td>" +
+                                    "<td>" + "--" + "</td>";
+                                "</tr>";
+
+                                $('tbody.prev[data-index="' + i + '"]').append(rowSub);
+                            }
+                        }
+
+                        if (i == data.Categories.length - 1) {
+                            var rowTot = "<tr>" +
+                                "<td>" + "Total" + "</td>" +
                                 "<td>" + "--" + "</td>" +
                                 "<td>" + "--" + "</td>" +
-                                "<td>" + data.d.Categories[i].subT_budget + "</td>" +
-                                "<td>" + data.d.Categories[i].subT_invoiceTotal + "</td>" +
+                                "<td>" + data.Total.tot_budget + "</td>" +
+                                "<td>" + data.Total.tot_invoiceTotal + "</td>" +
                                 "<td>" + "--" + "</td>" +
-                                "<td>" + data.d.Categories[i].subT_balBFwd + "</td>" +
-                                "<td>" + data.d.Categories[i].subT_fromRev + "</td>" +
-                                "<td>" + data.d.Categories[i].subT_toRev + "</td>" +
-                                "<td>" + data.d.Categories[i].subT_closingBal + "</td>" +
+                                "<td>" + data.Total.tot_balBFwd + "</td>" +
+                                "<td>" + data.Total.tot_fromRev + "</td>" +
+                                "<td>" + data.Total.tot_toRev + "</td>" +
+                                "<td>" + data.Total.tot_closingBal + "</td>" +
                                 "<td>" + "0" + "</td>" +
                                 "<td>" + "0" + "</td>" +
                                 "<td>" + "0" + "</td>" +
@@ -405,46 +1061,110 @@
                                 "<td>" + "--" + "</td>";
                             "</tr>";
 
-                            $('tbody[data-index="' + i + '"]').append(rowSub);
+                            $('tbody.prev[data-index="' + "9" + '"]').append(rowTot);
+                        }
+                    }
+                    $(".overlay-preload").delay(1300).fadeOut(100);
+                    $("body").css("overflow-y", "scroll");
+                    $(".card.prev").fadeIn(800);
+                    $('.fullscreen.modify.modal').modal('refresh');
+                }
+
+                else {
+                    $("#tbl_cellular tbody").html("");
+                    $("#tbl_broadband tbody").html("");
+                    $("#tbl_microwave tbody").html("");
+                    $("#tbl_other tbody").html("");
+                    $("#tbl_trunking tbody").html("");
+                    $("#tbl_aeronautical tbody").html("");
+                    $("#tbl_marine tbody").html("");
+                    $("#tbl_dservices tbody").html("");
+                    $("#tbl_total tbody").html("");
+                    $("#tbl_vsat tbody").html("");
+
+                    for (var i = 0; i < data.Categories.length; i++) {
+                        for (var j = 0; j < data.Categories[i].records.length; j++) {
+                            var row = "<tr>" +
+                                "<td>" + data.Categories[i].records[j].licenseNumber + "</td>" +
+                                "<td>" + data.Categories[i].records[j].clientCompany + "</td>" +
+                                "<td>" + data.Categories[i].records[j].invoiceID + "</td>" +
+                                "<td>" + data.Categories[i].records[j].budget + "</td>" +
+                                "<td>" + data.Categories[i].records[j].invoiceTotal + "</td>" +
+                                "<td>" + data.Categories[i].records[j].thisPeriodsInv + "</td>" +
+                                "<td>" + data.Categories[i].records[j].balBFwd + "</td>" +
+                                "<td>" + data.Categories[i].records[j].fromRev + "</td>" +
+                                "<td>" + data.Categories[i].records[j].toRev + "</td>" +
+                                "<td>" + data.Categories[i].records[j].closingBal + "</td>" +
+                                "<td>" + data.Categories[i].records[j].totalMonths + "</td>" +
+                                "<td>" + data.Categories[i].records[j].monthUtil + "</td>" +
+                                "<td>" + data.Categories[i].records[j].monthRemain + "</td>" +
+                                "<td>" + data.Categories[i].records[j].valPStart + "</td>" +
+                                "<td>" + data.Categories[i].records[j].valPEnd + "</td>";
+                            "</tr>";
+
+                            $('tbody.original[data-index="' + i + '"]').append(row);
+
+                            if (j == data.Categories[i].records.length - 1) {
+                                var rowSub = "<tr>" +
+                                    "<td>" + "Sub Total" + "</td>" +
+                                    "<td>" + "--" + "</td>" +
+                                    "<td>" + "--" + "</td>" +
+                                    "<td>" + data.Categories[i].subT_budget + "</td>" +
+                                    "<td>" + data.Categories[i].subT_invoiceTotal + "</td>" +
+                                    "<td>" + "--" + "</td>" +
+                                    "<td>" + data.Categories[i].subT_balBFwd + "</td>" +
+                                    "<td>" + data.Categories[i].subT_fromRev + "</td>" +
+                                    "<td>" + data.Categories[i].subT_toRev + "</td>" +
+                                    "<td>" + data.Categories[i].subT_closingBal + "</td>" +
+                                    "<td>" + "0" + "</td>" +
+                                    "<td>" + "0" + "</td>" +
+                                    "<td>" + "0" + "</td>" +
+                                    "<td>" + "--" + "</td>" +
+                                    "<td>" + "--" + "</td>";
+                                "</tr>";
+
+                                $('tbody.original[data-index="' + i + '"]').append(rowSub);
+                            }
+                        }
+
+                        if (i == data.Categories.length - 1) {
+                            var rowTot = "<tr>" +
+                                "<td>" + "Total" + "</td>" +
+                                "<td>" + "--" + "</td>" +
+                                "<td>" + "--" + "</td>" +
+                                "<td>" + data.Total.tot_budget + "</td>" +
+                                "<td>" + data.Total.tot_invoiceTotal + "</td>" +
+                                "<td>" + "--" + "</td>" +
+                                "<td>" + data.Total.tot_balBFwd + "</td>" +
+                                "<td>" + data.Total.tot_fromRev + "</td>" +
+                                "<td>" + data.Total.tot_toRev + "</td>" +
+                                "<td>" + data.Total.tot_closingBal + "</td>" +
+                                "<td>" + "0" + "</td>" +
+                                "<td>" + "0" + "</td>" +
+                                "<td>" + "0" + "</td>" +
+                                "<td>" + "--" + "</td>" +
+                                "<td>" + "--" + "</td>";
+                            "</tr>";
+
+                            $('tbody.original[data-index="' + "9" + '"]').append(rowTot);
                         }
                     }
 
-                    if (i == data.d.Categories.length - 1) {
-                        var rowTot = "<tr>" +
-                            "<td>" + "Total" + "</td>" +
-                            "<td>" + "--" + "</td>" +
-                            "<td>" + "--" + "</td>" +
-                            "<td>" + data.d.Total.tot_budget + "</td>" +
-                            "<td>" + data.d.Total.tot_invoiceTotal + "</td>" +
-                            "<td>" + "--" + "</td>" +
-                            "<td>" + data.d.Total.tot_balBFwd + "</td>" +
-                            "<td>" + data.d.Total.tot_fromRev + "</td>" +
-                            "<td>" + data.d.Total.tot_toRev + "</td>" +
-                            "<td>" + data.d.Total.tot_closingBal + "</td>" +
-                            "<td>" + "0" + "</td>" +
-                            "<td>" + "0" + "</td>" +
-                            "<td>" + "0" + "</td>" +
-                            "<td>" + "--" + "</td>" +
-                            "<td>" + "--" + "</td>";
-                        "</tr>";
-
-                        $('tbody[data-index="' + "9" + '"]').append(rowTot);
-                    }
+                    $(".overlay-preload").delay(1300).fadeOut(100);
+                    $("body").css("overflow-y", "scroll");
+                    $(".card.original").fadeIn(800);
                 }
-                $(".overlay-preload").delay(1300).fadeOut(100);
-                $("body").css("overflow-y", "scroll");
-                $(".card").fadeIn(800);
             }
 
 
             $("#btnViewHtml").click(function () {
-                var fiscalyr = $("#fiscalyr").find(":selected").val();
+                var fiscalyr = $("#fiscalyr").find(":selected").data("year");
 
                 $(".overlay-preload").fadeIn(500);
                 $("body").css("overflow-y", "hidden");
 
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/ViewAnnDeferredRpt',
+                    url: 'http://erp-srvr.sma.gov.jm:1786/IntegrationService.asmx/ViewAnnDeferredRpt',
                     type: 'POST',
                     contentType: 'application/json',
                     data: '{"ReportType":"Annual", "fiscalyr":' + fiscalyr + '}',
@@ -453,7 +1173,7 @@
 
                         if (data.d != null) {
 
-                            loadTableData(data, fiscalyr);
+                            loadTableData(data.d, false);
                         }
                         else {
 
@@ -482,13 +1202,13 @@
             });
 
             $("#btnDeferredMainPdf").click(function () {
-                var fiscalyr = $("#fiscalyr").find(":selected").val();
+                var fiscalyr = $("#fiscalyr").find(":selected").data("year");
 
                 $(".overlay-preload").fadeIn(500);
                 $("body").css("overflow-y", "hidden");
 
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/ViewAnnDeferredRpt',
+                    url: 'http://erp-srvr.sma.gov.jm:1786/IntegrationService.asmx/ViewAnnDeferredRpt',
                     type: 'POST',
                     contentType: 'application/json',
                     data: '{"ReportType":"Annual", "fiscalyr":' + fiscalyr + '}',
@@ -531,13 +1251,13 @@
             });
 
             $("#btnDeferredSubs").click(function () {
-                var fiscalyr = $("#fiscalyr").find(":selected").val();
+                var fiscalyr =$("#fiscalyr").find(":selected").data("year");
 
                 $(".overlay-preload").fadeIn(500);
                 $("body").css("overflow-y", "hidden");
 
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/ViewAnnDeferredRpt',
+                    url: 'http://erp-srvr.sma.gov.jm:1786/IntegrationService.asmx/ViewAnnDeferredRpt',
                     type: 'POST',
                     contentType: 'application/json',
                     data: '{"ReportType":"Annual", "fiscalyr":' + fiscalyr + '}',
@@ -585,7 +1305,7 @@
                 var budget = $("#txt_budget").val();
 
                 $.ajax({
-                    url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/UpdateBudget',
+                    url: 'http://erp-srvr.sma.gov.jm:1786/IntegrationService.asmx/UpdateBudget',
                     type: 'POST',
                     contentType: 'application/json',
                     data: '{"invoiceID":' + invoiceId + ', "budgetAmt":' + budget + '}',
@@ -604,6 +1324,469 @@
 
             $("#btnMain").click(function () {
                 window.location.replace("/menugrid.aspx");
+            });
+
+            $.ajax({
+                url: 'http://erp-srvr.sma.gov.jm:1786/IntegrationService.asmx/GetReportPeriods',
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: '{"reportType": "Annual"}',
+                success: function (result) {
+                    console.log(result)
+                    $.each(result.d, function (index, value) {
+                        console.log(value)
+                        var html = '<option value="' + value.reportId + '" data-month="' + value.month + '" data-year="' + value.year + '">' + value.reportLabel + '</option>'
+                        $("#fiscalyr").append(html)
+                        $("#modify-rpt-selector").append(html);
+                    })
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+
+            $("#rpt-modify").click(function () {
+                $('.fullscreen.modify.modal').modal({
+                    allowMultiple: true,
+                    onApprove: function () {
+                        getReportModifications(true);
+                        return false
+                    },
+                    onDeny: function () {
+                        return true;
+                    }
+                }).modal('show');
+            });
+
+            $("#cancel").click(function () {
+                $("#prev_tbl_cellular tbody").html("");
+                $("#prev_tbl_broadband tbody").html("");
+                $("#prev_tbl_microwave tbody").html("");
+                $("#prev_tbl_other tbody").html("");
+                $("#prev_tbl_trunking tbody").html("");
+                $("#prev_tbl_aeronautical tbody").html("");
+                $("#prev_tbl_marine tbody").html("");
+                $("#prev_tbl_dservices tbody").html("");
+                $("#prev_tbl_total tbody").html("");
+                $("#prev_tbl_vsat tbody").html("");
+
+                $(".card.prev").fadeOut(200);
+
+                $("#edit-licNo").val('');
+                $("#edit-clientCompany").val('');
+                $("#edit-budget").val('');
+                $("#edit-invTotal").val('');
+                $("#edit-balBfwd").val('');
+                $("#edit-thisMInvoice").val('');
+                $("#edit-fromRev").val('');
+                $("#edit-toRev").val('');
+                $("#edit-closingBal").val('');
+                $("#edit-totalMonths").val('');
+                $("#edit-monthUtil").val('');
+                $("#edit-monthRemain").val('');
+                $("#edit-valPstart").val('');
+                $("#edit-valPend").val('');
+            })
+
+            $(".new-modification").on("click", function () {
+
+                if ($("#edit-invoiceId").val() != '') {
+                    if ($("#edit-budget").val() != '') {
+                        if ($("#edit-invTotal").val() != '') {
+                            if ($("#edit-balBfwd").val() != '') {
+                                if ($("#edit-thisMInvoice").val() != '') {
+                                    if ($("#edit-fromRev").val() != '') {
+                                        if ($("#edit-toRev").val() != '') {
+                                            if ($("#edit-closingBal").val() != '') {
+                                                if ($("#edit-totalMonths").val() != '') {
+                                                    if ($("#edit-monthUtil").val() != '') {
+                                                        if ($("#edit-monthRemain").val() != '') {
+                                                            if ($("#edit-valPstart").val() != '') {
+                                                                if ($("#edit-valPend").val() != '') {
+
+                                                                    var html = '<div class="row modifications-row">' +
+                                                                        '<div class="sixteen fields">' +
+                                                                        '<div class="field disabled">' +
+                                                                        '<input disabled class="edit-invoiceId"  type="text" placeholder="Invoice ID" autofocus value ="' + $("#edit-invoiceId").val() + '">' +
+                                                                        '</div>' +
+
+                                                                        '<div style="display: none;" class="field disabled">' +
+                                                                        '<input disabled class="edit-licNo" type="text" placeholder="License Number" value ="' + $("#edit-licNo").val() + '">' +
+                                                                        '</div>' +
+                                                                        '<div style="display: none;" class="field disabled">' +
+                                                                        '<input disabled class="edit-clientCompany" type="text" placeholder="Client Company" value ="' + $("#edit-clientCompany").val() + '">' +
+                                                                        '</div>' +
+
+                                                                        '<div class="field disabled">' +
+                                                                        '<input disabled class="edit-budget" type="number" placeholder="Budget" value ="' + $("#edit-budget").val() + '">' +
+                                                                        '</div>' +
+                                                                        '<div class="field disabled">' +
+                                                                        '<input disabled class="edit-invTotal" type="number" placeholder="Invoice Total" value ="' + $("#edit-invTotal").val() + '">' +
+                                                                        '</div>' +
+                                                                        '<div class="field disabled">' +
+                                                                        '<input disabled class="edit-balBfwd" type="number" placeholder="BalBFwd" value ="' + $("#edit-balBfwd").val() + '">' +
+                                                                        '</div>' +
+                                                                        '<div class="field disabled">' +
+                                                                        '<input disabled class="edit-thisMInvoice" type="text" placeholder="This Month Inv" value ="' + $("#edit-thisMInvoice").val() + '">' +
+                                                                        '</div>' +
+                                                                        '<div class="field disabled">' +
+                                                                        '<input disabled class="edit-fromRev" type="number" placeholder="FromRev" value ="' + $("#edit-fromRev").val() + '">' +
+                                                                        '</div>' +
+                                                                        '<div class="field disabled">' +
+                                                                        '<input disabled class="edit-toRev" type="number" placeholder="ToRev" value ="' + $("#edit-toRev").val() + '">' +
+                                                                        '</div>' +
+                                                                        '<div class="field disabled">' +
+                                                                        '<input disabled class="edit-closingBal" type="number" placeholder="ClosingBal" value ="' + $("#edit-closingBal").val() + '">' +
+                                                                        '</div>' +
+                                                                        '<div class="field disabled">' +
+                                                                        '<input disabled class="edit-totalMonths" type="text" placeholder="TotalMonths" value ="' + $("#edit-totalMonths").val() + '">' +
+                                                                        '</div>' +
+                                                                        '<div class="field disabled">' +
+                                                                        '<input disabled class="edit-monthUtil" type="text" placeholder="MonthUtil" value ="' + $("#edit-monthUtil").val() + '">' +
+                                                                        '</div>' +
+                                                                        '<div class="field disabled">' +
+                                                                        '<input disabled class="edit-monthRemain" type="text" placeholder="MonthRemain" value ="' + $("#edit-monthRemain").val() + '">' +
+                                                                        '</div>' +
+                                                                        '<div class="field disabled">' +
+                                                                        '<input disabled class="edit-valPstart" type="date" placeholder="ValPStart" value ="' + $("#edit-valPstart").val() + '">' +
+                                                                        '</div>' +
+                                                                        '<div class="field disabled">' +
+                                                                        '<input class="edit-valPend" disabled type="date" placeholder="ValPEnd" value ="' + $("#edit-valPend").val() + '">' +
+                                                                        '</div>' +
+                                                                        '<div class="field">' +
+                                                                        '<i class="trash alternate icon remove-modification"></i>' +
+                                                                        '</div>' +
+                                                                        '</div>' +
+                                                                        '</div>';
+
+                                                                    $(".modifications.form").append(html);
+
+                                                                    $("#edit-invoiceId").val('');
+                                                                    $("#edit-licNo").val('');
+                                                                    $("#edit-clientCompany").val('');
+                                                                    $("#edit-budget").val('');
+                                                                    $("#edit-invTotal").val('');
+                                                                    $("#edit-balBfwd").val('');
+                                                                    $("#edit-thisMInvoice").val('');
+                                                                    $("#edit-fromRev").val('');
+                                                                    $("#edit-toRev").val('');
+                                                                    $("#edit-closingBal").val('');
+                                                                    $("#edit-totalMonths").val('');
+                                                                    $("#edit-monthUtil").val('');
+                                                                    $("#edit-monthRemain").val('');
+                                                                    $("#edit-valPstart").val('');
+                                                                    $("#edit-valPend").val('');
+                                                                    $('.fullscreen.modify.modal').modal('refresh');
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+                }
+            });
+
+            $(document).on("click", ".remove-modification", function (e) {
+                e.preventDefault()
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                $(this).parent().parent().parent().remove();
+                $('.fullscreen.modify.modal').modal('refresh');
+            })
+
+            $("#add-remove").click(function () {
+                $("#add-remove-header").data("reportid", $("#modify-rpt-selector").find(":selected").val())
+                $("#add-remove-header").html("Add/Remove: " + $("#modify-rpt-selector").find(":selected").text())
+
+                $(".fullscreen.add-remove.modal").modal({
+                    allowMultiple: true,
+                    onApprove: function () {
+
+                        return false
+                    },
+                    onDeny: function () {
+                        return true;
+                    }
+                }).modal('show');
+            })
+
+            $("#preview-rpt").click(function () {
+                getReportModifications(false);
+            })
+
+            $("#add-report-entry").click(function () {
+                
+                if ($("#add-invoiceId").val() != '') {
+                    if ($("#add-clientCompany").val() != '') {
+                        if ($("#add-licNo").val() != '') {
+                            if ($("#add-budget").val() != '') {
+                                if ($("#add-invTotal").val() != '') {
+                                    if ($("#add-balBfwd").val() != '') {
+                                        if ($("#add-thisMInvoice").val() != '') {
+                                            if ($("#add-fromRev").val() != '') {
+                                                if ($("#add-toRev").val() != '') {
+                                                    if ($("#add-closingBal").val() != '') {
+                                                        if ($("#add-totalMonths").val() != '') {
+                                                            if ($("#add-monthUtil").val() != '') {
+                                                                if ($("#add-monthRemain").val() != '') {
+                                                                    if ($("#add-valPstart").val() != '') {
+                                                                        if ($("#add-valPend").val() != '') {
+
+                                                                            var params = new Object();
+                                                                            params.entry = new Object();
+
+                                                                            params.reportId = $("#add-remove-header").data("reportid");
+                                                                            params.entry.group = $("#report-category-selector").find(":selected").val()
+                                                                            params.entry.licenseNumber = $("#add-licNo").val();
+                                                                            params.entry.clientCompany = $("#add-clientCompany").val()
+                                                                            params.entry.invoiceId = parseInt($("#add-invoiceId").val())
+                                                                            params.entry.budget = parseFloat($("#add-budget").val())
+                                                                            params.entry.invoiceTotal = parseFloat($("#add-invTotal").val())
+                                                                            params.entry.thisMonthInvoice = $("#add-thisMInvoice").val()
+                                                                            params.entry.balanceBroughtFoward = parseFloat($("#add-balBfwd").val())
+                                                                            params.entry.fromRevenue = parseFloat($("#add-fromRev").val())
+                                                                            params.entry.toRevenue = parseFloat($("#add-toRev").val())
+                                                                            params.entry.closingBalance = parseFloat($("#add-closingBal").val())
+                                                                            params.entry.totalMonths = parseInt($("#add-totalMonths").val())
+                                                                            params.entry.monthsUtilized = parseInt($("#add-monthUtil").val());
+                                                                            params.entry.monthsRemaining = parseInt($("#add-monthRemain").val())
+
+                                                                            params.entry.validityStart = moment($("#add-valPstart").val()).format("YYYY-MM-DD HH:mm:ss.SSS")
+                                                                            params.entry.validityEnd = moment($("#add-valPend").val()).format("YYYY-MM-DD HH:mm:ss.SSS");
+
+                                                                            var json = JSON.stringify(params);
+                                                                            $("#add-report-entry").prop('disabled', true)
+
+                                                                            $.ajax({
+                                                                                url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/AddToAnnualReport',
+                                                                                type: 'POST',
+                                                                                contentType: 'application/json',
+                                                                                data: json,
+                                                                                dataType: 'json',
+                                                                                success: function (data) {
+                                                                                    console.log(data);
+                                                                                    $("#add-report-entry").prop('disabled', false)
+
+                                                                                    if (data.d != null) {
+                                                                                        if (isRptPreviewVisible)
+                                                                                            loadTableData(data.d.modifiedData);
+                                                                                        alert("Invoice: " + parseInt($("#add-invoiceId").val()) + " inserted sucessfully");
+
+                                                                                        $(".fullscreen.add-remove.modal").modal('refresh');
+
+
+                                                                                        $("#add-invoiceId").val('');
+                                                                                        $("#add-licNo").val('');
+                                                                                        $("#add-clientCompany").val('');
+                                                                                        $("#add-budget").val('');
+                                                                                        $("#add-invTotal").val('');
+                                                                                        $("#add-balBfwd").val('');
+                                                                                        $("#add-thisMInvoice").val('');
+                                                                                        $("#add-fromRev").val('');
+                                                                                        $("#add-toRev").val('');
+                                                                                        $("#add-closingBal").val('');
+                                                                                        $("#add-totalMonths").val('');
+                                                                                        $("#add-monthUtil").val('');
+                                                                                        $("#add-monthRemain").val('');
+                                                                                        $("#add-valPstart").val('');
+                                                                                        $("#add-valPend").val('');
+                                                                                    }
+                                                                                    else {
+                                                                                        alert("The invoice " + parseInt($("#add-invoiceId").val()) + " may already exist in the current category: " + $("#report-category-selector").find(":selected").val()) + ", insert failed";
+                                                                                    }
+                                                                                    $("#add-invoiceId").val('')
+                                                                                },
+                                                                                error: function (data) {
+                                                                                    console.log(data);
+                                                                                    $("#add-report-entry").prop('disabled', false)
+                                                                                    alert("A network error has occurred - " + data);
+                                                                                }
+                                                                            });
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+
+            $("#remove-report-entry").click(function () {
+                var params = new Object();
+                params.reportId = $("#add-remove-header").data("reportid");
+                params.invoiceId = parseInt($("#remove-invoiceId").val())
+
+                if ($("#add-remove-header").data("reportid") != '' && $("#remove-invoiceId").val() != '') {
+                    var json = JSON.stringify(params);
+
+                    $.ajax({
+                        url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/RemoveFromAnnualReport',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: json,
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+
+                            if (data.d != null) {
+                                if (isRptPreviewVisible)
+                                    loadTableData(data.d.modifiedData);
+                                alert("Invoice: " + parseInt($("#remove-invoiceId").val()) + " removed sucessfully");
+                            }
+                            else {
+                                alert("The invoice " + parseInt($("#remove-invoiceId").val()) + " was not removed, invoice might not be present.");
+                            }
+                            $("#remove-invoiceId").val('')
+                        },
+                        error: function (data) {
+                            alert("A network error has occurred - " + data);
+                        }
+                    });
+                }
+            })
+            $("#validate").click(function () {
+
+                $("#edit-licNo").prop("disabled", true);
+                $("#edit-licNo").parent().addClass("disabled");
+
+                $("#edit-clientCompany").prop("disabled", true);;
+                $("#edit-clientCompany").parent().addClass("disabled");
+
+                $("#edit-budget").prop("disabled", true);
+                $("#edit-budget").parent().addClass("disabled");
+
+                $("#edit-invTotal").prop("disabled", true);
+                $("#edit-invTotal").parent().addClass("disabled");
+
+                $("#edit-balBfwd").prop("disabled", true);
+                $("#edit-balBfwd").parent().addClass("disabled");
+
+                $("#edit-thisMInvoice").prop("disabled", true);
+                $("#edit-thisMInvoice").parent().addClass("disabled");
+
+                $("#edit-fromRev").prop("disabled", true);
+                $("#edit-fromRev").parent().addClass("disabled");
+
+                $("#edit-toRev").prop("disabled", true);
+                $("#edit-toRev").parent().addClass("disabled")
+
+                $("#edit-closingBal").prop("disabled", true);
+                $("#edit-closingBal").parent().addClass("disabled");
+
+                $("#edit-totalMonths").prop("disabled", true);
+                $("#edit-totalMonths").parent().addClass("disabled");
+
+                $("#edit-monthUtil").prop("disabled", true);
+                $("#edit-monthUtil").parent().addClass("disabled");
+
+                $("#edit-monthRemain").prop("disabled", true);
+                $("#edit-monthRemain").parent().addClass("disabled");
+
+                $("#edit-valPstart").prop("disabled", true);
+                $("#edit-valPstart").parent().addClass("disabled");
+
+                $("#edit-valPend").prop("disabled", true);
+                $("#edit-valPend").parent().addClass("disabled");
+
+                if ($("#edit-invoiceId").val() !== "") {
+                    $.ajax({
+                        url: 'http://erp-srvr.sma.gov.jm:1786/integrationservice.asmx/GetDeferredReportLineItemForAnnual',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: '{"invoiceId":' + $("#edit-invoiceId").val() + ', "reportId":' + $("#modify-rpt-selector").find(":selected").val() + '}',
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+
+                            if (data.d != null) {
+                                $("#edit-clientCompany").prop("disabled", false);;
+                                $("#edit-clientCompany").parent().removeClass("disabled");
+
+                                $("#edit-budget").prop("disabled", false);
+                                $("#edit-budget").parent().removeClass("disabled");
+
+                                $("#edit-invTotal").prop("disabled", false);
+                                $("#edit-invTotal").parent().removeClass("disabled");
+
+                                $("#edit-balBfwd").prop("disabled", false);
+                                $("#edit-balBfwd").parent().removeClass("disabled");
+
+                                $("#edit-thisMInvoice").prop("disabled", false);
+                                $("#edit-thisMInvoice").parent().removeClass("disabled");
+
+                                $("#edit-fromRev").prop("disabled", false);
+                                $("#edit-fromRev").parent().removeClass("disabled");
+
+                                $("#edit-toRev").prop("disabled", false);
+                                $("#edit-toRev").parent().removeClass("disabled")
+
+                                $("#edit-closingBal").prop("disabled", false);
+                                $("#edit-closingBal").parent().removeClass("disabled");
+
+                                $("#edit-totalMonths").prop("disabled", false);
+                                $("#edit-totalMonths").parent().removeClass("disabled");
+
+                                $("#edit-monthUtil").prop("disabled", false);
+                                $("#edit-monthUtil").parent().removeClass("disabled");
+
+                                $("#edit-monthRemain").prop("disabled", false);
+                                $("#edit-monthRemain").parent().removeClass("disabled");
+
+                                $("#edit-valPstart").prop("disabled", false);
+                                $("#edit-valPstart").parent().removeClass("disabled");
+
+                                $("#edit-valPend").prop("disabled", false);
+                                $("#edit-valPend").parent().removeClass("disabled");
+
+                                $(".invoice-group").html(data.d.group);
+                                $(".invoice-group").show();
+                                $("#edit-licNo").val(data.d.licenseNumber);
+                                $("#edit-clientCompany").val(data.d.clientCompany)
+                                $("#edit-budget").val(data.d.budget)
+                                $("#edit-invTotal").val(data.d.invoiceTotal)
+                                $("#edit-balBfwd").val(data.d.balBFwd)
+                                $("#edit-thisMInvoice").val(data.d.thisPeriodsInv)
+                                $("#edit-fromRev").val(data.d.fromRev)
+                                $("#edit-toRev").val(data.d.toRev)
+                                $("#edit-closingBal").val(data.d.closingBal)
+                                $("#edit-totalMonths").val(data.d.totalMonths)
+                                $("#edit-monthUtil").val(data.d.monthUtil)
+                                $("#edit-monthRemain").val(data.d.monthRemain)
+
+                                var s = moment(data.d.valPStart, "DD/MM/YYYY").toDate().toISOString().split('T')[0];
+                                $("#edit-valPstart").val(moment(data.d.valPStart, "DD/MM/YYYY").toDate().toISOString().split('T')[0]);
+                                $("#edit-valPend").val(moment(data.d.valPEnd, "DD/MM/YYYY").toDate().toISOString().split('T')[0]);
+                            }
+                            else {
+                                alert("No record found for current input")
+                            }
+                        },
+                        error: function (data) {
+                            console.log(data);
+                        }
+                    });
+                }
+                else {
+                    alert("Enter an invoice Id");
+                }
+                return false;
             });
 
             initializeInvoiceList();

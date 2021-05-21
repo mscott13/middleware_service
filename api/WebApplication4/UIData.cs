@@ -22,5 +22,6 @@ namespace WebApplication4
         public int monthRemain { get; set; }
         public string valPStart { get; set; }
         public string valPEnd { get; set; }
+        public string group { get; set; }
     }
 }

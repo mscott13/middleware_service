@@ -19,6 +19,14 @@ html {
     box-sizing: inherit;
 }
 
+b {
+    font-weight: 900 !important;
+}
+.scrolling.content {
+    overflow:scroll;
+    max-height:300px;
+}
+
 .gridTop {
     width: 100%;
     height: 50px;
@@ -44,12 +52,18 @@ html {
         color: #DBDBDB;
         margin-left: 20px;
         line-height: 20px;
+        display: inline;
     }
 
+#rpt-modify {
+    margin-left: 20px;
+}
+
 .left {
-    width: 95%;
+    width: 100%;
     height: 100%;
     float: left;
+    padding-top: 10px;
 }
 
 
@@ -212,17 +226,54 @@ html {
     margin-bottom: 55px;
 }
 
-select {
-    width: 100%;
-    padding: 4px;
-    background-color: #ffffff;
-    outline: none;
-    border: 1px solid #D9DEE0;
-    border-radius: 3px;
-    height: 50px;
-    font-family: 'Open Sans', sans-serif;
-    margin-bottom: 10px;
+#modify-rpt-selector {
+    font-size: 15px;
+    margin-left: 10px;
 }
+
+.ui.form input {
+    padding:1px !important;
+}
+
+.new-modification {
+    margin-top: 23px !important;
+    cursor:pointer !important;
+}
+
+    .new-modification:hover {
+        color: blue !important;
+    }
+
+.invoice-group {
+    display: inline;
+    position: absolute;
+    top: 18px;
+    font-size: 14px;
+    background-color: #efefef;
+    border-radius: 2px;
+    padding: 2px;
+    right: 10px;
+    display: none;
+}
+
+.remove-modification {
+    cursor: pointer !important;
+}
+
+    .remove-modification:hover {
+        color: red !important;
+    }
+    select.lg-select {
+        width: 100%;
+        padding: 4px;
+        background-color: #ffffff;
+        outline: none;
+        border: 1px solid #D9DEE0;
+        border-radius: 3px;
+        height: 50px;
+        font-family: 'Open Sans', sans-serif;
+        margin-bottom: 10px;
+    }
 
 .update-budget {
     width: 50%;
@@ -279,11 +330,25 @@ table, td {
     box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.10);
     margin-bottom:25px;
     display:none;
+
 }
+
+.tables .deferred_table th {
+    font-size: 12px !important;
+    background-color: #1e768e !important;
+    color: white !important;
+    padding: 5px !important;
+    font-family: 'Lato', sans-serif !important;
+}
+
+.tables .deferred_table tr td {
+    font-size: 11px !important;
+}
+
 
 td
 {
-    padding: 7px;
+    padding: 4px !important;
     text-align:center;
 }
 tbody tr:nth-child(odd) {

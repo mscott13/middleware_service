@@ -5,6 +5,7 @@ using System.Web;
 
 namespace WebApplication4
 {
+    [Serializable]
     public class DeferredData
     {
         public List<DataWrapper> Categories { get; set; }

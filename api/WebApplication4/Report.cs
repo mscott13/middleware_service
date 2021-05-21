@@ -1,18 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
-using System.Diagnostics;
-using System.Drawing;
-using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Packaging;
-using System.Web.UI.WebControls;
 using System.Globalization;
 
 
@@ -21,6 +12,16 @@ namespace WebApplication4
 {
     public class Report
     {
+        public const string RPT_CATEGORY_CELLULAR = "Cellular";
+        public const string RPT_CATEGORY_BROADBAND = "Broadband";
+        public const string RPT_CATEGORY_MICROWAVE = "Microwave";
+        public const string RPT_CATEGORY_VSAT = "Vsat";
+        public const string RPT_CATEGORY_MARINE = "Marine";
+        public const string RPT_CATEGORY_DSERVICES = "Data & Services";
+        public const string RPT_CATEGORY_AERONAUTICAL = "Aeronautical";
+        public const string RPT_CATEGORY_TRUNKING = "Trunking";
+        public const string RPT_CATEGORY_OTHER = "OTHER";
+
         public DeferredData gen_rpt(string ReportType, Integration intlink, int action, int month, int year)
         {
             DateTime startDate = new DateTime(year, month, 1);
@@ -464,8 +465,8 @@ namespace WebApplication4
                 Report.report_id = intlink.saveReport(ReportType, ReportCategories, ReportTotal);
             }
             
-            //createPdfReport(ReportType, Report, startDate);
-            //createPdfTotalsReport(ReportType, Report, startDate);
+            createPdfReport(ReportType, Report, startDate);
+            createPdfTotalsReport(ReportType, Report, startDate);
 
             return Report;
         }
@@ -486,9 +487,9 @@ namespace WebApplication4
             return true;
         }
 
-        string formatMoney(decimal inputs)
+        public static string formatMoney(decimal inputs)
         {
-            string input = Convert.ToString(inputs);
+            string input = decimal.Round(inputs, 2, MidpointRounding.AwayFromZero).ToString("0.00");
             string neg = " ";
             if (input[0] == '-')
             {
@@ -562,9 +563,13 @@ namespace WebApplication4
 
         }
 
-        public void createPdfReport(string ReportType, DeferredData Report, DateTime startDate)
+        public static void createPdfReport(string ReportType, DeferredData Report, DateTime startDate)
         {
             string path_local = @"C:\Program Files (x86)\M.S\SMA Middleware\resources\reports\" + ReportType + "DefferedIncomeReport" + startDate.Year.ToString() + startDate.Month.ToString("00") + "01.pdf";
+            if (File.Exists(path_local))
+            {
+                File.Delete(path_local);
+            }
 
             // Document doc = new Document(iTextSharp.text.PageSize._11X17, 10, 10, 42, 35);
             Document doc = new Document(iTextSharp.text.PageSize.LEDGER);
@@ -575,7 +580,7 @@ namespace WebApplication4
 
             catch (Exception ex)
             {
-                //handle exception here
+                Console.WriteLine(ex.Message);
             }
 
             Paragraph paragraph = new Paragraph();
@@ -679,9 +684,13 @@ namespace WebApplication4
             doc.Close();
         }
 
-        public void createPdfTotalsReport(String ReportType, DeferredData Report, DateTime startDate)
+        public static void createPdfTotalsReport(String ReportType, DeferredData Report, DateTime startDate)
         {
             string path_local = @"C:\Program Files (x86)\M.S\SMA Middleware\resources\reports\" + ReportType + "DefferedIncomeSummaryReport" + startDate.Year.ToString() + startDate.Month.ToString("00") + "01.pdf";
+            if (File.Exists(path_local))
+            {
+                File.Delete(path_local);
+            }
 
             // Document doc = new Document(iTextSharp.text.PageSize._11X17, 10, 10, 42, 35);
             Document doc = new Document(iTextSharp.text.PageSize.LETTER, 0, 0, 20, 0);
@@ -692,7 +701,7 @@ namespace WebApplication4
 
             catch (Exception ex)
             {
-                //handle exception here
+                Console.WriteLine(ex.Message);
             }
 
             Paragraph paragraph = new Paragraph();
